@@ -1,0 +1,118 @@
+.main {
+    width: 90%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 265px;
+}
+
+.line {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    width: 100%;
+}
+
+.blockTitle {
+    font-size: 20px;
+    color: #140702;
+    font-family: 'Dela Gothic One', system-ui;
+    user-select: none;
+}
+
+.blockButton {
+    background: #FDEDBF;
+    color: #140702;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 20px;
+}
+
+.blockButton:hover {
+    cursor: pointer;
+}
+
+.block {
+    width: 50%;
+    height: 270px;
+    background-image: url(../../public/start1.png);
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-top: 109px;
+}
+
+.block2 {
+    width: 50%;
+    height: 270px;
+    background-image: url(../../public/start2.png);
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-top: 109px;
+}
+
+.block3 {
+    width: 33%;
+    height: 270px;
+    background-image: url(../../public/start3.png);
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-top: 99px;
+}
+
+.block4 {
+    width: 33%;
+    height: 270px;
+    background-image: url(../../public/start4.png);
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-top: 99px;
+}
+
+.block5 {
+    width: 33%;
+    height: 270px;
+    background-image: url(../../public/start5.png);
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-top: 99px;
+}
+
+.block6 {
+    width: 50%;
+    height: 270px;
+    background-image: url(../../public/start6.png);
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-top: 109px;
+}
+
+.block7 {
+    width: 50%;
+    height: 270px;
+    background-image: url(../../public/start7.png);
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-top: 109px;
+}

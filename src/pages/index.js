@@ -1,5 +1,5 @@
 
-import { Header } from "@/components";
+import { Footer, Header, PopularBlock, StartBlock } from "@/components";
 import Head from "next/head";
 
 export default function Home() {
@@ -14,6 +14,9 @@ export default function Home() {
       <center>
         <main>
           <Header />
+          <StartBlock />
+          <PopularBlock />
+          <Footer />
         </main>
       </center>
     </>

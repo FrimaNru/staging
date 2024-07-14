@@ -1,0 +1,80 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    margin: 100px 0;
+    width: 90%;
+    max-width: 1400px;
+}
+
+.title {
+    font-size: 32px;
+    color: #140702;
+    font-family: 'Dela Gothic One', system-ui;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.sliderItem {
+    width: 230px;
+    height: 340px;
+}
+
+.sliderItem:hover {
+    cursor: pointer;
+}
+
+.sliderItemContent {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.sliderItemColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+.sliderItemImage {
+    width: 222px;
+    height: 220px;
+}
+
+.sliderItemTitle {
+    font-size: 20px;
+    color: #140702;
+    font-family: 'Dela Gothic One', system-ui;
+}
+
+.sliderItemText {
+    width: 200px;
+    font-size: 15px;
+    text-align: center;
+    color: #140702;
+}
+
+.sliderItemCost {
+    color: #C39748;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 14px;
+}
+
+.prevArrow {
+    position: absolute;
+    margin-top: 154px;
+    z-index: 10;
+}
+
+.prevArrow:hover, .nextArrow:hover {
+    cursor: pointer;
+}
+
+.nextArrow {
+    position: absolute;
+    margin-top: -186px;
+    z-index: 10;
+    right: 0%;
+}
