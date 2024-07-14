@@ -1,0 +1,99 @@
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 30px;
+    align-items: center;
+}
+
+.firstLine {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    max-width: 1400px;
+}
+
+.logo {
+    width: 202px;
+    height: 72px;
+}
+
+.searchBlock {
+    display: flex;
+    flex-direction: row;
+    width: 400px;
+    height: 40px;
+    border: solid 1px #000000;
+    border-radius: 100px;
+    align-items: center;
+    padding: 10px 17px;
+    gap: 10px;
+}
+
+.searchBlockIcon {
+    width: 18px;
+    height: 18px;
+}
+
+.searchBlockInput {
+    width: 100%;
+    font-size: 15px;
+}
+
+.searchBlockInput::placeholder {
+    font-size: 15px;
+    line-height: normal;
+    color: #140702;
+
+}
+
+.searchBlockInput:focus {
+    outline: none;
+}
+
+.icon {
+    height: 25px;
+}
+
+.icon:hover {
+    cursor: pointer;
+}
+
+.iconLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+}
+
+.secondLine {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.hr {
+    border-top: solid 1px #140702;
+    width: 100%;
+}
+
+.linkLine {
+    display: flex;
+    flex-direction: row;
+    gap: 90px;
+}
+
+.linkItem {
+    font-size: 20px;
+    line-height: 100%;
+}
+
+.linkItem:hover {
+    cursor: pointer;
+}
