@@ -2,3 +2,6 @@ export * from "./Header/Header";
 export * from "./StartBlock/StartBlock";
 export * from "./PopularBlock/PopularBlock";
 export * from "./Footer/Footer";
+export * from "./Delivery/DeliveryPage";
+export * from "./Brand/Brand";
+export * from "./Faq/Faq";

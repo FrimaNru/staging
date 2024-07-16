@@ -1,9 +1,12 @@
 import styles from "@/styles/Header.module.css";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export function Header() {
 
-    const links = [{ text: 'Новинки', link: '/' }, { text: 'Каталог', link: '/' }, { text: 'Доставка', link: '/' }, { text: 'О бренде', link: '/' }, { text: 'Частые вопросы', link: '/' }];
+    const router = useRouter();
+
+    const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
 
     return <div className={styles.main}>
         <div className={styles.firstLine} >
@@ -22,8 +25,10 @@ export function Header() {
         </div>
         <div className={styles.secondLine}>
             <hr className={styles.hr} />
-            <div className={styles.linkLine} > 
-                {links.map((x, i) => <p key={i} className={styles.linkItem} >{x.text}</p>)}
+            <div className={styles.linkLine} >
+                {links.map((x, i) => <Link key={i} href={x.link} style={{ width: 'max-content' }} >
+                    <p className={`${styles.linkItem} ${router.pathname === x.link && styles.linkItemSelect}`} >{x.text}</p>
+                </Link>)}
             </div>
             <hr className={styles.hr} />
         </div>
