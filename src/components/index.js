@@ -6,3 +6,4 @@ export * from "./Delivery/DeliveryPage";
 export * from "./Brand/Brand";
 export * from "./Faq/Faq";
 export * from "./Catalog/Catalog";
+export * from "./Product/Product";

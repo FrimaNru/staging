@@ -1,0 +1,201 @@
+.main {
+    width: 85%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+    margin: 265px 0 100px 0;
+    align-items: center;
+}
+
+.infoLine {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 80px;
+}
+
+.infoColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    width: 500px;
+}
+
+.infoColumnText {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.infoLilColumnText {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.infoTitleLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.infoTitle {
+    color: #140702;
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.infoFavIcon {
+    width: 36px;
+    height: 31px;
+}
+
+.infoSubtitle {
+    color: #140702;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.description {
+    text-align: left;
+    color: #140702;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.infoButtonColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.infoCost {
+    color: #C39748;
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    text-align: left;
+    padding: 0 30px;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.infoButton {
+    display: flex;
+    width: 100%;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.infoButton:hover {
+    cursor: pointer;
+}
+
+.imgSliderBox {
+    width: 530px;
+}
+
+.sliderItem {
+    width: 458px;
+    height: 454px;
+}
+
+.sliderItemImg {
+    width: 458px;
+    height: 454px;
+}
+
+.paggingItem {
+    width: 100px;
+    height: 100px;
+}
+
+.paggingBox {
+    width: 100px;
+    margin-left: 100px;
+}
+
+.imgSliderBoxColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.lineDots {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot {
+    width: 100px;
+    height: 100px;
+}
+
+.dot:hover {
+    cursor: pointer;
+}
+
+.charasteristicColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    width: 100%;
+}
+
+.accordionButton {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border-top: solid 1px #140702;
+    padding: 20px;
+}
+
+.accordionButtonTitle {
+    color: #140702;
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.accordionText {
+    color: #140702;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+    padding: 0 20px 20px 20px ;
+}

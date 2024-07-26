@@ -1,12 +1,29 @@
 import styles from "@/styles/Header.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export function Header() {
 
     const router = useRouter();
+    const [stateNew, setStateNew] = useState(false);
 
     const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
+
+    useEffect(() => {
+        if (typeof window !== undefined && window.location.href.includes('new')) setStateNew(true);
+        const handleRouteChange = (url) => {
+            if (window.location.href.includes('new')) {
+                setStateNew(true);
+            } else {
+                setStateNew(false);
+            }
+        };
+        router.events.on('routeChangeComplete', handleRouteChange);
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange);
+        };
+    }, []);
 
     return <div className={styles.main}>
         <div className={styles.firstLine} >
@@ -27,7 +44,7 @@ export function Header() {
             <hr className={styles.hr} />
             <div className={styles.linkLine} >
                 {links.map((x, i) => <Link key={i} href={x.link} style={{ width: 'max-content' }} >
-                    <p className={`${styles.linkItem} ${router.pathname === x.link && styles.linkItemSelect}`} >{x.text}</p>
+                    <p className={`${styles.linkItem} ${(!stateNew ? (router.pathname === x.link && styles.linkItemSelect) : (x.text === 'Новинки' && styles.linkItemSelect))}`} >{x.text}</p>
                 </Link>)}
             </div>
             <hr className={styles.hr} />

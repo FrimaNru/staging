@@ -75,10 +75,21 @@
     text-align: left;
 }
 
+.filterText {
+    color: #140702;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+    user-select: none;
+}
+
 .catalogColumn {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    width: calc(100% - 250px);
 }
 
 .lineSort {
@@ -94,10 +105,11 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    user-select: none;
 }
 
 .menuButton {
-    width: 185px;
+    width: 200px;
     height: 40px;
     border-radius: 38px;
     border: 1px solid #140702;
@@ -105,5 +117,107 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+    background: #FFF;
+}
+
+.menuButtonText {
+    color: #140702;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.menuList {
+    width: 200px;
+    border: solid 1px #140702;
+    margin: -27px 0 0 -24px;
+    position: relative;
+    padding: 20px 0 0 0;
+    background: #FFF;
+}
+
+.menuItem {
+    color: #140702;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.menuItemColumn {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menuItemHr {
+    width: 100%;
+    border-bottom: solid 1px #140702;
+}
+
+.lineOrders {
+    display: flex;
+    flex-direction: row;
+    gap: 70px;
+    width: 100%;
+}
+
+.sliderItem {
+    width: 240px;
+    height: 340px;
+}
+
+.sliderItem:hover {
+    cursor: pointer;
+}
+
+.sliderItemContent {
+    display: flex;
+    flex-direction: column;
     gap: 15px;
+    align-items: center;
+}
+
+.sliderItemColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+.sliderItemImage {
+    width: 222px;
+    height: 220px;
+}
+
+.sliderItemTitle {
+    font-size: 20px;
+    color: #140702;
+    font-family: 'Dela Gothic One', system-ui;
+}
+
+.sliderItemText {
+    width: 200px;
+    font-size: 15px;
+    text-align: center;
+    color: #140702;
+}
+
+.sliderItemCost {
+    color: #C39748;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 14px;
+}
+
+.mainHr {
+    width: 100%;
+    border-top: solid 1px #140702;
+    width: 864px;
 }

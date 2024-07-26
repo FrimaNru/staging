@@ -1,12 +1,12 @@
 
-import { Catalog, Footer, Header } from "@/components";
+import { Footer, Header, Product, PopularBlock } from "@/components";
 import Head from "next/head";
 
-export default function Delivery() {
+export default function ProductPage() {
     return (
         <>
             <Head>
-                <title>Каталог</title>
+                <title>Серьги CARAMEL</title>
                 <meta name="description" content='' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="./favicon.ico" />
@@ -14,7 +14,8 @@ export default function Delivery() {
             <center>
                 <main>
                     <Header />
-                    <Catalog />
+                    <Product />
+                    <PopularBlock />
                     <Footer />
                 </main>
             </center>
