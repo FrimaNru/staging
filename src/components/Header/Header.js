@@ -2,12 +2,12 @@ import styles from "@/styles/Header.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Authorization } from "@/components";
 
 export function Header() {
 
     const router = useRouter();
     const [stateNew, setStateNew] = useState(false);
-
     const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export function Header() {
             </div>
             <div className={styles.iconLine} >
                 <img src='/favIcon.svg' className={styles.icon} />
-                <img src='/userIcon.svg' className={styles.icon} />
+                <Authorization />
                 <img src='/shopIcon.svg' className={styles.icon} />
             </div>
         </div>
@@ -48,6 +48,6 @@ export function Header() {
                 </Link>)}
             </div>
             <hr className={styles.hr} />
-        </div>
+        </div>        
     </div>
 }

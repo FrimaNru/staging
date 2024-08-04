@@ -1,0 +1,131 @@
+import styles from "@/styles/Header.module.css";
+import axios from "axios";
+import { useState } from "react";
+import InputMask from 'react-input-mask';
+import { API_BASE_URL } from "../../../../apiConfig";
+import { useRouter } from "next/router";
+
+export function SignUp({ setStateAuth, onClose }) {
+
+    const router = useRouter();
+
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [code, setCode] = useState('');
+    const [password, setPassword] = useState('');
+    const [isCodeSend, setIsCodeSend] = useState(false);
+    const [time, setTime] = useState(59);
+
+    const [hidePassword, setHidePassword] = useState(true);
+
+    const [errorEmail, setErrorEmail] = useState(false);
+    const [errorCode, setErrorCode] = useState(false);
+    const [errorPhone, setErrorPhone] = useState(false);
+    const [errorPassword, setErrorPassword] = useState(false);
+    const [errorUser, setErrorUser] = useState(false);
+    const [errorCodeCorrect, setErrorCodeCorrect] = useState(false);
+
+    function sendCode() {
+        if (email.length > 0) {
+            axios.post(`${API_BASE_URL}sendCode`, { email })
+                .then(() => {
+                    setIsCodeSend(true);
+                    let nowtime = 59;
+                    setTime(nowtime);
+
+                    const timer = setInterval(() => {
+                        if (nowtime > 1) {
+                            nowtime -= 1;
+                            setTime(nowtime);
+                        } else {
+                            setIsCodeSend(false);
+                            clearInterval(timer);
+                        }
+                    }, 1000);
+                })
+                .catch(e => console.log(e));
+        } else {
+            if (email.length === 0) return setErrorEmail(true);
+        }
+    };
+
+    function signUp() {
+        if (code.length === 6 && password.length > 0 && phone.length > 0) {
+            axios.post(`${API_BASE_URL}signUp`, { email, code, phone, password })
+                .then((res) => {
+                    localStorage.setItem('token', res.data.token);
+                    router.push('/cabinet');
+                })
+                .catch((e) => {
+                    console.log(e);
+                    if (e?.response?.status === 400) return setErrorUser(true);
+                    if (e?.response?.status === 401) return setErrorCodeCorrect(true);
+                });
+        } else {
+            if (code.length !== 6) return setErrorCode(true);
+            if (phone.length === 0) return setErrorPhone(true);
+            if (password.length === 0) return setErrorPassword(true);
+        }
+    };
+
+    return <div className={styles.modalSignUp}>
+        <div className={styles.mainColumn}>
+            <div className={styles.headerModal} >
+                <div className={styles.headerModalLine}>
+                    <p className={styles.headerModalTitle}>РЕГИСТРАЦИЯ</p>
+                    <img src='/modalCross.svg' className={styles.cross} onClick={() => onClose()} />
+                </div>
+                <hr className={styles.modalHr} />
+            </div>
+            <div className={styles.columnContent}>
+                <div className={styles.inputColumn}>
+                    {(!errorEmail && !errorUser)
+                        ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >E-mail</p>
+                        : errorEmail ? <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Введите e-mail</p>
+                            : errorUser && <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Этот e-mail уже привязан к аккаунту</p>}
+                    <input className={styles.input} onChange={(e) => { setEmail(e.target.value); setErrorEmail(false); setErrorUser(false); }} value={email} />
+                </div>
+                <div className={styles.inputColumn}>
+                    {(!errorCode && !errorCodeCorrect)
+                        ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >Код подтверждения</p>
+                        : errorCode
+                            ? <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Введите код из письма</p>
+                            : errorCodeCorrect && <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Неверный код</p>}
+                    <div className={styles.inputLine}>
+                        <input className={styles.inputLil} type="number" onChange={(e) => { setCode(e.target.value); setErrorCode(false); setErrorCodeCorrect(false); }} value={code} />
+                        {!isCodeSend
+                            ? <div className={styles.buttonCode} onClick={sendCode}>ОТПРАВИТЬ ПИСЬМО</div>
+                            : <div className={styles.buttonTimer}>0:{time}</div>}
+                    </div>
+                </div>
+                <div className={styles.inputColumn}>
+                    {!errorPhone
+                        ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >Телефон</p>
+                        : <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Введите телефон</p>}
+                    <InputMask mask="+7 (999) 999-99-99" className={styles.input} onChange={(e) => { setPhone(e.target.value); setErrorPhone(false); }} value={phone} />
+                </div>
+                <div className={styles.inputColumn}>
+                    {!errorPassword
+                        ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >Пароль</p>
+                        : <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Придумайте и введите пароль</p>}
+                    <div className={styles.inputIconLine}>
+                        <input className={styles.input} type={hidePassword ? 'password' : 'text'} onChange={(e) => { setPassword(e.target.value); setErrorPassword(false); }} value={password} />
+                        <>
+                            {hidePassword
+                                ? <img src='/showIcon.svg' className={styles.inputIcon} onClick={() => setHidePassword(false)} />
+                                : <img src='/hideIcon.svg' className={styles.inputIcon} onClick={() => setHidePassword(true)} />}
+                        </>
+                    </div>
+                </div>
+                <div className={styles.lilColumn}>
+                    <div className={styles.mainButtonBlack} onClick={signUp} >ЗАРЕГИСТРИРОВАТЬСЯ</div>
+                    <p className={styles.agreementText}>Регистрируясь, я подтверждаю свое согласие на обработку персональных данных в соответствии с Политикой конфиденциальности.</p>
+                </div>
+            </div>
+        </div>
+        <div className={styles.lilColumn} >
+            <p className={styles.inputTitle}>Уже есть аккаунта?</p>
+            <div className={styles.mainButton} onClick={() => setStateAuth('signIn')} >ВОЙТИ</div>
+        </div>
+    </div>
+}

@@ -106,3 +106,295 @@
 .linkItem:hover {
     cursor: pointer;
 }
+
+.mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 33px;
+    width: 100%;
+}
+
+.modalSignUp {
+    background: #FDFDFD;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    padding: 38px 0 55px 0;
+}
+
+.inputTitle {
+    color: #140702;
+    text-align: center;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    font-family: 'Tenor Sans', sans-serif;
+    user-select: none;
+}
+
+.mainButton:hover {
+    cursor: pointer;
+}
+
+.mainButton {
+    display: flex;
+    width: 500px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #FDEDBF;
+    color: var(--, #140702);
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.lilColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.headerModal {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    width: 100%;
+}
+
+.headerModalLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.cross:hover {
+    cursor: pointer;
+}
+
+.headerModalTitle {
+    color: #140702;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    text-align: left;
+}
+
+.modalHr {
+    width: 100%;
+    border-top: solid 1px #140702;
+}
+
+.columnContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    padding: 0 49px;
+}
+
+.inputColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: left;
+    width: 100%;
+    justify-content: left;
+}
+
+.input {
+    width: 100%;
+    background: none;
+    height: 62px;
+    border-radius: 150px;
+    border: solid 1px #000;
+    color: #140702;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    padding: 0 20px;
+    font-family: 'Tenor Sans', sans-serif;
+}
+
+.input:focus,
+.inputLil:focus {
+    outline: none;
+}
+
+.inputLil {
+    width: 223px;
+    background: none;
+    height: 62px;
+    border-radius: 150px;
+    border: solid 1px #000;
+    color: #140702;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    padding: 0 20px;
+    font-family: 'Tenor Sans', sans-serif;
+}
+
+.inputLine {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+}
+
+.buttonCode {
+    display: flex;
+    width: 262px;
+    height: 62px;
+    padding: 15px 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.buttonCode:hover,
+.mainButtonBlack:hover,
+.mainButtonBlackRefresh:hover {
+    cursor: pointer;
+}
+
+.agreementText {
+    color: var(--, #140702);
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    width: 450px;
+}
+
+.mainButtonBlack {
+    display: flex;
+    width: 500px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.mainButtonBlackRefresh {
+    display: flex;
+    width: 500px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 200px;
+}
+
+.inputIconLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.inputIcon {
+    position: absolute;
+    right: 0;
+    margin-right: 40px;
+    z-index: 2;
+}
+
+.inputIcon:hover {
+    cursor: pointer;
+}
+
+.forgotPassword {
+    color: #140702;
+    text-align: center;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    font-family: 'Tenor Sans', sans-serif;
+}
+
+.forgotPassword:hover {
+    cursor: pointer;
+}
+
+.buttonTimer {
+    display: flex;
+    width: 262px;
+    height: 62px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #FDEDBF;
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.refreshText {
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    width: 470px;
+    margin: 30px 0 129px 0;
+}
+
+.errorText {
+    color: #950000;
+}
