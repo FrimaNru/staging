@@ -1,4 +1,6 @@
-html, body, main {
+html,
+body,
+main {
   background-color: #fff;
   margin: 0;
   padding: 0;
@@ -29,4 +31,20 @@ p {
 
 .input-file span {
   cursor: pointer;
+}
+
+.toast {
+  display: flex;
+  padding: 15px 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 104px;
+  background: #140702;
+  color: #FDEDBF;
+  text-align: center;
+  font-family: "Dela Gothic One";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

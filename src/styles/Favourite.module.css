@@ -1,0 +1,190 @@
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: left;
+    justify-content: left;
+}
+
+.title {
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.blackButtonLil {
+    display: flex;
+    padding: 15px 50px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    width: max-content;
+}
+
+.blackButtonLil:hover,
+.toBagButton:hover,
+.deleteAllButton:hover {
+    cursor: pointer;
+}
+
+.hr {
+    width: 100%;
+    border-top: solid 1px #140702;
+}
+
+.lineButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    width: 100%;
+}
+
+.toBagButton {
+    display: flex;
+    width: 55%;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 104px;
+    background: #140702;
+}
+
+.deleteAllButton {
+    display: flex;
+    width: max-content;
+    padding: 15px 76.5px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #C39748;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 220px;
+}
+
+.itemImg {
+    width: 222px;
+    height: 220px;
+    object-fit: cover;
+}
+
+.itemRow {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.itemCross {
+    width: 23px;
+    height: 23px;
+}
+
+.itemCross:hover,
+.lilButton:hover {
+    cursor: pointer;
+}
+
+.itemColumn {
+    display: flex;
+    flex-direction: column;
+    height: 220px;
+    justify-content: space-between;
+}
+
+.lilButton {
+    display: flex;
+    width: max-content;
+    height: 38px;
+    padding: 15px 74px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.itemLilColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: left;
+    justify-content: left;
+}
+
+.itemName {
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.itemText {
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.itemCost {
+    color: #C39748;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}

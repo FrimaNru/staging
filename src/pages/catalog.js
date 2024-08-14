@@ -6,8 +6,8 @@ export default function Delivery() {
     return (
         <>
             <Head>
-                <title>Каталог</title>
-                <meta name="description" content='' />
+                <title>Каталог Ювелирных Изделий – MiAlegria</title>
+                <meta name="description" content='Откройте для себя наш каталог ювелирных изделий: золотые и серебряные кольца, серьги, браслеты и подвески. Найдите идеальное украшение на любой случай!' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="./favicon.ico" />
             </Head>

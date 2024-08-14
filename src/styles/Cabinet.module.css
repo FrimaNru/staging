@@ -1,0 +1,59 @@
+.main {
+    display: flex;
+    flex-direction: row;
+    margin: 215px 0 100px 0;
+    gap: 145px;
+    align-items: flex-start;
+    width: 85%;
+    max-width: 1400px;
+}
+
+.sideMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: left;
+    justify-content: left;
+}
+
+.sideMenuColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: left;
+    justify-content: left;
+}
+
+.logOutButton {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.logOutButton:hover {
+    cursor: pointer;
+}
+
+.logOutButtonText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sideMenuItem {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sideMenuItemSelect {
+    border-bottom: 1px solid #140702;
+    font-weight: 600;
+}

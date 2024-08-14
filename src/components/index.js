@@ -13,3 +13,10 @@ export * from "./Header/items/AuthModal";
 export * from "./Header/items/SignUp";
 export * from "./Header/items/SignIn";
 export * from "./Header/items/RefreshPassword";
+
+export * from "./Cabinet/Cabinet";
+export * from "./Cabinet/items/SideMenu";
+export * from "./Cabinet/items/PersonalData";
+export * from "./Cabinet/items/FavouriteBlock";
+
+export * from "./Common/FavouriteButton";

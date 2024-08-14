@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import axios from "axios";
+import { API_BASE_URL } from "../../../apiConfig";
 
 export function Catalog() {
 
@@ -10,6 +12,7 @@ export function Catalog() {
     const [stateSales, setStateSales] = useState([]);
     const [stateGenders, setStateGenders] = useState('');
     const [stateType, setStateType] = useState('');
+    const [data, setData] = useState([]);
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
     const genders = ['Мужчинам', 'Женщинам', 'Унисекс'];
@@ -19,6 +22,7 @@ export function Catalog() {
     const [stateSortItems, setStateSortItems] = useState('По популярности');
 
     useEffect(() => {
+        load();
         if (window.location.href.includes('new')) setStateSales(old => [...old, 'Новинки']);
         const handleRouteChange = (url) => {
             if (window.location.href.includes('new')) {
@@ -30,19 +34,16 @@ export function Catalog() {
         router.events.on('routeChangeComplete', handleRouteChange);
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
-        };
+        };        
     }, [])
 
-    const data = [
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' }
-    ];
+    function load() {
+        axios.get(`${API_BASE_URL}getProducts`)
+        .then((res) => {
+            setData(res.data);
+        })
+        .catch((e) => console.log(e));
+    };
 
     return <div className={styles.main}>
         <div className={styles.imageBlock} >
@@ -80,7 +81,7 @@ export function Catalog() {
                             <div className={styles.menuButton} zIndex={5} pos='relative' >
                                 <p className={styles.menuButtonText} >{stateSortItems}</p>
                                 <svg style={{ marginTop: '3px' }} width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M0.496094 0.5L5.49609 5.5L10.4961 0.5" stroke="#140702" stroke-linecap="round" />
+                                    <path d="M0.496094 0.5L5.49609 5.5L10.4961 0.5" stroke="#140702" strokeLinecap="round" />
                                 </svg>
                             </div>
                         </MenuButton>
@@ -97,7 +98,7 @@ export function Catalog() {
                     </Menu>
                 </div>
                 <div className={styles.lineOrders}>
-                    {data.map((x, i) => i < 3 && <Link key={i} href='/product' style={{ width: 'max-content' }}>
+                    {data.map((x, i) => i < 3 && <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
                         <div className={styles.sliderItem} >
                             <div className={styles.sliderItemContent} >
                                 <img src={x.img} className={styles.sliderItemImage} />
@@ -112,7 +113,7 @@ export function Catalog() {
                 </div>
                 <hr className={styles.mainHr} />
                 <div className={styles.lineOrders}>
-                    {data.map((x, i) => i < 3 && <Link key={i} href='/product' style={{ width: 'max-content' }}>
+                    {data.map((x, i) => i < 3 && <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
                         <div key={i} className={styles.sliderItem} >
                             <div className={styles.sliderItemContent} >
                                 <img src={x.img} className={styles.sliderItemImage} />

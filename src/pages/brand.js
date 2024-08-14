@@ -6,8 +6,8 @@ export default function BrandPage() {
     return (
         <>
             <Head>
-                <title>О бренде</title>
-                <meta name="description" content='' />
+                <title>О Бренде MiAlegria – История и Ценности</title>
+                <meta name="description" content='Узнайте больше о бренде MiAlegria: наша история, миссия и ценности. Мы предлагаем только лучшие ювелирные изделия, созданные с любовью и мастерством.' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="./favicon.ico" />
             </Head>

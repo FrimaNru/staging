@@ -2,13 +2,15 @@ import styles from "@/styles/Header.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Authorization } from "@/components";
+import { AuthModal, Authorization } from "@/components";
+import { useDisclosure } from "@chakra-ui/react";
 
 export function Header() {
 
     const router = useRouter();
     const [stateNew, setStateNew] = useState(false);
     const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     useEffect(() => {
         if (typeof window !== undefined && window.location.href.includes('new')) setStateNew(true);
@@ -25,6 +27,14 @@ export function Header() {
         };
     }, []);
 
+    function favPage() {
+        if (localStorage.getItem('token')) {
+            router.push('/cabinet?page=favourites')
+        } else {
+            onOpen();
+        }
+    };
+
     return <div className={styles.main}>
         <div className={styles.firstLine} >
             <Link href='/' style={{ width: 'max-content' }} >
@@ -35,7 +45,8 @@ export function Header() {
                 <input className={styles.searchBlockInput} placeholder="Поиск по каталогу" />
             </div>
             <div className={styles.iconLine} >
-                <img src='/favIcon.svg' className={styles.icon} />
+                <img src='/favIcon.svg' className={styles.icon} onClick={() => favPage()} />
+                <AuthModal onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
                 <Authorization />
                 <img src='/shopIcon.svg' className={styles.icon} />
             </div>
@@ -48,6 +59,6 @@ export function Header() {
                 </Link>)}
             </div>
             <hr className={styles.hr} />
-        </div>        
+        </div>
     </div>
 }

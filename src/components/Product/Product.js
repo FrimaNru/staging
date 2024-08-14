@@ -1,18 +1,34 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "@/styles/Product.module.css";
 import Slider from "react-slick";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react'
+import { FavouriteButton } from "../Common/FavouriteButton";
+import axios from "axios";
+import { API_BASE_URL } from "../../../apiConfig";
 
 export function Product() {
 
     let sliderRef = useRef(null);
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        load();
+    }, []);
+
+    function load() {
+        axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
+        .then((res) => {
+            setData(res.data);
+        })
+        .catch((e) => console.log(e));
+    };
 
     const SampleNextArrow = (props) => {
         const { className, style, onClick } = props;
         return (
             <div className={className} onClick={onClick}>
                 <svg width="23" height="36" viewBox="0 0 23 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.5 33L18.5 18L3.5 3" stroke="#140702" stroke-width="6" stroke-linecap="round" />
+                    <path d="M3.5 33L18.5 18L3.5 3" stroke="#140702" strokeWidth="6" strokeLinecap="round" />
                 </svg>
             </div>
         );
@@ -23,7 +39,7 @@ export function Product() {
         return (
             <div className={className} onClick={onClick}>
                 <svg width="23" height="36" viewBox="0 0 23 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19.5 3L4.5 18L19.5 33" stroke="#140702" stroke-width="6" stroke-linecap="round" />
+                    <path d="M19.5 3L4.5 18L19.5 33" stroke="#140702" strokeWidth="6" strokeLinecap="round" />
                 </svg>
             </div>
         );
@@ -75,15 +91,15 @@ export function Product() {
                 <div className={styles.infoColumnText}>
                     <div className={styles.infoLilColumnText} >
                         <div className={styles.infoTitleLine} >
-                            <p className={styles.infoTitle}>СЕРЬГИ CARAMEL</p>
-                            <img src='/favIcon.svg' className={styles.infoFavIcon} />
+                            <p className={styles.infoTitle}>{data.name}</p>
+                            <FavouriteButton idProduct={data._id} />
                         </div>
-                        <p className={styles.infoSubtitle} >ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА</p>
+                        <p className={styles.infoSubtitle} >{data.text}</p>
                     </div>
                     <p className={styles.description}>Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота</p>
                 </div>
                 <div className={styles.infoButtonColumn}>
-                    <p className={styles.infoCost} >12 500 руб.</p>
+                    <p className={styles.infoCost} >{data.cost}</p>
                     <div className={styles.infoButton}>КУПИТЬ</div>
                 </div>
             </div>
@@ -98,10 +114,10 @@ export function Product() {
                                     <div className={styles.accordionButton} >
                                         <p className={styles.accordionButtonTitle} >{x.title}</p>
                                         {isExpanded ? <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M21 11.5L11 1.5L1 11.5" stroke="#140702" stroke-linecap="round" />
+                                            <path d="M21 11.5L11 1.5L1 11.5" stroke="#140702" strokeLinecap="round" />
                                         </svg>
                                             : <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M1 0.5L11 10.5L21 0.5" stroke="#140702" stroke-linecap="round" />
+                                                <path d="M1 0.5L11 10.5L21 0.5" stroke="#140702" strokeLinecap="round" />
                                             </svg>}
 
                                     </div>

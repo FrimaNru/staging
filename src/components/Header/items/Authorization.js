@@ -11,7 +11,7 @@ export function Authorization() {
 
     function auth() {
         if (localStorage.getItem('token')) {
-            router.push('/cabinet');
+            router.push('/cabinet?page=personaldata');
         } else {
             onOpen();
         }

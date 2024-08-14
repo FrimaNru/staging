@@ -59,6 +59,10 @@
     height: 31px;
 }
 
+.infoFavIcon:hover {
+    cursor: pointer;
+}
+
 .infoSubtitle {
     color: #140702;
     font-size: 20px;

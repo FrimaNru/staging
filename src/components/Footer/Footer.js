@@ -9,11 +9,11 @@ export function Footer() {
             {links.map((x, i) => <div key={i} className={styles.column} >
                 <p className={styles.title} >{x.title}</p>
                 {x.links.map((y, n) => x.title === 'Соц сети'
-                    ? <div className={styles.line} >
+                    ? <div className={styles.line} key={n} >
                         <img src={`/${y.text}.svg`} />
                         <p>{y.text}</p>
                     </div>
-                    : <Link href={y.link} ><p key={n} className={styles.text} >{y.text}</p></Link>)}
+                    : <Link href={y.link} key={n} ><p className={styles.text}>{y.text}</p></Link>)}
             </div>)}
         </div>
     </div>

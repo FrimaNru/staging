@@ -1,0 +1,365 @@
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-top: 50px;
+    gap: 50px;
+}
+
+.dataColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    align-items: left;
+}
+
+.titleColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.title {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+    width: 100%;
+}
+
+.inputColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: left;
+    width: 100%;
+}
+
+.inputTitle {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    text-align: left;
+}
+
+.input {
+    width: 502px;
+    height: 51px;
+    border: solid 1px #000;
+    border-radius: 100px;
+    padding: 0 25px;
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.lineSex {
+    display: flex;
+    flex-direction: row;
+    gap: 87px;
+    padding: 0 12.5px;
+}
+
+.lineLilSex {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.lineLilSex:hover {
+    cursor: pointer;
+}
+
+.sexText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sexCircle {
+    width: 20px;
+    height: 20px;
+}
+
+.hr {
+    width: 100%;
+    border-top: solid 1px #140702;
+}
+
+.lineAddress {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.buttonAddAddress {
+    display: flex;
+    width: 269px;
+    height: 131px;
+    padding: 20px 15px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    border: 1px solid #140702;
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.buttonAddAddress:hover {
+    cursor: pointer;
+}
+
+.passwordColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.inputIconLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.inputIcon {
+    position: absolute;
+    margin-left: 442px;
+    z-index: 2;
+}
+
+.inputIcon:hover {
+    cursor: pointer;
+}
+
+.saveButton {
+    display: flex;
+    width: 500px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.saveButton:hover {
+    cursor: pointer;
+}
+
+.modal {
+    width: 600px;
+    flex-shrink: 0;
+    background: #FDFDFD;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    padding: 40px 0 65px 0;
+}
+
+.modalHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.modalHeaderLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.modalHeaderTitle {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.cross:hover {
+    cursor: pointer;
+}
+
+.modalHr {
+    width: 100%;
+    border-top: solid 1px #140702;
+}
+
+.modalColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 50px;
+}
+
+.modalSubtitle {
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalColumnInput {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modalInputTitle {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalInput {
+    width: 502px;
+    height: 62px;
+    border: solid 1px #000;
+    border-radius: 100px;
+    padding: 0 25px;
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalInput:focus,
+.modalInputLil:focus {
+    outline: none;
+}
+
+.modalInputLil {
+    width: 223px;
+    height: 62px;
+    border: solid 1px #000;
+    border-radius: 100px;
+    padding: 0 25px;
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalInputLine {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.modalSaveButton {
+    display: flex;
+    width: 500px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.modalSaveButton:hover {
+    cursor: pointer;
+}
+
+.addressBlock {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    background: #FDEDBF;
+    width: 269px;
+    padding: 20px 15px;
+    align-items: flex-start;
+}
+
+.addressBlockColumn {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.addressBlockText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    text-align: left;
+}
+
+.addressBlockLine {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+}
+
+.addressBlockButton {
+    color: #C39748;
+    font-family: "Tenor Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.addressBlockButton:hover {
+    cursor: pointer;
+}
+
+.errorText {
+    color: #950000;
+}

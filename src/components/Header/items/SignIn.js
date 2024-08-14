@@ -22,7 +22,7 @@ export function SignIn({ setStateAuth, onClose }) {
             axios.post(`${API_BASE_URL}login`, { email, password })
                 .then((res) => {
                     localStorage.setItem('token', res.data.token);
-                    router.push('/cabinet');
+                    router.push('/cabinet?page=personaldata');
                 })
                 .catch((e) => {
                     console.log(e);
@@ -74,7 +74,7 @@ export function SignIn({ setStateAuth, onClose }) {
             </div>
         </div>
         <div className={styles.lilColumn} >
-            <p className={styles.inputTitle}>Уже есть аккаунта?</p>
+            <p className={styles.inputTitle}>Еще нет аккаунта?</p>
             <div className={styles.mainButton} onClick={() => setStateAuth('signUp')} >ЗАРЕГИСТРИРОВАТЬСЯ</div>
         </div>
     </div>
