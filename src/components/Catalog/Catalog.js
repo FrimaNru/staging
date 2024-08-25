@@ -16,7 +16,7 @@ export function Catalog() {
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
     const genders = ['Мужчинам', 'Женщинам', 'Унисекс'];
-    const types = ['Кольца', 'Серьги', 'Браслеты', 'Цепочки', 'Колье'];
+    const types = ['Кольца', 'Серьги', 'Браслеты', 'Колье'];
 
     const sortItems = ['По популярности', 'По возрастанию цены', 'По убыванию цены'];
     const [stateSortItems, setStateSortItems] = useState('По популярности');
@@ -58,13 +58,13 @@ export function Catalog() {
                         <p className={styles.filterText}>{x}</p>
                     </div>)}
                 </div>
-                <div className={styles.lilColumn}>
+                {/* <div className={styles.lilColumn}>
                     <p className={styles.filterTitle}>КОМУ</p>
                     {genders.map((x, i) => <div key={i} className={styles.filterLine} onClick={() => setStateGenders(x)} >
                         {stateGenders === x ? <img src='/goldDotSelect.svg' /> : <img src='/goldDot.svg' />}
                         <p className={styles.filterText}>{x}</p>
                     </div>)}
-                </div>
+                </div> */}
                 <div className={styles.lilColumn}>
                     <p className={styles.filterTitle}>ВИД ИЗДЕЛИЯ</p>
                     {types.map((x, i) => <div key={i} className={styles.filterLine} onClick={() => setStateType(x)}>

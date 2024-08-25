@@ -11,18 +11,16 @@ export function Brand() {
             <hr className={styles.hr} />
             <div className={styles.contentColumnBig} >
                 <div className={styles.line} >
-                    <p className={styles.text} >Mi Alegria - это гармоничное соединение многовековых культурных традиций
-                        и современного прочтения. </p>
+                    <p className={styles.text} >Mi Alegria - это естественное и гармоничное соединение многовековых культурных традиций и современного прочтения в мире украшений. </p>
                     <img src='/brandImg.png' className={styles.imgLine} />
                 </div>
                 <div className={styles.line} >
                     <img src='/brandImg.png' className={styles.imgLine} />
-                    <p className={styles.text} style={{ textAlign: 'right' }} >Наши украшения созданы<br /> для тех, кто хочет смело<br /> и со вкусом подчеркнуть<br /> свою индивидуальность.</p>
+                    <p className={styles.text} style={{ textAlign: 'right' }} >Наш бренд предлагает  премиальную бижутерию для тех, кто ценит качество и хочет смело, но со вкусом подчеркнуть свою индивидуальность. </p>
                 </div>
-                <p className={styles.text2}>Мы не гонимся за проходящими тенденциями в моде,
-                    наш дизайн актуален для любого пола, возраста, стиля и случая. </p>
+                <p className={styles.text2}>Мы не гонимся за проходящими сезонными тенденциями в моде, наш дизайн актуален для любого возраста, стиля и случая. В офисе, в театре, в ресторане и на прогулке вы будете выглядеть великолепно. </p>
                 <img src='/brandImg.png' />
-                <p className={styles.subtitle} >Вы сами создаете свой неповторимый стиль - дорогой,<br /> выразительный и дерзкий.</p>
+                <p className={styles.subtitle} >Пробуйте, экспериментируйте, сочетайте - создавайте сами свой неповторимый стиль - дорогой, выразительный и дерзкий.</p>
             </div>
         </div>
     </div>
