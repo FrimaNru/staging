@@ -6,6 +6,10 @@ import Link from "next/link";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 
+function formatNumber(num) {
+    return num?.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, '.');
+}
+
 export function Catalog() {
 
     const router = useRouter();
@@ -106,7 +110,7 @@ export function Catalog() {
                                     <p className={styles.sliderItemTitle} >{x.name}</p>
                                     <p className={styles.sliderItemText} >{x.text}</p>
                                 </div>
-                                <p className={styles.sliderItemCost} >{x.cost}</p>
+                                <p className={styles.sliderItemCost} >{formatNumber(x.cost)} руб.</p>
                             </div>
                         </div>
                     </Link>)}

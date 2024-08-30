@@ -1,15 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "@/styles/Product.module.css";
 import Slider from "react-slick";
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react'
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, useDisclosure, Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react'
 import { FavouriteButton } from "../Common/FavouriteButton";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
+import { useRouter } from "next/router";
+import { AuthModal } from "../Header/items/AuthModal";
+
+function formatNumber(num) {
+    return num?.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, '.');
+};
 
 export function Product() {
 
     let sliderRef = useRef(null);
     const [data, setData] = useState({});
+    const router = useRouter();
+    const { isOpen, onClose, onOpen } = useDisclosure();
+
+    const [isOpenModal, setIsOpenModal] = useState(false);
 
     useEffect(() => {
         load();
@@ -17,10 +27,10 @@ export function Product() {
 
     function load() {
         axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
-        .then((res) => {
-            setData(res.data);
-        })
-        .catch((e) => console.log(e));
+            .then((res) => {
+                setData(res.data);
+            })
+            .catch((e) => console.log(e));
     };
 
     const SampleNextArrow = (props) => {
@@ -62,6 +72,18 @@ export function Product() {
         { title: 'ГАРАНТИЯ И УХОД', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' }
     ];
 
+    function buy() {
+        if (localStorage.getItem('token')) {
+            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                .then(() => {
+                    setIsOpenModal(true);
+                })
+                .catch((e) => console.log(e));
+        } else {
+            onOpen();
+        }
+    };
+
     return <div className={styles.main}>
         <div className={styles.infoLine} >
             <div className={styles.imgSliderBoxColumn} >
@@ -99,8 +121,8 @@ export function Product() {
                     <p className={styles.description}>Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота</p>
                 </div>
                 <div className={styles.infoButtonColumn}>
-                    <p className={styles.infoCost} >{data.cost}</p>
-                    <div className={styles.infoButton}>КУПИТЬ</div>
+                    <p className={styles.infoCost} >{formatNumber(data.cost)} руб.</p>
+                    <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
                 </div>
             </div>
         </div>
@@ -130,7 +152,36 @@ export function Product() {
                     )}
                 </AccordionItem>)}
             </Accordion>
-
         </div>
+        <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
+            <ModalOverlay />
+            <ModalContent bg='none' boxShadow='none'>
+                <ModalBody p={0}>
+                    <div className={styles.modal} >
+                        <div className={styles.modalHeader}>
+                            <div className={styles.modalHeaderLine}>
+                                <p className={styles.modalHeaderTitle}>ДОБАВЛЕНО В КОРЗИНУ</p>
+                                <img src='/cross.svg' className={styles.modalHeaderCross} onClick={() => setIsOpenModal(false)} />
+                            </div>
+                            <hr className={styles.modalHeaderHr} />
+                        </div>
+                        <div className={styles.modalBody}>
+                            <div className={styles.modalBodyColumn}>
+                                <img src="/tovar2.png" className={styles.modalBodyImg} />
+                                <div className={styles.modalBodyColumnLil}>
+                                    <p className={styles.modalBodyTitle}>{data.name}</p>
+                                    <p className={styles.modalBodyText} >{data.text}</p>
+                                </div>
+                            </div>
+                            <div className={styles.modalBodyColumnButtons}>
+                                <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
+                                <button className={styles.modalBodyButtonBag} onClick={() => router.push('/bag')}>ОФОРМИТЬ ЗАКАЗ</button>
+                            </div>
+                        </div>
+                    </div>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
+        <AuthModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </div>
 };

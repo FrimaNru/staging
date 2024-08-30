@@ -48,7 +48,9 @@ export function Header() {
                 <img src='/favIcon.svg' className={styles.icon} onClick={() => favPage()} />
                 <AuthModal onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
                 <Authorization />
-                <img src='/shopIcon.svg' className={styles.icon} />
+                <Link href='/bag' style={{ width: 'max-content' }} >
+                    <img src='/shopIcon.svg' className={styles.icon} />
+                </Link>
             </div>
         </div>
         <div className={styles.secondLine}>

@@ -1,6 +1,9 @@
 import styles from "@/styles/Cabinet.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import axios from "axios";
+import { useEffect } from "react";
+import { API_BASE_URL } from "../../../../apiConfig";
 
 export function SideMenu() {
 
@@ -13,6 +16,25 @@ export function SideMenu() {
         { text: 'Избранное', link: 'favourites' },
         { text: 'История заказов', link: 'historyorders' }
     ];
+
+    useEffect(() => {
+        load();
+    }, []);
+
+    function load() {
+        axios.get(`${API_BASE_URL}getUser`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .catch((e) => {
+                console.log(e);
+                if (e?.response?.status === 404 || e?.response?.status === 401) {
+                    localStorage.removeItem('token');
+                    router.push('/');
+                }
+            });
+    };
 
     return <div className={styles.sideMenu}>
         <div className={styles.sideMenuColumn}>

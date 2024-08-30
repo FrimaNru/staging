@@ -14,21 +14,21 @@ export function FavouriteButton({ idProduct }) {
     const { id } = router.query;
 
     useEffect(() => {
-        load();
+        if (localStorage.getItem('token')) load();
     }, []);
 
     function load() {
         axios.get(`${API_BASE_URL}getUser`, {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         })
-        .then((res) => {
-            res.data.favourite.forEach(x => {
-                if (x === id) {
-                    setHeart(true);
-                }
+            .then((res) => {
+                res.data.favourite.forEach(x => {
+                    if (x === id) {
+                        setHeart(true);
+                    }
+                })
             })
-        })
-        .catch((e) => console.log(e));
+            .catch((e) => console.log(e));
     };
 
     function fav() {

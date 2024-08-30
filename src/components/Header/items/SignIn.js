@@ -22,7 +22,9 @@ export function SignIn({ setStateAuth, onClose }) {
             axios.post(`${API_BASE_URL}login`, { email, password })
                 .then((res) => {
                     localStorage.setItem('token', res.data.token);
-                    router.push('/cabinet?page=personaldata');
+                    if (window.location.href.includes('product?id=')) {
+                        onClose();
+                    } else router.push('/cabinet?page=personaldata');
                 })
                 .catch((e) => {
                     console.log(e);
