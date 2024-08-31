@@ -1,0 +1,263 @@
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-top: 50px;
+    gap: 50px;
+    min-height: 45vh;
+}
+
+.noOrderTitle {
+    color: #140702;
+    text-align: left;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.noOrderButton {
+    display: flex;
+    width: 250px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.hr {
+    width: 100%;
+    border-top: solid 1px #140702;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.columnItem {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.itemCover {
+    width: 77px;
+    height: 77px;
+    object-fit: cover;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.itemLineProducts {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.itemCover:hover {
+    cursor: pointer;
+}
+
+.itemColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.itemTitle {
+    color: #140702;
+    text-align: left;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.itemDate {
+    color: #140702;
+    text-align: left;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.itemTotal {
+    color: #C39748;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.itemButton {
+    display: flex;
+    width: 210px;
+    height: 34px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    width: 100%;
+}
+
+.itemDeliveryLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.lilColumnOrder {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.deliveryColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.costGold {
+    color: #C39748;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.columnOrder {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.statusBlock {
+    display: flex;
+    padding: 15px 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 40px;
+    background: #FDEDBF;
+    width: max-content;
+    user-select: none;
+}
+
+.statusBlockText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.titleColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.itemHistory {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.itemHistory:hover {
+    cursor: pointer;
+}
+
+.itemRowHistory {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    padding: 0 30px;
+    align-items: center;
+}
+
+.itemCoverHistory {
+    width: 132px;
+    height: 130px;
+    object-fit: cover;
+}
+
+.itemTextColumnHistory {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.itemNameHistory {
+    color: #140702;
+    text-align: left;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.itemCountNumberHistory {
+    color: #140702;
+    text-align: left;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.itemCostHistory {
+    color: #C39748;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

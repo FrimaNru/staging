@@ -13,6 +13,7 @@ function formatNumber(num) {
 export function Catalog() {
 
     const router = useRouter();
+    const { product } = router.query;
     const [stateSales, setStateSales] = useState([]);
     const [stateGenders, setStateGenders] = useState('');
     const [stateType, setStateType] = useState('');
@@ -28,6 +29,16 @@ export function Catalog() {
     useEffect(() => {
         load();
         if (window.location.href.includes('new')) setStateSales(old => [...old, 'Новинки']);
+        switch (product) {
+            case 'ring':
+                return setStateType('Кольца');
+            case 'necklace':
+                return setStateType('Колье');
+            case 'earrings':
+                return setStateType('Серьги');
+            case 'bracelets':
+                return setStateType('Браслеты');
+        }
         const handleRouteChange = (url) => {
             if (window.location.href.includes('new')) {
                 setStateSales(old => [...old, 'Новинки']);
@@ -38,15 +49,15 @@ export function Catalog() {
         router.events.on('routeChangeComplete', handleRouteChange);
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
-        };        
+        };
     }, [])
 
     function load() {
         axios.get(`${API_BASE_URL}getProducts`)
-        .then((res) => {
-            setData(res.data);
-        })
-        .catch((e) => console.log(e));
+            .then((res) => {
+                setData(res.data);
+            })
+            .catch((e) => console.log(e));
     };
 
     return <div className={styles.main}>

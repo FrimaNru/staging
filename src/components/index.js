@@ -19,5 +19,7 @@ export * from "./Cabinet/Cabinet";
 export * from "./Cabinet/items/SideMenu";
 export * from "./Cabinet/items/PersonalData";
 export * from "./Cabinet/items/FavouriteBlock";
+export * from "./Cabinet/items/MyOrders";
+export * from "./Cabinet/items/HistoryOrders"
 
 export * from "./Common/FavouriteButton";

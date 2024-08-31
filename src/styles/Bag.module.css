@@ -1,14 +1,14 @@
 .main {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 85%;
     max-width: 1400px;
-    gap: 100px;
     margin: 315px 0 100px 0;
     align-items: flex-start;
     min-height: 45vh;
-    gap: 40px;
+    gap: 90px;
     justify-content: space-between;
+    overflow: hidden;
 }
 
 .columnProducts {
@@ -289,6 +289,394 @@
     text-align: center;
     font-family: "Dela Gothic One";
     font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.mainRow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.order {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.orderColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.orderTitle {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.orderLine {
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    align-items: flex-start;
+}
+
+.orderColumnBig {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.orderColumnLil {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.orderInputTitle {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    text-align: left;
+}
+
+.orderInput {
+    width: 502px;
+    height: 51px;
+    border: solid 1px #000;
+    border-radius: 51px;
+    padding: 0 25px;
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.orderInput:focus {
+    outline: none;
+}
+
+.orderLineDelivery {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    width: max-content;
+    user-select: none;
+}
+
+.orderLineDelivery:hover {
+    cursor: pointer;
+}
+
+.orderDeliveryDot {
+    width: 12px;
+    height: 12px;
+}
+
+.orderDeliveryText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.orderButtonPay {
+    display: flex;
+    width: 412px;
+    height: 46px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.orderDeliveryLineAddress {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+
+.orderDeliveryAddress {
+    display: flex;
+    width: 269px;
+    height: 84px;
+    padding: 20px 15px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    background: #FDEDBF;
+}
+
+.orderDeliveryAddress:hover,
+.anotherAddress:hover {
+    cursor: pointer;
+}
+
+.orderDeliveryAddressText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    text-align: left;
+}
+
+.anotherAddress {
+    display: flex;
+    width: 269px;
+    height: 84px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    border: 1px solid #140702;
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modal {
+    width: 600px;
+    flex-shrink: 0;
+    background: #FDFDFD;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    padding: 40px 0 65px 0;
+}
+
+.modalSuccess {
+    width: 600px;
+    flex-shrink: 0;
+    background: #FDFDFD;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    padding: 40px 0 29px 0;
+}
+
+.modalHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.modalHeaderLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.modalHeaderTitle {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.cross:hover {
+    cursor: pointer;
+}
+
+.modalHr {
+    width: 100%;
+    border-top: solid 1px #140702;
+}
+
+.modalColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 50px;
+}
+
+.modalSubtitle {
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalColumnInput {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modalInputTitle {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalInput {
+    width: 502px;
+    height: 62px;
+    border: solid 1px #000;
+    border-radius: 100px;
+    padding: 0 25px;
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalInput:focus,
+.modalInputLil:focus {
+    outline: none;
+}
+
+.modalInputLil {
+    width: 223px;
+    height: 62px;
+    border: solid 1px #000;
+    border-radius: 100px;
+    padding: 0 25px;
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalInputLine {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.modalSaveButton {
+    display: flex;
+    width: 500px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.modalSaveButton:hover {
+    cursor: pointer;
+}
+
+.modalSuccessColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+    padding: 0 50px;
+}
+
+.modalSuccessColumnLil {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modalSuccessTitle {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.modalSuccessText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.modalSuccessStatus {
+    display: flex;
+    width: 100%;
+    padding: 15px 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 40px;
+    background: #FDEDBF;
+}
+
+.modalSuccessColumnMiddle {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.modalSuccessLine {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+.modalSuccessLineIcon {
+    width: 24px;
+}
+
+.modalSuccessGold {
+    color: #C39748;
+    text-align: left;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
