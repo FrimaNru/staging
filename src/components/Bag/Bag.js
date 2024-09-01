@@ -54,6 +54,8 @@ export function Bag() {
                 setData(res.data.bag);
                 setDataUser(res.data);
                 let d = 0
+                console.log(res.data);
+                setSuccessData(res.data.orders[res.data.orders.length - 1])
                 if (res.data.bag.length === 0) return setTotal(0);
                 res.data.bag.map(x => {
                     axios.post(`${API_BASE_URL}getOneProduct`, { id: x })
@@ -62,7 +64,7 @@ export function Bag() {
                             setTotal(d);
                         })
                         .catch((e) => console.log(e));
-                })
+                });
             })
             .catch((e) => console.log(e));
     };
@@ -252,10 +254,10 @@ export function Bag() {
             <ModalOverlay />
             <ModalContent>
                 <ModalBody p={0}>
-                    <div className={styles.modalSuccess}>
+                    {successData && <div className={styles.modalSuccess}>
                         <div className={styles.modalHeader}>
                             <div className={styles.modalHeaderLine}>
-                                <p className={styles.modalHeaderTitle}>ЗАКАЗ ОФОРМЛЕН</p>
+                                <p className={styles.modalHeaderTitle} onClick={() => console.log(successData)}>ЗАКАЗ ОФОРМЛЕН</p>
                                 <img src='/cross.svg' className={styles.cross} onClick={() => setSuccessModal(false)} />
                             </div>
                             <hr className={styles.modalHr} />
@@ -289,7 +291,7 @@ export function Bag() {
                             <p className={styles.modalSuccessGold} >Оплачено: {formatNumber(successData.total)} руб.</p>
                             <div className={styles.modalSaveButton} onClick={() => router.push('/cabinet?page=myorders')}>ДЕТАЛИ ЗАКАЗА</div>
                         </div>
-                    </div>
+                    </div>}
                 </ModalBody>
             </ModalContent>
         </Modal>
