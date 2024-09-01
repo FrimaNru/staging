@@ -681,3 +681,37 @@
     font-weight: 400;
     line-height: normal;
 }
+
+.loading {
+    position: relative;
+    background: rgba(20, 7, 2, 0.5);
+    color: rgba(253, 237, 191, 0.5);
+}
+
+.loading:hover {
+    cursor: auto;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 30%;
+    left: 46%;
+    width: 20px;
+    height: 20px;
+    border: 4px solid #FFF;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

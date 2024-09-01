@@ -23,7 +23,6 @@ function formatDate(dateString) {
 export function Bag() {
 
     const router = useRouter();
-    const { paymentType } = router.query;
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
@@ -35,12 +34,23 @@ export function Bag() {
     const [newAddressData, setNewAddressData] = useState({});
     const [order, setOrder] = useState(false);
     const [successModal, setSuccessModal] = useState(false);
+    const [errorModal, setErrorModal] = useState(false);
     const [successData, setSuccessData] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+
+    const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
 
     useEffect(() => {
         load();
         if (window.location.href.includes('paymentType') && window.location.href?.split('/bag?')[1].split('&')[0] === 'paymentType=success') {
-            successPayment();
+            setSuccessModal(true);
+            setOrder(false);
+            load();
+        };
+        if (window.location.href.includes('paymentType') && window.location.href?.split('/bag?')[1].split('&')[0] === 'paymentType=error') {
+            setErrorModal(true);
+            setOrder(false);
+            load();
         }
     }, []);
 
@@ -54,7 +64,6 @@ export function Bag() {
                 setData(res.data.bag);
                 setDataUser(res.data);
                 let d = 0
-                console.log(res.data);
                 setSuccessData(res.data.orders[res.data.orders.length - 1])
                 if (res.data.bag.length === 0) return setTotal(0);
                 res.data.bag.map(x => {
@@ -85,24 +94,23 @@ export function Bag() {
     };
 
     function buy() {
-        if (dataUser.name.length > 0 && dataUser.phone.length === 18 && dataUser.name.length > 0) {
-
+        if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email)) {
+            setIsLoading(true);
             const delivery = { street: 'Улица троицкая, д.54 кв.8', date: '8.10.24 с 12:00 до 15:00' };
 
             axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total, delivery }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
+                    setIsLoading(false);
                     router.push(res.data.PaymentURL);
                 })
-                .catch((e) => console.log(e));
+                .catch((e) => { console.log(e); setIsLoading(false); });
         } else {
-        }
-    };
+            if (dataUser.name.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не указали имя</div>), duration: 3000 });
+            if (dataUser.phone.replaceAll('_', '').length !== 18) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали номер телефона</div>), duration: 3000 });
+            if (dataUser.personalData.lastName.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не указали фамилию</div>), duration: 3000 });
+            if (!regexMail.test(dataUser.email)) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали почту</div>), duration: 3000 });
 
-    function successPayment() {
-        // setSuccessData(res.data);
-        setSuccessModal(true);
-        setOrder(false);
-        load();
+        }
     };
 
     return <div className={styles.main}>
@@ -110,7 +118,7 @@ export function Bag() {
             <div className={styles.columnProducts}>
                 <div className={styles.rowHeader} >
                     <p className={styles.rowHeaderTitle}>КОРЗИНА</p>
-                    <button className={styles.rowHeaderClear} onClick={clearBag} >Очистить корзину</button>
+                    {data.length > 0 && <button className={styles.rowHeaderClear} onClick={clearBag} >Очистить корзину</button>}
                 </div>
                 {data.length > 0 && Object.entries(itemCounts)
                     .filter(([item, count], index, self) => self.findIndex(([x]) => x === item) === index)
@@ -206,7 +214,7 @@ export function Bag() {
                     </>}
             </>}
             <hr className={styles.hr} />
-            <button className={styles.orderButtonPay} onClick={buy} >ОПЛАТИТЬ</button>
+            <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy} >ОПЛАТИТЬ</button>
         </div>}
         <Modal onClose={onClose} isOpen={isOpen} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
@@ -257,7 +265,7 @@ export function Bag() {
                     {successData && <div className={styles.modalSuccess}>
                         <div className={styles.modalHeader}>
                             <div className={styles.modalHeaderLine}>
-                                <p className={styles.modalHeaderTitle} onClick={() => console.log(successData)}>ЗАКАЗ ОФОРМЛЕН</p>
+                                <p className={styles.modalHeaderTitle}>ЗАКАЗ ОФОРМЛЕН</p>
                                 <img src='/cross.svg' className={styles.cross} onClick={() => setSuccessModal(false)} />
                             </div>
                             <hr className={styles.modalHr} />
@@ -290,6 +298,30 @@ export function Bag() {
                             </div>
                             <p className={styles.modalSuccessGold} >Оплачено: {formatNumber(successData.total)} руб.</p>
                             <div className={styles.modalSaveButton} onClick={() => router.push('/cabinet?page=myorders')}>ДЕТАЛИ ЗАКАЗА</div>
+                        </div>
+                    </div>}
+                </ModalBody>
+            </ModalContent>
+        </Modal>
+        <Modal onClose={() => setErrorModal(false)} isOpen={errorModal} autoFocus={false} isCentered size='xl' >
+            <ModalOverlay />
+            <ModalContent>
+                <ModalBody p={0}>
+                    {successData && <div className={styles.modalSuccess}>
+                        <div className={styles.modalHeader}>
+                            <div className={styles.modalHeaderLine}>
+                                <p className={styles.modalHeaderTitle}>НЕДОСТАТОЧНО СРЕДСТВ</p>
+                                <img src='/cross.svg' className={styles.cross} onClick={() => setSuccessModal(false)} />
+                            </div>
+                            <hr className={styles.modalHr} />
+                        </div>
+                        <div className={styles.modalSuccessColumn}>
+                            <div className={styles.modalSuccessColumnLil}>
+                                <p className={styles.modalSuccessTitle}>ЗАКАЗ № {successData.id}</p>
+                                <p className={styles.modalSuccessText}>{formatDate(successData.createDate)}</p>
+                            </div>
+                            <p className={styles.modalSuccessGold} >СУММА ЗАКАЗА: {formatNumber(successData.total)} руб.</p>
+                            <div className={styles.modalSaveButton} onClick={() => router.push('/cabinet?page=myorders')}>ОПЛАТИТЬ ЗАКАЗ</div>
                         </div>
                     </div>}
                 </ModalBody>

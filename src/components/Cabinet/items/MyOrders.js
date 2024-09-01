@@ -24,6 +24,7 @@ export function MyOrders() {
     const router = useRouter();
     const [data, setData] = useState({});
     const [dataUser, setDataUser] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         load();
@@ -42,24 +43,42 @@ export function MyOrders() {
             .catch((e) => console.log(e));
     };
 
-    function selectStatus(status) {
+    function selectStatus(status, paymentStatus) {
+        if (paymentStatus !== 'CONFIRMED') {
+            switch (paymentStatus) {
+                case 'REFUNDED':
+                    return 'Вам были возвращены средства'
+                case 'REJECTED':
+                    return 'Заказ не оплачен'
+                case 'FORM_SHOWED':
+                    return 'Заказ не оплачен'
+            };
+        };
+
         switch (status) {
             case 'processed':
-                return <div className={styles.statusBlock} >
-                    <img src='/infoIcon.svg' />
-                    <p className={styles.statusBlockText}>Ваш заказ обрабатывается </p>
-                </div>
+                return 'Ваш заказ обрабатывается'
             case 'delivery':
-                return <div className={styles.statusBlock} >
-                    <img src='/infoIcon.svg' />
-                    <p className={styles.statusBlockText}>Ваш заказ передан в доставку</p>
-                </div>
+                return 'Ваш заказ передан в доставку'
             case 'canceled':
-                return <div className={styles.statusBlock} >
-                    <img src='/infoIcon.svg' />
-                    <p className={styles.statusBlockText}>Ваш заказ отменен</p>
-                </div>
+                return 'Ваш заказ отменен'
         }
+    };
+
+    function checkOrder(x) {
+        axios.post(`${API_BASE_URL}checkOrder`, { OrderId: x.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .catch((e) => console.log(e));
+    };
+
+    function pay(total, OrderId) {
+        setIsLoading(true);
+
+        axios.post(`${API_BASE_URL}payOrder`, { dataUser, total, OrderId }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then((res) => {
+                setIsLoading(false);
+                router.push(res.data.PaymentURL);
+            })
+            .catch((e) => { console.log(e); setIsLoading(false); });
     };
 
     return <div className={styles.main}>
@@ -71,6 +90,7 @@ export function MyOrders() {
             </>
             : <div className={styles.bigColumn}>
                 {data.length > 0 && data.map((x, i) => {
+                    checkOrder(x);
                     const itemCounts = x.products && typeof x.products === 'string'
                         ? x.products.split(',').reduce((acc, product) => {
                             const trimmedProduct = product.trim();
@@ -91,7 +111,10 @@ export function MyOrders() {
                                 <p className={styles.title}>ЗАКАЗ № {x.id}</p>
                                 <p className={styles.text}>{formatDate(x.createDate)}</p>
                             </div>
-                            {selectStatus(x.status)}
+                            <div className={styles.statusBlock} >
+                                <img src='/infoIcon.svg' />
+                                <p className={styles.statusBlockText}>{selectStatus(x.status, x.paymentStatus)}</p>
+                            </div>
                             <div className={styles.lilColumnOrder}>
                                 {Object.entries(itemCounts).map(([item, count], i) => (
                                     <div key={i} className={styles.itemColumn}>
@@ -117,7 +140,11 @@ export function MyOrders() {
                                     </div>
                                 </div>
                             </div>
-                            <p className={styles.costGold}>Оплачено: {formatNumber(x.total)} руб.</p>
+                            <p className={styles.costGold}>{(x.paymentStatus === 'REJECTED' || x.paymentStatus === 'FORM_SHOWED') ? 'К оплате' : 'Оплачено'}: {formatNumber(x.total)} руб.</p>
+                            {(x.paymentStatus === 'REJECTED' || x.paymentStatus === 'FORM_SHOWED') && <div className={styles.deliveryColumn}>
+                                <p className={styles.title}>Оплата</p>
+                                <button onClick={() => !isLoading && pay(x.total, x.id)} className={`${styles.buttonPay} ${isLoading && styles.loading}`}>ОПЛАТИТЬ СЕЙЧАС</button>
+                            </div>}
                             <hr className={styles.hr} />
                         </div>
                     );
