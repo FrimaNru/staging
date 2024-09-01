@@ -39,9 +39,7 @@ export function Bag() {
 
     useEffect(() => {
         load();
-        console.log(paymentType)
-        if (paymentType === 'success') {
-            console.log(paymentType);
+        if (window.location.href.split('/bag?')[1].split('&')[0] === 'paymentType=success') {
             successPayment();
         }
     }, []);
@@ -100,7 +98,6 @@ export function Bag() {
 
     function successPayment() {
         // setSuccessData(res.data);
-        console.log('123');
         setSuccessModal(true);
         setOrder(false);
         load();
