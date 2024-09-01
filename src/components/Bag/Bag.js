@@ -39,7 +39,7 @@ export function Bag() {
 
     useEffect(() => {
         load();
-        if (window.location.href.split('/bag?')[1].split('&')[0] === 'paymentType=success') {
+        if (window.location.href?.split('/bag?')[1].split('&')[0] === 'paymentType=success') {
             successPayment();
         }
     }, []);
