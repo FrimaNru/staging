@@ -39,6 +39,7 @@ export function MyOrders() {
             .then((res) => {
                 setData(res.data.orders.reverse());
                 setDataUser(res.data);
+                res.data.orders.map(x => checkOrder(x));
             })
             .catch((e) => console.log(e));
     };
@@ -67,6 +68,10 @@ export function MyOrders() {
 
     function checkOrder(x) {
         axios.post(`${API_BASE_URL}checkOrder`, { OrderId: x.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then(() => {
+                setIsLoading(false);
+                load();
+            })
             .catch((e) => console.log(e));
     };
 

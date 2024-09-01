@@ -320,7 +320,7 @@ export function Bag() {
                                 <p className={styles.modalSuccessTitle}>ЗАКАЗ № {successData.id}</p>
                                 <p className={styles.modalSuccessText}>{formatDate(successData.createDate)}</p>
                             </div>
-                            <p className={styles.modalSuccessGold} >СУММА ЗАКАЗА: {formatNumber(successData.total)} руб.</p>
+                            <p className={styles.modalSuccessGold} >К ОПЛАТЕ: {formatNumber(successData.total)} руб.</p>
                             <div className={styles.modalSaveButton} onClick={() => router.push('/cabinet?page=myorders')}>ОПЛАТИТЬ ЗАКАЗ</div>
                         </div>
                     </div>}
