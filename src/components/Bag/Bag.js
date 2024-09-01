@@ -39,6 +39,7 @@ export function Bag() {
 
     useEffect(() => {
         load();
+        console.log(paymentType)
         if (paymentType === 'success') {
             console.log(paymentType);
             successPayment();
