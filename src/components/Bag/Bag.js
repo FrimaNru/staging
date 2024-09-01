@@ -23,6 +23,7 @@ function formatDate(dateString) {
 export function Bag() {
 
     const router = useRouter();
+    const { paymentType } = router.query;
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
@@ -38,6 +39,7 @@ export function Bag() {
 
     useEffect(() => {
         load();
+        if (paymentType === 'success') return successPayment();
     }, []);
 
     function load() {
@@ -85,14 +87,18 @@ export function Bag() {
 
             axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total, delivery }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
-                    setSuccessData(res.data);
-                    setSuccessModal(true);
-                    setOrder(false)
-                    load();
+                    router.push(res.data.PaymentURL);
                 })
                 .catch((e) => console.log(e));
         } else {
         }
+    };
+
+    function successPayment() {
+        // setSuccessData(res.data);
+        setSuccessModal(true);
+        setOrder(false);
+        load();
     };
 
     return <div className={styles.main}>
