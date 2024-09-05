@@ -68,6 +68,22 @@ export function FavouriteBlock() {
             .catch((e) => console.log(e));
     };
 
+    function buy(id) {
+        axios.post(`${API_BASE_URL}addProductToBag`, { id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then(() => {
+                toast({ position: 'bottom-right', render: () => (<div className="toast">Товар добавлен в корзину</div>), duration: 3000 });
+            })
+            .catch((e) => console.log(e));
+    };
+
+    function buyAll() {
+        data.map((x, i) => {
+            axios.post(`${API_BASE_URL}addProductToBag`, { id: x._id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                .catch((e) => console.log(e));
+        })
+        return toast({ position: 'bottom-right', render: () => (<div className="toast">Все товары добавлены в корзину</div>), duration: 3000 });
+    }
+
     return <div className={styles.main}>
         {data.length > 0
             ? <>
@@ -85,15 +101,7 @@ export function FavouriteBlock() {
                                     <p className={styles.itemText}>В наличии</p>
                                     <p className={styles.itemCost}>{formatNumber(x?.cost)} руб.</p>
                                 </div>
-                                <div className={styles.lilButton} onClick={() => {
-                                    toast({
-                                        position: 'bottom-right',
-                                        render: () => (
-                                            <div className="toast">Товар добавлен в корзину</div>
-                                        ),
-                                        duration: 3000
-                                    })
-                                }} >В КОРЗИНУ</div>
+                                <div className={styles.lilButton} onClick={() => buy(x?._id)}>В КОРЗИНУ</div>
                             </div>
                         </div>
                         <img src='/cross.svg' className={styles.itemCross} onClick={() => deleteOneProduct(x._id)} />
@@ -101,15 +109,7 @@ export function FavouriteBlock() {
                     <hr className={styles.hr} />
                 </div>)}
                 <div className={styles.lineButtons}>
-                    <div className={styles.toBagButton} onClick={() => {
-                        toast({
-                            position: 'bottom-right',
-                            render: () => (
-                                <div className="toast">Все товары добавлены в корзину</div>
-                            ),
-                            duration: 3000
-                        })
-                    }} >ДОБАВИТЬ ВСЕ В КОРЗИНУ</div>
+                    <div className={styles.toBagButton} onClick={() => buyAll()}>ДОБАВИТЬ ВСЕ В КОРЗИНУ</div>
                     <div className={styles.deleteAllButton} onClick={() => deleteAllProducts()} >УДАЛИТЬ ВСЕ</div>
                 </div>
             </>
