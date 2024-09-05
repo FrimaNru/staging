@@ -6,9 +6,12 @@ import Link from "next/link";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 
-function formatNumber(num) {
-    return num?.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, '.');
-}
+function formatNumber(number) {
+    let numStr = number.toString();
+    let parts = numStr.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parts.join('.');
+};
 
 export function Catalog() {
 
@@ -18,6 +21,7 @@ export function Catalog() {
     const [stateGenders, setStateGenders] = useState('');
     const [stateType, setStateType] = useState('');
     const [data, setData] = useState([]);
+    const [pagging, setPagging] = useState(1);
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
     const genders = ['Мужчинам', 'Женщинам', 'Унисекс'];
@@ -112,36 +116,40 @@ export function Catalog() {
                         </MenuList>
                     </Menu>
                 </div>
-                <div className={styles.lineOrders}>
-                    {data.map((x, i) => i < 3 && <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
-                        <div className={styles.sliderItem} >
-                            <div className={styles.sliderItemContent} >
-                                <img src={x.img} className={styles.sliderItemImage} />
-                                <div className={styles.sliderItemColumn} >
-                                    <p className={styles.sliderItemTitle} >{x.name}</p>
-                                    <p className={styles.sliderItemText} >{x.text}</p>
-                                </div>
-                                <p className={styles.sliderItemCost} >{formatNumber(x.cost)} руб.</p>
-                            </div>
-                        </div>
-                    </Link>)}
-                </div>
-                <hr className={styles.mainHr} />
-                <div className={styles.lineOrders}>
-                    {data.map((x, i) => i < 3 && <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
-                        <div key={i} className={styles.sliderItem} >
-                            <div className={styles.sliderItemContent} >
-                                <img src={x.img} className={styles.sliderItemImage} />
-                                <div className={styles.sliderItemColumn} >
-                                    <p className={styles.sliderItemTitle} >{x.name}</p>
-                                    <p className={styles.sliderItemText} >{x.text}</p>
-                                </div>
-                                <p className={styles.sliderItemCost} >{x.cost}</p>
-                            </div>
-                        </div>
-                    </Link>)}
+                <div className={styles.columnOrders}>
+                    <div className={styles.lineOrders}>
+                        {data.map((x, i) => (
+                            i >= (pagging - 1) * 6 && i < (pagging - 1) * 6 + 3 && (
+                                <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
+                                    <div className={styles.sliderItem}>
+                                        <div className={styles.sliderItemContent}>
+                                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
+                                            <p className={styles.sliderItemTitle}>{x.name}</p>
+                                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            )
+                        ))}
+                    </div>
+                    <hr className={styles.orderHr} />
+                    <div className={styles.lineOrders}>
+                        {data.map((x, i) => (
+                            i >= (pagging - 1) * 6 + 3 && i < pagging * 6 && (
+                                <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
+                                    <div className={styles.sliderItem}>
+                                        <div className={styles.sliderItemContent}>
+                                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
+                                            <p className={styles.sliderItemTitle}>{x.name}</p>
+                                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            )
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div >
 }

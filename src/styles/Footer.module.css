@@ -35,6 +35,7 @@
     font-family: 'Dela Gothic One', system-ui;
     text-transform: uppercase;
     text-align: left;
+    width: max-content;
 }
 
 .text {

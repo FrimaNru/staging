@@ -98,6 +98,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    text-transform: uppercase;
 }
 
 .itemText {
@@ -714,4 +715,22 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+.countinueShoppingButton {
+    display: flex;
+    width: 412px;
+    height: 46px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #C39748;
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }

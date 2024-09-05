@@ -6,8 +6,11 @@ import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure }
 import { useRouter } from "next/router";
 import InputMask from "react-input-mask";
 
-function formatNumber(num) {
-    return num?.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, '.');
+function formatNumber(number) {
+    let numStr = number.toString();
+    let parts = numStr.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parts.join('.');
 };
 
 function formatDate(dateString) {
@@ -124,7 +127,7 @@ export function Bag() {
                     .filter(([item, count], index, self) => self.findIndex(([x]) => x === item) === index)
                     .map(([item, count], i) => (
                         <div key={i} className={styles.itemColumn}>
-                            <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} />
+                            <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} setData={setData} />
                             <hr className={styles.hr} />
                         </div>
                     ))
@@ -159,7 +162,10 @@ export function Bag() {
                         <p className={styles.totalGold}>{formatNumber(total)} руб.</p>
                     </div>
                 </div>
-                {data.length > 0 && !order && <button className={styles.totalButton} onClick={() => setOrder(true)} >ОФОРМИТЬ ЗАКАЗ</button>}
+                {data.length > 0 && !order && <>
+                    <button className={styles.totalButton} onClick={() => setOrder(true)} >ОФОРМИТЬ ЗАКАЗ</button>
+                    <button className={styles.countinueShoppingButton} onClick={() => router.push('/catalog')} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
+                </>}
             </div>
         </div>
         {order && <div className={styles.order}>
@@ -296,7 +302,7 @@ export function Bag() {
                                     </div>
                                 </div>
                             </div>
-                            <p className={styles.modalSuccessGold} >Оплачено: {formatNumber(successData.total)} руб.</p>
+                            <p className={styles.modalSuccessGold} >Оплачено: {formatNumber(Number(successData.total))} руб.</p>
                             <div className={styles.modalSaveButton} onClick={() => router.push('/cabinet?page=myorders')}>ДЕТАЛИ ЗАКАЗА</div>
                         </div>
                     </div>}
@@ -311,7 +317,7 @@ export function Bag() {
                         <div className={styles.modalHeader}>
                             <div className={styles.modalHeaderLine}>
                                 <p className={styles.modalHeaderTitle}>НЕДОСТАТОЧНО СРЕДСТВ</p>
-                                <img src='/cross.svg' className={styles.cross} onClick={() => setSuccessModal(false)} />
+                                <img src='/cross.svg' className={styles.cross} onClick={() => setErrorModal(false)} />
                             </div>
                             <hr className={styles.modalHr} />
                         </div>
@@ -320,7 +326,7 @@ export function Bag() {
                                 <p className={styles.modalSuccessTitle}>ЗАКАЗ № {successData.id}</p>
                                 <p className={styles.modalSuccessText}>{formatDate(successData.createDate)}</p>
                             </div>
-                            <p className={styles.modalSuccessGold} >К ОПЛАТЕ: {formatNumber(successData.total)} руб.</p>
+                            <p className={styles.modalSuccessGold} >К ОПЛАТЕ: {formatNumber(Number(successData.total))} руб.</p>
                             <div className={styles.modalSaveButton} onClick={() => router.push('/cabinet?page=myorders')}>ОПЛАТИТЬ ЗАКАЗ</div>
                         </div>
                     </div>}
@@ -331,9 +337,9 @@ export function Bag() {
 };
 
 
-function ProductItem({ item, count, load }) {
+function ProductItem({ item, count, load, setData }) {
 
-    const [data, setData] = useState({});
+    const [data, setDataProduct] = useState({});
     const toast = useToast();
 
     useEffect(() => {
@@ -343,7 +349,7 @@ function ProductItem({ item, count, load }) {
     function loadNow() {
         axios.post(`${API_BASE_URL}getOneProduct`, { id: item })
             .then((res) => {
-                setData(res.data);
+                setDataProduct(res.data);
             })
             .catch((e) => console.log(e));
     };
@@ -351,6 +357,7 @@ function ProductItem({ item, count, load }) {
     function deleteProduct() {
         axios.post(`${API_BASE_URL}deleteProductFromBag`, { id: item }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
+                setData([]);
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Товар успешно удален</div>), duration: 3000 });
                 load();
             })
@@ -368,6 +375,7 @@ function ProductItem({ item, count, load }) {
     function minusProduct() {
         axios.post(`${API_BASE_URL}minusProductFromBag`, { id: item }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
+                setData([]);
                 load();
             })
             .catch((e) => console.log(e));
@@ -375,13 +383,12 @@ function ProductItem({ item, count, load }) {
 
     return <div className={styles.item}>
         <div className={styles.itemRow}>
-            <img src={`/${data.img}`} className={styles.itemCover} />
+            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
                 <div className={styles.itemTextColumnLil} >
-                    <p className={styles.itemName}>{data.name}</p>
-                    <p className={styles.itemText}>{data.text}</p>
+                    <p className={styles.itemName}>{data?.name}</p>
                 </div>
-                <p className={styles.itemCost} >{formatNumber(data.cost)} руб.</p>
+                <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>
             </div>
         </div>
         <div className={styles.itemRowLil}>

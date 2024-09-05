@@ -28,7 +28,13 @@ export function FavouriteButton({ idProduct }) {
                     }
                 })
             })
-            .catch((e) => console.log(e));
+            .catch((e) => {
+                console.log(e);
+                if (e?.response?.status === 404 || e?.response?.status === 401) {
+                    localStorage.removeItem('token');
+                    toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не авторизованы</div>), duration: 3000 });
+                };
+            });
     };
 
     function fav() {

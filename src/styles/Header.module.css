@@ -398,3 +398,23 @@
 .errorText {
     color: #950000;
 }
+
+.bagCount {
+    position: absolute;
+    color: #000;
+    font-family: "Tenor Sans";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    display: inline-flex;
+    height: 19px;
+    padding: 5px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 30px;
+    background: #C39748;
+    margin-top: -13px;
+}

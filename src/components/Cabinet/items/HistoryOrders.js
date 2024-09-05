@@ -6,8 +6,11 @@ import styles from "@/styles/HistoryOrders.module.css";
 import { useToast } from "@chakra-ui/react";
 import Link from "next/link";
 
-function formatNumber(num) {
-    return num?.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, '.');
+function formatNumber(number) {
+    let numStr = number.toString();
+    let parts = numStr.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parts.join('.');
 };
 
 function formatDate(dateString) {
@@ -153,7 +156,7 @@ function ProductItemHistory({ item }) {
             .catch((e) => console.log(e));
     };
 
-    return <Link href={`/product?id=${data._id}`}><img src={`/${data.img}`} className={styles.itemCover} /></Link>
+    return <Link href={`/product?id=${data?._id}`}><img src={`/${data?.cover}`} className={styles.itemCover} /></Link>
 };
 
 function ProductItemOrderHistory({ item, count }) {

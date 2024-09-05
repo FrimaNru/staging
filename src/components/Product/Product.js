@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "@/styles/Product.module.css";
 import Slider from "react-slick";
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, useDisclosure, Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react'
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, useDisclosure, Modal, ModalOverlay, ModalContent, ModalBody, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
 import { FavouriteButton } from "../Common/FavouriteButton";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { useRouter } from "next/router";
 import { AuthModal } from "../Header/items/AuthModal";
 
-function formatNumber(num) {
-    return num?.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, '.');
+function formatNumber(number) {
+    let numStr = number.toString();
+    let parts = numStr.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parts.join('.');
 };
+
 
 export function Product() {
 
@@ -18,6 +22,7 @@ export function Product() {
     const [data, setData] = useState({});
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
+    const [colorOfProduct, setColorOfProduct] = useState('');
 
     const [isOpenModal, setIsOpenModal] = useState(false);
 
@@ -29,6 +34,7 @@ export function Product() {
         axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
             .then((res) => {
                 setData(res.data);
+                setColorOfProduct(res.data.colors[0]);
             })
             .catch((e) => console.log(e));
     };
@@ -66,7 +72,7 @@ export function Product() {
     };
 
     const dataCharacteristic = [
-        { title: 'МАТЕРИАЛ', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' },
+        { title: 'МАТЕРИАЛ', text: 'Наши украшения созданы из уникального сплава Zamak и покрыты гальваническим методом для большей прочности и износостойкости. <br />Zamak - это идеальный материал для изготовления премиальной бижутерии, потому что в первую очередь он является гипоаллергенным, так как не содержит никеля, который и  является основным источником аллергии людей. Состав сплава zamak: цинк, магний, алюминий, медь. <br />Также физические и механические свойства сплавов Zamak позволяют изготавливать изделия с точностью до одной сотой миллиметра, но при этом они очень твердые и прочные, не боятся больших нагрузок. <br />Гальваническое покрытие обеспечивает изделиям устойчивость к истиранию и коррозии, придает украшениям еще более привлекательный внешний вид, добавляя блеска, делая  элегантными. <br />Обеспечьте для своего нового украшения сухое чистое место хранения, лучше исключить соседство с другой бижутерией, чтобы не образовалось царапин. Избегайте посещения бань, саун и пляжей, а также попадания химии на поверхность изделия. Загрязнения легко убрать мягкой влажной тканью и при необходимости шампунем, после чего насухо вытереть.<br />При правильном хранении и уходе наши украшения будут радовать вас своим неизменно превосходным видом долгие годы.' },
         { title: 'ГАБАРИТЫ', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' },
         { title: 'ДОСТАВКА, ОПЛАТА И ВОЗВРАТ', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' },
         { title: 'ГАРАНТИЯ И УХОД', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' }
@@ -85,28 +91,28 @@ export function Product() {
     };
 
     return <div className={styles.main}>
-        <div className={styles.infoLine} >
+        <div className={styles.infoLine}>
             <div className={styles.imgSliderBoxColumn} >
                 <div className={styles.imgSliderBox} >
                     <Slider {...settings} ref={slider => {
                         sliderRef = slider;
                     }}>
                         <div className={styles.sliderItem} >
-                            <img src="/tovar2.png" className={styles.sliderItemImg} />
+                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                         </div>
-                        <div className={styles.sliderItem}>
-                            <img src="/tovar2.png" className={styles.sliderItemImg} />
+                        <div className={styles.sliderItem} >
+                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                         </div>
-                        <div className={styles.sliderItem}>
-                            <img src="/tovar2.png" className={styles.sliderItemImg} />
+                        <div className={styles.sliderItem} >
+                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                         </div>
-                        <div className={styles.sliderItem}>
-                            <img src="/tovar2.png" className={styles.sliderItemImg} />
+                        <div className={styles.sliderItem} >
+                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                         </div>
                     </Slider>
                 </div>
                 <div className={styles.lineDots} >
-                    {[0, 1, 2, 3].map((x, i) => <img src='/tovar2.png' className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
+                    {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
                 </div>
             </div>
             <div className={styles.infoColumn}>
@@ -116,12 +122,27 @@ export function Product() {
                             <p className={styles.infoTitle}>{data.name}</p>
                             <FavouriteButton idProduct={data._id} />
                         </div>
-                        <p className={styles.infoSubtitle} >{data.text}</p>
                     </div>
-                    <p className={styles.description}>Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота</p>
+                    <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
+                    <Menu autoSelect={false} >
+                        <MenuButton pos='relative' zIndex={10} p={0}>
+                            <div className={styles.menuButton} >
+                                <p className={styles.menuButtonText} >{colorOfProduct}</p>
+                                <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 0.5L8 7.5L15 0.5" stroke="#140702" stroke-linecap="round" />
+                                </svg>
+                            </div>
+                        </MenuButton>
+                        <MenuList p={0} border='none' boxShadow='none' mt='-30px' pos='relative' zIndex={0} >
+                            {data?.colors?.length > 0 && data.colors.filter(x => x !== colorOfProduct).map((x, i) => <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
+                                <div className={styles.menuItem} onClick={() => setColorOfProduct(x)}>{x}</div>
+                            </MenuItem>)}
+                        </MenuList>
+                    </Menu>
+                    {data?.articles?.length > 0 && <p className={styles.articles} >Артикул: {data?.articles[0]}{data?.articles[1] && `/${data?.articles[1]}`}</p>}
                 </div>
                 <div className={styles.infoButtonColumn}>
-                    <p className={styles.infoCost} >{formatNumber(data.cost)} руб.</p>
+                    <p className={styles.infoCost} >{formatNumber(Number(data.cost))} руб.</p>
                     <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
                 </div>
             </div>
@@ -134,7 +155,7 @@ export function Product() {
                             <h2>
                                 <AccordionButton _hover={{}} p={0} >
                                     <div className={styles.accordionButton} >
-                                        <p className={styles.accordionButtonTitle} >{x.title}</p>
+                                        <div dangerouslySetInnerHTML={{ __html: x.title }} className={styles.accordionButtonTitle} />
                                         {isExpanded ? <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 11.5L11 1.5L1 11.5" stroke="#140702" strokeLinecap="round" />
                                         </svg>
@@ -146,7 +167,7 @@ export function Product() {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel p={0}>
-                                <p className={styles.accordionText} >{x.text}</p>
+                                <p className={styles.accordionText} dangerouslySetInnerHTML={{ __html: x.text }} />
                             </AccordionPanel>
                         </>
                     )}
@@ -167,7 +188,7 @@ export function Product() {
                         </div>
                         <div className={styles.modalBody}>
                             <div className={styles.modalBodyColumn}>
-                                <img src="/tovar2.png" className={styles.modalBodyImg} />
+                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.modalBodyImg} />
                                 <div className={styles.modalBodyColumnLil}>
                                     <p className={styles.modalBodyTitle}>{data.name}</p>
                                     <p className={styles.modalBodyText} >{data.text}</p>

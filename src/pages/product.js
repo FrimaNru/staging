@@ -6,8 +6,8 @@ export default function ProductPage() {
     return (
         <>
             <Head>
-                <title>Серьги CARAMEL – Купить в MiAlegria</title>
-                <meta name="description" content='Серьги CARAMEL от MiAlegria. Высокое качество, эксклюзивный дизайн и выгодные цены. Бесплатная доставка и гарантия на все ювелирные изделия.' />
+                <title>Серьги CARAMEL – Купить в Mi Alegria</title>
+                <meta name="description" content='Серьги CARAMEL от Mi Alegria. Высокое качество, эксклюзивный дизайн и выгодные цены. Бесплатная доставка и гарантия на все ювелирные изделия.' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="./favicon.ico" />
             </Head>

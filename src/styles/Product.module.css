@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     gap: 80px;
 }
@@ -52,6 +52,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    text-transform: uppercase;
 }
 
 .infoFavIcon {
@@ -291,6 +292,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    text-transform: uppercase;
 }
 
 .modalBodyText {
@@ -342,4 +344,52 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+.articles {
+    text-align: left;
+    font-size: 18px;
+    color: #140702;
+}
+
+.menuButton {
+    width: 498px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 40px;
+    border: solid 1px #000;
+    border-radius: 100px;
+    justify-content: left;
+    align-items: center;
+    padding: 0 20px;
+    background-color: white;
+}
+
+.menuItem {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    width: 498px;
+    text-align: center;
+    height: auto;
+    padding: 30px 0 10px 0;
+    border: solid 1px #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menuButtonText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    width: 100%;
+    text-align: left;
 }

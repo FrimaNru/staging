@@ -171,7 +171,7 @@
 
 .sliderItem {
     width: 240px;
-    height: 340px;
+    height: auto;
 }
 
 .sliderItem:hover {
@@ -201,6 +201,7 @@
     font-size: 20px;
     color: #140702;
     font-family: 'Dela Gothic One', system-ui;
+    text-transform: uppercase;
 }
 
 .sliderItemText {
@@ -220,4 +221,16 @@
     width: 100%;
     border-top: solid 1px #140702;
     width: 864px;
+}
+
+.columnOrders {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: max-content;
+}
+
+.orderHr {
+    width: 100%;
+    border-top: solid 1px #140702;
 }

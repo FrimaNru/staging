@@ -6,6 +6,13 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useToast } from "@chakra-ui/react";
 
+function formatNumber(number) {
+    let numStr = number.toString();
+    let parts = numStr.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parts.join('.');
+};
+
 export function FavouriteBlock() {
 
     const [data, setData] = useState([]);
@@ -66,9 +73,9 @@ export function FavouriteBlock() {
             ? <>
                 {data.map((x, i) => <div key={i} className={styles.column} >
                     <div className={styles.item}>
-                        <div className={styles.itemRow} >
+                        <div className={styles.itemRow}>
                             <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
-                                <img src={x?.img} className={styles.itemImg} />
+                                <img src={`https://api.mi-alegria.shop/uploads/${x?.cover} `} className={styles.itemImg} />
                             </Link>
                             <div className={styles.itemColumn}>
                                 <div className={styles.itemLilColumn}>
@@ -76,7 +83,7 @@ export function FavouriteBlock() {
                                         <p className={styles.itemName}>{x?.name}</p>
                                     </Link>
                                     <p className={styles.itemText}>В наличии</p>
-                                    <p className={styles.itemCost}>{x?.cost}</p>
+                                    <p className={styles.itemCost}>{formatNumber(x?.cost)} руб.</p>
                                 </div>
                                 <div className={styles.lilButton} onClick={() => {
                                     toast({

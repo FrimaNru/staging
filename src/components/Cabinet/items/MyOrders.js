@@ -5,8 +5,11 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
 import { useToast } from "@chakra-ui/react";
 
-function formatNumber(num) {
-    return num?.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, '.');
+function formatNumber(number) {
+    let numStr = number.toString();
+    let parts = numStr.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parts.join('.');
 };
 
 function formatDate(dateString) {
@@ -178,12 +181,12 @@ function ProductItemOrder({ item, count }) {
 
     return <div className={styles.item} onClick={() => router.push(`/product?id=${data._id}`)} >
         <div className={styles.itemRow}>
-            <img src={`/${data.img}`} className={styles.itemCover} />
+            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
-                <p className={styles.itemName}>{data.name}</p>
+                <p className={styles.itemName}>{data?.name}</p>
                 <div className={styles.itemCountNumber}>{count} шт</div>
             </div>
         </div>
-        <p className={styles.itemCost} >{formatNumber(data.cost)} руб.</p>
+        <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>
     </div>
 };
