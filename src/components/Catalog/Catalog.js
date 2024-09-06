@@ -1,5 +1,5 @@
 import styles from "@/styles/Catalog.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -13,15 +13,25 @@ function formatNumber(number) {
     return parts.join('.');
 };
 
+const shuffle = (array) => {
+    let shuffled = array.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+};
+
 export function Catalog() {
 
     const router = useRouter();
-    const { product } = router.query;
+    const { product, text } = router.query;
     const [stateSales, setStateSales] = useState([]);
     const [stateGenders, setStateGenders] = useState('');
     const [stateType, setStateType] = useState('');
     const [data, setData] = useState([]);
     const [pagging, setPagging] = useState(1);
+    const [search, setSearch] = useState(false);
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
     const genders = ['Мужчинам', 'Женщинам', 'Унисекс'];
@@ -64,6 +74,104 @@ export function Catalog() {
             .catch((e) => console.log(e));
     };
 
+    const filteredData = useMemo(() => {
+        let d = [...data];
+
+        if (stateSortItems === 'По возрастанию цены') {
+            d.sort((a, b) => a.cost - b.cost);
+        } else if (stateSortItems === 'По убыванию цены') {
+            d.sort((a, b) => b.cost - a.cost);
+        } else if (stateSortItems === 'По популярности') {
+            d = shuffle(d);
+        };
+
+        if (stateSales.includes('Популярное')) {
+            console.log('123')
+            d = d.filter(x => x.additionally.includes('popular'));
+        };
+
+        if (text && text.length > 0) {
+            d = d.filter(x => x.name.includes(text));
+        };
+
+        const typeMap = { 'Кольца': 'ring', 'Серьги': 'earrings', 'Браслеты': 'bracelets', 'Колье': 'necklace' };
+
+        if (stateType in typeMap) { d = d.filter(x => x.type === typeMap[stateType]); };
+
+        return d;
+    }, [data, stateSortItems, stateType, stateSales, text]);
+
+    const totalPages = Math.ceil(filteredData.length / 6);
+
+    const renderPagination = () => {
+        const pages = [];
+
+        if (pagging > 2) {
+            pages.push(
+                <button
+                    key={1}
+                    className={styles.paggingNumber}
+                    onClick={() => setPagging(1)}
+                >
+                    1
+                </button>
+            );
+        }
+
+        if (pagging > 3) {
+            pages.push(
+                <span
+                    key="dots-start"
+                    className={styles.paggingNumber}
+                    style={{ userSelect: 'none' }}
+                >
+                    ...
+                </span>
+            );
+        }
+
+        const startPage = Math.max(1, pagging - 1);
+        const endPage = Math.min(totalPages, pagging + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(
+                <button
+                    key={i}
+                    className={`${styles.paggingNumber} ${i === pagging ? styles.paggingNumberSelect : ''}`}
+                    onClick={() => setPagging(i)}
+                >
+                    {i}
+                </button>
+            );
+        }
+
+        if (pagging < totalPages - 2) {
+            pages.push(
+                <span
+                    key="dots-end"
+                    className={styles.paggingNumber}
+                    style={{ userSelect: 'none' }}
+                >
+                    ...
+                </span>
+            );
+        }
+
+        if (pagging < totalPages - 1) {
+            pages.push(
+                <button
+                    key={totalPages}
+                    className={`${styles.paggingNumber} ${pagging === totalPages ? styles.paggingNumberSelect : ''}`}
+                    onClick={() => setPagging(totalPages)}
+                >
+                    {totalPages}
+                </button>
+            );
+        }
+
+        return pages;
+    };
+
     return <div className={styles.main}>
         <div className={styles.imageBlock} >
             <img className={styles.backImg} src='/backCatalog.png' />
@@ -86,7 +194,10 @@ export function Catalog() {
                 </div> */}
                 <div className={styles.lilColumn}>
                     <p className={styles.filterTitle}>ВИД ИЗДЕЛИЯ</p>
-                    {types.map((x, i) => <div key={i} className={styles.filterLine} onClick={() => setStateType(x)}>
+                    {types.map((x, i) => <div key={i} className={styles.filterLine} onClick={() => {
+                        if (stateType !== x) setStateType(x);
+                        else setStateType('');
+                    }}>
                         {stateType === x ? <img src='/goldDotSelect.svg' /> : <img src='/goldDot.svg' />}
                         <p className={styles.filterText}>{x}</p>
                     </div>)}
@@ -117,8 +228,15 @@ export function Catalog() {
                     </Menu>
                 </div>
                 <div className={styles.columnOrders}>
+                    {search && filteredData.length === 0 && <div className={styles.noFindProductsColumnBig} >
+                        <div className={styles.noFindProductsColumn}>
+                            <p className={styles.noFindProductsTitle} >По запросу "{text}" ничего не найдено</p>
+                            <p className={styles.noFindProductsText}>По вашему запросу ничего не найдено. Проверьте, правильно ли введен запрос.</p>
+                        </div>
+                        <button className={styles.noFindProductsButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
+                    </div>}
                     <div className={styles.lineOrders}>
-                        {data.map((x, i) => (
+                        {filteredData.map((x, i) => (
                             i >= (pagging - 1) * 6 && i < (pagging - 1) * 6 + 3 && (
                                 <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
                                     <div className={styles.sliderItem}>
@@ -132,9 +250,9 @@ export function Catalog() {
                             )
                         ))}
                     </div>
-                    <hr className={styles.orderHr} />
+                    {filteredData.length > 0 && <hr className={styles.orderHr} />}
                     <div className={styles.lineOrders}>
-                        {data.map((x, i) => (
+                        {filteredData.map((x, i) => (
                             i >= (pagging - 1) * 6 + 3 && i < pagging * 6 && (
                                 <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
                                     <div className={styles.sliderItem}>
@@ -148,6 +266,17 @@ export function Catalog() {
                             )
                         ))}
                     </div>
+                    {filteredData.length > 0 && <div className={styles.paggingLine} >
+                        <button className={styles.paggingArrow} onClick={() => pagging > 1 && setPagging(pagging - 1)} >
+                            <img src='/leftArrow.svg' />
+                        </button>
+                        <div className={styles.paggingLineLil}>
+                            {renderPagination()}
+                        </div>
+                        <button className={styles.paggingArrow} onClick={() => (pagging < (filteredData.length / 6)) && setPagging(pagging + 1)} >
+                            <img src='/rightArrow.svg' />
+                        </button>
+                    </div>}
                 </div>
             </div>
         </div>

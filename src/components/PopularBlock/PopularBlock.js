@@ -1,5 +1,9 @@
 import styles from "@/styles/PopularBlock.module.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import Slider from "react-slick";
+import { API_BASE_URL } from "../../../apiConfig";
+import Link from "next/link";
 
 function SampleNextArrow(props) {
     const { onClick } = props;
@@ -10,7 +14,7 @@ function SampleNextArrow(props) {
             </svg>
         </div>
     );
-}
+};
 function SamplePrevArrow(props) {
     const { onClick } = props;
     return (
@@ -20,9 +24,18 @@ function SamplePrevArrow(props) {
             </svg>
         </div>
     );
-}
+};
+
+function formatNumber(number) {
+    let numStr = number.toString();
+    let parts = numStr.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parts.join('.');
+};
 
 export function PopularBlock() {
+
+    const [data, setData] = useState([]);
 
     var settings = {
         dots: false,
@@ -34,30 +47,33 @@ export function PopularBlock() {
         prevArrow: <SamplePrevArrow />
     };
 
-    const data = [
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar1.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar1.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar1.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar1.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' },
-        { name: 'СЕРЬГИ CARAMEL', text: 'ЛАТУНЬ С ПОКРЫТИЕМ ИЗ 18 КТ ЗОЛОТА', cost: '12.500 руб.', img: 'tovar2.png' }
-    ];
+    useEffect(() => {
+        load();
+    }, []);
+
+    function load() {
+        axios.get(`${API_BASE_URL}getPopularProducts`)
+            .then((res) => {
+                console.log(res.data);
+                setData(res.data);
+            })
+            .catch((e) => console.log(e));
+    }
 
     return <div className={styles.main}>
         <p className={styles.title}>Популярное</p>
         <Slider {...settings}>
-            {data.map((x, i) => <div key={i} className={styles.sliderItem} >
-                <div className={styles.sliderItemContent} >
-                    <img src={x.img} className={styles.sliderItemImage} />
-                    <div className={styles.sliderItemColumn} >
-                        <p className={styles.sliderItemTitle} >{x.name}</p>
-                        <p className={styles.sliderItemText} >{x.text}</p>
+            {data.map((x, i) => <Link style={{ width: 'max-content' }} key={i}  href={`/product?id=${x._id}`} > 
+                <div className={styles.sliderItem} >
+                    <div className={styles.sliderItemContent} >
+                        <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
+                        <div className={styles.sliderItemColumn} >
+                            <p className={styles.sliderItemTitle} >{x.name}</p>
+                        </div>
+                        <p className={styles.sliderItemCost} >{formatNumber(x.cost)} руб.</p>
                     </div>
-                    <p className={styles.sliderItemCost} >{x.cost}</p>
                 </div>
-            </div>)}
+            </Link>)}
         </Slider>
     </div>
 }

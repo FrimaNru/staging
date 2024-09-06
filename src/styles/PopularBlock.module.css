@@ -5,6 +5,7 @@
     margin: 100px 0;
     width: 85%;
     max-width: 1400px;
+    min-height: 430px;
 }
 
 .title {
@@ -47,6 +48,7 @@
     font-size: 20px;
     color: #140702;
     font-family: 'Dela Gothic One', system-ui;
+    text-transform: uppercase;
 }
 
 .sliderItemText {
@@ -64,7 +66,7 @@
 
 .prevArrow {
     position: absolute;
-    margin-top: 154px;
+    margin-top: 94px;
     z-index: 10;
 }
 
@@ -74,7 +76,7 @@
 
 .nextArrow {
     position: absolute;
-    margin-top: -186px;
+    margin-top: -246px;
     z-index: 10;
     right: 0%;
 }

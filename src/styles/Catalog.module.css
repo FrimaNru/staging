@@ -228,9 +228,111 @@
     flex-direction: column;
     gap: 40px;
     width: max-content;
+    align-items: center;
+    justify-content: center;
+    min-width: 864px;
 }
 
 .orderHr {
     width: 100%;
     border-top: solid 1px #140702;
+}
+
+.paggingLine {
+    display: flex;
+    flex-direction: row;
+    gap: 65px;
+    align-items: center;
+}
+
+.paggingArrow {
+    display: flex;
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid #140702;
+}
+
+.paggingLineLil {
+    display: flex;
+    flex-direction: row;
+}
+
+.paggingNumber {
+    display: flex;
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid #140702;
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.paggingNumberSelect {
+    border: solid 1px #FDEDBF;
+    background: #FDEDBF;
+}
+
+.noFindProductsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.noFindProductsTitle {
+    color: #000;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.noFindProductsText {
+    color: #000;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.noFindProductsButton {
+    display: flex;
+    width: 250px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.noFindProductsColumnBig {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: left;
+    gap: 40px;
 }

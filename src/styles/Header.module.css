@@ -418,3 +418,74 @@
     background: #C39748;
     margin-top: -13px;
 }
+
+.inputPanel {
+    width: 400px;
+    background: #fff;
+    padding: 10px 0;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: absolute;
+    margin-left: -18px;
+    top: 88px;
+    border: solid 1px #140702;
+    max-height: 375px;
+    overflow: scroll;
+}
+
+.inputPanelHeader {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 20px 20px 20px;
+    border-bottom: solid 1px #140702;
+}
+
+.inputPanelText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.inputPanelLine {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    padding: 0 33px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.inputPanelCover {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.inputPanelName {
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.inputPanelCost {
+    color: #C39748;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
