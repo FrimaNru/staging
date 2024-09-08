@@ -33,7 +33,6 @@ export default function Home() {
         <main>
           <Header />
           <StartBlock />
-          <img src='./faviconsWithBg.ico.ico/apple-icon-180x180.png' />
           <PopularBlock />
           <Footer />
         </main>

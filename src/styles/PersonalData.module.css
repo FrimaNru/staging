@@ -5,6 +5,7 @@
     align-items: left;
     padding-top: 50px;
     gap: 50px;
+    overflow: hidden;
 }
 
 .dataColumn {
@@ -106,10 +107,17 @@
     border-top: solid 1px #140702;
 }
 
+.lineAddressBox {
+    width: 100%;
+    overflow: hidden;
+    overflow-x: scroll;
+}
+
 .lineAddress {
     display: flex;
     flex-direction: row;
     gap: 20px;
+    width: max-content;
 }
 
 .buttonAddAddress {

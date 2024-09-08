@@ -37,31 +37,35 @@
     width: 50%;
     height: 270px;
     background-image: url(../../public/start1.png);
-    background-size: 100%;
+    background-size: auto 100%;
+    background-repeat: repeat-x;
     display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    padding-top: 109px;
+    justify-content: center;
 }
 
 .block2 {
     width: 50%;
     height: 270px;
     background-image: url(../../public/start2.png);
-    background-size: 100%;
+    background-size: auto 100%;
+    background-repeat: repeat-x;
     display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    padding-top: 109px;
+    justify-content: center;
 }
+
 
 .block3 {
     width: 33%;
     height: 270px;
     background-image: url(../../public/start3.png);
-    background-size: 100%;
+    background-size: auto 100%;
+    background-repeat: repeat-x;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -97,22 +101,24 @@
     width: 50%;
     height: 270px;
     background-image: url(../../public/start3.png);
-    background-size: 100%;
+    background-size: auto 100%;
+    background-repeat: repeat-x;
     display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    padding-top: 109px;
+    justify-content: center;
 }
 
 .block7 {
     width: 50%;
     height: 270px;
     background-image: url(../../public/start4.png);
-    background-size: 100%;
+    background-size: auto 100%;
+    background-repeat: repeat-x;
     display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    padding-top: 109px;
+    justify-content: center;
 }

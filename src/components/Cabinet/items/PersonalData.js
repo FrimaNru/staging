@@ -61,7 +61,7 @@ export function PersonalData() {
                     toast({
                         position: 'bottom-right',
                         render: () => (
-                           <div className="toast">Данные успешно обновлены</div>
+                            <div className="toast">Данные успешно обновлены</div>
                         ),
                         duration: 3000
                     })
@@ -120,22 +120,24 @@ export function PersonalData() {
             </div>
         </div>
         <hr className={styles.hr} />
-        <div className={styles.lineAddress}>
-            {addresses.map((x, i) => <div key={i} className={styles.addressBlock}>
-                <img src='/iconMap.svg' />
-                <div className={styles.addressBlockColumn}>
-                    <p className={styles.addressBlockText}>{x.street}, д.{x.house}, кв.{x.appartment}</p>
-                    <div className={styles.addressBlockLine}>
-                        <p className={styles.addressBlockButton} onClick={() => {
-                            setCity(x.city); setStreet(x.street); setHouse(x.house); setAppartment(x.appartment); setIdAddress(x.idAddress); onOpen();
-                        }}>Изменить</p>
-                        <p className={styles.addressBlockButton} onClick={() => {
-                            setAddresses(old => old.filter(y => x.street !== y.street && x.appartment !== y.appartment));
-                        }} >Удалить</p>
+        <div className={styles.lineAddressBox} >
+            <div className={styles.lineAddress}>
+                {addresses.map((x, i) => <div key={i} className={styles.addressBlock}>
+                    <img src='/iconMap.svg' />
+                    <div className={styles.addressBlockColumn}>
+                        <p className={styles.addressBlockText}>{x.street}, д.{x.house}, кв.{x.appartment}</p>
+                        <div className={styles.addressBlockLine}>
+                            <p className={styles.addressBlockButton} onClick={() => {
+                                setCity(x.city); setStreet(x.street); setHouse(x.house); setAppartment(x.appartment); setIdAddress(x.idAddress); onOpen();
+                            }}>Изменить</p>
+                            <p className={styles.addressBlockButton} onClick={() => {
+                                setAddresses(old => old.filter(y => x.street !== y.street && x.appartment !== y.appartment));
+                            }} >Удалить</p>
+                        </div>
                     </div>
-                </div>
-            </div>)}
-            <div className={styles.buttonAddAddress} onClick={() => { onOpen(); setIdAddress(Math.floor(Math.random() * 900000) + 100000); }}>Добавить адрес</div>
+                </div>)}
+                <div className={styles.buttonAddAddress} onClick={() => { onOpen(); setIdAddress(Math.floor(Math.random() * 900000) + 100000); }}>Добавить адрес</div>
+            </div>
         </div>
         <hr className={styles.hr} />
         <div className={styles.passwordColumn}>
