@@ -70,7 +70,6 @@ export function Header() {
     function getAllProducts() {
         axios.get(`${API_BASE_URL}getProducts`)
             .then((res) => {
-                console.log(res.data);
                 setProducts(res.data);
             })
             .catch((e) => console.log(e));

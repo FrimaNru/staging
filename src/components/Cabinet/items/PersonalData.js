@@ -42,7 +42,6 @@ export function PersonalData() {
             }
         })
             .then((res) => {
-                console.log(res.data)
                 setPhone(res.data.phone);
                 setEmail(res.data.email);
                 setName(res.data.name);
@@ -70,9 +69,6 @@ export function PersonalData() {
         } else {
             if (password === repeatPassword) {
                 axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, addresses, password }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-                    .then((res) => {
-                        console.log(res.data);
-                    })
                     .catch((e) => console.log(e));
             } else {
                 if (password !== repeatPassword) return setError(true);

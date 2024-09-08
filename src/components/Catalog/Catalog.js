@@ -86,7 +86,6 @@ export function Catalog() {
         };
 
         if (stateSales.includes('Популярное')) {
-            console.log('123')
             d = d.filter(x => x.additionally.includes('popular'));
         };
 
