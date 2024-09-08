@@ -37,8 +37,8 @@
     width: 50%;
     height: 270px;
     background-image: url(../../public/start1.png);
-    background-size: auto 100%;
-    background-repeat: repeat-x;
+    background-size: cover;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -50,8 +50,8 @@
     width: 50%;
     height: 270px;
     background-image: url(../../public/start2.png);
-    background-size: auto 100%;
-    background-repeat: repeat-x;
+    background-size: cover;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -101,8 +101,8 @@
     width: 50%;
     height: 270px;
     background-image: url(../../public/start3.png);
-    background-size: auto 100%;
-    background-repeat: repeat-x;
+    background-size: cover;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -114,8 +114,8 @@
     width: 50%;
     height: 270px;
     background-image: url(../../public/start4.png);
-    background-size: auto 100%;
-    background-repeat: repeat-x;
+    background-size: cover;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     gap: 20px;
