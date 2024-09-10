@@ -9,6 +9,7 @@ export function SignIn({ setStateAuth, onClose }) {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const [hidePassword, setHidePassword] = useState(true);
 
@@ -17,10 +18,20 @@ export function SignIn({ setStateAuth, onClose }) {
     const [errorUser, setErrorUser] = useState(false);
     const [errorCorrectPassword, setErrorCorrectPassword] = useState(false);
 
-    function signIn() {
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            signIn(email, password);
+        }
+    };
+
+    const signIn = (email, password) => {
         if (email.length > 0 && password.length > 0) {
-            axios.post(`${API_BASE_URL}login`, { email, password })
+            setIsLoading(true);
+            axios
+                .post(`${API_BASE_URL}login`, { email, password })
                 .then((res) => {
+                    setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
                     if (window.location.href.includes('product?id=')) {
                         onClose();
@@ -28,12 +39,13 @@ export function SignIn({ setStateAuth, onClose }) {
                 })
                 .catch((e) => {
                     console.log(e);
+                    setIsLoading(false);
                     if (e?.response?.status === 404) return setErrorUser(true);
                     if (e?.response?.status === 400) return setErrorCorrectPassword(true);
                 });
         } else {
-            if (email.length === 0) return setErrorEmail(true);
-            if (password.length === 0) return setErrorPassword(true);
+            if (email.length === 0) setErrorEmail(true);
+            if (password.length === 0) setErrorPassword(true);
         }
     };
 
@@ -52,7 +64,7 @@ export function SignIn({ setStateAuth, onClose }) {
                         ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >E-mail</p>
                         : errorEmail ? <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Введите e-mail</p>
                             : errorUser && <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Неверный логин</p>}
-                    <input className={styles.input} onChange={(e) => { setEmail(e.target.value); setErrorEmail(false); setErrorUser(false); }} value={email} />
+                    <input onKeyDown={handleKeyDown} className={styles.input} onChange={(e) => { setEmail(e.target.value); setErrorEmail(false); setErrorUser(false); }} value={email} />
                 </div>
                 <div className={styles.inputColumn}>
                     {(!errorPassword && !errorCorrectPassword)
@@ -61,7 +73,7 @@ export function SignIn({ setStateAuth, onClose }) {
                             ? <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Введите пароль</p>
                             : errorCorrectPassword && <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Неверный пароль</p>}
                     <div className={styles.inputIconLine} >
-                        <input className={styles.input} type={hidePassword ? 'password' : 'text'} onChange={(e) => { setPassword(e.target.value); setErrorPassword(false); setErrorCorrectPassword(false); }} value={password} />
+                        <input onKeyDown={handleKeyDown} className={styles.input} type={hidePassword ? 'password' : 'text'} onChange={(e) => { setPassword(e.target.value); setErrorPassword(false); setErrorCorrectPassword(false); }} value={password} />
                         <>
                             {hidePassword
                                 ? <img src='/showIcon.svg' className={styles.inputIcon} onClick={() => setHidePassword(false)} />
@@ -70,14 +82,14 @@ export function SignIn({ setStateAuth, onClose }) {
                     </div>
                 </div>
                 <div className={styles.lilColumn} style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }} >
-                    <div className={styles.mainButtonBlack} onClick={signIn} >ВОЙТИ</div>
+                    <button className={`${styles.mainButtonBlack} ${isLoading && styles.loading}`} onClick={() => signIn(email, password)} >ВОЙТИ</button>
                     <p className={styles.forgotPassword} style={{ width: 'max-content' }} onClick={() => setStateAuth('refresh')}>Забыли пароль?</p>
                 </div>
             </div>
         </div>
         <div className={styles.lilColumn} >
             <p className={styles.inputTitle}>Еще нет аккаунта?</p>
-            <div className={styles.mainButton} onClick={() => setStateAuth('signUp')} >ЗАРЕГИСТРИРОВАТЬСЯ</div>
+            <button className={styles.mainButton} onClick={() => setStateAuth('signUp')} >ЗАРЕГИСТРИРОВАТЬСЯ</button>
         </div>
     </div>
 }

@@ -54,7 +54,6 @@ export function PopularBlock() {
     function load() {
         axios.get(`${API_BASE_URL}getPopularProducts`)
             .then((res) => {
-                console.log(res.data);
                 setData(res.data);
             })
             .catch((e) => console.log(e));

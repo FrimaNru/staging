@@ -50,13 +50,14 @@ export function Header() {
     };
 
     function load() {
-        if (!localStorage.getItem('tokeb')) return;
+        if (!localStorage.getItem('token')) return;
         axios.get(`${API_BASE_URL}getUser`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
             .then((res) => {
+                console.log(res.data.bag.length)
                 setData(res.data.bag);
             })
             .catch((e) => {

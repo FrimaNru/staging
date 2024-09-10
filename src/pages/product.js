@@ -1,12 +1,33 @@
 
 import { Footer, Header, Product, PopularBlock } from "@/components";
 import Head from "next/head";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { API_BASE_URL } from "../../apiConfig";
+import { useRouter } from "next/router";
 
 export default function ProductPage() {
+
+    const [data, setData] = useState({});
+    const router = useRouter();
+    const { id } = router.query;
+
+    useEffect(() => {
+        load();
+    }, [id, router]);
+
+    function load() {
+        axios.post(`${API_BASE_URL}getOneProduct`, { id })
+            .then((res) => {
+                setData(res.data);
+            })
+            .catch((e) => console.log(e));
+    };
+
     return (
         <>
             <Head>
-                <title>Серьги CARAMEL – Купить в Mi Alegria</title>
+                <title>{data?.name?.toUpperCase()} – Купить в Mi Alegria</title>
                 <meta name="description" content='Серьги CARAMEL от Mi Alegria. Высокое качество, эксклюзивный дизайн и выгодные цены. Бесплатная доставка и гарантия на все ювелирные изделия.' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />

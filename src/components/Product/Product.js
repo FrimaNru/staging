@@ -23,11 +23,19 @@ export function Product() {
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [colorOfProduct, setColorOfProduct] = useState('');
+    const [countOfColor, setCountOfColor] = useState(0);
 
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     useEffect(() => {
         load();
+        const handleRouteChange = (url) => {
+            load();
+        };
+        router.events.on('routeChangeComplete', handleRouteChange);
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange);
+        };
     }, []);
 
     function load() {
@@ -128,18 +136,16 @@ export function Product() {
                         <MenuButton pos='relative' zIndex={10} p={0}>
                             <div className={styles.menuButton} >
                                 <p className={styles.menuButtonText} >{colorOfProduct}</p>
-                                <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 0.5L8 7.5L15 0.5" stroke="#140702" stroke-linecap="round" />
-                                </svg>
+                                {data?.colors?.length > 1 && <img src='/colorArrow.svg' />}
                             </div>
                         </MenuButton>
                         <MenuList p={0} border='none' boxShadow='none' mt='-30px' pos='relative' zIndex={0} >
-                            {data?.colors?.length > 0 && data.colors.filter(x => x !== colorOfProduct).map((x, i) => <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
-                                <div className={styles.menuItem} onClick={() => setColorOfProduct(x)}>{x}</div>
+                            {data?.colors?.length > 0 && data.colors.map((x, i) => x !== colorOfProduct && <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
+                                <div className={styles.menuItem} onClick={() => { setColorOfProduct(x); setCountOfColor(i); }}>{x}</div>
                             </MenuItem>)}
                         </MenuList>
                     </Menu>
-                    {data?.articles?.length > 0 && <p className={styles.articles} >Артикул: {data?.articles[0]}{data?.articles[1] && `/${data?.articles[1]}`}</p>}
+                    {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.articles[countOfColor]}</p>}
                 </div>
                 <div className={styles.infoButtonColumn}>
                     <p className={styles.infoCost} >{formatNumber(Number(data.cost))} руб.</p>
@@ -174,11 +180,11 @@ export function Product() {
                 </AccordionItem>)}
             </Accordion>
         </div>
-        <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
+        <Modal isOpen={isOpenModal} size='xl' onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
             <ModalOverlay />
             <ModalContent bg='none' boxShadow='none'>
                 <ModalBody p={0}>
-                    <div className={styles.modal} >
+                    <div className={styles.modal}>
                         <div className={styles.modalHeader}>
                             <div className={styles.modalHeaderLine}>
                                 <p className={styles.modalHeaderTitle}>ДОБАВЛЕНО В КОРЗИНУ</p>
@@ -189,10 +195,7 @@ export function Product() {
                         <div className={styles.modalBody}>
                             <div className={styles.modalBodyColumn}>
                                 <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.modalBodyImg} />
-                                <div className={styles.modalBodyColumnLil}>
-                                    <p className={styles.modalBodyTitle}>{data.name}</p>
-                                    <p className={styles.modalBodyText} >{data.text}</p>
-                                </div>
+                                <p className={styles.modalBodyTitle}>{data.name}</p>
                             </div>
                             <div className={styles.modalBodyColumnButtons}>
                                 <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)} >ПРОДОЛЖИТЬ ПОКУПКИ</button>

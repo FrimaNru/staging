@@ -42,6 +42,7 @@ export function Catalog() {
 
     useEffect(() => {
         load();
+        if (text) setSearch(true);
         if (window.location.href.includes('new')) setStateSales(old => [...old, 'Новинки']);
         switch (product) {
             case 'ring':
@@ -64,7 +65,7 @@ export function Catalog() {
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
         };
-    }, [])
+    }, [router, text])
 
     function load() {
         axios.get(`${API_BASE_URL}getProducts`)
@@ -174,7 +175,7 @@ export function Catalog() {
     return <div className={styles.main}>
         <div className={styles.imageBlock} >
             <img className={styles.backImg} src='/backCatalog.png' />
-            <p className={styles.logoText}>ЮВЕЛИРНЫЕ ДИЗАЙНЕРСКИЕ УКРАШЕНИЯ</p>
+            <p className={styles.logoText}>ДИЗАЙНЕРСКИЕ УКРАШЕНИЯ</p>
         </div>
         <div className={styles.row}>
             <div className={styles.filter}>

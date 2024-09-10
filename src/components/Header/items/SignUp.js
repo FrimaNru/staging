@@ -15,6 +15,7 @@ export function SignUp({ setStateAuth, onClose }) {
     const [password, setPassword] = useState('');
     const [isCodeSend, setIsCodeSend] = useState(false);
     const [time, setTime] = useState(59);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [hidePassword, setHidePassword] = useState(true);
 
@@ -49,16 +50,26 @@ export function SignUp({ setStateAuth, onClose }) {
         }
     };
 
-    function signUp() {
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            signUp(email, password, phone);
+        }
+    };
+
+    function signUp(email, password, phone) {
         if (code.length === 6 && password.length > 0 && phone.length > 0) {
+            setIsLoading(true);
             axios.post(`${API_BASE_URL}signUp`, { email, code, phone, password })
                 .then((res) => {
+                    setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
                     if (window.location.href.includes('product?id=')) {
                         onClose();
                     } else router.push('/cabinet?page=personaldata');
                 })
                 .catch((e) => {
+                    setIsLoading(false);
                     console.log(e);
                     if (e?.response?.status === 400) return setErrorUser(true);
                     if (e?.response?.status === 401) return setErrorCodeCorrect(true);
@@ -85,7 +96,7 @@ export function SignUp({ setStateAuth, onClose }) {
                         ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >E-mail</p>
                         : errorEmail ? <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Введите e-mail</p>
                             : errorUser && <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Этот e-mail уже привязан к аккаунту</p>}
-                    <input className={styles.input} onChange={(e) => { setEmail(e.target.value); setErrorEmail(false); setErrorUser(false); }} value={email} />
+                    <input onKeyDown={handleKeyDown} className={styles.input} onChange={(e) => { setEmail(e.target.value); setErrorEmail(false); setErrorUser(false); }} value={email} />
                 </div>
                 <div className={styles.inputColumn}>
                     {(!errorCode && !errorCodeCorrect)
@@ -104,14 +115,14 @@ export function SignUp({ setStateAuth, onClose }) {
                     {!errorPhone
                         ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >Телефон</p>
                         : <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Введите телефон</p>}
-                    <InputMask mask="+7 (999) 999-99-99" className={styles.input} onChange={(e) => { setPhone(e.target.value); setErrorPhone(false); }} value={phone} />
+                    <InputMask onKeyDown={handleKeyDown} mask="+7 (999) 999-99-99" className={styles.input} onChange={(e) => { setPhone(e.target.value); setErrorPhone(false); }} value={phone} />
                 </div>
                 <div className={styles.inputColumn}>
                     {!errorPassword
                         ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >Пароль</p>
                         : <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Придумайте и введите пароль</p>}
                     <div className={styles.inputIconLine}>
-                        <input className={styles.input} type={hidePassword ? 'password' : 'text'} onChange={(e) => { setPassword(e.target.value); setErrorPassword(false); }} value={password} />
+                        <input onKeyDown={handleKeyDown} className={styles.input} type={hidePassword ? 'password' : 'text'} onChange={(e) => { setPassword(e.target.value); setErrorPassword(false); }} value={password} />
                         <>
                             {hidePassword
                                 ? <img src='/showIcon.svg' className={styles.inputIcon} onClick={() => setHidePassword(false)} />
@@ -120,7 +131,7 @@ export function SignUp({ setStateAuth, onClose }) {
                     </div>
                 </div>
                 <div className={styles.lilColumn}>
-                    <div className={styles.mainButtonBlack} onClick={signUp} >ЗАРЕГИСТРИРОВАТЬСЯ</div>
+                    <div className={`${styles.mainButtonBlack} ${isLoading && styles.loading}`} onClick={() => signUp(email, password, phone)} >ЗАРЕГИСТРИРОВАТЬСЯ</div>
                     <p className={styles.agreementText}>Регистрируясь, я подтверждаю свое согласие на обработку персональных данных в соответствии с Политикой конфиденциальности.</p>
                 </div>
             </div>

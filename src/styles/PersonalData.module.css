@@ -111,6 +111,9 @@
     width: 100%;
     overflow: hidden;
     overflow-x: scroll;
+    display: flex;
+    align-items: left;
+    justify-content: left;
 }
 
 .lineAddress {

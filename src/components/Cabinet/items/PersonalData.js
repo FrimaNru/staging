@@ -116,9 +116,9 @@ export function PersonalData() {
             </div>
         </div>
         <hr className={styles.hr} />
-        <div className={styles.lineAddressBox} >
+        <div className={styles.lineAddressBox}>
             <div className={styles.lineAddress}>
-                {addresses.map((x, i) => <div key={i} className={styles.addressBlock}>
+                {addresses.length > 0 && addresses.map((x, i) => <div key={i} className={styles.addressBlock}>
                     <img src='/iconMap.svg' />
                     <div className={styles.addressBlockColumn}>
                         <p className={styles.addressBlockText}>{x.street}, д.{x.house}, кв.{x.appartment}</p>

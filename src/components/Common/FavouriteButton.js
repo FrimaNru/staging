@@ -1,6 +1,6 @@
 import styles from "@/styles/Product.module.css";
 import { AuthModal } from "@/components";
-import { useDisclosure } from "@chakra-ui/react";
+import { useDisclosure, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ export function FavouriteButton({ idProduct }) {
     const [heart, setHeart] = useState(false);
     const router = useRouter();
     const { id } = router.query;
+    const toast = useToast();
 
     useEffect(() => {
         if (localStorage.getItem('token')) load();
