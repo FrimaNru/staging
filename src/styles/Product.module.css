@@ -8,6 +8,13 @@
     align-items: center;
 }
 
+.mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+    width: 100%;
+}
+
 .infoLine {
     display: flex;
     flex-direction: row;
@@ -374,13 +381,14 @@
     font-weight: 400;
     line-height: normal;
     width: 498px;
-    text-align: center;
+    text-align: left;
     height: auto;
-    padding: 30px 0 10px 0;
+    padding: 30px 0 10px 20px;
     border: solid 1px #000;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: left;
+    border-radius: 0 0 20px 20px;
 }
 
 .menuButtonText {

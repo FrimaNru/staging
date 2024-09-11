@@ -23,3 +23,4 @@ export * from "./Cabinet/items/MyOrders";
 export * from "./Cabinet/items/HistoryOrders"
 
 export * from "./Common/FavouriteButton";
+export * from "./Common/Breadcrumb.js";

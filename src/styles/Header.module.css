@@ -420,6 +420,37 @@
     margin-top: -13px;
 }
 
+.favCount {
+    position: absolute;
+    display: flex;
+    height: 20px;
+    width: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #C39748;
+    margin: 18px 0 0 14px;
+}
+
+.favCountText {
+    color: #000;
+    font-family: "Tenor Sans";
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 100%;
+    margin-left: 1.5px;
+}
+
+.bagCountText {
+    color: #000;
+    font-family: "Tenor Sans";
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 100%;
+    margin-left: 1.4px;
+}
+
 .inputPanel {
     width: 400px;
     background: #fff;
@@ -523,4 +554,36 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+.breadcrumbItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    width: max-content;
+}
+
+.breadcrumbLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    width: max-content;
+}
+
+.breadcrumbItemText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    width: max-content;
+}
+
+.breadcrumbItemIcon {
+    width: 7.5px;
+    height: 15px;
+    margin-top: 5px;
 }

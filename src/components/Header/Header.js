@@ -23,9 +23,10 @@ export function Header() {
     const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [search, setSearch] = useState('');
+    const [favLength, setFavLength] = useState(0);
 
     useEffect(() => {
-        setInterval(() => load(), 2000);
+        setInterval(() => load(), 1000);
         getAllProducts();
         if (typeof window !== undefined && window.location.href.includes('new')) setStateNew(true);
         const handleRouteChange = (url) => {
@@ -57,8 +58,8 @@ export function Header() {
             }
         })
             .then((res) => {
-                console.log(res.data.bag.length)
                 setData(res.data.bag);
+                setFavLength(res.data.favourite.length)
             })
             .catch((e) => {
                 console.log(e);
@@ -103,12 +104,19 @@ export function Header() {
                 </div>}
             </div>
             <div className={styles.iconLine} >
-                <img src='/favIcon.svg' className={styles.icon} onClick={() => favPage()} />
+                <>
+                    <img src='/favIcon.svg' className={styles.icon} onClick={() => favPage()} />
+                    {favLength > 0 && <div className={styles.favCount}>
+                        <p className={styles.favCountText}>{favLength}</p>
+                    </div>}
+                </>
                 <AuthModal onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
                 <Authorization />
                 <Link href='/bag' style={{ width: 'max-content' }} >
                     <img src='/shopIcon.svg' className={styles.icon} />
-                    {data.length > 0 && <p className={styles.bagCount} >{data.length}</p>}
+                    {data.length > 0 && <div className={styles.bagCount}>
+                        <p className={styles.bagCountText}>{data.length}</p>
+                    </div>}
                 </Link>
             </div>
         </div>

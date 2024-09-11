@@ -1,6 +1,7 @@
 import styles from "@/styles/Faq.module.css";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react'
 import { useState } from "react";
+import { Breadcrumb } from "@/components";
 
 export function Faq() {
 
@@ -18,35 +19,38 @@ export function Faq() {
             <img className={styles.backImg} src='/backHandImage.png' />
             <img src='/logoText.svg' className={styles.logoText} />
         </div>
-        <div className={styles.accordionBox} >
-            <Accordion w='100%' allowToggle>
-                <div className={styles.accordionColumn}>
-                    {data.map((x, i) => <AccordionItem key={i} border='none' >
-                        {({ isExpanded }) => (
-                            <>
-                                <AccordionButton p={0} _hover={{}}>
-                                    <div className={`${styles.accordionButton} ${open === i && styles.accordionButtonSelect}`} onClick={() => { open === i ? setOpen('') : setOpen(i) }}>
-                                        <p className={styles.accordionButtonText}>{x.ques.toUpperCase()}</p>
-                                        {isExpanded
-                                            ? <svg width="24" height="13" viewBox="0 0 24 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M23 11.5L12 1.5L1 11.5" stroke="#140702" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                            : <svg width="24" height="13" viewBox="0 0 24 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M1 1.5L12 11.5L23 1.5" stroke="#140702" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
-                                            </svg>}
-                                    </div>
-                                </AccordionButton>
-                                <AccordionPanel p={0}>
-                                    <div className={styles.accordionPanel}>
-                                        <hr className={styles.hr} />
-                                        <div className={styles.accordionPanelText} dangerouslySetInnerHTML={{ __html: x.answ }} />
-                                    </div>
-                                </AccordionPanel>
-                            </>
-                        )}
-                    </AccordionItem>)}
-                </div>
-            </Accordion>
+        <div className={styles.mainColumn}>
+            <Breadcrumb />
+            <div className={styles.accordionBox} >
+                <Accordion w='100%' allowToggle>
+                    <div className={styles.accordionColumn}>
+                        {data.map((x, i) => <AccordionItem key={i} border='none' >
+                            {({ isExpanded }) => (
+                                <>
+                                    <AccordionButton p={0} _hover={{}}>
+                                        <div className={`${styles.accordionButton} ${open === i && styles.accordionButtonSelect}`} onClick={() => { open === i ? setOpen('') : setOpen(i) }}>
+                                            <p className={styles.accordionButtonText}>{x.ques.toUpperCase()}</p>
+                                            {isExpanded
+                                                ? <svg width="24" height="13" viewBox="0 0 24 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M23 11.5L12 1.5L1 11.5" stroke="#140702" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                                : <svg width="24" height="13" viewBox="0 0 24 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1 1.5L12 11.5L23 1.5" stroke="#140702" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
+                                                </svg>}
+                                        </div>
+                                    </AccordionButton>
+                                    <AccordionPanel p={0}>
+                                        <div className={styles.accordionPanel}>
+                                            <hr className={styles.hr} />
+                                            <div className={styles.accordionPanelText} dangerouslySetInnerHTML={{ __html: x.answ }} />
+                                        </div>
+                                    </AccordionPanel>
+                                </>
+                            )}
+                        </AccordionItem>)}
+                    </div>
+                </Accordion>
+            </div>
         </div>
     </div>
 }

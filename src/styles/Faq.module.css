@@ -93,3 +93,9 @@
     width: 100%;
     border-top: solid 1px #140702;
 }
+
+.mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+}

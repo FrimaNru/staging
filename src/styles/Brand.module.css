@@ -8,6 +8,12 @@
     align-items: center;
 }
 
+.mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+}
+
 .imageBlock {
     width: 100%;
     display: flex;

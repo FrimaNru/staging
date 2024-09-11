@@ -7,6 +7,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { useRouter } from "next/router";
 import { AuthModal } from "../Header/items/AuthModal";
+import { Breadcrumb } from "@/components";
 
 function formatNumber(number) {
     let numStr = number.toString();
@@ -99,57 +100,60 @@ export function Product() {
     };
 
     return <div className={styles.main}>
-        <div className={styles.infoLine}>
-            <div className={styles.imgSliderBoxColumn} >
-                <div className={styles.imgSliderBox} >
-                    <Slider {...settings} ref={slider => {
-                        sliderRef = slider;
-                    }}>
-                        <div className={styles.sliderItem} >
-                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
-                        </div>
-                        <div className={styles.sliderItem} >
-                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
-                        </div>
-                        <div className={styles.sliderItem} >
-                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
-                        </div>
-                        <div className={styles.sliderItem} >
-                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
-                        </div>
-                    </Slider>
-                </div>
-                <div className={styles.lineDots} >
-                    {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
-                </div>
-            </div>
-            <div className={styles.infoColumn}>
-                <div className={styles.infoColumnText}>
-                    <div className={styles.infoLilColumnText} >
-                        <div className={styles.infoTitleLine} >
-                            <p className={styles.infoTitle}>{data.name}</p>
-                            <FavouriteButton idProduct={data._id} />
-                        </div>
-                    </div>
-                    <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
-                    <Menu autoSelect={false} >
-                        <MenuButton pos='relative' zIndex={10} p={0}>
-                            <div className={styles.menuButton} >
-                                <p className={styles.menuButtonText} >{colorOfProduct}</p>
-                                {data?.colors?.length > 1 && <img src='/colorArrow.svg' />}
+        <div className={styles.mainColumn} >
+            <Breadcrumb />
+            <div className={styles.infoLine}>
+                <div className={styles.imgSliderBoxColumn} >
+                    <div className={styles.imgSliderBox} >
+                        <Slider {...settings} ref={slider => {
+                            sliderRef = slider;
+                        }}>
+                            <div className={styles.sliderItem} >
+                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                             </div>
-                        </MenuButton>
-                        <MenuList p={0} border='none' boxShadow='none' mt='-30px' pos='relative' zIndex={0} >
-                            {data?.colors?.length > 0 && data.colors.map((x, i) => x !== colorOfProduct && <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
-                                <div className={styles.menuItem} onClick={() => { setColorOfProduct(x); setCountOfColor(i); }}>{x}</div>
-                            </MenuItem>)}
-                        </MenuList>
-                    </Menu>
-                    {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.articles[countOfColor]}</p>}
+                            <div className={styles.sliderItem} >
+                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
+                            </div>
+                            <div className={styles.sliderItem} >
+                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
+                            </div>
+                            <div className={styles.sliderItem} >
+                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
+                            </div>
+                        </Slider>
+                    </div>
+                    <div className={styles.lineDots} >
+                        {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
+                    </div>
                 </div>
-                <div className={styles.infoButtonColumn}>
-                    <p className={styles.infoCost} >{formatNumber(Number(data.cost))} руб.</p>
-                    <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
+                <div className={styles.infoColumn}>
+                    <div className={styles.infoColumnText}>
+                        <div className={styles.infoLilColumnText} >
+                            <div className={styles.infoTitleLine} >
+                                <p className={styles.infoTitle}>{data.name}</p>
+                                <FavouriteButton idProduct={data._id} />
+                            </div>
+                        </div>
+                        <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
+                        <Menu autoSelect={false} >
+                            <MenuButton pos='relative' zIndex={10} p={0}>
+                                <div className={styles.menuButton} >
+                                    <p className={styles.menuButtonText} >{colorOfProduct}</p>
+                                    {data?.colors?.length > 1 && <img src='/colorArrow.svg' />}
+                                </div>
+                            </MenuButton>
+                            <MenuList p={0} border='none' boxShadow='none' mt='-30px' pos='relative' zIndex={0} >
+                                {data?.colors?.length > 0 && data.colors.map((x, i) => x !== colorOfProduct && <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
+                                    <div className={styles.menuItem} onClick={() => { setColorOfProduct(x); setCountOfColor(i); }}>{x}</div>
+                                </MenuItem>)}
+                            </MenuList>
+                        </Menu>
+                        {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.articles[countOfColor]}</p>}
+                    </div>
+                    <div className={styles.infoButtonColumn}>
+                        <p className={styles.infoCost} >{formatNumber(Number(data.cost))} руб.</p>
+                        <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
+                    </div>
                 </div>
             </div>
         </div>
