@@ -7,7 +7,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { useRouter } from "next/router";
 import { AuthModal } from "../Header/items/AuthModal";
-import { Breadcrumb } from "@/components";
+import { BigImage, Breadcrumb } from "@/components";
 
 function formatNumber(number) {
     let numStr = number.toString();
@@ -27,6 +27,7 @@ export function Product() {
     const [countOfColor, setCountOfColor] = useState(0);
 
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [openBigImage, setOpenBigImage] = useState(false);
 
     useEffect(() => {
         load();
@@ -108,7 +109,7 @@ export function Product() {
                         <Slider {...settings} ref={slider => {
                             sliderRef = slider;
                         }}>
-                            <div className={styles.sliderItem} >
+                            <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
                                 <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                             </div>
                             <div className={styles.sliderItem} >
@@ -125,6 +126,7 @@ export function Product() {
                     <div className={styles.lineDots} >
                         {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
                     </div>
+                    <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={data.cover} />
                 </div>
                 <div className={styles.infoColumn}>
                     <div className={styles.infoColumnText}>
