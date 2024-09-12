@@ -3,16 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AuthModal, Authorization } from "@/components";
-import { useDisclosure } from "@chakra-ui/react";
+import { useDisclosure, Drawer, DrawerContent } from "@chakra-ui/react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
+import { formatNumber } from "@/lib/Formatting";
 
-function formatNumber(number) {
-    let numStr = number.toString();
-    let parts = numStr.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return parts.join('.');
-};
+const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
 
 export function Header() {
 
@@ -20,10 +16,10 @@ export function Header() {
     const [data, setData] = useState([]);
     const [products, setProducts] = useState([]);
     const [stateNew, setStateNew] = useState(false);
-    const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [search, setSearch] = useState('');
     const [favLength, setFavLength] = useState(0);
+    const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
     useEffect(() => {
         setInterval(() => load(), 1000);
@@ -78,7 +74,12 @@ export function Header() {
     };
 
     return <div className={styles.main}>
-        <div className={styles.firstLine} >
+        <div className={styles.firstLine}>
+            <div className={styles.mobileIconsLine}>
+                <img src='/burgerMenu.svg' className={styles.icon} style={{ height: '12px' }} onClick={() => setIsOpenDrawer(!isOpenDrawer)} />
+                <img src='/searchIconMobile.svg' className={styles.icon} />
+                <div className={styles.emptyIcon} />
+            </div>
             <Link href='/' style={{ width: 'max-content' }} >
                 <img src='/logo.svg' className={styles.logo} />
             </Link>
@@ -129,5 +130,39 @@ export function Header() {
             </div>
             <hr className={styles.hr} />
         </div>
+        <DrawerBlock isOpenDrawer={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer} pathname={router.pathname} />
     </div>
+}
+
+function DrawerBlock({ isOpenDrawer, setIsOpenDrawer, pathname }) {
+
+    const [state, setState] = useState(false);
+    const typeCatalog = [{ text: 'Все изделия', link: 'catalog' }, { text: 'Кольца', link: 'catalog?product=ring' }, { text: 'Серьги', link: 'catalog?product=earrings' }, { text: 'Браслеты', link: 'catalog?product=bracelets' }, { text: 'Колье', link: 'catalog?product=necklace' }];
+
+    return <Drawer isOpen={isOpenDrawer} placement='right' autoFocus={false} onClose={() => setIsOpenDrawer(false)} size='full' >
+        <DrawerContent bg='white' h='calc(100% - 63px)' mt='63px' w='100%'>
+            <div className={styles.drawerColumn}>
+                {!state
+                    ? <>
+                        <hr className={styles.drawerHr} />
+                        {links.map((x, i) => x.text !== 'Каталог'
+                            ? <Link key={i} href={x.link} style={{ width: '100%' }}>
+                                <div className={`${styles.drawerItem} ${pathname === x.link && styles.drawerItemSelect}`}>{x.text}</div>
+                            </Link>
+                            : <div key={i} className={styles.drawerItem} onClick={() => setState(true)}>{x.text}</div>)}
+                    </>
+                    : <>
+                        <div className={styles.drawerCatalogHeader}>
+                            <img src='/drawerIcon.svg' className={styles.drawerCatalogHeaderIcon} onClick={() => setState(false)} />
+                            <p className={styles.drawerCatalogHeaderText}>Каталог</p>
+                        </div>
+                        <div className={styles.drawerCatalogColumn}>
+                            {typeCatalog.map((x, i) => <Link key={i} href={x.link} style={{ width: 'max-content' }}>
+                                <p className={styles.drawerCatalogColumnText}>{x.text}</p>
+                            </Link>)}
+                        </div>
+                    </>}
+            </div>
+        </DrawerContent>
+    </Drawer>
 }

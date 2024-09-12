@@ -73,6 +73,12 @@
     text-align: left;
 }
 
+.contentSecondColumnTitle {
+    font-size: 20px;
+    font-family: 'Dela Gothic One', system-ui;
+    text-align: left;
+}
+
 .contentFirstColumnLine {
     display: flex;
     flex-direction: row;
@@ -100,4 +106,62 @@
     font-size: 20px;
     font-family: 'Dela Gothic One', system-ui;
     line-height: 100%;
+}
+
+@media (max-width: 475px) {
+    .main {
+        width: 100%;
+        padding: 0 0px;
+        gap: 15px;
+        margin: 78px 0 7.5px 0;
+    }
+
+    .columnNavigation {
+        display: none;
+    }
+
+    .contentFirstColumn {
+        padding: 0;
+    }
+
+    .contentFirstColumnTitle {
+        font-size: 18px;
+        font-family: 'Dela Gothic One', system-ui;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .contentFirstColumnText {
+        font-size: 16px;
+    }
+
+    .contentColumn {
+        gap: 20px;
+    }
+
+    .orderLoadBlock {
+        padding: 0 75px;
+        color: #140702;
+        text-align: center;
+        font-family: "Dela Gothic One";
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    .contentFirstColumnLil {
+        gap: 20px;
+        padding: 0 40px;
+        width: 100%;
+    }
+
+    .contentSecondColumnTitle {
+        font-size: 16px;
+        text-transform: none;
+    }
+
+    .contentFirstColumnText {
+        font-size: 13px;
+    }
 }

@@ -21,6 +21,10 @@ export function Faq() {
         </div>
         <div className={styles.mainColumn}>
             <Breadcrumb />
+            <div className={styles.titleBlock}>
+                <p className={styles.title}>ЧАСТЫЕ  ВОПРОСЫ</p>
+                <hr className={styles.hr} />
+            </div>
             <div className={styles.accordionBox} >
                 <Accordion w='100%' allowToggle>
                     <div className={styles.accordionColumn}>
@@ -31,12 +35,11 @@ export function Faq() {
                                         <div className={`${styles.accordionButton} ${open === i && styles.accordionButtonSelect}`} onClick={() => { open === i ? setOpen('') : setOpen(i) }}>
                                             <p className={styles.accordionButtonText}>{x.ques.toUpperCase()}</p>
                                             {isExpanded
-                                                ? <svg width="24" height="13" viewBox="0 0 24 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M23 11.5L12 1.5L1 11.5" stroke="#140702" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                                : <svg width="24" height="13" viewBox="0 0 24 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M1 1.5L12 11.5L23 1.5" stroke="#140702" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
-                                                </svg>}
+                                                ? <img src='/faqArrowOpen.svg' className={styles.accordionButtonArrow} />
+                                                : <img src='/faqArrowClose.svg' className={styles.accordionButtonArrow} />}
+                                            {isExpanded
+                                                ? <img src='/faqArrowOpenMobile.svg' className={styles.accordionButtonArrowMobile} />
+                                                : <img src='/faqArrowCloseMobile.svg' className={styles.accordionButtonArrowMobile} />}
                                         </div>
                                     </AccordionButton>
                                     <AccordionPanel p={0}>

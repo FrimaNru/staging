@@ -50,7 +50,7 @@
 
 .accordionButtonSelect {
     border-radius: 20px 20px 0 0;
-    border-bottom: none;   
+    border-bottom: none;
     transition: 0.3s all;
 }
 
@@ -98,4 +98,96 @@
     display: flex;
     flex-direction: column;
     gap: 45px;
+}
+
+.accordionButtonArrowMobile {
+    display: none;
+}
+
+.titleBlock {
+    display: none;
+}
+
+@media (max-width: 475px) {
+    .main {
+        width: 100%;
+        gap: 15px;
+        margin: 63px 0 50px 0;
+    }
+
+    .imageBlock {
+        height: 147px;
+    }
+
+    .backImg {
+        height: 147px;
+    }
+
+    .logoText {
+        width: 204px;
+    }
+
+    .accordionButton {
+        height: 48px;
+        border-radius: 10px;
+        padding: 5px 15px;
+    }
+
+    .accordionButtonSelect {
+        border-radius: 10px 10px 0 0;
+        border-bottom: none;
+        transition: 0.3s all;
+    }
+
+    .mainColumn {
+        width: 100%;
+        gap: 15px;
+    }
+
+    .accordionBox {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .accordionColumn {
+        gap: 15px;
+    }
+
+    .accordionButtonText {
+        font-size: 13px;
+        width: 94%;
+    }
+
+    .accordionButtonArrow {
+        display: none;
+    }
+
+    .accordionButtonArrowMobile {
+        display: block;
+    }
+
+    .accordionPanelText {
+        font-size: 12px;
+    }
+
+    .accordionPanel {
+        border-radius: 0 0 10px 10px;
+        padding: 0 15px 5px 15px;
+    }
+
+    .titleBlock {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .title {
+        color: #140702;
+        text-align: center;
+        font-family: "Dela Gothic One";
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
 }

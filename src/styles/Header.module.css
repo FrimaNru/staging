@@ -587,3 +587,129 @@
     height: 15px;
     margin-top: 5px;
 }
+
+.mobileIconsLine {
+    display: none;
+}
+
+@media (max-width: 475px) {
+    .main {
+        padding: 15px 0;
+    }
+
+    .firstLine {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .iconLine {
+        gap: 10px;
+    }
+
+    .searchBlock {
+        display: none;
+    }
+
+    .logo {
+        width: auto;
+        height: 33px;
+    }
+
+    .secondLine {
+        display: none;
+    }
+
+    .mobileIconsLine {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .icon {
+        height: 18px;
+        width: auto;
+    }
+
+    .emptyIcon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .drawerColumn {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .drawerItem {
+        display: flex;
+        padding: 20px 30px;
+        color: #140702;
+        font-family: "Tenor Sans";
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 109.152%;
+        border-bottom: solid 1px #140702;
+        width: 100%;
+    }
+
+    .drawerItemSelect {
+        background: #FDEDBF;
+        font-size: 24px;
+    }
+
+    .drawerHr {
+        width: 100%;
+        border-top: solid 1px #140702;
+    }
+
+    .drawerCatalogHeader {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background: #FDEDBF;
+        padding: 20px;
+    }
+
+    .drawerCatalogHeaderText {
+        color: #140702;
+        font-family: "Tenor Sans";
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    .drawerCatalogHeaderIcon {
+        position: absolute;
+        left: 20px;
+    }
+
+    .drawerCatalogColumn {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+        border-bottom: solid 1px #140702;
+    }
+
+    .drawerCatalogColumnText {
+        color: #140702;
+        font-family: "Tenor Sans";
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    .breadcrumbLine {
+        margin-left: 20px;
+    }
+
+    .breadcrumbItemText {
+        font-size: 16px;        
+    }
+}

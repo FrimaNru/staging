@@ -70,7 +70,8 @@
     z-index: 10;
 }
 
-.prevArrow:hover, .nextArrow:hover {
+.prevArrow:hover,
+.nextArrow:hover {
     cursor: pointer;
 }
 
@@ -79,4 +80,63 @@
     margin-top: -246px;
     z-index: 10;
     right: 0%;
+}
+
+.sliderBlockMobile {
+    display: none;
+}
+
+@media (max-width: 475px) {
+    .main {
+        gap: 15px;
+        margin: 30px 0 0 0;
+        width: 100%;
+        min-height: 290px;
+        align-items: center;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .sliderBlock {
+        display: none;
+    }
+
+    .sliderBlockMobile {
+        display: block;
+        width: 100%;
+    }
+
+    .sliderItemContent {
+        gap: 10px;
+    }
+
+    .sliderItemTitle {
+        font-size: 16px;
+    }
+
+    .sliderItemCost {
+        font-size: 16px;
+    }
+
+    .sliderItemImage {
+        width: 190px;
+        height: 190px;
+        object-fit: cover;
+    }
+
+    .nextArrow {
+        position: absolute;
+        margin-top: -236px;
+        z-index: 10;
+        right: 40px;
+    }
+
+    .prevArrow {
+        position: absolute;
+        margin-top: 104px;
+        z-index: 10;
+        left: 40px;
+    }
 }

@@ -91,3 +91,94 @@
     font-family: 'Dela Gothic One', system-ui;
     text-align: center;
 }
+
+.columnMobile {
+    display: none;
+}
+
+.textRight {
+    text-align: right;
+}
+
+@media (max-width: 475px) {
+    .main {
+        width: 100%;
+        gap: 15px;
+        margin-top: 63px;
+    }
+
+    .mainColumn {
+        gap: 15px;
+    }
+
+    .imageBlock {
+        height: 147px;
+    }
+
+    .backImg {
+        height: 147px;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .logoText {
+        width: 205px;
+    }
+
+    .contentColumn {
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    .title {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .contentColumnBig {
+        gap: 20px;
+    }
+
+    .line {
+        display: none;
+    }
+
+    .columnMobile {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .text {
+        font-size: 16px;
+        width: 100%;
+        text-align: center;
+        padding: 0 15px;
+    }
+
+    .text2 {
+        font-size: 16px;
+        padding: 0 15px;
+    }
+
+    .lineMobile {
+        display: flex;
+        flex-direction: row;
+        gap: 11px;
+    }
+
+    .imgLine {
+        width: 50%;
+        height: 170px;
+        object-fit: cover;
+    }
+
+    .textRight {
+        text-align: center;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+}

@@ -188,3 +188,26 @@
     background-repeat: no-repeat;
     transition: all 0.3s;
 }
+
+@media (max-width: 475px) {
+    .main {
+        width: 100%;
+        gap: 10px;
+        margin-top: 63px;
+    }
+
+    .line {
+        gap: 10px;
+    }
+
+    .block,
+    .block2,
+    .block6,
+    .block7 {
+        height: 125px;
+    }
+
+    .blockText {
+        font-size: 12px;
+    }
+}
