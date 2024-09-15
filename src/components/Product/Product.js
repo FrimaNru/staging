@@ -20,6 +20,7 @@ function formatNumber(number) {
 export function Product() {
 
     let sliderRef = useRef(null);
+    const elementRef = useRef(null);
     const [data, setData] = useState({});
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
@@ -28,8 +29,14 @@ export function Product() {
 
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [openBigImage, setOpenBigImage] = useState(false);
+    const [width, setWidth] = useState(0);
 
     useEffect(() => {
+        const element = elementRef.current;
+        if (element) {
+            const width = element.offsetWidth;
+            setWidth(width - 2);
+        };
         load();
         const handleRouteChange = (url) => {
             load();
@@ -53,9 +60,7 @@ export function Product() {
         const { className, style, onClick } = props;
         return (
             <div className={className} onClick={onClick}>
-                <svg width="23" height="36" viewBox="0 0 23 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.5 33L18.5 18L3.5 3" stroke="#140702" strokeWidth="6" strokeLinecap="round" />
-                </svg>
+                <img src='/productArrowNext.svg' className={styles.sliderArrow} />
             </div>
         );
     };
@@ -64,7 +69,7 @@ export function Product() {
         const { className, style, onClick } = props;
         return (
             <div className={className} onClick={onClick}>
-                <svg width="23" height="36" viewBox="0 0 23 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className={styles.sliderArrow} width="23" height="36" viewBox="0 0 23 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19.5 3L4.5 18L19.5 33" stroke="#140702" strokeWidth="6" strokeLinecap="round" />
                 </svg>
             </div>
@@ -112,13 +117,13 @@ export function Product() {
                             <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
                                 <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                             </div>
-                            <div className={styles.sliderItem} >
+                            <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
                                 <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                             </div>
-                            <div className={styles.sliderItem} >
+                            <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
                                 <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                             </div>
-                            <div className={styles.sliderItem} >
+                            <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
                                 <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
                             </div>
                         </Slider>
@@ -130,15 +135,13 @@ export function Product() {
                 </div>
                 <div className={styles.infoColumn}>
                     <div className={styles.infoColumnText}>
-                        <div className={styles.infoLilColumnText} >
-                            <div className={styles.infoTitleLine} >
-                                <p className={styles.infoTitle}>{data.name}</p>
-                                <FavouriteButton idProduct={data._id} />
-                            </div>
+                        <div className={styles.infoTitleLine} >
+                            <p className={styles.infoTitle}>{data.name}</p>
+                            <FavouriteButton idProduct={data._id} />
                         </div>
                         <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
                         <Menu autoSelect={false} >
-                            <MenuButton pos='relative' zIndex={10} p={0}>
+                            <MenuButton pos='relative' zIndex={10} p={0} ref={elementRef}>
                                 <div className={styles.menuButton} >
                                     <p className={styles.menuButtonText} >{colorOfProduct}</p>
                                     {data?.colors?.length > 1 && <img src='/colorArrow.svg' />}
@@ -146,7 +149,7 @@ export function Product() {
                             </MenuButton>
                             <MenuList p={0} border='none' boxShadow='none' mt='-30px' pos='relative' zIndex={0} >
                                 {data?.colors?.length > 0 && data.colors.map((x, i) => x !== colorOfProduct && <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
-                                    <div className={styles.menuItem} onClick={() => { setColorOfProduct(x); setCountOfColor(i); }}>{x}</div>
+                                    <div className={styles.menuItem} style={{ width }} onClick={() => { setColorOfProduct(x); setCountOfColor(i); }}>{x}</div>
                                 </MenuItem>)}
                             </MenuList>
                         </Menu>
@@ -161,12 +164,12 @@ export function Product() {
         </div>
         <div className={styles.charasteristicColumn}>
             <Accordion allowToggle >
-                {dataCharacteristic.map((x, i) => <AccordionItem key={i} border='none' >
+                {dataCharacteristic.map((x, i) => <AccordionItem key={i} border='none' style={{ borderBottom: dataCharacteristic.length === i + 1 && 'solid 1px #140702' }}  >
                     {({ isExpanded }) => (
                         <>
                             <h2>
                                 <AccordionButton _hover={{}} p={0} >
-                                    <div className={styles.accordionButton} >
+                                    <div className={styles.accordionButton}>
                                         <div dangerouslySetInnerHTML={{ __html: x.title }} className={styles.accordionButtonTitle} />
                                         {isExpanded ? <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21 11.5L11 1.5L1 11.5" stroke="#140702" strokeLinecap="round" />

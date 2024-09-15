@@ -1,6 +1,6 @@
 import styles from "@/styles/Catalog.module.css";
 import { useEffect, useState, useMemo } from "react";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuItem, MenuList, Accordion, AccordionItem, AccordionButton, AccordionPanel } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
@@ -167,6 +167,52 @@ export function Catalog() {
                             <button className={styles.noFindProductsButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
                         </div>}
                         <div className={styles.lineOrdersContainer}>
+                            <Accordion w='100%' allowToggle className={styles.accordion} >
+                                <AccordionItem border='none' >
+                                    {({ isExpanded }) => (
+                                        <>
+                                            <AccordionButton p={0} _hover={{}}>
+                                                <div className={styles.accordionButton}>
+                                                    <p className={styles.accordionButtonText}>Фильтры</p>
+                                                    {isExpanded
+                                                        ? <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M13 8L7 2L1 8" stroke="#140702" strokeWidth="2" strokeLinecap="round" />
+                                                        </svg>
+                                                        : <svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9" fill="none">
+                                                            <path d="M1 1.47754L7 7.47754L13 1.47754" stroke="#140702" strokeWidth="2" strokeLinecap="round" />
+                                                        </svg>}
+                                                </div>
+                                            </AccordionButton>
+                                            <AccordionPanel p={0}>
+                                                <div className={styles.accordionPanel}>
+                                                    <div className={styles.lilColumn}>
+                                                        {sales.map((x, i) => <div key={i} className={styles.filterLine} onClick={() => setStateSales(old => old.includes(x) ? old.filter(item => item !== x) : [...old, x])}>
+                                                            {stateSales.includes(x) ? <img src='/goldDotSelect.svg' /> : <img src='/goldDot.svg' />}
+                                                            <p className={styles.filterText}>{x}</p>
+                                                        </div>)}
+                                                    </div>
+                                                    <div className={styles.lilColumn}>
+                                                        <p className={styles.filterTitle}>СОРТИРОВКА</p>
+                                                        {sortItems.map((x, i) => <div key={i} className={styles.filterLine} onClick={() => setStateSortItems(x)}>
+                                                            {stateSortItems === x ? <img src='/goldDotSelect.svg' /> : <img src='/goldDot.svg' />}
+                                                            <p className={styles.filterText}>{x}</p>
+                                                        </div>)}
+                                                    </div>
+                                                    <div className={styles.lilColumn}>
+                                                        <p className={styles.filterTitle}>ВИД ИЗДЕЛИЯ</p>
+                                                        {types.map((x, i) => <div key={i} className={styles.filterLine} onClick={() => {
+                                                            if (stateType !== x) setStateType(x);
+                                                            else setStateType('');
+                                                        }}>
+                                                            {stateType === x ? <img src='/goldDotSelect.svg' /> : <img src='/goldDot.svg' />}
+                                                            <p className={styles.filterText}>{x}</p>
+                                                        </div>)}
+                                                    </div>
+                                                </div>
+                                            </AccordionPanel>
+                                        </>)}
+                                </AccordionItem>
+                            </Accordion>
                             {filteredData.reduce((rows, item, index) => {
                                 if (index % 3 === 0) rows.push([]);
                                 rows[rows.length - 1].push(item);
@@ -175,7 +221,7 @@ export function Catalog() {
                                 <div className={styles.rowIndex} key={rowIndex}>
                                     <div className={styles.lineOrders}>
                                         {row.map((x, i) => (
-                                            <Link key={i} href={`/product?id=${x._id}`} style={{ width: 'max-content' }}>
+                                            <Link key={i} href={`/product?id=${x._id}`} className={styles.sliderItemLink}>
                                                 <div className={styles.sliderItem}>
                                                     <div className={styles.sliderItemContent}>
                                                         <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />

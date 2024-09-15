@@ -11,8 +11,7 @@ export function BigImage({ data, onOpen, onClose, isOpen }) {
         const { className, style, onClick } = props;
         return (
             <>
-                <div className={`${className}`} style={{ display: 'none' }} >
-                </div>
+                <div className={`${className}`} style={{ display: 'none' }}></div>
                 <svg onClick={onClick} className={styles.bigImageNextArrow} width="23" height="36" viewBox="0 0 23 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3.5 33L18.5 18L3.5 3" stroke="#FDEDBF" strokeWidth="6" strokeLinecap="round" />
                 </svg>

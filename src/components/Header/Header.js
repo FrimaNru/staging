@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AuthModal, Authorization } from "@/components";
-import { useDisclosure, Drawer, DrawerContent } from "@chakra-ui/react";
+import { useDisclosure, Drawer, DrawerContent, DrawerOverlay } from "@chakra-ui/react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { formatNumber } from "@/lib/Formatting";
@@ -20,6 +20,7 @@ export function Header() {
     const [search, setSearch] = useState('');
     const [favLength, setFavLength] = useState(0);
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     useEffect(() => {
         setInterval(() => load(), 1000);
@@ -77,7 +78,7 @@ export function Header() {
         <div className={styles.firstLine}>
             <div className={styles.mobileIconsLine}>
                 <img src='/burgerMenu.svg' className={styles.icon} style={{ height: '12px' }} onClick={() => setIsOpenDrawer(!isOpenDrawer)} />
-                <img src='/searchIconMobile.svg' className={styles.icon} />
+                <img src='/searchIconMobile.svg' className={styles.icon} onClick={() => setIsSearchOpen(true)} />
                 <div className={styles.emptyIcon} />
             </div>
             <Link href='/' style={{ width: 'max-content' }} >
@@ -131,6 +132,7 @@ export function Header() {
             <hr className={styles.hr} />
         </div>
         <DrawerBlock isOpenDrawer={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer} pathname={router.pathname} />
+        <SearchDrawerBlock isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} products={products} />
     </div>
 }
 
@@ -165,4 +167,38 @@ function DrawerBlock({ isOpenDrawer, setIsOpenDrawer, pathname }) {
             </div>
         </DrawerContent>
     </Drawer>
-}
+};
+
+function SearchDrawerBlock({ isSearchOpen, setIsSearchOpen, products }) {
+
+    const [search, setSearch] = useState('');
+
+    return <Drawer isOpen={isSearchOpen} placement='top' autoFocus={false} onClose={() => setIsSearchOpen(false)} >
+        <DrawerOverlay />
+        <DrawerContent bg='white'>
+            <div className={styles.searchBlockDrawer}>
+                <div className={styles.searchBlockDrawerHeader} >
+                    <input className={styles.searchBlockInput} placeholder="Поиск по каталогу" onChange={(e) => setSearch(e.target.value)} />
+                    <img src='/searchIcon.svg' className={styles.searchBlockIcon} />
+                </div>
+                {search.length > 0 && <div className={styles.inputPanel}>
+                    <Link href={`/catalog?text=${search}`} onClick={() => setIsSearchOpen(false)} >
+                        <div className={styles.inputPanelHeader}>
+                            <img src='/searchIcon.svg' className={styles.searchBlockIcon} />
+                            <p className={styles.inputPanelText} >Искать “{search}”</p>
+                        </div>
+                    </Link>
+                    <>
+                        {products.map((x, i) => x.name.includes(search) && <Link key={i} href={`/product?id=${x._id}`} onClick={() => setIsSearchOpen(false)} >
+                            <div className={styles.inputPanelLine} >
+                                <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.inputPanelCover} />
+                                <p className={styles.inputPanelName}>{x.name}</p>
+                                <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
+                            </div>
+                        </Link>)}
+                    </>
+                </div>}
+            </div>
+        </DrawerContent>
+    </Drawer>
+};
