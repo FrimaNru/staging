@@ -90,6 +90,9 @@ export function MyOrders() {
     };
 
     return <div className={styles.main}>
+        <hr className={`${styles.hr} ${styles.hrMobile}`} />
+        <p className={styles.titleMobile}>МОИ ЗАКАЗЫ</p>
+        <hr className={`${styles.hr} ${styles.hrMobile}`} />
         {data.length === 0
             ? <>
                 <p className={styles.noOrderTitle} >К сожалению, у вас нет текущих заказов</p>
@@ -114,47 +117,49 @@ export function MyOrders() {
                             : {};
 
                     return (
-                        <div key={i} className={styles.columnOrder}>
-                            <div className={styles.titleColumn}>
-                                <p className={styles.title}>ЗАКАЗ № {x.id}</p>
-                                <p className={styles.text}>{formatDate(x.createDate)}</p>
-                            </div>
-                            <div className={styles.statusBlock} >
-                                <img src='/infoIcon.svg' />
-                                <p className={styles.statusBlockText}>{selectStatus(x.status, x.paymentStatus)}</p>
-                            </div>
-                            <div className={styles.lilColumnOrder}>
-                                {Object.entries(itemCounts).map(([item, count], i) => (
-                                    <div key={i} className={styles.itemColumn}>
-                                        <ProductItemOrder item={item} count={count} />
-                                        <hr className={styles.hr} />
-                                    </div>
-                                ))}
-                            </div>
-                            <div className={styles.deliveryColumn}>
-                                <p className={styles.title}>Доставка</p>
+                        <>
+                            <div key={i} className={styles.columnOrder}>
+                                <div className={styles.titleColumn}>
+                                    <p className={styles.title}>ЗАКАЗ № {x.id}</p>
+                                    <p className={styles.text}>{formatDate(x.createDate)}</p>
+                                </div>
+                                <div className={styles.statusBlock} >
+                                    <img src='/infoIcon.svg' className={styles.statusBlockIcon} />
+                                    <p className={styles.statusBlockText}>{selectStatus(x.status, x.paymentStatus)}</p>
+                                </div>
                                 <div className={styles.lilColumnOrder}>
-                                    <div className={styles.modalSuccessLine}>
-                                        <img src='/iconMap.svg' className={styles.modalSuccessLineIcon} style={{ width: '22px' }} />
-                                        <p className={styles.modalSuccessText}>{x?.delivery?.street}</p>
-                                    </div>
-                                    <div className={styles.modalSuccessLine}>
-                                        <img src='/clock.svg' className={styles.modalSuccessLineIcon} />
-                                        <p className={styles.modalSuccessText}>{x?.delivery?.date}</p>
-                                    </div>
-                                    <div className={styles.modalSuccessLine}>
-                                        <img src='/phone.svg' className={styles.modalSuccessLineIcon} />
-                                        <p className={styles.modalSuccessText}>{dataUser.phone}</p>
+                                    {Object.entries(itemCounts).map(([item, count], i) => (
+                                        <div key={i} className={styles.itemColumn}>
+                                            <ProductItemOrder item={item} count={count} />
+                                            <hr className={styles.hr} />
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className={styles.deliveryColumn}>
+                                    <p className={styles.title}>Доставка</p>
+                                    <div className={styles.lilColumnOrder}>
+                                        <div className={styles.modalSuccessLine}>
+                                            <img src='/iconMap.svg' className={`${styles.modalSuccessLineIcon} ${styles.modalSuccessLineIconMap}`} />
+                                            <p className={styles.modalSuccessText}>{x?.delivery?.street}</p>
+                                        </div>
+                                        <div className={styles.modalSuccessLine}>
+                                            <img src='/clock.svg' className={styles.modalSuccessLineIcon} />
+                                            <p className={styles.modalSuccessText}>{x?.delivery?.date}</p>
+                                        </div>
+                                        <div className={styles.modalSuccessLine}>
+                                            <img src='/phone.svg' className={styles.modalSuccessLineIcon} />
+                                            <p className={styles.modalSuccessText}>{dataUser.phone}</p>
+                                        </div>
                                     </div>
                                 </div>
+                                <p className={styles.costGold}>{(x.paymentStatus === 'REJECTED' || x.paymentStatus === 'FORM_SHOWED') ? 'К оплате' : 'Оплачено'}: {formatNumber(x.total)} руб.</p>
+                                {(x.paymentStatus === 'REJECTED' || x.paymentStatus === 'FORM_SHOWED') && <div className={styles.deliveryColumn}>
+                                    <p className={styles.title}>Оплата</p>
+                                    <button onClick={() => !isLoading && pay(x.total, x.id)} className={`${styles.buttonPay} ${isLoading && styles.loading}`}>ОПЛАТИТЬ СЕЙЧАС</button>
+                                </div>}
                             </div>
-                            <p className={styles.costGold}>{(x.paymentStatus === 'REJECTED' || x.paymentStatus === 'FORM_SHOWED') ? 'К оплате' : 'Оплачено'}: {formatNumber(x.total)} руб.</p>
-                            {(x.paymentStatus === 'REJECTED' || x.paymentStatus === 'FORM_SHOWED') && <div className={styles.deliveryColumn}>
-                                <p className={styles.title}>Оплата</p>
-                                <button onClick={() => !isLoading && pay(x.total, x.id)} className={`${styles.buttonPay} ${isLoading && styles.loading}`}>ОПЛАТИТЬ СЕЙЧАС</button>
-                            </div>}
-                            <hr className={styles.hr} />
-                        </div>
+                            {data.length !== i + 1 && <hr className={styles.hr} />}
+                        </>
                     );
                 })}
             </div>}
@@ -185,6 +190,7 @@ function ProductItemOrder({ item, count }) {
             <div className={styles.itemTextColumn}>
                 <p className={styles.itemName}>{data?.name}</p>
                 <div className={styles.itemCountNumber}>{count} шт</div>
+                <p className={styles.itemCostMobile} >{formatNumber(Number(data?.cost))} руб.</p>
             </div>
         </div>
         <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>

@@ -3,8 +3,8 @@ export function capitalizeFirstLetter(text) {
 };
 
 export function formatNumber(number) {
-    let numStr = number.toString();
-    let parts = numStr.split('.');
+    let numStr = number?.toString();
+    let parts = numStr?.split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     return parts.join('.');
 };

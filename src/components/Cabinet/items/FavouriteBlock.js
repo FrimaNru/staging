@@ -85,6 +85,9 @@ export function FavouriteBlock() {
     }
 
     return <div className={styles.main}>
+        <hr className={`${styles.hr} ${styles.hrMobile}`} />
+        <p className={styles.titleMain}>ИЗБРАННОЕ</p>
+        <hr className={`${styles.hr} ${styles.hrMobile}`} />
         {data.length > 0
             ? <>
                 {data.map((x, i) => <div key={i} className={styles.column} >
@@ -116,7 +119,7 @@ export function FavouriteBlock() {
             : <>
                 <p className={styles.title} >К сожалению, в избранном пока нет товаров</p>
                 <div className={styles.blackButtonLil} onClick={() => router.push('/catalog')}>В КАТАЛОГ</div>
-                <hr className={styles.hr} />
+                <hr className={`${styles.hr} ${styles.hrLast}`} />
             </>}
     </div>
 }

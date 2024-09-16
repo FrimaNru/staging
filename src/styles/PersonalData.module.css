@@ -374,3 +374,196 @@
 .errorText {
     color: #950000;
 }
+
+.hrMobile {
+    display: none;
+}
+
+.crossMobile {
+    display: none;
+}
+
+@media (max-width: 475px) {
+    .main {
+        width: 100%;
+        padding-top: 0px;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .titleColumn {
+        gap: 15px;
+        padding: 0;
+    }
+
+    .title {
+        font-size: 18px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .inputColumn {
+        gap: 5px;
+        padding: 0 45px;
+    }
+
+    .inputTitle {
+        font-size: 14px;
+    }
+
+    .input {
+        width: 100%;
+        height: 31px;
+        padding: 0 15px;
+        font-size: 16px;
+    }
+
+    .saveButton {
+        width: calc(100% - 90px);
+        padding: 9.5px 20px;
+        font-size: 13px;
+    }
+
+    .sexText {
+        font-size: 16px;
+    }
+
+    .lineSex {
+        gap: 30px;
+        padding: 0;
+    }
+
+    .sexCircle {
+        width: 16px;
+        height: 16px;
+    }
+
+    .hrMobile {
+        display: block;
+    }
+
+    .dataColumn {
+        margin-bottom: 15px;
+    }
+
+    .lineAddressBox {
+        overflow-x: hidden;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .lineAddress {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .addressBlock {
+        height: auto;
+    }
+
+    .addressBlockColumn {
+        gap: 30px;
+    }
+
+    .addressBlockText {
+        font-size: 15px;
+    }
+
+    .addressBlockIcon {
+        width: 14px;
+    }
+
+    .buttonAddAddress {
+        height: 119px;
+        font-size: 15px;
+    }
+
+    .passwordColumn {
+        gap: 20px;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .inputIcon {
+        position: absolute;
+        margin-left: 0px;
+        right: 50px;
+        z-index: 2;
+        width: 27px;
+    }
+
+    .modal {
+        width: 90%;
+        gap: 15px;
+        padding: 15px 0 30px 0;
+        margin-left: 5%;
+    }
+
+    .modalHeader {
+        gap: 15px;
+    }
+
+    .modalHeaderTitle {
+        font-size: 13px;
+    }
+
+    .cross {
+        display: none;
+    }
+
+    .crossMobile {
+        display: block;
+    }
+
+    .modalSubtitle {
+        font-size: 15px;
+        width: 100%;
+    }
+
+    .modalColumn {
+        gap: 15px;
+        padding: 0 20px;
+    }
+
+    .modalColumnInput {
+        gap: 5px;
+    }
+
+    .modalInputTitle {
+        font-size: 14px;
+    }
+
+    .modalInput {
+        width: 100%;
+        height: 34px;
+        padding: 0 15px;
+        font-size: 14px;
+    }
+
+    .modalInputLine {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .modalInputLil {
+        width: 100%;
+        height: 34px;
+        padding: 0 15px;
+        font-size: 14px;
+    }
+
+    .modalSaveButton {
+        width: 100%;
+        padding: 9.5px 20px;
+        font-size: 13px;
+    }
+
+
+    .modalHeaderLine {
+        padding: 0 15px;
+    }
+}

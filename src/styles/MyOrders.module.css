@@ -258,3 +258,156 @@
         transform: rotate(360deg);
     }
 }
+
+.modalSuccessLineIconMap {
+    width: 22px;
+}
+
+.itemCostMobile {
+    display: none;
+}
+
+.titleMobile {
+    display: none;
+}
+
+.hrMobile {
+    display: none;
+}
+
+@media (max-width: 475px) {
+    .main {
+        align-items: center;
+        padding-top: 0px;
+        gap: 15px;
+        min-height: 45vh;
+    }
+
+    .bigColumn {
+        gap: 50px;
+    }
+
+    .columnOrder {
+        gap: 30px;
+        padding: 15px 40px 0 40px;
+    }
+
+    .titleColumn {
+        gap: 5px;
+    }
+
+    .title {
+        font-size: 16px;
+    }
+
+    .text {
+        font-size: 16px;
+    }
+
+    .statusBlock {
+        padding: 10px 15px;
+    }
+
+    .statusBlockIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .statusBlockText {
+        font-size: 16px;
+    }
+
+    .deliveryColumn {
+        gap: 15px;
+    }
+
+    .modalSuccessText {
+        font-size: 16px;
+    }
+
+    .lilColumnOrder {
+        gap: 10px;
+    }
+
+    .modalSuccessLineIcon {
+        width: 16px;
+        height: 14px;
+    }
+
+    .modalSuccessLineIconMap {
+        width: 16px;
+    }
+
+    .modalSuccessLine {
+        gap: 10px;
+    }
+
+    .costGold {
+        font-size: 16px;
+    }
+
+    .buttonPay {
+        width: 100%;
+        padding: 9.5px 20px;
+        font-size: 13px;
+    }
+
+    .itemCost {
+        display: none;
+    }
+
+    .itemCostMobile {
+        display: block;
+        color: #C39748;
+        font-family: "Dela Gothic One";
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-align: left;
+    }
+
+    .itemRow {
+        gap: 20px;
+        padding: 0;
+    }
+
+    .itemTextColumn {
+        gap: 15px;
+    }
+
+    .itemName {
+        font-size: 13px;
+    }
+
+    .itemCountNumber {
+        font-size: 11px;
+    }
+
+    .noOrderTitle {
+        text-align: center;
+        font-size: 16px;
+        width: calc(100% - 90px);
+    }
+
+    .noOrderButton {
+        width: calc(100% - 62px);
+        padding: 9.5px 20px;
+        font-size: 13px;
+    }
+
+    .titleMobile {
+        display: block;
+        color: #140702;
+        text-align: center;
+        font-family: "Dela Gothic One";
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    .hrMobile {
+        display: block;
+    }
+}

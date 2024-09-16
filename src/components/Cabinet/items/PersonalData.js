@@ -57,13 +57,7 @@ export function PersonalData() {
         if (password === '') {
             axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, addresses }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
-                    toast({
-                        position: 'bottom-right',
-                        render: () => (
-                            <div className="toast">Данные успешно обновлены</div>
-                        ),
-                        duration: 3000
-                    })
+                    toast({ position: 'bottom-right', render: () => (<div className="toast">Данные успешно обновлены</div>), duration: 3000 });
                 })
                 .catch((e) => console.log(e));
         } else {
@@ -79,7 +73,9 @@ export function PersonalData() {
     return <div className={styles.main}>
         <div className={styles.dataColumn}>
             <div className={styles.titleColumn}>
+                <hr className={`${styles.hr} ${styles.hrMobile}`} />
                 <p className={styles.title}>Личные данные</p>
+                <hr className={`${styles.hr} ${styles.hrMobile}`} />
                 <div className={styles.inputColumn}>
                     <p className={styles.inputTitle}>Имя</p>
                     <input className={styles.input} onChange={(e) => setName(e.target.value)} value={name} />
@@ -118,8 +114,10 @@ export function PersonalData() {
         <hr className={styles.hr} />
         <div className={styles.lineAddressBox}>
             <div className={styles.lineAddress}>
+                <p className={`${styles.title} ${styles.hrMobile}`}>Адреса доставки</p>
+                <hr className={`${styles.hr} ${styles.hrMobile}`} />
                 {addresses.length > 0 && addresses.map((x, i) => <div key={i} className={styles.addressBlock}>
-                    <img src='/iconMap.svg' />
+                    <img src='/iconMap.svg' className={styles.addressBlockIcon} />
                     <div className={styles.addressBlockColumn}>
                         <p className={styles.addressBlockText}>{x.street}, д.{x.house}, кв.{x.appartment}</p>
                         <div className={styles.addressBlockLine}>
@@ -139,6 +137,7 @@ export function PersonalData() {
         <div className={styles.passwordColumn}>
             <div className={styles.titleColumn}>
                 <p className={styles.title}>Изменить пароль</p>
+                <hr className={`${styles.hr} ${styles.hrMobile}`} />
                 <div className={styles.inputColumn}>
                     <p className={styles.inputTitle}>Новый пароль</p>
                     <div className={styles.inputIconLine}>
@@ -166,16 +165,17 @@ export function PersonalData() {
             </div>
         </div>
         <hr className={styles.hr} />
-        <div className={styles.saveButton} onClick={saveData}>СОХРАНИТЬ</div>
+        <button className={styles.saveButton} onClick={saveData}>СОХРАНИТЬ</button>
         <Modal onClose={onClose} isOpen={isOpen} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent p={0} bg='none' boxShadow='none' >
                 <ModalBody p={0}>
                     <div className={styles.modal}>
                         <div className={styles.modalHeader}>
                             <div className={styles.modalHeaderLine}>
                                 <p className={styles.modalHeaderTitle}>ДОБАВИТЬ АДРЕС</p>
                                 <img src='/cross.svg' className={styles.cross} onClick={() => onClose()} />
+                                <img src='/crossMobile.svg' className={styles.crossMobile} onClick={() => onClose()} />
                             </div>
                             <hr className={styles.modalHr} />
                             <div className={styles.modalColumn}>

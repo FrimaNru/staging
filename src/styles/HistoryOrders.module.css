@@ -67,10 +67,17 @@
     padding: 20px;
 }
 
+.itemLineProductsBox {
+    width: 40%;
+    overflow: auto;
+}
+
 .itemLineProducts {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    width: max-content;
+    overflow: scroll;
 }
 
 .itemCover:hover {
@@ -260,4 +267,133 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+.hrMobile {
+    display: none;
+}
+
+.itemCostHistoryMobile {
+    display: none;
+}
+
+@media (max-width: 475px) {
+    .main {
+        padding-top: 0px;
+        gap: 15px;
+    }
+
+    .itemLineProductsBox {
+        display: none;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .noOrderTitle {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .hrMobile {
+        display: block;
+    }
+
+    .columnItem {
+        gap: 10px;
+        margin-top: -30px;
+    }
+
+    .itemBox {
+        padding: 15px 20px;
+    }
+
+    .item {
+        padding: 15px 0px;
+    }
+
+    .itemColumn {
+        gap: 10px;
+    }
+
+    .itemTitle {
+        font-size: 15px;
+    }
+
+    .itemDate {
+        font-size: 16px;
+    }
+
+    .itemTotal {
+        font-size: 15px;
+        text-align: right;
+    }
+
+    .itemButton {
+        width: max-content;
+        height: 26px;
+        padding: 4.5px 20px;
+        font-size: 12px;
+    }
+
+    .columnOrder {
+        gap: 15px;
+        padding: 15px 40px 0 49px;
+    }
+
+    .titleColumn {
+        gap: 5px;
+    }
+
+    .statusBlock {
+        padding: 10px 15px;
+    }
+
+    .statusBlockText {
+        font-size: 16px;
+    }
+
+    .statusBlockIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .itemRowHistory {
+        gap: 20px;
+        padding: 0;
+    }
+
+    .itemCoverHistory {
+        width: 93px;
+        height: 102px;
+    }
+
+    .itemTextColumnHistory {
+        gap: 15px;
+    }
+
+    .itemNameHistory {
+        font-size: 13px;
+    }
+
+    .itemCountNumberHistory {
+        font-size: 11px;
+    }
+
+    .itemCostHistory {
+        display: none;
+    }
+
+    .itemCostHistoryMobile {
+        display: block;
+        color: #C39748;
+        font-family: "Dela Gothic One";
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
 }

@@ -5,13 +5,7 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import styles from "@/styles/HistoryOrders.module.css";
 import { useToast } from "@chakra-ui/react";
 import Link from "next/link";
-
-function formatNumber(number) {
-    let numStr = number.toString();
-    let parts = numStr.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return parts.join('.');
-};
+import { formatNumber } from "@/lib/Formatting";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -57,7 +51,7 @@ export function HistoryOrders() {
             </>
             : <div className={styles.mainColumn}>
                 {moreOrder !== '' && <div className={styles.mainColumn}>
-                    {data.map((x, i) => {
+                    {data.length > 0 && data.map((x, i) => {
                         if (x.id === moreOrder) {
                             const itemCounts = x.products && typeof x.products === 'string'
                                 ? x.products.split(',').reduce((acc, product) => {
@@ -79,7 +73,7 @@ export function HistoryOrders() {
                                     <p className={styles.itemDate}>{formatDate(x.createDate)}</p>
                                 </div>
                                 <div className={styles.statusBlock} >
-                                    <img src='/infoIcon.svg' />
+                                    <img src='/infoIcon.svg' className={styles.statusBlockIcon} />
                                     <p className={styles.statusBlockText}>Ваш заказ доставлен</p>
                                 </div>
                                 <div className={styles.lilColumnOrder}>
@@ -107,25 +101,29 @@ export function HistoryOrders() {
                                         </div>
                                     </div>
                                 </div>
-                                <p className={styles.costGold}>Оплачено: {formatNumber(x.total)} руб.</p>
+                                {/* <p className={styles.costGold}>Оплачено: {formatNumber(x.total)} руб.</p> */}
                             </div>)
                         }
                     })}
                     <hr className={styles.hr} />
                 </div>}
                 <div className={styles.column}>
+                    <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <p className={styles.noOrderTitle}>ИСТОРИЯ ЗАКАЗОВ</p>
+                    <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <div className={styles.columnItem}>
-                        {data.length > 0 && data.map((x, i) => <div key={i}>
+                        {data.length > 0 && data.map((x, i) => <div key={i} className={styles.itemBox} >
                             <div className={styles.item}>
                                 <div className={styles.itemColumn}>
                                     <p className={styles.itemTitle} >ЗАКАЗ № {x.id}</p>
                                     <p className={styles.itemDate}>{formatDate(x.createDate)}</p>
                                 </div>
-                                <div className={styles.itemLineProducts}>
-                                    {x.products
-                                        .filter((item, index, self) => self.findIndex(x => x === item) === index)
-                                        .map((y, n) => <ProductItemHistory item={y} key={n} />)}
+                                <div className={styles.itemLineProductsBox} >
+                                    <div className={styles.itemLineProducts}>
+                                        {x.products
+                                            .filter((item, index, self) => self.findIndex(x => x === item) === index)
+                                            .map((y, n) => <ProductItemHistory item={y} key={n} />)}
+                                    </div>
                                 </div>
                                 <div className={styles.itemColumn}>
                                     <p className={styles.itemTotal}>{formatNumber(x.total)} руб.</p>
@@ -156,7 +154,7 @@ function ProductItemHistory({ item }) {
             .catch((e) => console.log(e));
     };
 
-    return <Link href={`/product?id=${data?._id}`}><img src={`/${data?.cover}`} className={styles.itemCover} /></Link>
+    return <Link href={`/product?id=${data?._id}`}><img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} /></Link>
 };
 
 function ProductItemOrderHistory({ item, count }) {
@@ -177,14 +175,17 @@ function ProductItemOrderHistory({ item, count }) {
             .catch((e) => console.log(e));
     };
 
+    if (!data) return;
+
     return <div className={styles.itemHistory} onClick={() => router.push(`/product?id=${data._id}`)} >
         <div className={styles.itemRowHistory}>
-            <img src={`/${data.img}`} className={styles.itemCoverHistory} />
+            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.itemCoverHistory} />
             <div className={styles.itemTextColumnHistory}>
-                <p className={styles.itemNameHistory}>{data.name}</p>
+                <p className={styles.itemNameHistory}>{data.name?.toUpperCase()}</p>
                 <div className={styles.itemCountNumberHistory}>{count} шт</div>
+                {data.cost && <p className={styles.itemCostHistoryMobile} >{formatNumber(data?.cost)} руб.</p>}
             </div>
         </div>
-        <p className={styles.itemCostHistory} >{formatNumber(data.cost)} руб.</p>
+        {data.cost && <p className={styles.itemCostHistory} >{formatNumber(data?.cost)} руб.</p>}
     </div>
 };
