@@ -43,6 +43,9 @@ export function HistoryOrders() {
     };
 
     return <div className={styles.main}>
+        <hr className={`${styles.hr} ${styles.hrMobile}`} />
+        <p className={styles.noOrderTitle}>ИСТОРИЯ ЗАКАЗОВ</p>
+        <hr className={`${styles.hr} ${styles.hrMobile}`} />
         {data.length === 0
             ? <>
                 <p className={styles.noOrderTitle} >К сожалению, у вас нет прошедших заказов</p>
@@ -88,7 +91,7 @@ export function HistoryOrders() {
                                     <p className={styles.itemTitle}>Доставка</p>
                                     <div className={styles.lilColumnOrder}>
                                         <div className={styles.itemDeliveryLine}>
-                                            <img src='/iconMap.svg' className={styles.modalSuccessLineIcon} style={{ width: '22px' }} />
+                                            <img src='/iconMap.svg' className={`${styles.modalSuccessLineIcon} ${styles.modalSuccessLineIconMap}`} />
                                             <p className={styles.itemDate}>{x?.delivery?.street}</p>
                                         </div>
                                         <div className={styles.itemDeliveryLine}>
@@ -101,16 +104,13 @@ export function HistoryOrders() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <p className={styles.costGold}>Оплачено: {formatNumber(x.total)} руб.</p> */}
+                                <p className={styles.costGold}>Оплачено: {formatNumber(x.total)} руб.</p>
                             </div>)
                         }
                     })}
                     <hr className={styles.hr} />
                 </div>}
                 <div className={styles.column}>
-                    <hr className={`${styles.hr} ${styles.hrMobile}`} />
-                    <p className={styles.noOrderTitle}>ИСТОРИЯ ЗАКАЗОВ</p>
-                    <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <div className={styles.columnItem}>
                         {data.length > 0 && data.map((x, i) => <div key={i} className={styles.itemBox} >
                             <div className={styles.item}>

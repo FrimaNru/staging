@@ -76,6 +76,7 @@
 .itemCover {
     width: 117px;
     height: 116px;
+    object-fit: cover;
 }
 
 .itemTextColumn {
@@ -99,16 +100,6 @@
     font-weight: 400;
     line-height: normal;
     text-transform: uppercase;
-}
-
-.itemText {
-    color: #140702;
-    text-align: left;
-    font-family: "Tenor Sans";
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
 }
 
 .itemCost {
@@ -140,6 +131,10 @@
 .itemCountLine {
     display: flex;
     flex-direction: row;
+}
+
+.itemCountLineMobile {
+    display: none;
 }
 
 .itemCountSymbolBox {
@@ -733,4 +728,299 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+.hrMobile {
+    display: none;
+}
+
+.itemCrossMobile {
+    display: none;
+}
+
+.modalSuccessLineIconMap {
+    width: 22px;
+}
+
+@media (max-width: 475px) {
+    .main {
+        width: 100%;
+        margin: 63px 0 50px 0;
+        align-items: flex-start;
+        min-height: 45vh;
+        gap: 20px;
+    }
+
+    .mainRow {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .columnProducts {
+        gap: 20px;
+        width: 100%;
+    }
+
+    .rowHeader {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .emptyBag {
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .emptyBagTitle {
+        width: calc(100% - 100px);
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .emptyBagButton {
+        width: calc(100% - 62px);
+        padding: 9.5px 20px;
+        font-size: 20px;
+    }
+
+    .hrMobile {
+        display: block;
+    }
+
+    .totalColumn {
+        gap: 15px;
+        width: calc(100% - 27px);
+        margin-left: 13.5px;
+    }
+
+    .totalButton {
+        height: 39px;
+        padding: 11px 20px;
+        font-size: 12px;
+    }
+
+    .countinueShoppingButton {
+        width: 100%;
+        height: 39px;
+        padding: 11px 20px;
+        font-size: 13px;
+    }
+
+    .total {
+        gap: 10px;
+    }
+
+    .totalTitle {
+        font-size: 16px;
+    }
+
+    .totalContent {
+        gap: 5px;
+    }
+
+    .totalSubtitle {
+        font-size: 16px;
+    }
+
+    .totalGold {
+        font-size: 16px;
+    }
+
+    .totalText {
+        font-size: 13px;
+    }
+
+    .itemColumn {
+        gap: 15px;
+        padding: 0 35px;
+    }
+
+    .item {
+        gap: 20px;
+    }
+
+    .itemRow {
+        gap: 20px;
+        width: 100%;
+    }
+
+    .itemCover {
+        width: 93px;
+        height: 102px;
+        object-fit: cover;
+    }
+
+    .itemTextColumn {
+        gap: 15px;
+        width: 100%;
+    }
+
+    .itemRowLil {
+        display: none;
+    }
+
+    .itemName,
+    .itemCost {
+        font-size: 13px;
+    }
+
+    .itemCountLine {
+        display: none;
+    }
+
+    .itemCountLineMobile {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .itemCrossMobile {
+        display: block;
+        width: 15px;
+        height: 15px;
+    }
+
+    .itemNameLine {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .order {
+        width: 100%;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .orderTitle {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .orderLine {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .orderColumnBig {
+        gap: 15px;
+        width: 100%;
+        padding: 0 45px;
+    }
+
+    .orderColumnLil {
+        gap: 5px;
+        width: 100%;
+    }
+
+    .orderInputTitle {
+        font-size: 14px;
+    }
+
+    .orderInput {
+        width: 100%;
+        padding: 0 15px;
+        font-size: 16px;
+        height: 31px;
+    }
+
+    .orderButtonPay {
+        width: calc(100% - 27px);
+        height: 39px;
+        padding: 11px 20px;
+        font-size: 12px;
+    }
+
+    .orderColumn {
+        gap: 15px;
+        width: 100%;
+    }
+
+    .modalSuccess {
+        width: 90%;
+        gap: 20px;
+        padding: 15px 0 18px 0;
+        margin-left: 5%;
+    }
+
+    .modalHeader {
+        gap: 15px;
+    }
+
+    .modalHeaderLine {
+        padding: 0 15px;
+        align-items: center;
+    }
+
+    .modalHeaderTitle {
+        font-size: 15px;
+    }
+
+    .cross {
+        width: 11.765px;
+        height: 10px;
+        flex-shrink: 0;
+    }
+
+    .modalSuccessColumn {
+        gap: 20px;
+        padding: 0 22px;
+    }
+
+    .modalSaveButton {
+        width: 100%;
+        padding: 9.5px 20px;
+        font-size: 13px;
+    }
+
+    .modalSuccessTitle {
+        font-size: 16px;
+    }
+
+    .modalSuccessColumnLil {
+        gap: 5px;
+    }
+
+    .modalSuccessText {
+        font-size: 16px;
+    }
+
+    .modalSuccessStatus {
+        padding: 10px 15px;
+    }
+
+    .modalSuccessStatusIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .modalSuccessColumnMiddle {
+        gap: 15px;
+    }
+
+    .itemTextColumn {
+        gap: 15px;
+    }
+
+    .modalSuccessLine {
+        gap: 10px;
+    }
+
+    .modalSuccessLineIcon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .modalSuccessLineIconMap {
+        width: 16px;
+    }
+
+    .modalSuccessGold {
+        font-size: 16px;
+    }
 }

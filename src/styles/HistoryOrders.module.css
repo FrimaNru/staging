@@ -277,6 +277,10 @@
     display: none;
 }
 
+.modalSuccessLineIconMap {
+    width: 22px;
+}
+
 @media (max-width: 475px) {
     .main {
         padding-top: 0px;
@@ -320,7 +324,7 @@
     }
 
     .itemTitle {
-        font-size: 15px;
+        font-size: 16px;
     }
 
     .itemDate {
@@ -395,5 +399,35 @@
         font-style: normal;
         font-weight: 400;
         line-height: normal;
+        text-align: left;
+    }
+
+    .costGold {
+        font-size: 16px;
+    }
+
+    .deliveryColumn {
+        gap: 15px;
+    }
+
+    .modalSuccessLineIcon {
+        width: 16px;
+        height: 14px;
+    }
+
+    .modalSuccessLineIconMap {
+        width: 16px;
+    }
+
+    .modalSuccessText {
+        font-size: 16px;
+    }
+
+    .itemDeliveryLine {
+        gap: 10px;
+    }
+
+    .mainColumn {
+        gap: 30px;
     }
 }

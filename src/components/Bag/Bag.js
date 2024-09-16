@@ -5,13 +5,7 @@ import { API_BASE_URL } from "../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import InputMask from "react-input-mask";
-
-function formatNumber(number) {
-    let numStr = number.toString();
-    let parts = numStr.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return parts.join('.');
-};
+import { formatNumber } from "@/lib/Formatting";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -120,7 +114,9 @@ export function Bag() {
         <div className={styles.mainRow}>
             <div className={styles.columnProducts}>
                 <div className={styles.rowHeader} >
+                    <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <p className={styles.rowHeaderTitle}>КОРЗИНА</p>
+                    <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     {data.length > 0 && <button className={styles.rowHeaderClear} onClick={clearBag} >Очистить корзину</button>}
                 </div>
                 {data.length > 0 && Object.entries(itemCounts)
@@ -135,10 +131,9 @@ export function Bag() {
                 {data.length === 0 && <div className={styles.emptyBag} >
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
-                    <hr className={styles.hr} />
                 </div>}
             </div>
-            <div className={styles.totalColumn}>
+            {total > 0 && <div className={styles.totalColumn}>
                 <div className={styles.total}>
                     <p className={styles.totalTitle}>ИТОГО</p>
                     <div className={styles.totalContent}>
@@ -166,11 +161,13 @@ export function Bag() {
                     <button className={styles.totalButton} onClick={() => setOrder(true)} >ОФОРМИТЬ ЗАКАЗ</button>
                     <button className={styles.countinueShoppingButton} onClick={() => router.push('/catalog')} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
                 </>}
-            </div>
+            </div>}
         </div>
         {order && <div className={styles.order}>
-            <div className={styles.orderColumn} >
+            <div className={styles.orderColumn}>
+                <hr className={`${styles.hr} ${styles.hrMobile}`} />
                 <p className={styles.orderTitle}>ЛИЧНЫЕ ДАННЫЕ</p>
+                <hr className={`${styles.hr} ${styles.hrMobile}`} />
                 <div className={styles.orderLine}>
                     <div className={styles.orderColumnBig}>
                         <div className={styles.orderColumnLil}>
@@ -196,10 +193,10 @@ export function Bag() {
             </div>
             <hr className={styles.hr} />
             <p className={styles.orderTitle} >СПОСОБЫ ДОСТАВКИ</p>
-            <div className={styles.orderLineDelivery} onClick={() => setSelectDelivery('courier')}>
+            {/* <div className={styles.orderLineDelivery}>
                 <img src={selectDelivery === 'courier' ? '/goldDotSelect.svg' : '/goldDot.svg'} className={styles.orderDeliveryDot} />
                 <p className={styles.orderDeliveryText} >Курьерская доставка до двери</p>
-            </div>
+            </div> */}
             {selectDelivery === 'courier' && <>
                 {address === ''
                     ? <div className={styles.orderDeliveryLineAddress}>
@@ -266,7 +263,7 @@ export function Bag() {
         </Modal>
         <Modal onClose={() => setSuccessModal(false)} isOpen={successModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent p={0} bg='none' boxShadow='none' >
                 <ModalBody p={0}>
                     {successData && <div className={styles.modalSuccess}>
                         <div className={styles.modalHeader}>
@@ -282,14 +279,14 @@ export function Bag() {
                                 <p className={styles.modalSuccessText}>{formatDate(successData.createDate)}</p>
                             </div>
                             <div className={styles.modalSuccessStatus} >
-                                <img src='/infoIcon.svg' />
+                                <img src='/infoIcon.svg' className={styles.modalSuccessStatusIcon} />
                                 <p className={styles.modalSuccessText}>Ваш заказ обрабатывается </p>
                             </div>
                             <div className={styles.modalSuccessColumnMiddle} >
                                 <p className={styles.modalSuccessTitle}>Доставка</p>
                                 <div className={styles.itemTextColumn}>
                                     <div className={styles.modalSuccessLine}>
-                                        <img src='/iconMap.svg' className={styles.modalSuccessLineIcon} style={{ width: '22px' }} />
+                                        <img src='/iconMap.svg' className={`${styles.modalSuccessLineIcon} ${styles.modalSuccessLineIconMap}`} />
                                         <p className={styles.modalSuccessText}>{successData?.delivery?.street}</p>
                                     </div>
                                     <div className={styles.modalSuccessLine}>
@@ -303,7 +300,7 @@ export function Bag() {
                                 </div>
                             </div>
                             <p className={styles.modalSuccessGold} >Оплачено: {formatNumber(Number(successData.total))} руб.</p>
-                            <div className={styles.modalSaveButton} onClick={() => router.push('/cabinet?page=myorders')}>ДЕТАЛИ ЗАКАЗА</div>
+                            <button className={styles.modalSaveButton} onClick={() => router.push('/cabinet?page=myorders')}>ДЕТАЛИ ЗАКАЗА</button>
                         </div>
                     </div>}
                 </ModalBody>
@@ -311,7 +308,7 @@ export function Bag() {
         </Modal>
         <Modal onClose={() => setErrorModal(false)} isOpen={errorModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent bg='none' boxShadow='none' >
                 <ModalBody p={0}>
                     {successData && <div className={styles.modalSuccess}>
                         <div className={styles.modalHeader}>
@@ -385,8 +382,18 @@ function ProductItem({ item, count, load, setData }) {
         <div className={styles.itemRow}>
             <img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
-                <div className={styles.itemTextColumnLil} >
+                <div className={styles.itemNameLine}>
                     <p className={styles.itemName}>{data?.name}</p>
+                    <img src='/cross.svg' className={styles.itemCrossMobile} onClick={deleteProduct} />
+                </div>
+                <div className={styles.itemCountLineMobile}>
+                    <button className={styles.itemCountSymbolBox} onClick={minusProduct}>
+                        <img src='/minus.svg' />
+                    </button>
+                    <div className={styles.itemCountNumber}>{count}</div>
+                    <button className={styles.itemCountSymbolBox} onClick={plusProduct}>
+                        <img src='/plus.svg' />
+                    </button>
                 </div>
                 <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>
             </div>
