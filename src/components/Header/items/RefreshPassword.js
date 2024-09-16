@@ -2,11 +2,11 @@ import styles from "@/styles/Header.module.css";
 import { useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
-import { useRouter } from "next/router";
+import { useToast } from "@chakra-ui/react";
 
 export function RefreshPassword({ setStateAuth, onClose }) {
 
-    const router = useRouter();
+    const toast = useToast();
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
     const [password, setPassword] = useState('');
@@ -44,11 +44,16 @@ export function RefreshPassword({ setStateAuth, onClose }) {
     };
 
     function refreshPassword() {
-        axios.post(`${API_BASE_URL}refreshPassword`, { email, password })
-            .then(() => {
-                setStateAuth('signIn');
-            })
-            .catch((e) => console.log(e));
+        if (password === repeatPassword) {
+            axios.post(`${API_BASE_URL}refreshPassword`, { email, password })
+                .then(() => {
+                    toast({ position: 'bottom-right', render: () => (<div className="toast">Пароль успешно восстановлен</div>), duration: 3000 });
+                    setStateAuth('signIn');
+                })
+                .catch((e) => console.log(e));
+        } else {
+            toast({ position: 'bottom-right', render: () => (<div className="toast">Пароли не совпадают</div>), duration: 3000 });
+        }
     };
 
     return <div className={styles.modalSignUp}>

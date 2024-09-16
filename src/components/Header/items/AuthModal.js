@@ -20,8 +20,8 @@ export function AuthModal({ isOpen, onClose }) {
     return <>
         <Modal isOpen={isOpen} size='xl' onClose={onClose} autoFocus={false} isCentered >
             <ModalOverlay />
-            <ModalContent>
-                <ModalBody p={0} >
+            <ModalContent p={0} bg='none' boxShadow='none'>
+                <ModalBody p={0}>
                     {selectAuth()}
                 </ModalBody>
             </ModalContent>

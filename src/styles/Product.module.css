@@ -468,6 +468,14 @@
     top: calc(50vh - 7.5px);
 }
 
+.modalHeaderTitleMobile {
+    display: none;
+}
+
+.modalHeaderCrossMobile {
+    display: none;
+}
+
 @media (max-width: 475px) {
     .main {
         width: 100%;
@@ -602,10 +610,70 @@
         width: 15px;
     }
 
-
     .bigImageCross {
         top: 20px;
         right: 20px;
         width: 15px;
+    }
+
+    .modal {
+        gap: 15px;
+        width: 90%;
+        padding: 15px 0 19px 0;
+        margin-left: 5%;
+    }
+
+    .modalHeaderTitle {
+        display: none;
+    }
+
+    .modalHeaderTitleMobile {
+        display: block;
+        color: #140702;
+        font-family: "Dela Gothic One";
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 109.152%;
+        text-align: left;
+    }
+
+    .modalHeader {
+        gap: 15px;
+    }
+
+    .modalHeaderCross {
+        display: none;
+    }
+
+    .modalHeaderCrossMobile {
+        display: block;
+    }
+
+    .modalBody {
+        padding: 0 20px;
+    }
+
+    .modalBodyColumn {
+        gap: 10px;
+    }
+
+    .modalBodyImg {
+        width: 164px;
+        height: auto;
+    }
+
+    .modalBodyTitle {
+        font-size: 13px;
+    }
+
+    .modalBodyButtonComplete {
+        padding: 9.5px 20px;
+        font-size: 13px;
+    }
+
+    .modalBodyButtonBag {
+        padding: 9.5px 20px;
+        font-size: 13px;
     }
 }

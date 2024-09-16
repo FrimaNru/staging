@@ -87,6 +87,7 @@ export function SignUp({ setStateAuth, onClose }) {
                 <div className={styles.headerModalLine}>
                     <p className={styles.headerModalTitle}>РЕГИСТРАЦИЯ</p>
                     <img src='/modalCross.svg' className={styles.cross} onClick={() => onClose()} />
+                    <img src='/crossMobile.svg' className={styles.crossMobile} onClick={() => onClose()} />
                 </div>
                 <hr className={styles.modalHr} />
             </div>
@@ -136,7 +137,7 @@ export function SignUp({ setStateAuth, onClose }) {
                 </div>
             </div>
         </div>
-        <div className={styles.lilColumn} >
+        <div className={styles.lilColumnSignUp} >
             <p className={styles.inputTitle}>Уже есть аккаунта?</p>
             <div className={styles.mainButton} onClick={() => setStateAuth('signIn')} >ВОЙТИ</div>
         </div>

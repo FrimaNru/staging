@@ -48,3 +48,10 @@ p {
   font-weight: 400;
   line-height: normal;
 }
+
+@media (max-width: 475px) {
+  .toast {
+    padding: 9.5px 20px;
+    font-size: 13px;
+  }
+}

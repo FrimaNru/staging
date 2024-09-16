@@ -197,7 +197,9 @@ export function Product() {
                         <div className={styles.modalHeader}>
                             <div className={styles.modalHeaderLine}>
                                 <p className={styles.modalHeaderTitle}>ДОБАВЛЕНО В КОРЗИНУ</p>
+                                <p className={styles.modalHeaderTitleMobile}>В КОРЗИНЕ</p>
                                 <img src='/cross.svg' className={styles.modalHeaderCross} onClick={() => setIsOpenModal(false)} />
+                                <img src='/crossMobile.svg' className={styles.modalHeaderCrossMobile} onClick={() => setIsOpenModal(false)} />
                             </div>
                             <hr className={styles.modalHeaderHr} />
                         </div>
