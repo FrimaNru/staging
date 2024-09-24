@@ -26,7 +26,7 @@ export function Footer() {
                 </div>)}
             </div>
             <div className={styles.columnMobile}>
-                {linksMobile.map((x, i) => (x.title === 'Соц сети' || x.title === 'МОБИЛЬНАЯ ВЕРСИЯ') && <div key={i} className={styles.columnMobile} style={{ marginTop: i === 4 && '10px' }} >
+                {linksMobile.map((x, i) => (x.title === 'Соц сети' || x.title === 'МОБИЛЬНАЯ ВЕРСИЯ') && <div key={i} className={styles.columnMobile} style={{ marginTop: i === 4 ? '10px' : null }} >
                     <p className={styles.title} >{x.title}</p>
                     <div className={styles.columnMobileLine}>
                         {x.links.map((y, n) => x.title === 'Соц сети' || x.title === 'МОБИЛЬНАЯ ВЕРСИЯ'

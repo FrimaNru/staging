@@ -164,7 +164,7 @@ export function Product() {
         </div>
         <div className={styles.charasteristicColumn}>
             <Accordion allowToggle >
-                {dataCharacteristic.map((x, i) => <AccordionItem key={i} border='none' style={{ borderBottom: dataCharacteristic.length === i + 1 && 'solid 1px #140702' }}  >
+                {dataCharacteristic.map((x, i) => <AccordionItem key={i} border='none' style={{ borderBottom: dataCharacteristic.length === i + 1 ? 'solid 1px #140702' : null }}>
                     {({ isExpanded }) => (
                         <>
                             <h2>

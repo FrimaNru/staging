@@ -1,5 +1,5 @@
 import styles from "@/styles/Bag.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure } from "@chakra-ui/react";
@@ -36,6 +36,10 @@ export function Bag() {
     const [isLoading, setIsLoading] = useState(false);
 
     const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
+
+    const [cityTo, setCityTo] = useState('');
+    const [result, setResult] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         load();
@@ -107,6 +111,21 @@ export function Bag() {
             if (dataUser.personalData.lastName.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не указали фамилию</div>), duration: 3000 });
             if (!regexMail.test(dataUser.email)) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали почту</div>), duration: 3000 });
 
+        }
+    };
+
+    const handleCalculate = async (e) => {
+        e.preventDefault();
+        setError(null);
+        setResult(null);
+
+        try {
+            const response = await axios.post(`${API_BASE_URL}calculateDevilery`, { cityTo }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+            console.log(response.data);
+            setResult(response.data);
+        } catch (err) {
+            setError('Ошибка при расчете доставки');
+            console.error(err);
         }
     };
 
@@ -192,12 +211,39 @@ export function Bag() {
                 </div>
             </div>
             <hr className={styles.hr} />
-            <p className={styles.orderTitle} >СПОСОБЫ ДОСТАВКИ</p>
+            <p className={styles.orderTitle} >ДОСТАВКА</p>
+
+            <div>
+                <h2>Расчет стоимости доставки СДЭК</h2>
+                <form onSubmit={handleCalculate}>
+                    <div>
+                        <label>Город назначения:</label>
+                        <input
+                            type="text"
+                            value={cityTo}
+                            onChange={(e) => setCityTo(e.target.value)}
+                            placeholder="Введите город"
+                            required
+                        />
+                    </div>
+                    <button type="submit">Рассчитать</button>
+                </form>
+
+                {result && (
+                    <div>
+                        <h3>Результат расчета:</h3>
+                        <p>Стоимость: {result.price} руб.</p>
+                        <p>Срок доставки: {result.period_min} - {result.period_max} дней</p>
+                    </div>
+                )}
+
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+            </div>
             {/* <div className={styles.orderLineDelivery}>
                 <img src={selectDelivery === 'courier' ? '/goldDotSelect.svg' : '/goldDot.svg'} className={styles.orderDeliveryDot} />
                 <p className={styles.orderDeliveryText} >Курьерская доставка до двери</p>
             </div> */}
-            {selectDelivery === 'courier' && <>
+            {/* {selectDelivery === 'courier' && <>
                 {address === ''
                     ? <div className={styles.orderDeliveryLineAddress}>
                         {dataUser.personalData.addresses.map((x, i) => <div key={i} className={styles.orderDeliveryAddress} onClick={() => setAddress(x.idAddress)} >
@@ -215,9 +261,9 @@ export function Bag() {
                             <div className={styles.anotherAddress} onClick={() => setAddress('')} >Другой адрес</div>
                         </div>
                     </>}
-            </>}
+            </>} */}
             <hr className={styles.hr} />
-            <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy} >ОПЛАТИТЬ</button>
+            <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
         </div>}
         <Modal onClose={onClose} isOpen={isOpen} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
