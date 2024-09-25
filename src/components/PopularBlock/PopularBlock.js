@@ -32,7 +32,7 @@ function SampleNextArrowMobile(props) {
     return (
         <div onClick={onClick} className={styles.nextArrow}>
             <svg width="18" height="29" viewBox="0 0 18 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2L14.5 14.5L2 27" stroke="#140702" stroke-width="4" stroke-linecap="round" />
+                <path d="M2 2L14.5 14.5L2 27" stroke="#140702" strokeWidth="4" strokeLinecap="round" />
             </svg>
         </div>
     );
@@ -42,7 +42,7 @@ function SamplePrevArrowMobile(props) {
     return (
         <div onClick={onClick} className={styles.prevArrow} >
             <svg width="18" height="29" viewBox="0 0 18 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 2L3.5 14.5L16 27" stroke="#140702" stroke-width="4" stroke-linecap="round" />
+                <path d="M16 2L3.5 14.5L16 27" stroke="#140702" strokeWidth="4" strokeLinecap="round" />
             </svg>
         </div>
     );

@@ -742,6 +742,78 @@
     width: 22px;
 }
 
+.lineDelivery {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+.orderText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.orderButton {
+    display: flex;
+    width: 412px;
+    height: 46px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #FDEDBF;
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.orderInfo {
+    display: flex;
+    padding: 30px 40px;
+    align-items: flex-start;
+    gap: 40px;
+    background: #FDEDBF;
+    width: max-content;
+}
+
+.orderInfoColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: left;
+    justify-content: left;
+}
+
+.orderInfoColumnTitle {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.orderInfoColumnText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    text-align: left;
+}
+
 @media (max-width: 475px) {
     .main {
         width: 100%;

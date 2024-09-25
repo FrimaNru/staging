@@ -2,7 +2,7 @@ import styles from "@/styles/Bag.module.css";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
-import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure } from "@chakra-ui/react";
+import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure, ModalCloseButton } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import InputMask from "react-input-mask";
 import { formatNumber } from "@/lib/Formatting";
@@ -21,13 +21,15 @@ export function Bag() {
 
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
+    const widgetContainerRef = useRef(null);
+    const [selectedPvz, setSelectedPvz] = useState(null);
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
     const [total, setTotal] = useState(0);
+    const [deliveryCost, setDeliveryCost] = useState(0);
     const toast = useToast();
     const [selectDelivery, setSelectDelivery] = useState('');
 
-    const [address, setAddress] = useState('');
     const [newAddressData, setNewAddressData] = useState({});
     const [order, setOrder] = useState(false);
     const [successModal, setSuccessModal] = useState(false);
@@ -37,7 +39,7 @@ export function Bag() {
 
     const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
 
-    const [cityTo, setCityTo] = useState('');
+    const [postCode, setPostCode] = useState('');
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
 
@@ -54,6 +56,20 @@ export function Bag() {
             load();
         }
     }, []);
+
+    useEffect(() => {
+        if (isOpen && widgetContainerRef.current && window.ISDEKWidjet) {
+            const widget = new window.ISDEKWidjet({
+                defaultCity: 'Москва',
+                cityFrom: 'Москва',
+                country: 'Россия',
+                onChoose: (pvz) => {
+                    handlePvzSelection(pvz);
+                },
+            });
+            widget.mount(widgetContainerRef.current.id);
+        }
+    }, [isOpen]);
 
     function load() {
         axios.get(`${API_BASE_URL}getUser`, {
@@ -114,19 +130,32 @@ export function Bag() {
         }
     };
 
-    const handleCalculate = async (e) => {
-        e.preventDefault();
+    const handleCalculate = async (x) => {
         setError(null);
         setResult(null);
 
+        console.log(x)
+        const address = `${x.street}, д. ${x.house}, кв. ${x.appartment}`;
+
+
         try {
-            const response = await axios.post(`${API_BASE_URL}calculateDevilery`, { cityTo }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
-            console.log(response.data);
-            setResult(response.data);
+            axios.post(`${API_BASE_URL}calculateDelivery`, { address, postal_code: 125252 }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                .then((res) => {
+                    console.log(res.data);
+                    setDeliveryCost(total + res.data.delivery_sum)
+                    setResult(res.data);
+                })
+                .catch((e) => console.log(e));
         } catch (err) {
             setError('Ошибка при расчете доставки');
             console.error(err);
         }
+    };
+
+    const handlePvzSelection = (pvzData) => {
+        setSelectedPvz(pvzData);
+        console.log('Данные ПВЗ:', pvzData);
+        onClose(); // Закрыть модальное окно после выбора
     };
 
     return <div className={styles.main}>
@@ -211,99 +240,38 @@ export function Bag() {
                 </div>
             </div>
             <hr className={styles.hr} />
-            <p className={styles.orderTitle} >ДОСТАВКА</p>
-
-            <div>
-                <h2>Расчет стоимости доставки СДЭК</h2>
-                <form onSubmit={handleCalculate}>
-                    <div>
-                        <label>Город назначения:</label>
-                        <input
-                            type="text"
-                            value={cityTo}
-                            onChange={(e) => setCityTo(e.target.value)}
-                            placeholder="Введите город"
-                            required
-                        />
-                    </div>
-                    <button type="submit">Рассчитать</button>
-                </form>
-
-                {result && (
-                    <div>
-                        <h3>Результат расчета:</h3>
-                        <p>Стоимость: {result.price} руб.</p>
-                        <p>Срок доставки: {result.period_min} - {result.period_max} дней</p>
-                    </div>
-                )}
-
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+            <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
+            <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
+            <button className={styles.orderButton} onClick={onOpen}>ВЫБРАТЬ ПУНКТ САМОВЫВОЗА</button>
+            <div className={styles.orderInfo}>
+                <div className={styles.orderInfoColumn}>
+                    <p className={styles.orderInfoColumnTitle}>Пункт самовывовоза находится по адресу:</p>
+                    <p className={styles.orderInfoColumnText}>Не выбрано</p>
+                </div>
+                <div className={styles.orderInfoColumn}>
+                    <p className={styles.orderInfoColumnTitle}>График работы:</p>
+                    <p className={styles.orderInfoColumnText}>Не выбрано</p>
+                </div>
+                <div className={styles.orderInfoColumn}>
+                    <p className={styles.orderInfoColumnTitle}>Контакты:</p>
+                    <p className={styles.orderInfoColumnText}>Не выбрано</p>
+                </div>
             </div>
-            {/* <div className={styles.orderLineDelivery}>
-                <img src={selectDelivery === 'courier' ? '/goldDotSelect.svg' : '/goldDot.svg'} className={styles.orderDeliveryDot} />
-                <p className={styles.orderDeliveryText} >Курьерская доставка до двери</p>
-            </div> */}
-            {/* {selectDelivery === 'courier' && <>
-                {address === ''
-                    ? <div className={styles.orderDeliveryLineAddress}>
-                        {dataUser.personalData.addresses.map((x, i) => <div key={i} className={styles.orderDeliveryAddress} onClick={() => setAddress(x.idAddress)} >
-                            <img src='/iconMap.svg' />
-                            <p className={styles.orderDeliveryAddressText} >{x.street}, д.{x.house}, кв.{x.appartment}</p>
-                        </div>)}
-                        <div className={styles.anotherAddress} onClick={() => { setNewAddressData({ ...newAddressData, idAddress: Math.floor(Math.random() * 900000) + 100000 }); onOpen(); }} >Добавить адрес</div>
-                    </div>
-                    : <>
-                        <div className={styles.orderDeliveryLineAddress}>
-                            {dataUser.personalData.addresses.map((x, i) => x.idAddress === address && <div key={i} className={styles.orderDeliveryAddress} onClick={() => setAddress(x.idAddress)}>
-                                <img src='/iconMap.svg' />
-                                <p className={styles.orderDeliveryAddressText} >{x.street}, д.{x.house}, кв.{x.appartment}</p>
-                            </div>)}
-                            <div className={styles.anotherAddress} onClick={() => setAddress('')} >Другой адрес</div>
-                        </div>
-                    </>}
-            </>} */}
+            {result && (
+                <div className={styles.lineDelivery} >
+                    <p className={styles.orderDeliveryAddressText}>Стоимость доставки: {result.delivery_sum} руб.</p>
+                    <p className={styles.orderDeliveryAddressText}>Срок доставки: {result.period_min} - {result.period_max} дней</p>
+                </div>
+            )}
             <hr className={styles.hr} />
             <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
         </div>}
-        <Modal onClose={onClose} isOpen={isOpen} autoFocus={false} isCentered size='xl' >
+        {/* <Modal isOpen={isOpen} onClose={onClose} isCentered >
             <ModalOverlay />
             <ModalContent>
-                <ModalBody p={0}>
-                    <div className={styles.modal}>
-                        <div className={styles.modalHeader}>
-                            <div className={styles.modalHeaderLine}>
-                                <p className={styles.modalHeaderTitle}>ДОБАВИТЬ АДРЕС</p>
-                                <img src='/cross.svg' className={styles.cross} onClick={() => onClose()} />
-                            </div>
-                            <hr className={styles.modalHr} />
-                            <div className={styles.modalColumn}>
-                                <p className={styles.modalSubtitle}>Заполните данные адреса доставки</p>
-                                <div className={styles.modalColumnInput}>
-                                    <p className={styles.modalInputTitle}>Город</p>
-                                    <input className={styles.modalInput} onChange={(e) => setNewAddressData({ ...newAddressData, city: e.target.value })} value={newAddressData.city} />
-                                </div>
-                                <div className={styles.modalColumnInput}>
-                                    <p className={styles.modalInputTitle}>Улица</p>
-                                    <input className={styles.modalInput} onChange={(e) => setNewAddressData({ ...newAddressData, street: e.target.value })} value={newAddressData.street} />
-                                </div>
-                                <div className={styles.modalInputLine} >
-                                    <div className={styles.modalColumnInput}>
-                                        <p className={styles.modalInputTitle}>Дом</p>
-                                        <input className={styles.modalInputLil} onChange={(e) => setNewAddressData({ ...newAddressData, house: e.target.value })} value={newAddressData.house} />
-                                    </div>
-                                    <div className={styles.modalColumnInput}>
-                                        <p className={styles.modalInputTitle}>Квартира</p>
-                                        <input className={styles.modalInputLil} onChange={(e) => setNewAddressData({ ...newAddressData, appartment: e.target.value })} value={newAddressData.appartment} />
-                                    </div>
-                                </div>
-                                <div className={styles.modalSaveButton} onClick={() => {
-                                    setDataUser({ ...dataUser, personalData: { ...dataUser.personalData, addresses: [...dataUser.personalData.addresses, newAddressData] } });
-                                    setNewAddressData({});
-                                    onClose();
-                                }}>СОХРАНИТЬ</div>
-                            </div>
-                        </div>
-                    </div>
+                <ModalCloseButton />
+                <ModalBody>
+                    <div id="pvz-widget" ref={widgetContainerRef} style={{ width: '100%', height: '400px', border: '1px solid #ccc' }}></div>
                 </ModalBody>
             </ModalContent>
         </Modal>
@@ -375,7 +343,7 @@ export function Bag() {
                     </div>}
                 </ModalBody>
             </ModalContent>
-        </Modal>
+        </Modal> */}
     </div >
 };
 
