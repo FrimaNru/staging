@@ -21,7 +21,7 @@ export function Bag() {
 
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
-    const widgetContainerRef = useRef(null);
+    const widgetRef = useRef(null);
     const [selectedPvz, setSelectedPvz] = useState(null);
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
@@ -58,18 +58,50 @@ export function Bag() {
     }, []);
 
     useEffect(() => {
-        if (isOpen && widgetContainerRef.current && window.ISDEKWidjet) {
-            const widget = new window.ISDEKWidjet({
-                defaultCity: 'Москва',
-                cityFrom: 'Москва',
-                country: 'Россия',
-                onChoose: (pvz) => {
-                    handlePvzSelection(pvz);
-                },
+        // Функция для загрузки скрипта
+        const loadScript = (src, onLoad) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            script.onload = onLoad;
+            script.onerror = () => console.error(`Ошибка загрузки скрипта ${src}`);
+            document.body.appendChild(script);
+        };
+
+        // Проверяем, доступен ли window, чтобы избежать ошибок на этапе SSR
+        if (typeof window !== 'undefined' && widgetRef.current) {
+            loadScript('https://widget.cdek.ru/widget/widjet.js', () => {
+                if (window.ISDEKWidjet) {
+                    try {
+                        // Инициализация виджета после полной загрузки скрипта
+                        const widget = new window.ISDEKWidjet({
+                            defaultCity: 'Москва',  // Город по умолчанию
+                            cityFrom: 'Москва',     // Город отправки
+                            country: 'Россия',      // Страна
+                            onChoose: (pvz) => {
+                                handlePvzSelection(pvz); // Обработка выбора ПВЗ
+                            },
+                        });
+
+                        // Проверяем, что ref ссылается на существующий DOM-элемент
+                        widget.mount(widgetRef.current.id);
+                    } catch (error) {
+                        console.error('Ошибка инициализации ISDEKWidjet:', error);
+                    }
+                } else {
+                    console.error('ISDEKWidjet не найден после загрузки');
+                }
             });
-            widget.mount(widgetContainerRef.current.id);
         }
-    }, [isOpen]);
+
+        return () => {
+            // Удаляем скрипт при размонтировании компонента
+            if (widgetRef.current) {
+                const script = document.querySelector('script[src="https://widget.cdek.ru/widget/widjet.js"]');
+                if (script) document.body.removeChild(script);
+            }
+        };
+    }, []);
 
     function load() {
         axios.get(`${API_BASE_URL}getUser`, {
@@ -154,8 +186,7 @@ export function Bag() {
 
     const handlePvzSelection = (pvzData) => {
         setSelectedPvz(pvzData);
-        console.log('Данные ПВЗ:', pvzData);
-        onClose(); // Закрыть модальное окно после выбора
+        console.log('Выбранный ПВЗ:', pvzData);
     };
 
     return <div className={styles.main}>
@@ -234,7 +265,7 @@ export function Bag() {
                         </div>
                         <div className={styles.orderColumnLil}>
                             <p className={styles.orderInputTitle}>Телефон</p>
-                            <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={dataUser.phone} onChange={(e) => setDataUser({ ...dataUser, phone: e.target.value })} />
+                            {/* <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={dataUser.phone} onChange={(e) => setDataUser({ ...dataUser, phone: e.target.value })} /> */}
                         </div>
                     </div>
                 </div>
@@ -243,6 +274,16 @@ export function Bag() {
             <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
             <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
             <button className={styles.orderButton} onClick={onOpen}>ВЫБРАТЬ ПУНКТ САМОВЫВОЗА</button>
+            <div id="pvz-widget" ref={widgetRef} style={{ width: '500px', height: '500px', border: '1px solid #ccc' }}></div>
+
+            {selectedPvz && (
+                <div>
+                    <h2>Детали выбранного ПВЗ:</h2>
+                    <p>Адрес: {selectedPvz.PVZ.Address}</p>
+                    <p>Код ПВЗ: {selectedPvz.PVZ.Code}</p>
+                    <p>Стоимость доставки: {selectedPvz.delivery_price} руб.</p>
+                </div>
+            )}
             <div className={styles.orderInfo}>
                 <div className={styles.orderInfoColumn}>
                     <p className={styles.orderInfoColumnTitle}>Пункт самовывовоза находится по адресу:</p>
@@ -257,21 +298,14 @@ export function Bag() {
                     <p className={styles.orderInfoColumnText}>Не выбрано</p>
                 </div>
             </div>
-            {result && (
-                <div className={styles.lineDelivery} >
-                    <p className={styles.orderDeliveryAddressText}>Стоимость доставки: {result.delivery_sum} руб.</p>
-                    <p className={styles.orderDeliveryAddressText}>Срок доставки: {result.period_min} - {result.period_max} дней</p>
-                </div>
-            )}
             <hr className={styles.hr} />
             <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
         </div>}
-        {/* <Modal isOpen={isOpen} onClose={onClose} isCentered >
+        <Modal isOpen={isOpen} onClose={onClose} isCentered >
             <ModalOverlay />
             <ModalContent>
                 <ModalCloseButton />
                 <ModalBody>
-                    <div id="pvz-widget" ref={widgetContainerRef} style={{ width: '100%', height: '400px', border: '1px solid #ccc' }}></div>
                 </ModalBody>
             </ModalContent>
         </Modal>
@@ -343,7 +377,7 @@ export function Bag() {
                     </div>}
                 </ModalBody>
             </ModalContent>
-        </Modal> */}
+        </Modal>
     </div >
 };
 
