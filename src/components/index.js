@@ -25,3 +25,4 @@ export * from "./Cabinet/items/HistoryOrders"
 export * from "./Common/FavouriteButton";
 export * from "./Common/Breadcrumb.js";
 export * from "./Common/BigImage";
+export * from "./Common/WidgetPVZ";

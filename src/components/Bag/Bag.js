@@ -6,6 +6,7 @@ import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure, 
 import { useRouter } from "next/router";
 import InputMask from "react-input-mask";
 import { formatNumber } from "@/lib/Formatting";
+import WidgetPVZ from "../Common/WidgetPVZ";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -274,7 +275,7 @@ export function Bag() {
             <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
             <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
             <button className={styles.orderButton} onClick={onOpen}>ВЫБРАТЬ ПУНКТ САМОВЫВОЗА</button>
-            <div id="pvz-widget" ref={widgetRef} style={{ width: '500px', height: '500px', border: '1px solid #ccc' }}></div>
+            <WidgetPVZ />
 
             {selectedPvz && (
                 <div>
