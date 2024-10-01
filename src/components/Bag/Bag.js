@@ -58,52 +58,6 @@ export function Bag() {
         }
     }, []);
 
-    useEffect(() => {
-        // Функция для загрузки скрипта
-        const loadScript = (src, onLoad) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.async = true;
-            script.onload = onLoad;
-            script.onerror = () => console.error(`Ошибка загрузки скрипта ${src}`);
-            document.body.appendChild(script);
-        };
-
-        // Проверяем, доступен ли window, чтобы избежать ошибок на этапе SSR
-        if (typeof window !== 'undefined' && widgetRef.current) {
-            loadScript('https://widget.cdek.ru/widget/widjet.js', () => {
-                if (window.ISDEKWidjet) {
-                    try {
-                        // Инициализация виджета после полной загрузки скрипта
-                        const widget = new window.ISDEKWidjet({
-                            defaultCity: 'Москва',  // Город по умолчанию
-                            cityFrom: 'Москва',     // Город отправки
-                            country: 'Россия',      // Страна
-                            onChoose: (pvz) => {
-                                handlePvzSelection(pvz); // Обработка выбора ПВЗ
-                            },
-                        });
-
-                        // Проверяем, что ref ссылается на существующий DOM-элемент
-                        widget.mount(widgetRef.current.id);
-                    } catch (error) {
-                        console.error('Ошибка инициализации ISDEKWidjet:', error);
-                    }
-                } else {
-                    console.error('ISDEKWidjet не найден после загрузки');
-                }
-            });
-        }
-
-        return () => {
-            // Удаляем скрипт при размонтировании компонента
-            if (widgetRef.current) {
-                const script = document.querySelector('script[src="https://widget.cdek.ru/widget/widjet.js"]');
-                if (script) document.body.removeChild(script);
-            }
-        };
-    }, []);
-
     function load() {
         axios.get(`${API_BASE_URL}getUser`, {
             headers: {
@@ -163,33 +117,6 @@ export function Bag() {
         }
     };
 
-    const handleCalculate = async (x) => {
-        setError(null);
-        setResult(null);
-
-        console.log(x)
-        const address = `${x.street}, д. ${x.house}, кв. ${x.appartment}`;
-
-
-        try {
-            axios.post(`${API_BASE_URL}calculateDelivery`, { address, postal_code: 125252 }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-                .then((res) => {
-                    console.log(res.data);
-                    setDeliveryCost(total + res.data.delivery_sum)
-                    setResult(res.data);
-                })
-                .catch((e) => console.log(e));
-        } catch (err) {
-            setError('Ошибка при расчете доставки');
-            console.error(err);
-        }
-    };
-
-    const handlePvzSelection = (pvzData) => {
-        setSelectedPvz(pvzData);
-        console.log('Выбранный ПВЗ:', pvzData);
-    };
-
     return <div className={styles.main}>
         <div className={styles.mainRow}>
             <div className={styles.columnProducts}>
@@ -208,6 +135,7 @@ export function Bag() {
                         </div>
                     ))
                 }
+                <WidgetPVZ />
                 {data.length === 0 && <div className={styles.emptyBag} >
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
@@ -275,16 +203,15 @@ export function Bag() {
             <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
             <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
             <button className={styles.orderButton} onClick={onOpen}>ВЫБРАТЬ ПУНКТ САМОВЫВОЗА</button>
-            <WidgetPVZ />
 
-            {selectedPvz && (
+            {/* {selectedPvz && (
                 <div>
                     <h2>Детали выбранного ПВЗ:</h2>
                     <p>Адрес: {selectedPvz.PVZ.Address}</p>
                     <p>Код ПВЗ: {selectedPvz.PVZ.Code}</p>
                     <p>Стоимость доставки: {selectedPvz.delivery_price} руб.</p>
                 </div>
-            )}
+            )} */}
             <div className={styles.orderInfo}>
                 <div className={styles.orderInfoColumn}>
                     <p className={styles.orderInfoColumnTitle}>Пункт самовывовоза находится по адресу:</p>
@@ -302,14 +229,6 @@ export function Bag() {
             <hr className={styles.hr} />
             <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
         </div>}
-        <Modal isOpen={isOpen} onClose={onClose} isCentered >
-            <ModalOverlay />
-            <ModalContent>
-                <ModalCloseButton />
-                <ModalBody>
-                </ModalBody>
-            </ModalContent>
-        </Modal>
         <Modal onClose={() => setSuccessModal(false)} isOpen={successModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent p={0} bg='none' boxShadow='none' >
