@@ -18,7 +18,7 @@ const WidgetPVZ = () => {
         if (window.CDEKWidget) {
           try {
             window.widget = new window.CDEKWidget({
-              apiKey: '612fd896-95e5-4772-87af-2f37b484fde1', // Ваш API-ключ
+              apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf', // Ваш API-ключ
               defaultLocation: 'Москва', // Город по умолчанию
               popup: true // Открытие в модальном окне
             });
