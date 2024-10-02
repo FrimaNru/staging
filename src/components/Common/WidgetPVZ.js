@@ -1,30 +1,61 @@
 import { useEffect } from 'react';
+import { Button, Box, Text } from '@chakra-ui/react';
 
 const WidgetPVZ = () => {
   useEffect(() => {
-    // Инициализируем виджет только на клиенте
-    if (typeof window !== 'undefined') {
+    // Функция для загрузки скрипта
+    const loadScript = (src, onLoad) => {
       const script = document.createElement('script');
-      script.src = 'https://widget.cdek.ru/widget/scripts/widget.js'; // URL для виджета
+      script.src = src;
       script.async = true;
-      script.onload = () => {
-        new window.CDEKWidget({
-          from: 'Новосибирск',
-          root: 'cdek-map',
-          apiKey: '612fd896-95e5-4772-87af-2f37b484fde1', // API-ключ Яндекс
-          servicePath: 'https://widget.cdek.ru/widget/scripts/service.php', // Корректный путь
-          defaultLocation: 'Новосибирск'
-        });
-      };
-
+      script.onload = onLoad;
+      script.onerror = () => console.error(`Ошибка загрузки скрипта ${src}`);
       document.body.appendChild(script);
+    };
+
+    if (typeof window !== 'undefined') {
+      loadScript('https://cdn.jsdelivr.net/npm/@cdek-it/widget@3', () => {
+        if (window.CDEKWidget) {
+          try {
+            window.widget = new window.CDEKWidget({
+              apiKey: '612fd896-95e5-4772-87af-2f37b484fde1', // Ваш API-ключ
+              defaultLocation: 'Москва', // Город по умолчанию
+              popup: true // Открытие в модальном окне
+            });
+          } catch (error) {
+            console.error('Ошибка инициализации CDEKWidget:', error);
+          }
+        }
+      });
     }
   }, []);
 
+  const openWidget = () => {
+    if (window.widget) {
+      window.widget.open();
+    } else {
+      console.error('Виджет не инициализирован');
+    }
+  };
+
+  const closeWidget = () => {
+    if (window.widget) {
+      window.widget.close();
+    } else {
+      console.error('Виджет не инициализирован');
+    }
+  };
+
   return (
-    <div>
-      <div id="cdek-map" style={{ width: '100%', height: '500px', border: 'solid 1px red' }}></div>
-    </div>
+    <Box>
+      <Text fontSize="xl" mb={4}>Выберите пункт выдачи СДЭК</Text>
+      <Button onClick={openWidget} colorScheme="teal" mr={4}>
+        Показать виджет
+      </Button>
+      <Button onClick={closeWidget} colorScheme="red">
+        Скрыть виджет
+      </Button>
+    </Box>
   );
 };
 
