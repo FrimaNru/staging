@@ -1,62 +1,44 @@
-import { useEffect } from 'react';
-import { Button, Box, Text } from '@chakra-ui/react';
+import { useEffect, useRef } from 'react';
+import CdekWidget from '@cdek-it/widget';
 
-const WidgetPVZ = () => {
+const WidgetPVZ = ({ onSelectPVZ }) => {
+  const widgetRef = useRef(null);
+
   useEffect(() => {
-    // Функция для загрузки скрипта
-    const loadScript = (src, onLoad) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      script.onload = onLoad;
-      script.onerror = () => console.error(`Ошибка загрузки скрипта ${src}`);
-      document.body.appendChild(script);
-    };
+    // if (!window.CdekWidget) {
+    //   console.error('CdekWidget не загружен');
+    //   return;
+    // }
 
-    if (typeof window !== 'undefined') {
-      loadScript('https://cdn.jsdelivr.net/npm/@cdek-it/widget@3', () => {
-        if (window.CDEKWidget) {
-          try {
-            window.widget = new window.CDEKWidget({
-              apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf', // Ваш API-ключ
-              defaultLocation: 'Москва', // Город по умолчанию
-              popup: true // Открытие в модальном окне
-            });
-          } catch (error) {
-            console.error('Ошибка инициализации CDEKWidget:', error);
-          }
-        }
+    try {
+      const widget = new CdekWidget({
+        element: widgetRef.current,
+        servicepath: 'https://widget.cdek.ru/widget/scripts/',
+        apikey: 'oq6SGTH2JEszUlewiFNSi9DHagsfMviF', // Замените на ваш фактический API-ключ СДЭК
+        goods: [{ weight: 0.5, height: 10, width: 10, length: 10 }],
+        defaultLocation: 'Москва', // Передача города как строки
+        map: {
+          provider: 'yandex',
+          yandex: {
+            apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf', // Ваш API-ключ Яндекс.Карт
+            center: [55.7558, 37.6173],
+            zoom: 10,
+          },
+        },
+        onChoose: (pvz) => {
+          onSelectPVZ(pvz);
+        },
       });
-    }
-  }, []);
 
-  const openWidget = () => {
-    if (window.widget) {
-      window.widget.open();
-    } else {
-      console.error('Виджет не инициализирован');
+      return () => {
+        widget.destroy();
+      };
+    } catch (error) {
+      console.error('Ошибка инициализации виджета СДЭК:', error);
     }
-  };
+  }, [onSelectPVZ]);
 
-  const closeWidget = () => {
-    if (window.widget) {
-      window.widget.close();
-    } else {
-      console.error('Виджет не инициализирован');
-    }
-  };
-
-  return (
-    <Box>
-      <Text fontSize="xl" mb={4}>Выберите пункт выдачи СДЭК</Text>
-      <Button onClick={openWidget} colorScheme="teal" mr={4}>
-        Показать виджет
-      </Button>
-      <Button onClick={closeWidget} colorScheme="red">
-        Скрыть виджет
-      </Button>
-    </Box>
-  );
+  return <div ref={widgetRef} style={{ width: '100%', height: '500px' }}></div>;
 };
 
 export default WidgetPVZ;

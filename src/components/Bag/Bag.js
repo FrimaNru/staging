@@ -117,6 +117,13 @@ export function Bag() {
         }
     };
 
+    const [selectedPVZ, setSelectedPVZ] = useState(null);
+
+    const handleSelectPVZ = (pvz) => {
+        setSelectedPVZ(pvz);
+        console.log('Выбран ПВЗ:', pvz);
+    };
+
     return <div className={styles.main}>
         <div className={styles.mainRow}>
             <div className={styles.columnProducts}>
@@ -135,7 +142,13 @@ export function Bag() {
                         </div>
                     ))
                 }
-                <WidgetPVZ />
+                <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
+                {selectedPVZ && (
+                    <div>
+                        <h2>Вы выбрали ПВЗ:</h2>
+                        <p>{selectedPVZ.PVZ.Address}</p>
+                    </div>
+                )}
                 {data.length === 0 && <div className={styles.emptyBag} >
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
