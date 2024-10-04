@@ -15,7 +15,7 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
         element: widgetRef.current,
         root: 'cdek-map',
         servicePath: 'https://api.mi-alegria.shop/map_service/service.php',
-        apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf',
+        apiKey: '7a275500-155b-4b65-87a4-b6f39744f0f7',
         // apikey: 'oq6SGTH2JEszUlewiFNSi9DHagsfMviF', // Замените на ваш фактический API-ключ СДЭК
         goods: [{ weight: 0.5, height: 10, width: 10, length: 10 }],
         defaultLocation: 'Москва', // Передача города как строки
