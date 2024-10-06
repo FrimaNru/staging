@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
 import { useToast } from "@chakra-ui/react";
+import React from "react";
 
 function formatNumber(number) {
     let numStr = number.toString();
@@ -42,7 +43,6 @@ export function MyOrders() {
             .then((res) => {
                 setData(res.data.orders.reverse());
                 setDataUser(res.data);
-                res.data.orders.map(x => checkOrder(x));
             })
             .catch((e) => console.log(e));
     };
@@ -101,7 +101,6 @@ export function MyOrders() {
             </>
             : <div className={styles.bigColumn}>
                 {data.length > 0 && data.map((x, i) => {
-                    checkOrder(x);
                     const itemCounts = x.products && typeof x.products === 'string'
                         ? x.products.split(',').reduce((acc, product) => {
                             const trimmedProduct = product.trim();
@@ -117,8 +116,8 @@ export function MyOrders() {
                             : {};
 
                     return (
-                        <>
-                            <div key={i} className={styles.columnOrder}>
+                        <React.Fragment key={i}>
+                            <div className={styles.columnOrder}>
                                 <div className={styles.titleColumn}>
                                     <p className={styles.title}>ЗАКАЗ № {x.id}</p>
                                     <p className={styles.text}>{formatDate(x.createDate)}</p>
@@ -159,7 +158,7 @@ export function MyOrders() {
                                 </div>}
                             </div>
                             {data.length !== i + 1 && <hr className={styles.hr} />}
-                        </>
+                        </React.Fragment>
                     );
                 })}
             </div>}

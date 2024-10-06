@@ -99,7 +99,7 @@ export function Bag() {
         if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email) && selectedPVZ?.address && deliveryDate !== '') {
             setIsLoading(true);
 
-            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + deliveryCost, delivery: { street: selectedPVZ?.address, date: deliveryDate } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + deliveryCost, delivery: { street: selectedPVZ?.address, date: deliveryDate, pvzCode: selectedPVZ?.code } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
                     setIsLoading(false);
                     router.push(res.data.PaymentURL);
@@ -213,21 +213,23 @@ export function Bag() {
                 </div>
             </div>
             <hr className={styles.hr} />
-            <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
-            <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
-            <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
-            <div className={styles.orderInfo}>
-                <div className={styles.orderInfoColumn}>
-                    <p className={styles.orderInfoColumnTitle}>Пункт самовывовоза находится по адресу:</p>
-                    <p className={styles.orderInfoColumnText}>{selectedPVZ?.address ?? 'Не выбрано'}</p>
-                </div>
-                <div className={styles.orderInfoColumn}>
-                    <p className={styles.orderInfoColumnTitle}>График работы:</p>
-                    <p className={styles.orderInfoColumnText}>{selectedPVZ?.work_time ?? 'Не выбрано'}</p>
-                </div>
-                <div className={styles.orderInfoColumn}>
-                    <p className={styles.orderInfoColumnTitle}>Время доставки:</p>
-                    <p className={styles.orderInfoColumnText}>{deliveryDate !== '' ? deliveryDate : 'Не выбрано'}</p>
+            <div className={styles.orderColumn}>
+                <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
+                <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
+                <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
+                <div className={styles.orderInfo}>
+                    <div className={styles.orderInfoColumn}>
+                        <p className={styles.orderInfoColumnTitle}>Пункт самовывовоза находится по адресу:</p>
+                        <p className={styles.orderInfoColumnText}>{selectedPVZ?.address ?? 'Не выбрано'}</p>
+                    </div>
+                    <div className={styles.orderInfoColumn}>
+                        <p className={styles.orderInfoColumnTitle}>График работы:</p>
+                        <p className={styles.orderInfoColumnText}>{selectedPVZ?.work_time ?? 'Не выбрано'}</p>
+                    </div>
+                    <div className={styles.orderInfoColumn}>
+                        <p className={styles.orderInfoColumnTitle}>Срок доставки:</p>
+                        <p className={styles.orderInfoColumnText}>{deliveryDate !== '' ? deliveryDate : 'Не выбрано'}</p>
+                    </div>
                 </div>
             </div>
             <hr className={styles.hr} />
