@@ -782,7 +782,7 @@
     display: flex;
     padding: 30px 40px;
     align-items: flex-start;
-    gap: 40px;
+    gap: 80px;
     background: #FDEDBF;
     width: max-content;
 }
@@ -802,6 +802,8 @@
     font-style: normal;
     font-weight: 400;
     line-height: 109.152%;
+    text-align: left;
+    width: 100%;
 }
 
 .orderInfoColumnText {
@@ -813,6 +815,7 @@
     line-height: 109.152%;
     text-align: left;
 }
+
 
 @media (max-width: 475px) {
     .main {

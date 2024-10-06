@@ -5,11 +5,6 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
   const widgetRef = useRef(null);
 
   useEffect(() => {
-    // if (!window.CdekWidget) {
-    //   console.error('CdekWidget не загружен');
-    //   return;
-    // }
-
     try {
       const widget = new CdekWidget({
         element: widgetRef.current,
@@ -17,7 +12,7 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
         servicePath: 'https://api.mi-alegria.shop/map_service/service.php',
         apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf',
         goods: [{ weight: 0.5, height: 10, width: 10, length: 10 }],
-        defaultLocation: 'Москва', // Передача города как строки
+        defaultLocation: 'Москва',
         map: {
           provider: 'yandex',
           yandex: {
@@ -27,10 +22,13 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
         },
         hideDeliveryOptions: {
           office: false,
-          door: false,
+          door: true,
         },
-        onChoose: (pvz) => {
-          onSelectPVZ(pvz);
+        tariffs: {
+          office: [136]
+        },
+        onChoose(type, tariff, address) {
+          onSelectPVZ(address)
         },
       });
 
@@ -38,11 +36,15 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
         widget.destroy();
       };
     } catch (error) {
-      console.error('Ошибка инициализации виджета СДЭК:', error);
+      if (error.code === 'ERR_CANCELED') {
+        console.warn('Запрос был отменен:', error.message);
+      } else {
+        console.error('Ошибка инициализации виджета СДЭК:', error);
+      }
     }
   }, [onSelectPVZ]);
 
-  return <div ref={widgetRef} style={{ width: '100%', height: '500px' }}></div>;
+  return <div ref={widgetRef} id="cdek-map" className="widget" ></div>;
 };
 
 export default WidgetPVZ;

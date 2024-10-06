@@ -22,14 +22,12 @@ export function Bag() {
 
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
-    const widgetRef = useRef(null);
-    const [selectedPvz, setSelectedPvz] = useState(null);
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
     const [total, setTotal] = useState(0);
     const [deliveryCost, setDeliveryCost] = useState(0);
+    const [deliveryDate, setDeliveryDate] = useState('');
     const toast = useToast();
-    const [selectDelivery, setSelectDelivery] = useState('');
 
     const [newAddressData, setNewAddressData] = useState({});
     const [order, setOrder] = useState(false);
@@ -98,11 +96,10 @@ export function Bag() {
     };
 
     function buy() {
-        if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email)) {
+        if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email) && selectedPVZ?.address && deliveryDate !== '') {
             setIsLoading(true);
-            const delivery = { street: 'Улица троицкая, д.54 кв.8', date: '8.10.24 с 12:00 до 15:00' };
 
-            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total, delivery }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + deliveryCost, delivery: { street: selectedPVZ?.address, date: deliveryDate } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
                     setIsLoading(false);
                     router.push(res.data.PaymentURL);
@@ -113,6 +110,7 @@ export function Bag() {
             if (dataUser.phone.replaceAll('_', '').length !== 18) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали номер телефона</div>), duration: 3000 });
             if (dataUser.personalData.lastName.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не указали фамилию</div>), duration: 3000 });
             if (!regexMail.test(dataUser.email)) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали почту</div>), duration: 3000 });
+            if (!selectedPVZ?.address) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали пункт выдачи заказа</div>), duration: 3000 });
 
         }
     };
@@ -121,7 +119,14 @@ export function Bag() {
 
     const handleSelectPVZ = (pvz) => {
         setSelectedPVZ(pvz);
-        console.log('Выбран ПВЗ:', pvz);
+
+        axios.post(`${API_BASE_URL}calculateDelivery`, { address: pvz.address, postal_code: pvz.postal_code }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then((res) => {
+                console.log(res.data);
+                setDeliveryDate(`${res.data.period_min} - ${res.data.period_max} дня`);
+                setDeliveryCost(res.data.total_sum);
+            })
+            .catch((e) => console.log(e));
     };
 
     return <div className={styles.main}>
@@ -142,13 +147,6 @@ export function Bag() {
                         </div>
                     ))
                 }
-                <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
-                {selectedPVZ && (
-                    <div>
-                        <h2>Вы выбрали ПВЗ:</h2>
-                        <p>{selectedPVZ.PVZ.Address}</p>
-                    </div>
-                )}
                 {data.length === 0 && <div className={styles.emptyBag} >
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
@@ -165,17 +163,19 @@ export function Bag() {
                         <div className={styles.totalColumnLil}>
                             <div className={styles.totalRow}>
                                 <p className={styles.totalSubtitle}>Доставка</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="5" viewBox="0 0 11 5" fill="none">
-                                    <path d="M10.2008 4.53996H0.800781V0.459961H10.2008V4.53996Z" fill="#C49748" />
-                                </svg>
+                                {deliveryCost === 0
+                                    ? <svg xmlns="http://www.w3.org/2000/svg" width="11" height="5" viewBox="0 0 11 5" fill="none">
+                                        <path d="M10.2008 4.53996H0.800781V0.459961H10.2008V4.53996Z" fill="#C49748" />
+                                    </svg>
+                                    : <p className={styles.totalGold}>{formatNumber(deliveryCost)} руб.</p>}
                             </div>
-                            <p className={styles.totalText}>Стоимость доставки будет рассчитана позднее на основании выбранного способа доставки</p>
+                            <p className={styles.totalText}>Стоимость доставки будет рассчитана позднее на основании выбранного ПВЗ</p>
                         </div>
                     </div>
                     <hr className={styles.hr} />
                     <div className={styles.totalRow} >
                         <p className={styles.totalSubtitle}>Итого</p>
-                        <p className={styles.totalGold}>{formatNumber(total)} руб.</p>
+                        <p className={styles.totalGold}>{formatNumber(total + deliveryCost)} руб.</p>
                     </div>
                 </div>
                 {data.length > 0 && !order && <>
@@ -207,7 +207,7 @@ export function Bag() {
                         </div>
                         <div className={styles.orderColumnLil}>
                             <p className={styles.orderInputTitle}>Телефон</p>
-                            {/* <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={dataUser.phone} onChange={(e) => setDataUser({ ...dataUser, phone: e.target.value })} /> */}
+                            <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={dataUser.phone} onChange={(e) => setDataUser({ ...dataUser, phone: e.target.value })} />
                         </div>
                     </div>
                 </div>
@@ -215,28 +215,19 @@ export function Bag() {
             <hr className={styles.hr} />
             <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
             <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
-            <button className={styles.orderButton} onClick={onOpen}>ВЫБРАТЬ ПУНКТ САМОВЫВОЗА</button>
-
-            {/* {selectedPvz && (
-                <div>
-                    <h2>Детали выбранного ПВЗ:</h2>
-                    <p>Адрес: {selectedPvz.PVZ.Address}</p>
-                    <p>Код ПВЗ: {selectedPvz.PVZ.Code}</p>
-                    <p>Стоимость доставки: {selectedPvz.delivery_price} руб.</p>
-                </div>
-            )} */}
+            <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
             <div className={styles.orderInfo}>
                 <div className={styles.orderInfoColumn}>
                     <p className={styles.orderInfoColumnTitle}>Пункт самовывовоза находится по адресу:</p>
-                    <p className={styles.orderInfoColumnText}>Не выбрано</p>
+                    <p className={styles.orderInfoColumnText}>{selectedPVZ?.address ?? 'Не выбрано'}</p>
                 </div>
                 <div className={styles.orderInfoColumn}>
                     <p className={styles.orderInfoColumnTitle}>График работы:</p>
-                    <p className={styles.orderInfoColumnText}>Не выбрано</p>
+                    <p className={styles.orderInfoColumnText}>{selectedPVZ?.work_time ?? 'Не выбрано'}</p>
                 </div>
                 <div className={styles.orderInfoColumn}>
-                    <p className={styles.orderInfoColumnTitle}>Контакты:</p>
-                    <p className={styles.orderInfoColumnText}>Не выбрано</p>
+                    <p className={styles.orderInfoColumnTitle}>Время доставки:</p>
+                    <p className={styles.orderInfoColumnText}>{deliveryDate !== '' ? deliveryDate : 'Не выбрано'}</p>
                 </div>
             </div>
             <hr className={styles.hr} />
