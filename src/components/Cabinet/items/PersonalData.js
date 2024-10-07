@@ -111,7 +111,7 @@ export function PersonalData() {
                 </div>
             </div>
         </div>
-        <hr className={styles.hr} />
+        {/*  <hr className={styles.hr} />
         <div className={styles.lineAddressBox}>
             <div className={styles.lineAddress}>
                 <p className={`${styles.title} ${styles.hrMobile}`}>Адреса доставки</p>
@@ -132,7 +132,7 @@ export function PersonalData() {
                 </div>)}
                 <div className={styles.buttonAddAddress} onClick={() => { onOpen(); setIdAddress(Math.floor(Math.random() * 900000) + 100000); }}>Добавить адрес</div>
             </div>
-        </div>
+        </div> */}
         <hr className={styles.hr} />
         <div className={styles.passwordColumn}>
             <div className={styles.titleColumn}>

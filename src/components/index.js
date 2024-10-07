@@ -26,3 +26,11 @@ export * from "./Common/FavouriteButton";
 export * from "./Common/Breadcrumb.js";
 export * from "./Common/BigImage";
 export * from "./Common/WidgetPVZ";
+
+export * from "./Admin/Auth/AdminAuth";
+export * from "./Admin/Panel/AdminPanel";
+export * from "./Admin/Panel/items/SideMenuAdmin";
+export * from "./Admin/Panel/items/AdminDashboard";
+export * from "./Admin/Panel/items/DownloadExcel";
+export * from "./Admin/Panel/items/AdminProducts";
+export * from "./Admin/Panel/items/AdminOrders";

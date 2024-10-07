@@ -1,0 +1,538 @@
+.authBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.authBlock {
+    width: 500px;
+    border: solid 1px #000;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.authInput {
+    width: 100%;
+    border: solid 1px #000;
+    border-radius: 100px;
+    height: 50px;
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    padding: 0 25px;
+}
+
+.authInput::placeholder {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.authInput:focus {
+    outline: none;
+}
+
+.authButton {
+    display: flex;
+    width: 100%;
+    height: 46px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.sideMenu {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-right: solid 1px #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 50px 20px;
+}
+
+.sideMenuContent {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+}
+
+.sideMenuLogo {
+    width: 160px;
+}
+
+.sideMenuColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: left;
+    justify-content: left;
+    width: 100%;
+}
+
+.sideMenuItem {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+    width: max-content;
+    transition: all 0.1s;
+    float: left;
+}
+
+.sideMenuItemSelect {
+    font-weight: 800;
+    border-bottom: solid 1px #000;
+    width: max-content;
+    float: left;
+    transition: all 0.3s;
+}
+
+.logOutButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logOutButton:hover {
+    cursor: pointer;
+}
+
+.adminMainBox {
+    display: flex;
+    width: calc(100% - 250px);
+    margin-left: 200px;
+    padding: 50px;
+}
+
+.adminMain {
+    display: flex;
+    width: 100%;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+
+}
+
+.title {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.dashboardLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 30px;
+    justify-content: space-between;
+}
+
+.dashboardLineItem {
+    width: 33%;
+    border-radius: 40px;
+    background: #FDEDBF;
+    padding: 15px 20px;
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.ordersLineItem {
+    width: 50%;
+    border-radius: 40px;
+    background: #FDEDBF;
+    padding: 15px 20px;
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.dashboardColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+}
+
+.subtitle {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.dashboardColumnUsers {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.dashboardAccordionButton {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border: solid 1px #000;
+    border-radius: 60px;
+    padding: 0px;
+}
+
+.dashboardAccordionTableInfo {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: 60px;
+    padding: 0px;
+    background: #FDEDBF;
+    border: solid 1px #000;
+}
+
+.dashboardAccordionButtonText {
+    width: 20%;
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    border-right: solid 1px #000;
+    padding: 10px 5px;
+}
+
+.dashboardAccordionButtonTextLil {
+    width: 20%;
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-align: center;
+    border-right: solid 1px #000;
+    padding: 10px 5px;
+}
+
+.dashboardAccordionButtonBlock {
+    width: 10%;
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    border-right: solid 1px #000;
+    padding: 10px 0;
+}
+
+.dashboardAccordionButtonBlockLil {
+    width: 10%;
+    color: #140702;
+    text-align: center;
+    font-family: "Tenor Sans";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-align: center;
+    border-right: solid 1px #000;
+    padding: 10px 0;
+}
+
+.dashboarNoBorder {
+    border-right: none;
+}
+
+.accordionPanel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: solid 1px #000;
+    border-radius: 30px;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.accordionPanelColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.accordionPanelTitle {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.accordionPanelLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.accordionPanelText {
+    font-family: "Tenor Sans";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    text-align: left;
+}
+
+.hr {
+    border-top: solid 1px #000;
+}
+
+.accrdionPanelItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: #FDEDBF;
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.productImg {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+}
+
+.accordionPanelProductLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 400px;
+    overflow: auto;
+}
+
+.accordionPanelProductLine::-webkit-scrollbar {
+    display: none;
+}
+
+.accordionPanelProductLineLil {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: max-content;
+}
+
+.accordionPanelButton {
+    display: flex;
+    width: max-content;
+    height: 34px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.dashboardSubtitleLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.productsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.productsInput {
+    width: 75%;
+    height: 50px;
+    border: solid 1px #000;
+    border-radius: 60px;
+    padding: 0 25px;
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.productsInput::placeholder {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.productsInput:focus {
+    outline: none;
+}
+
+.productsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.productsGridItem {
+    display: flex;
+    flex-direction: row;
+    background: #FDEDBF;
+    border-radius: 30px;
+    padding: 20px;
+    gap: 20px;
+    align-items: center;
+}
+
+.productsGridItemCover {
+    width: 125px;
+    height: 125px;
+    object-fit: cover;
+    border-radius: 30px;
+}
+
+.productsGridItemColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: calc(100% - 135px);
+}
+
+.productsGridItemText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+    text-align: left;
+}
+
+.productsGridItemLineButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    padding: 20px 0 0 33px;
+}
+
+.productsGridItemButton {
+    color: #C39748;
+    font-family: "Tenor Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
+.productsGridItemTextLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.productsGridItemPopular {
+    padding: 5px;
+    background: #140702;
+    border-radius: 10px;
+}
+
+.productsLine {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.productsButtonAddProduct {
+    display: flex;
+    width: 25%;
+    padding: 15px 10px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    gap: 880px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
