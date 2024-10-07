@@ -32,7 +32,7 @@ export function AdminAuth() {
     return <div className={styles.authBox}>
         <div className={styles.authBlock}>
             <input className={styles.authInput} placeholder="Логин" onChange={(e) => setLogin(e.target.value)} />
-            <input className={styles.authInput} placeholder="Пароль" onChange={(e) => setPassword(e.target.value)} />
+            <input className={styles.authInput} placeholder="Пароль" type='password' onChange={(e) => setPassword(e.target.value)} />
             <button className={styles.authButton} onClick={auth}>Войти</button>
         </div>
     </div>
