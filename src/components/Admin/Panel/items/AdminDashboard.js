@@ -59,7 +59,7 @@ export function AdminDashboard() {
         <div className={styles.dashboardColumn}>
             <div className={styles.dashboardSubtitleLine}>
                 <p className={styles.subtitle}>Пользователи</p>
-                <ButtonDownloadExcel data={users} />
+                <ButtonDownloadExcel data={users} type='users' />
             </div>
             <Accordion allowToggle>
                 <div className={styles.dashboardColumnUsers}>

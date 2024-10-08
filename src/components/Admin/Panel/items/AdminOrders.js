@@ -5,6 +5,7 @@ import { API_BASE_URL } from "../../../../../apiConfig";
 import { Accordion, AccordionItem, AccordionPanel, AccordionIcon, AccordionButton, useToast } from "@chakra-ui/react";
 import { formatNumber, formatDate } from "@/lib/Formatting";
 import Link from "next/link";
+import { ButtonDownloadExcel } from "./DownloadExcel";
 
 const stataTitle = {
     'total': 'Общее количество заказов',
@@ -71,7 +72,10 @@ export function AdminOrders() {
         </div>
 
         <div className={styles.ordersColumn}>
-            <p className={styles.subtitle}>Активные заказы</p>
+            <div className={styles.dashboardSubtitleLine}>
+                <p className={styles.subtitle}>Активные заказы</p>
+                <ButtonDownloadExcel data={active} type='active' />
+            </div>
             <Accordion allowToggle>
                 <div className={styles.ordersColumn}>
                     {active.length > 0 && (active.map((x, i) => <AccordionItem border='none' key={i}>
@@ -116,7 +120,10 @@ export function AdminOrders() {
         </div>
 
         <div className={styles.ordersColumn}>
-            <p className={styles.subtitle}>Прошедшие заказы</p>
+            <div className={styles.dashboardSubtitleLine}>
+                <p className={styles.subtitle}>Прошедшие заказы</p>
+                <ButtonDownloadExcel data={active} type='history' />
+            </div>
             <Accordion allowToggle>
                 <div className={styles.ordersColumn}>
                     {history.length > 0 && history.map((x, i) => <AccordionItem border='none' key={i}>
