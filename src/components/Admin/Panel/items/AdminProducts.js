@@ -51,7 +51,14 @@ export function AdminProducts() {
     };
 
     function delProduct() {
-
+        console.log(deleteProduct._id)
+        axios.post(`${API_BASE_URL}deleteProduct`, { id: deleteProduct._id }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
+            .then((res) => {
+                onClose();
+                load();
+                toast({ position: 'bottom-right', render: () => (<div className="toast">Успешно удалено</div>), duration: 3000 });
+            })
+            .catch((e) => console.log(e));
     };
 
     return <div className={styles.dashboard}>
@@ -75,21 +82,28 @@ export function AdminProducts() {
                                     ? <img src='/starFull.svg' onClick={() => changePopular(x._id)} />
                                     : <img src='/star.svg' onClick={() => changePopular(x._id)} />}
                             </button>
-                        </div>
+                        </div>  
                         <p className={styles.productsGridItemText} style={{ fontWeight: 800 }} >{formatNumber(x.cost)} руб.</p>
                         <div className={styles.productsGridItemLineButtons}>
-                            <button className={styles.productsGridItemButton}>Изменить</button>
+                            <button className={styles.productsGridItemButton} onClick={() => router.push(`/adminpanel?page=editProduct&id=${x._id}`)} >Изменить</button>
                             <button className={styles.productsGridItemButton} onClick={() => { setDeleteProduct(x); onOpen(); }}>Удалить</button>
                         </div>
                     </div>
                 </div>)}
             </div>
         </div>
-        <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false}>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false} size='lg' >
             <ModalOverlay />
             <ModalCloseButton />
             <ModalContent>
-
+                <div className={styles.createModal}>
+                    <p className={styles.createModalTitle}>Вы уверены, что хотите удалить {deleteProduct?.name?.toUpperCase()}?</p>
+                    <img className={styles.createModalCover} src={`https://api.mi-alegria.shop/uploads/${deleteProduct.cover}`} />
+                    <div className={styles.createModalLine} >
+                        <button className={styles.createModalButton} onClick={delProduct}>Удалить</button>
+                        <button className={styles.createModalButtonCancel} onClick={() => { onClose(); setDeleteProduct({}); }}>Отменить</button>
+                    </div>
+                </div>
             </ModalContent>
         </Modal>
     </div>

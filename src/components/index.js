@@ -35,3 +35,4 @@ export * from "./Admin/Panel/items/DownloadExcel";
 export * from "./Admin/Panel/items/AdminProducts";
 export * from "./Admin/Panel/items/AdminOrders";
 export * from "./Admin/Panel/items/AdminCreateProduct";
+export * from "./Admin/Panel/items/AdminEditProduct";
