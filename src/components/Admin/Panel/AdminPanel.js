@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
-import { AdminDashboard, AdminOrders, AdminProducts, SideMenuAdmin } from "@/components";
+import { AdminCreateProduct, AdminDashboard, AdminOrders, AdminProducts, SideMenuAdmin } from "@/components";
 
 export function AdminPanel() {
 
@@ -27,6 +27,8 @@ export function AdminPanel() {
                 return <AdminProducts />
             case 'orders':
                 return <AdminOrders />
+            case 'createProduct': 
+                return <AdminCreateProduct />;
             default:
                 return <AdminDashboard />
         }

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../../../../../apiConfig";
 import { formatNumber } from "@/lib/Formatting";
 import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useDisclosure, Modal, ModalOverlay, ModalCloseButton, ModalContent } from "@chakra-ui/react";
 
 const stataTitle = {
     'earrings': 'СЕРЬГИ',
@@ -14,8 +16,11 @@ const stataTitle = {
 
 export function AdminProducts() {
 
+    const router = useRouter();
     const [statistick, setStatistick] = useState([]);
     const [products, setProducts] = useState([]);
+    const [deleteProduct, setDeleteProduct] = useState({});
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast();
 
     useEffect(() => {
@@ -45,6 +50,10 @@ export function AdminProducts() {
             .catch((e) => console.log(e));
     };
 
+    function delProduct() {
+
+    };
+
     return <div className={styles.dashboard}>
         <p className={styles.title}>Товары</p>
         <div className={styles.dashboardLine}>
@@ -53,7 +62,7 @@ export function AdminProducts() {
         <div className={styles.productsColumn}>
             <div className={styles.productsLine}>
                 <input placeholder="Введите id товара или название" className={styles.productsInput} />
-                <button className={styles.productsButtonAddProduct} >Добавить товар</button>
+                <button className={styles.productsButtonAddProduct} onClick={() => router.push('/adminpanel?page=createProduct')} >Добавить товар</button>
             </div>
             <div className={styles.productsGrid}>
                 {products.length > 0 && products.map((x, i) => <div key={i} className={styles.productsGridItem}>
@@ -70,11 +79,18 @@ export function AdminProducts() {
                         <p className={styles.productsGridItemText} style={{ fontWeight: 800 }} >{formatNumber(x.cost)} руб.</p>
                         <div className={styles.productsGridItemLineButtons}>
                             <button className={styles.productsGridItemButton}>Изменить</button>
-                            <button className={styles.productsGridItemButton}>Удалить</button>
+                            <button className={styles.productsGridItemButton} onClick={() => { setDeleteProduct(x); onOpen(); }}>Удалить</button>
                         </div>
                     </div>
                 </div>)}
             </div>
         </div>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false}>
+            <ModalOverlay />
+            <ModalCloseButton />
+            <ModalContent>
+
+            </ModalContent>
+        </Modal>
     </div>
 };

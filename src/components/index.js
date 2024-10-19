@@ -34,3 +34,4 @@ export * from "./Admin/Panel/items/AdminDashboard";
 export * from "./Admin/Panel/items/DownloadExcel";
 export * from "./Admin/Panel/items/AdminProducts";
 export * from "./Admin/Panel/items/AdminOrders";
+export * from "./Admin/Panel/items/AdminCreateProduct";
