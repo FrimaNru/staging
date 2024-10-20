@@ -43,7 +43,6 @@ export function AdminEditProduct() {
                 .then((res) => {
                     setData(res.data);
                     setCountColors(res.data.colors.length)
-                    console.log(res.data);
                 })
                 .catch((e) => console.log(e));
         }
@@ -52,21 +51,20 @@ export function AdminEditProduct() {
     const addProduct = async () => {
 
         if (data?.name?.length > 0 && String(data?.cost)?.length > 0 && data?.type?.length > 0 && data.colors.length > 0 && data.articles.length > 0) {
-            console.log(data)
             setIsLoading(true);
 
-            const formData = new FormData();
+            // const formData = new FormData();
 
-            if (cover) formData.append('cover', cover);
+            // if (cover) formData.append('cover', cover);
 
             // images.forEach(image => {
             //     formData.append('images', image);
             // });
 
-            formData.append('data', JSON.stringify(data));
+            // formData.append('data', JSON.stringify(data));
 
-            axios.post(`${API_BASE_URL}editProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`, 'Content-Type': 'multipart/form-data' } })
-                .then((res) => {
+            axios.post(`${API_BASE_URL}editProduct`, { data }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`} })
+                .then(() => {
                     setIsLoading(false);
                     router.push('/adminpanel?page=products')
                 })
@@ -133,7 +131,7 @@ export function AdminEditProduct() {
                     ))}
                 </div>
             </div>
-            <div className={styles.createLilColumn}>
+            {/* <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Обложка</p>
                 <div className={styles.newsImageButtonBox} >
                     {data.cover ? (
@@ -152,7 +150,7 @@ export function AdminEditProduct() {
                         </label>
                     }
                 </div>
-            </div>
+            </div> */}
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Цвета</p>
                 <div className={styles.createCountLine}>

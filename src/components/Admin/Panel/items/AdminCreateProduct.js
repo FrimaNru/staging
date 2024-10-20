@@ -70,7 +70,6 @@ export function AdminCreateProduct() {
         }
     };
 
-
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setCover(file);
