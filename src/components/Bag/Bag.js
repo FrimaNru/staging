@@ -21,7 +21,7 @@ function formatDate(dateString) {
 export function Bag() {
 
     const router = useRouter();
-    const { isOpen, onClose, onOpen } = useDisclosure();
+    const [prevPath, setPrevPath] = useState(null);
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
     const [total, setTotal] = useState(0);
@@ -29,7 +29,6 @@ export function Bag() {
     const [deliveryDate, setDeliveryDate] = useState('');
     const toast = useToast();
 
-    const [newAddressData, setNewAddressData] = useState({});
     const [order, setOrder] = useState(false);
     const [successModal, setSuccessModal] = useState(false);
     const [errorModal, setErrorModal] = useState(false);
@@ -37,10 +36,6 @@ export function Bag() {
     const [isLoading, setIsLoading] = useState(false);
 
     const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
-
-    const [postCode, setPostCode] = useState('');
-    const [result, setResult] = useState(null);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         load();
@@ -55,6 +50,21 @@ export function Bag() {
             load();
         }
     }, []);
+
+    useEffect(() => {
+        const path = sessionStorage.getItem('prevPath');
+        if (path && path.includes('product')) {
+            setPrevPath(path);
+        }
+    }, []);
+
+    const handleGoToCatalog = () => {
+        if (prevPath) {
+            router.push(prevPath);
+        } else {
+            router.push('/catalog');
+        }
+    };
 
     function load() {
         axios.get(`${API_BASE_URL}getUser`, {
@@ -180,7 +190,7 @@ export function Bag() {
                 </div>
                 {data.length > 0 && !order && <>
                     <button className={styles.totalButton} onClick={() => setOrder(true)} >ОФОРМИТЬ ЗАКАЗ</button>
-                    <button className={styles.countinueShoppingButton} onClick={() => router.push('/catalog')} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
+                    <button className={styles.countinueShoppingButton} onClick={handleGoToCatalog} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
                 </>}
             </div>}
         </div>

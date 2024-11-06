@@ -16,6 +16,7 @@ export function PersonalData() {
     const [phone, setPhone] = useState('');
     const [dateBirthday, setDateBirthday] = useState('');
     const [addresses, setAddresses] = useState([]);
+    const [mailing, setMailing] = useState('');
 
     const [hidePassword, setHidePassword] = useState(true);
     const [hidePassword2, setHidePassword2] = useState(true);
@@ -49,20 +50,21 @@ export function PersonalData() {
                 setSex(res.data.personalData.sex);
                 setDateBirthday(res.data.personalData.dateBirthday);
                 setAddresses(res.data.personalData.addresses);
+                setMailing(res.data.personalData.mailing);
             })
             .catch((e) => console.log(e));
     };
 
     function saveData() {
         if (password === '') {
-            axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, addresses }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, addresses, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
                     toast({ position: 'bottom-right', render: () => (<div className="toast">Данные успешно обновлены</div>), duration: 3000 });
                 })
                 .catch((e) => console.log(e));
         } else {
             if (password === repeatPassword) {
-                axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, addresses, password }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, addresses, password, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                     .catch((e) => console.log(e));
             } else {
                 if (password !== repeatPassword) return setError(true);
@@ -104,6 +106,19 @@ export function PersonalData() {
                 <div className={styles.inputColumn}>
                     <p className={styles.inputTitle}>Телефон</p>
                     <InputMask mask="+7 (999) 999-99-99" className={styles.input} value={phone} onChange={(e) => setPhone(e.target.value)} />
+                </div>
+                <div className={styles.inputColumn}>
+                    <p className={styles.inputTitle}>Получать рассылки</p>
+                    <div className={styles.lineSex}>
+                        <div className={styles.lineLilSex} onClick={() => setMailing('E-mail')} >
+                            <img src={mailing === 'E-mail' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
+                            <p className={styles.sexText}>E-mail</p>
+                        </div>
+                        <div className={styles.lineLilSex} onClick={() => setMailing('Телефон')}>
+                            <img src={mailing === 'Телефон' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
+                            <p className={styles.sexText} >Телефон</p>
+                        </div>
+                    </div>
                 </div>
                 <div className={styles.inputColumn}>
                     <p className={styles.inputTitle}>Дата рождения</p>

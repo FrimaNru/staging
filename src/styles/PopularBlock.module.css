@@ -21,10 +21,6 @@
     height: 340px;
 }
 
-.sliderItem:hover {
-    cursor: pointer;
-}
-
 .sliderItemContent {
     display: flex;
     flex-direction: column;
@@ -66,8 +62,10 @@
 
 .prevArrow {
     position: absolute;
-    margin-top: 94px;
+    margin-top: 0px;
     z-index: 10;
+    height: 300px;
+    padding-top: 104px;
 }
 
 .prevArrow:hover,
@@ -77,9 +75,11 @@
 
 .nextArrow {
     position: absolute;
-    margin-top: -246px;
+    margin-top: -340px;
     z-index: 10;
     right: 0%;
+    height: 300px;
+    padding-top: 104px;
 }
 
 .sliderBlockMobile {
@@ -128,15 +128,17 @@
 
     .nextArrow {
         position: absolute;
-        margin-top: -236px;
+        margin-top: -340px;
         z-index: 10;
         right: 40px;
+        height: 250px;
     }
 
     .prevArrow {
         position: absolute;
-        margin-top: 104px;
+        margin-top: 0px;
         z-index: 10;
         left: 40px;
+        height: 250px;
     }
 }

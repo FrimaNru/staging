@@ -89,32 +89,32 @@ export function PopularBlock() {
 
         <div className={styles.sliderBlock}>
             <Slider {...settings}>
-                {data.map((x, i) => <Link style={{ width: 'max-content' }} key={i} href={`/product?id=${x._id}`}>
-                    <div className={styles.sliderItem}>
-                        <div className={styles.sliderItemContent}>
+                {data.map((x, i) => <div className={styles.sliderItem} key={i}>
+                    <div className={styles.sliderItemContent}>
+                        <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
                             <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
-                            <div className={styles.sliderItemColumn}>
-                                <p className={styles.sliderItemTitle}>{x.name}</p>
-                            </div>
-                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                        </Link>
+                        <div className={styles.sliderItemColumn}>
+                            <p className={styles.sliderItemTitle}>{x.name}</p>
                         </div>
+                        <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
                     </div>
-                </Link>)}
+                </div>)}
             </Slider>
         </div>
 
         <div className={styles.sliderBlockMobile}>
             <Slider {...settingsMobile}>
-                {data.map((x, i) => <Link style={{ width: 'max-content' }} key={i} href={`/product?id=${x._id}`}>
-                    <div className={styles.sliderItem}>
-                        <div className={styles.sliderItemContent}>
+                {data.map((x, i) => <div className={styles.sliderItem} key={i}>
+                    <div className={styles.sliderItemContent}>
+                        <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
                             <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
-                            <p className={styles.sliderItemTitle}>{x.name}</p>
-                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
-                        </div>
+                        </Link>
+                        <p className={styles.sliderItemTitle}>{x.name}</p>
+                        <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
                     </div>
-                </Link>)}
+                </div>)}
             </Slider>
         </div>
-    </div>
+    </div >
 }
