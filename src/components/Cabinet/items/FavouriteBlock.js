@@ -5,6 +5,7 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useToast } from "@chakra-ui/react";
+import { useDisclosure, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
 
 function formatNumber(number) {
     let numStr = number.toString();
@@ -16,6 +17,7 @@ function formatNumber(number) {
 export function FavouriteBlock() {
 
     const [data, setData] = useState([]);
+    const { onOpen, isOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
 
@@ -56,14 +58,9 @@ export function FavouriteBlock() {
     function deleteAllProducts() {
         axios.delete(`${API_BASE_URL}deleteAllFavourites`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
+                onClose();
                 load();
-                toast({
-                    position: 'bottom-right',
-                    render: () => (
-                        <div className="toast">Все товары удалены из избранных</div>
-                    ),
-                    duration: 3000
-                })
+                toast({ position: 'bottom-right', render: () => (<div className="toast">Все товары удалены из избранных</div>), duration: 3000 });
             })
             .catch((e) => console.log(e));
     };
@@ -113,7 +110,7 @@ export function FavouriteBlock() {
                 </div>)}
                 <div className={styles.lineButtons}>
                     <div className={styles.toBagButton} onClick={() => buyAll()}>ДОБАВИТЬ ВСЕ В КОРЗИНУ</div>
-                    <div className={styles.deleteAllButton} onClick={() => deleteAllProducts()} >УДАЛИТЬ ВСЕ</div>
+                    <div className={styles.deleteAllButton} onClick={onOpen}>УДАЛИТЬ ВСЕ</div>
                 </div>
             </>
             : <>
@@ -121,5 +118,20 @@ export function FavouriteBlock() {
                 <div className={styles.blackButtonLil} onClick={() => router.push('/catalog')}>В КАТАЛОГ</div>
                 <hr className={`${styles.hr} ${styles.hrLast}`} />
             </>}
+        <Modal isOpen={isOpen} onClose={onClose} autoFocus='false' isCentered size='xl' >
+            <ModalOverlay />
+            <ModalContent background='none'>
+                <div className={styles.modal}>
+                    <div className={styles.modalHeader}>
+                        <p className={styles.modalHeaderTitle}>УДАЛИТЬ ВСЕ?</p>
+                        <img src='/cross.svg' onClick={onClose} className={styles.modalCross} />
+                    </div>
+                    <div className={styles.modalColumn}>
+                        <button onClick={deleteAllProducts} className={styles.modalDeleteAll}>УДАЛИТЬ ВСЕ</button>
+                        <button onClick={onClose} className={styles.modalClose}>НЕТ</button>
+                    </div>
+                </div>
+            </ModalContent>
+        </Modal>
     </div>
 }

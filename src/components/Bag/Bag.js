@@ -27,6 +27,7 @@ export function Bag() {
     const [total, setTotal] = useState(0);
     const [deliveryCost, setDeliveryCost] = useState(0);
     const [deliveryDate, setDeliveryDate] = useState('');
+    const { isOpen, onClose, onOpen } = useDisclosure();
     const toast = useToast();
 
     const [order, setOrder] = useState(false);
@@ -98,8 +99,9 @@ export function Bag() {
     function clearBag() {
         axios.post(`${API_BASE_URL}clearBag`, {}, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
-                toast({ position: 'bottom-right', render: () => (<div className="toast">Корзина успешно очищена</div>), duration: 3000 });
+                onClose();
                 load();
+                toast({ position: 'bottom-right', render: () => (<div className="toast">Корзина успешно очищена</div>), duration: 3000 });
                 setOrder(false);
             })
             .catch((e) => console.log(e));
@@ -146,7 +148,7 @@ export function Bag() {
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <p className={styles.rowHeaderTitle}>КОРЗИНА</p>
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
-                    {data.length > 0 && <button className={styles.rowHeaderClear} onClick={clearBag} >Очистить корзину</button>}
+                    {data.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen} >Очистить корзину</button>}
                 </div>
                 {data.length > 0 && Object.entries(itemCounts)
                     .filter(([item, count], index, self) => self.findIndex(([x]) => x === item) === index)
@@ -312,6 +314,21 @@ export function Bag() {
                         </div>
                     </div>}
                 </ModalBody>
+            </ModalContent>
+        </Modal>
+        <Modal isOpen={isOpen} onClose={onClose} autoFocus='false' isCentered size='xl' >
+            <ModalOverlay />
+            <ModalContent background='none'>
+                <div className={styles.modalClear}>
+                    <div className={styles.modalHeaderClear}>
+                        <p className={styles.modalHeaderTitle}>ОЧИСТИТЬ КОРЗИНУ?</p>
+                        <img src='/cross.svg' onClick={onClose} className={styles.modalCross} />
+                    </div>
+                    <div className={styles.modalColumn}>
+                        <button onClick={clearBag} className={styles.modalDeleteAll}>ОЧИСТИТЬ КОРЗИНУ</button>
+                        <button onClick={onClose} className={styles.modalClose}>НЕТ</button>
+                    </div>
+                </div>
             </ModalContent>
         </Modal>
     </div >

@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 export function PersonalData() {
 
     const toast = useToast();
+    const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [name, setName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -15,7 +17,6 @@ export function PersonalData() {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [dateBirthday, setDateBirthday] = useState('');
-    const [addresses, setAddresses] = useState([]);
     const [mailing, setMailing] = useState('');
 
     const [hidePassword, setHidePassword] = useState(true);
@@ -24,13 +25,9 @@ export function PersonalData() {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
 
-    const [idAddress, setIdAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [street, setStreet] = useState('');
-    const [house, setHouse] = useState('');
-    const [appartment, setAppartment] = useState('');
-
     const [error, setError] = useState(false);
+
+    const [initialData, setInitialData] = useState(null);
 
     useEffect(() => {
         load();
@@ -38,33 +35,83 @@ export function PersonalData() {
 
     function load() {
         axios.get(`${API_BASE_URL}getUser`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         })
             .then((res) => {
-                setPhone(res.data.phone);
-                setEmail(res.data.email);
-                setName(res.data.name);
-                setLastName(res.data.personalData.lastName);
-                setSex(res.data.personalData.sex);
-                setDateBirthday(res.data.personalData.dateBirthday);
-                setAddresses(res.data.personalData.addresses);
-                setMailing(res.data.personalData.mailing);
+                const userData = {
+                    phone: res.data.phone,
+                    email: res.data.email,
+                    name: res.data.name,
+                    lastName: res.data.personalData.lastName,
+                    sex: res.data.personalData.sex,
+                    dateBirthday: res.data.personalData.dateBirthday,
+                    mailing: res.data.personalData.mailing,
+                };
+
+                // Устанавливаем состояния
+                setPhone(userData.phone);
+                setEmail(userData.email);
+                setName(userData.name);
+                setLastName(userData.lastName);
+                setSex(userData.sex);
+                setDateBirthday(userData.dateBirthday);
+                setMailing(userData.mailing);
+
+                // Сохраняем начальные данные для отслеживания изменений
+                setInitialData(userData);
             })
             .catch((e) => console.log(e));
+    }
+
+    const hasChanges = () => {
+        return (
+            initialData &&
+            (phone !== initialData.phone ||
+                email !== initialData.email ||
+                name !== initialData.name ||
+                lastName !== initialData.lastName ||
+                sex !== initialData.sex ||
+                dateBirthday !== initialData.dateBirthday ||
+                mailing !== initialData.mailing)
+        );
     };
+
+    const handleRouteChange = (url) => {
+        if (hasChanges()) {
+            onOpen(); // Показываем модальное окно
+            router.events.emit('routeChangeError'); // Останавливаем навигацию
+            throw 'routeChange aborted.'; // Прерываем переход
+        }
+    };
+
+    useEffect(() => {
+        router.events.on('routeChangeStart', handleRouteChange);
+
+        return () => {
+            router.events.off('routeChangeStart', handleRouteChange);
+        };
+    }, [phone, email, name, lastName, sex, dateBirthday, mailing, initialData]);
+
+
 
     function saveData() {
         if (password === '') {
-            axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, addresses, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-                .then((res) => {
+            axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                .then(() => {
+                    onClose();
+                    const userData = { phone, email, name, lastName, sex, dateBirthday, mailing };
+                    setInitialData(userData);
                     toast({ position: 'bottom-right', render: () => (<div className="toast">Данные успешно обновлены</div>), duration: 3000 });
                 })
                 .catch((e) => console.log(e));
         } else {
             if (password === repeatPassword) {
-                axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, addresses, password, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, password, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                    .then(() => {
+                        onClose();
+                        const userData = { phone, email, name, lastName, sex, dateBirthday, mailing };
+                        setInitialData(userData);
+                    })
                     .catch((e) => console.log(e));
             } else {
                 if (password !== repeatPassword) return setError(true);
@@ -181,7 +228,7 @@ export function PersonalData() {
         </div>
         <hr className={styles.hr} />
         <button className={styles.saveButton} onClick={saveData}>СОХРАНИТЬ</button>
-        <Modal onClose={onClose} isOpen={isOpen} autoFocus={false} isCentered size='xl' >
+        {/* <Modal onClose={onClose} isOpen={isOpen} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent p={0} bg='none' boxShadow='none' >
                 <ModalBody p={0}>
@@ -241,6 +288,32 @@ export function PersonalData() {
                                     };
                                 }}>СОХРАНИТЬ</div>
                             </div>
+                        </div>
+                    </div>
+                </ModalBody>
+            </ModalContent>
+        </Modal> */}
+        <Modal onClose={onClose} isOpen={isOpen} autoFocus={false} isCentered size='xl' >
+            <ModalOverlay />
+            <ModalContent p={0} bg='none' boxShadow='none' >
+                <ModalBody p={0}>
+                    <div className={styles.modal}>
+                        <div className={styles.modalHeader}>
+                            <p className={styles.modalHeaderTitle}>СОХРАНИТЬ ИЗМЕНЕНИЯ?</p>
+                            <img src='/cross.svg' onClick={onClose} className={styles.modalCross} />
+                        </div>
+                        <div className={styles.modalColumn}>
+                            <button onClick={saveData} className={styles.modalDeleteAll}>СОХРАНИТЬ</button>
+                            <button onClick={() => {
+                                setPhone(initialData.phone);
+                                setEmail(initialData.email);
+                                setName(initialData.name);
+                                setLastName(initialData.lastName);
+                                setSex(initialData.sex);
+                                setDateBirthday(initialData.dateBirthday);
+                                setMailing(initialData.mailing);
+                                onClose();
+                            }} className={styles.modalClose}>НЕТ</button>
                         </div>
                     </div>
                 </ModalBody>

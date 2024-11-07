@@ -191,44 +191,34 @@
 
 .modal {
     width: 600px;
-    flex-shrink: 0;
-    background: #FDFDFD;
+    background: #FFF;
+    padding-bottom: 93px;
+    margin-left: -20px;
     display: flex;
     flex-direction: column;
     gap: 35px;
-    padding: 40px 0 65px 0;
 }
 
 .modalHeader {
     display: flex;
-    flex-direction: column;
-    gap: 40px;
-}
-
-.modalHeaderLine {
-    display: flex;
     flex-direction: row;
-    width: 100%;
+    align-items: center;
     justify-content: space-between;
-    padding: 0 30px;
+    width: 100%;
+    padding: 40px 30px;
+    border-bottom: solid 1px #140702;
 }
 
 .modalHeaderTitle {
-    color: #140702;
-    font-family: "Dela Gothic One";
     font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 109.152%;
+    color: #140702;
+    line-height: 109%;
+    text-align: left;
+    font-family: "Dela Gothic One";
 }
 
-.cross:hover {
+.modalCross:hover {
     cursor: pointer;
-}
-
-.modalHr {
-    width: 100%;
-    border-top: solid 1px #140702;
 }
 
 .modalColumn {
@@ -236,6 +226,30 @@
     flex-direction: column;
     gap: 20px;
     padding: 0 50px;
+}
+
+.modalDeleteAll {
+    background: #FDEDBF;
+    width: 100%;
+    height: 59px;
+    border-radius: 104px;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    color: #041F17;
+    line-height: 100%;
+    text-align: center;
+}
+
+.modalClose {
+    background: #140702;
+    width: 100%;
+    height: 59px;
+    border-radius: 104px;
+    font-family: "Dela Gothic One";
+    font-size: 20px;
+    color: #FDEDBF;
+    line-height: 100%;
+    text-align: center;
 }
 
 .modalSubtitle {
@@ -498,35 +512,36 @@
 
     .modal {
         width: 90%;
-        gap: 15px;
-        padding: 15px 0 30px 0;
+        padding-bottom: 40px;
         margin-left: 5%;
+        gap: 25px;
     }
 
     .modalHeader {
-        gap: 15px;
+        padding: 15px 17px;
     }
 
     .modalHeaderTitle {
-        font-size: 13px;
-    }
-
-    .cross {
-        display: none;
-    }
-
-    .crossMobile {
-        display: block;
-    }
-
-    .modalSubtitle {
         font-size: 15px;
-        width: 100%;
+    }
+
+    .modalCross:hover {
+        cursor: pointer;
     }
 
     .modalColumn {
-        gap: 15px;
-        padding: 0 20px;
+        gap: 10px;
+        padding: 0 30px;
+    }
+
+    .modalDeleteAll {
+        height: 38px;
+        font-size: 13px;
+    }
+
+    .modalClose {
+        height: 38px;
+        font-size: 13px;
     }
 
     .modalColumnInput {
