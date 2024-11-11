@@ -476,6 +476,146 @@
     display: none;
 }
 
+.sizeColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sizeTitle {
+    font-family: Dela Gothic One;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 34.75px;
+    text-align: left;
+    color: rgba(20, 7, 2, 1);
+}
+
+.sizeTitleMM {
+    font-family: Tenor Sans;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 28.08px;
+    text-align: left;
+    color: rgba(20, 7, 2, 1);
+}
+
+.sizeButton {
+    font-family: Tenor Sans;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 21.06px;
+    text-align: left;
+    text-decoration-line: underline;
+}
+
+.sizeLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.sizeItem {
+    padding: 5px 10px;
+    font-family: Tenor Sans;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 28.08px;
+    color: rgba(20, 7, 2, 1);
+    border: solid 1px rgba(20, 7, 2, 1);
+    border-radius: 100px;
+    width: 72px;
+}
+
+.sizeItemSelect {
+    background: rgba(20, 7, 2, 1);
+    color: rgba(253, 237, 191, 1);
+}
+
+.modalBodySize {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 0px 35px 130px 35px;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalSizeLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.modalSizeIcon {
+    width: 54px;
+    height: auto;
+}
+
+.modalSizeText {
+    font-family: Tenor Sans;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 21.83px;
+    text-align: left;
+    color: rgba(20, 7, 2, 1);
+}
+
+.modalSizeButton {
+    background: rgba(20, 7, 2, 1);
+    border-radius: 104px;
+    padding: 15px 5px;
+    color: rgba(253, 237, 191, 1);
+    font-family: Dela Gothic One;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23.17px;
+    text-align: center;
+    text-transform: uppercase;
+    min-width: 262px;
+}
+
+.modalSizeInput {
+    width: 223px;
+    border: solid 1px rgba(20, 7, 2, 1);
+    border-radius: 104px;
+    background: none;
+    height: 62px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23.17px;
+    text-transform: uppercase;
+    font-family: Tenor Sans;
+    color: rgba(20, 7, 2, 1);
+    text-align: left;
+    padding-left: 20px;
+}
+
+.modalSizeInput:focus {
+    outline: none;
+}
+
+.modalSizeInput::placeholder {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23.17px;
+    text-align: left;
+    text-transform: uppercase;
+    font-family: Tenor Sans;
+    color: rgba(20, 7, 2, 1);
+}
+
+.modalHeaderTitleSize {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 109.152%;
+}
+
 @media (max-width: 475px) {
     .main {
         width: 100%;
@@ -675,5 +815,84 @@
     .modalBodyButtonBag {
         padding: 9.5px 20px;
         font-size: 13px;
+    }
+
+    .sizeTitle {
+        font-size: 16px;
+        line-height: 100%;
+    }
+
+    .sizeTitleMM {
+        font-size: 16px;
+        line-height: 100%;
+    }
+
+    .sizeLine {
+        gap: 5px;
+    }
+
+    .sizeItem {
+        padding: 5px 10px;
+        font-size: 16px;
+        line-height: 100%;
+        width: 50px;
+    }
+
+    .sizeItemSelect {
+        background: rgba(20, 7, 2, 1);
+        color: rgba(253, 237, 191, 1);
+    }
+
+    .sizeButton {
+        font-size: 14px;
+        line-height: 100%;
+        width: max-content;
+    }
+
+    .modalHeaderTitleSize {
+        font-size: 15px;
+    }
+
+    .modalBodySize {
+        gap: 20px;
+        padding: 0px 15px 50px 15px;
+    }
+
+    .modalSizeLine {
+        gap: 10px;
+    }
+
+    .modalSizeIcon {
+        width: 35px;
+    }
+
+    .modalSizeText {
+        font-size: 16px;
+        line-height: 100%;
+    }
+
+    .modalSizeLineMobile {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .modalSizeButton {
+        font-size: 16px;
+        line-height: 100%;
+        min-width: 100%;
+    }
+    
+    .modalSizeInput {
+        width: 100%;
+        height: 40px;
+        font-size: 16px;
+        line-height: 100%;
+        padding-left: 10px;
+    }
+    
+    .modalSizeInput::placeholder {
+        font-size: 16px;
+        line-height: 100%;
     }
 }

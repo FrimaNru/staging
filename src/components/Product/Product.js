@@ -16,7 +16,6 @@ function formatNumber(number) {
     return parts.join('.');
 };
 
-
 export function Product() {
 
     let sliderRef = useRef(null);
@@ -25,9 +24,11 @@ export function Product() {
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [colorOfProduct, setColorOfProduct] = useState('');
+    const [sizeOfProduct, setSizeOfProduct] = useState(0);
     const [countOfColor, setCountOfColor] = useState(0);
 
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalSize, setIsOpenModalSize] = useState(false);
     const [openBigImage, setOpenBigImage] = useState(false);
     const [width, setWidth] = useState(0);
 
@@ -52,6 +53,8 @@ export function Product() {
             .then((res) => {
                 setData(res.data);
                 setColorOfProduct(res.data.colors[0]);
+                if (res.data.type === 'ring' || res.data.type === 'bracelets') setSizeOfProduct(16)
+                else if (res.data.type === 'necklace') setSizeOfProduct(28);
             })
             .catch((e) => console.log(e));
     };
@@ -93,9 +96,79 @@ export function Product() {
         { title: 'ГАРАНТИЯ И УХОД', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' }
     ];
 
+    const ringSize = [16, 16.5, 17, 17.5, 18];
+    const necklaceSize = [28, 30, 38, 42, 50];
+    const braceletsSize = [16, 17, 18, 19];
+
+    const textSizeRings = [
+        { img: 'threads.svg', text: 'Закрутите нитку, шнурок или бумажную ленту вокругнужного пальца.' },
+        { img: 'ruler.svg', text: 'Используйте линейку, чтобы определить длину нитки.' },
+        { img: 'ringSize.svg', text: 'Введите длину в миллиметрах и ответ будет вашим размером кольца.' }
+    ];
+    const textSizeNecklace = [
+        { img: 'threads.svg', text: 'Возьмите нитку и оберните её вокруг шеи, закрепив на необходимой высоте.' },
+        { img: 'ruler.svg', text: 'Расположите нить так, как вы хотите, чтобы лежало колье, а затем измерьте её длину.' },
+        { img: 'necklaceSize.svg', text: 'Округлите полученное значение до ближайшего 0 или 5 — это и будет ваш размер колье.' }
+    ];
+    const textSizeBracelets = [
+        { img: 'threads.svg', text: 'Возьмите нитку и оберните её вокруг руки, закрепив на необходимой высоте.' },
+        { img: 'ruler.svg', text: 'Расположите нить так, как вы хотите, чтобы лежал браслет, а затем измерьте её длину.' },
+        { img: 'necklaceSize.svg', text: 'Округлите полученное значение до ближайшего 0 или 5 — это и будет ваш размер браслета.' }
+    ];
+
+    const [millimeters, setMillimeters] = useState('');
+    const [ringSizeCalculate, setRingSize] = useState(null);
+    const [buttonText, setButtonText] = useState('Рассчитать');
+
+    const ringSizes = [
+        { size: 15, minCircumference: 47, maxCircumference: 48 },
+        { size: 15.5, minCircumference: 48, maxCircumference: 49 },
+        { size: 16, minCircumference: 49, maxCircumference: 50 },
+        { size: 16.5, minCircumference: 50, maxCircumference: 52 },
+        { size: 17, minCircumference: 52, maxCircumference: 53 },
+        { size: 17.5, minCircumference: 53, maxCircumference: 55 },
+        { size: 18, minCircumference: 55, maxCircumference: 57 },
+        { size: 18.5, minCircumference: 58, maxCircumference: 59 },
+        { size: 19, minCircumference: 56, maxCircumference: 60 },
+        { size: 19.5, minCircumference: 60.3, maxCircumference: 60.3 },
+        { size: 20, minCircumference: 61, maxCircumference: 63 },
+        { size: 20.5, minCircumference: 63, maxCircumference: 64 },
+        { size: 21, minCircumference: 64, maxCircumference: 65 },
+        { size: 21.5, minCircumference: 67, maxCircumference: 68 },
+        { size: 22, minCircumference: 69.1, maxCircumference: 69.1 },
+    ];
+
+    function getRingSize(mm) {
+        const sizeObj = ringSizes.find(
+            ({ minCircumference, maxCircumference }) =>
+                mm >= minCircumference && mm <= maxCircumference
+        );
+        return sizeObj ? sizeObj.size : null;
+    }
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+
+        if (value === '' || (/^\d{1,2}$/.test(value) && Number(value) <= 99)) {
+            setMillimeters(value);
+            setRingSize(null);
+            setButtonText('Рассчитать');
+        }
+    };
+
+    const handleCalculateClick = () => {
+        const size = getRingSize(Number(millimeters));
+        if (size !== null) {
+            setRingSize(size);
+            setButtonText(`Ваш размер: ${size}`);
+        } else {
+            setButtonText('Не существует');
+        }
+    };
+
     function buy() {
         if (localStorage.getItem('token')) {
-            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(() => {
                     setIsOpenModal(true);
                 })
@@ -140,7 +213,17 @@ export function Product() {
                             <FavouriteButton idProduct={data._id} />
                         </div>
                         <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
-                        <Menu autoSelect={false} >
+                        {(data.type === 'ring' || data.type === 'necklace' || data.type === 'bracelets') && <div className={styles.sizeColumn}>
+                            <p className={styles.sizeTitle}>Размер, <span className={styles.sizeTitleMM}>{data.type === 'ring' ? 'мм' : 'см'}</span></p>
+                            <div className={styles.sizeLine}>
+                                {(data.type === 'ring' ? ringSize : data.type === 'necklace' ? necklaceSize : braceletsSize).map((x, i) => <button
+                                    key={i}
+                                    className={`${styles.sizeItem} ${x === sizeOfProduct ? styles.sizeItemSelect : ''}`}
+                                    onClick={() => setSizeOfProduct(x)}>{x}</button>)}
+                            </div>
+                            <button className={styles.sizeButton} onClick={() => setIsOpenModalSize(true)}>Как определить размер?</button>
+                        </div>}
+                        <Menu autoSelect={false}>
                             <MenuButton pos='relative' zIndex={10} p={0} ref={elementRef}>
                                 <div className={styles.menuButton} >
                                     <p className={styles.menuButtonText} >{colorOfProduct}</p>
@@ -212,6 +295,57 @@ export function Product() {
                                 <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
                                 <button className={styles.modalBodyButtonBag} onClick={() => router.push('/bag')}>ОФОРМИТЬ ЗАКАЗ</button>
                             </div>
+                        </div>
+                    </div>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
+        <Modal isOpen={isOpenModalSize} size='xl' onClose={() => {
+            setIsOpenModalSize(false); setMillimeters(''); setRingSize(null); setButtonText('Рассчитать');
+        }} isCentered autoFocus={false}>
+            <ModalOverlay />
+            <ModalContent bg='none' boxShadow='none'>
+                <ModalBody p={0}>
+                    <div className={styles.modal}>
+                        <div className={styles.modalHeader}>
+                            <div className={styles.modalHeaderLine}>
+                                <p className={styles.modalHeaderTitleSize}>КАК ОПРЕДЕЛИТЬ РАЗМЕР?</p>
+                                <img src='/cross.svg' className={styles.modalHeaderCross} onClick={() => setIsOpenModalSize(false)} />
+                                <img src='/crossMobile.svg' className={styles.modalHeaderCrossMobile} onClick={() => setIsOpenModalSize(false)} />
+                            </div>
+                            <hr className={styles.modalHeaderHr} />
+                        </div>
+                        <div className={styles.modalBodySize}>
+                            {data.type === 'ring'
+                                ? <>
+                                    {textSizeRings.map((x, i) => <div key={i} className={styles.modalSizeLine}>
+                                        <img src={x.img} className={styles.modalSizeIcon} />
+                                        <p className={styles.modalSizeText}>{x.text}</p>
+                                    </div>)}
+                                    <div className={`${styles.modalSizeLine} ${styles.modalSizeLineMobile}`}>
+                                        <input
+                                            type="text"
+                                            value={millimeters}
+                                            onChange={handleInputChange}
+                                            placeholder="Введите мм"
+                                            className={styles.modalSizeInput}
+                                        />
+                                        <button onClick={handleCalculateClick} className={styles.modalSizeButton}>{buttonText}</button>
+                                    </div>
+                                </>
+                                : data.type === 'necklace'
+                                    ? <>
+                                        {textSizeNecklace.map((x, i) => <div key={i} className={styles.modalSizeLine}>
+                                            <img src={x.img} className={styles.modalSizeIcon} />
+                                            <p className={styles.modalSizeText}>{x.text}</p>
+                                        </div>)}
+                                    </>
+                                    : <>
+                                        {textSizeBracelets.map((x, i) => <div key={i} className={styles.modalSizeLine}>
+                                            <img src={x.img} className={styles.modalSizeIcon} />
+                                            <p className={styles.modalSizeText}>{x.text}</p>
+                                        </div>)}
+                                    </>}
                         </div>
                     </div>
                 </ModalBody>

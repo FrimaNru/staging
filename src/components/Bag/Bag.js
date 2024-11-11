@@ -80,7 +80,7 @@ export function Bag() {
                 setSuccessData(res.data.orders[res.data.orders.length - 1])
                 if (res.data.bag.length === 0) return setTotal(0);
                 res.data.bag.map(x => {
-                    axios.post(`${API_BASE_URL}getOneProduct`, { id: x })
+                    axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
                         .then((r) => {
                             d = d + r.data.cost;
                             setTotal(d);
@@ -92,7 +92,8 @@ export function Bag() {
     };
 
     const itemCounts = data.reduce((acc, item) => {
-        acc[item] = (acc[item] || 0) + 1;
+        const key = JSON.stringify({ id: item.id, size: item.size });
+        acc[key] = (acc[key] || 0) + 1;
         return acc;
     }, {});
 
@@ -151,13 +152,16 @@ export function Bag() {
                     {data.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen} >Очистить корзину</button>}
                 </div>
                 {data.length > 0 && Object.entries(itemCounts)
-                    .filter(([item, count], index, self) => self.findIndex(([x]) => x === item) === index)
-                    .map(([item, count], i) => (
-                        <div key={i} className={styles.itemColumn}>
-                            <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} setData={setData} />
-                            <hr className={styles.hr} />
-                        </div>
-                    ))
+                    .filter(([key, count], index, self) => self.findIndex(([x]) => x === key) === index)
+                    .map(([key, count], i) => {
+                        const item = JSON.parse(key);
+                        return (
+                            <div key={i} className={styles.itemColumn}>
+                                <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} setData={setData} />
+                                <hr className={styles.hr} />
+                            </div>
+                        );
+                    })
                 }
                 {data.length === 0 && <div className={styles.emptyBag} >
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
@@ -348,7 +352,7 @@ function ProductItem({ item, count, load, setData }) {
     }, []);
 
     function loadNow() {
-        axios.post(`${API_BASE_URL}getOneProduct`, { id: item })
+        axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
                 setDataProduct(res.data);
             })
@@ -356,7 +360,7 @@ function ProductItem({ item, count, load, setData }) {
     };
 
     function deleteProduct() {
-        axios.post(`${API_BASE_URL}deleteProductFromBag`, { id: item }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        axios.post(`${API_BASE_URL}deleteProductFromBag`, { id: item.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 setData([]);
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Товар успешно удален</div>), duration: 3000 });
@@ -366,7 +370,7 @@ function ProductItem({ item, count, load, setData }) {
     };
 
     function plusProduct() {
-        axios.post(`${API_BASE_URL}plusProductToBag`, { id: item }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        axios.post(`${API_BASE_URL}plusProductToBag`, { id: item.id, size: item.size }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 load();
             })
@@ -374,7 +378,7 @@ function ProductItem({ item, count, load, setData }) {
     };
 
     function minusProduct() {
-        axios.post(`${API_BASE_URL}minusProductFromBag`, { id: item }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        axios.post(`${API_BASE_URL}minusProductFromBag`, { id: item.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 setData([]);
                 load();

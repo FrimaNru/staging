@@ -101,19 +101,13 @@ export function MyOrders() {
             </>
             : <div className={styles.bigColumn}>
                 {data.length > 0 && data.map((x, i) => {
-                    const itemCounts = x.products && typeof x.products === 'string'
-                        ? x.products.split(',').reduce((acc, product) => {
-                            const trimmedProduct = product.trim();
-                            acc[trimmedProduct] = (acc[trimmedProduct] || 0) + 1;
+                    const itemCounts = Array.isArray(x.products)
+                        ? x.products.reduce((acc, product) => {
+                            const key = JSON.stringify(product);
+                            acc[key] = (acc[key] || 0) + 1;
                             return acc;
                         }, {})
-                        : Array.isArray(x.products)
-                            ? x.products.reduce((acc, product) => {
-                                const trimmedProduct = product.trim();
-                                acc[trimmedProduct] = (acc[trimmedProduct] || 0) + 1;
-                                return acc;
-                            }, {})
-                            : {};
+                        : {};
 
                     return (
                         <React.Fragment key={i}>
@@ -127,12 +121,15 @@ export function MyOrders() {
                                     <p className={styles.statusBlockText}>{selectStatus(x.status, x.paymentStatus)}</p>
                                 </div>
                                 <div className={styles.lilColumnOrder}>
-                                    {Object.entries(itemCounts).map(([item, count], i) => (
-                                        <div key={i} className={styles.itemColumn}>
-                                            <ProductItemOrder item={item} count={count} />
-                                            <hr className={styles.hr} />
-                                        </div>
-                                    ))}
+                                    {Object.entries(itemCounts).map(([key, count], i) => {
+                                        const item = JSON.parse(key);
+                                        return (
+                                            <div key={i} className={styles.itemColumn}>
+                                                <ProductItemOrder item={item} count={count} />
+                                                <hr className={styles.hr} />
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                                 <div className={styles.deliveryColumn}>
                                     <p className={styles.title}>Доставка</p>
@@ -176,7 +173,7 @@ function ProductItemOrder({ item, count }) {
     }, []);
 
     function loadNow() {
-        axios.post(`${API_BASE_URL}getOneProduct`, { id: item })
+        axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
                 setData(res.data);
             })

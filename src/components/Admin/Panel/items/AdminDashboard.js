@@ -105,7 +105,7 @@ export function AdminDashboard() {
                                             <p className={styles.accordionPanelText}>Сумма: <span style={{ fontWeight: 800 }}>{formatNumber(y.total)} руб.</span></p>
                                             <div className={styles.accordionPanelProductLine}>
                                                 <p className={styles.accordionPanelText}>Товары:</p>
-                                                <div className={styles.accordionPanelProductLineLil}>{y.products.map((z, j) => <ProductItem key={j} id={z} type='img' />)}</div>
+                                                <div className={styles.accordionPanelProductLineLil}>{y.products.map((z, j) => <ProductItem key={j} id={z.id} type='img' />)}</div>
                                             </div>
                                             <p className={styles.accordionPanelText}>Статус: <span style={{ fontWeight: 800 }}>{status[y.paymentStatus] ?? 'Не оплачено'}</span></p>
                                         </div>)}
