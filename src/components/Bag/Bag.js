@@ -111,7 +111,7 @@ export function Bag() {
         if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email) && selectedPVZ?.address && deliveryDate !== '') {
             setIsLoading(true);
 
-            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + deliveryCost, delivery: { street: selectedPVZ?.address, date: deliveryDate, pvzCode: selectedPVZ?.code } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + (total >= 3000 ? 0 : deliveryCost), delivery: { street: selectedPVZ?.address, date: deliveryDate, pvzCode: selectedPVZ?.code } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
                     setIsLoading(false);
                     router.push(res.data.PaymentURL);
@@ -175,19 +175,22 @@ export function Bag() {
                         <div className={styles.totalColumnLil}>
                             <div className={styles.totalRow}>
                                 <p className={styles.totalSubtitle}>Доставка</p>
-                                {deliveryCost === 0
-                                    ? <svg xmlns="http://www.w3.org/2000/svg" width="11" height="5" viewBox="0 0 11 5" fill="none">
-                                        <path d="M10.2008 4.53996H0.800781V0.459961H10.2008V4.53996Z" fill="#C49748" />
-                                    </svg>
-                                    : <p className={styles.totalGold}>{formatNumber(deliveryCost)} руб.</p>}
+                                {total < 3000
+                                    ? <>{deliveryCost === 0
+                                        ? <svg xmlns="http://www.w3.org/2000/svg" width="11" height="5" viewBox="0 0 11 5" fill="none">
+                                            <path d="M10.2008 4.53996H0.800781V0.459961H10.2008V4.53996Z" fill="#C49748" />
+                                        </svg>
+                                        : <p className={styles.totalGold}>{formatNumber(deliveryCost)} руб.</p>}
+                                    </>
+                                    : <p className={styles.totalGold}>0 руб.</p>}
                             </div>
-                            <p className={styles.totalText}>Стоимость доставки будет рассчитана позднее на основании выбранного ПВЗ</p>
+                            <p className={styles.totalText}>При заказе от 3000 рублей, доставка бесплатная</p>
                         </div>
                     </div>
                     <hr className={styles.hr} />
                     <div className={styles.totalRow} >
                         <p className={styles.totalSubtitle}>Итого</p>
-                        <p className={styles.totalGold}>{formatNumber(total + deliveryCost)} руб.</p>
+                        <p className={styles.totalGold}>{formatNumber(total + (total >= 3000 ? 0 : deliveryCost))} руб.</p>
                     </div>
                 </div>
                 {data.length > 0 && !order && <>
