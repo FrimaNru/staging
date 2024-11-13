@@ -30,9 +30,10 @@ export function FavouriteBlock() {
         axios.get(`${API_BASE_URL}getFavourites`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 res.data.forEach(x => {
-                    axios.post(`${API_BASE_URL}getOneProduct`, { id: x })
+                    axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
                         .then((res) => {
-                            setData(old => [...old, res.data]);
+                            setData(old => [...old, { ...res.data, color: x.color, size: x.size, article: x.article }]);
+                            console.log({ ...res.data, color: x.color, size: x.size, article: x.article })
                         })
                         .catch((e) => console.log(e));
                 })
@@ -65,8 +66,8 @@ export function FavouriteBlock() {
             .catch((e) => console.log(e));
     };
 
-    function buy(id) {
-        axios.post(`${API_BASE_URL}addProductToBag`, { id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+    function buy(id, size, color, article) {
+        axios.post(`${API_BASE_URL}addProductToBag`, { id, size, color, article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Товар добавлен в корзину</div>), duration: 3000 });
             })
@@ -98,10 +99,15 @@ export function FavouriteBlock() {
                                     <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
                                         <p className={styles.itemName}>{x?.name}</p>
                                     </Link>
-                                    <p className={styles.itemText}>В наличии</p>
+                                    <p className={styles.itemText}>{x.totalCount > 0 ? 'В наличии' : 'Нет в наличии'}</p>
+                                    <div className={styles.itemLilTextColumn}>
+                                        <p className={styles.itemTexLil}>Артикул: {x.article}</p>
+                                        <p className={styles.itemTexLil}>Цвет: {x.color}</p>
+                                        <p className={styles.itemTexLil}>Размер: {x.size}</p>
+                                    </div>
                                     <p className={styles.itemCost}>{formatNumber(x?.cost)} руб.</p>
                                 </div>
-                                <div className={styles.lilButton} onClick={() => buy(x?._id)}>В КОРЗИНУ</div>
+                                {x.totalCount > 0 && <div className={styles.lilButton} onClick={() => buy(x?._id, x.size, x.color, x.article)}>В КОРЗИНУ</div>}
                             </div>
                         </div>
                         <img src='/cross.svg' className={styles.itemCross} onClick={() => deleteOneProduct(x._id)} />

@@ -6,7 +6,7 @@ import { API_BASE_URL } from "../../../apiConfig";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-export function FavouriteButton({ idProduct }) {
+export function FavouriteButton({ idProduct, size, color, article }) {
 
     const { onClose, isOpen, onOpen } = useDisclosure();
     const [heart, setHeart] = useState(false);
@@ -19,9 +19,7 @@ export function FavouriteButton({ idProduct }) {
     }, []);
 
     function load() {
-        axios.get(`${API_BASE_URL}getUser`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        })
+        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 res.data.favourite.forEach(x => {
                     if (x === id) {
@@ -40,7 +38,7 @@ export function FavouriteButton({ idProduct }) {
 
     function fav() {
         if (localStorage.getItem('token')) {
-            axios.post(`${API_BASE_URL}addFavourite`, { id: idProduct }, {
+            axios.post(`${API_BASE_URL}addFavourite`, { id: idProduct, size, article, color }, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
                 .then((res) => {

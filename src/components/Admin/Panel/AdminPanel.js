@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { AdminCreateProduct, AdminDashboard, AdminEditProduct, AdminOrders, AdminProducts, SideMenuAdmin } from "@/components";
+import AdminWarehouse from "./items/AdminWarehouse";
 
 export function AdminPanel() {
 
@@ -31,6 +32,8 @@ export function AdminPanel() {
                 return <AdminCreateProduct />;
             case 'editProduct':
                 return <AdminEditProduct />;
+            case 'warehouse':
+                return <AdminWarehouse />
             default:
                 return <AdminDashboard />;
         }

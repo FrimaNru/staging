@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 export function SideMenuAdmin() {
 
     const router = useRouter();
-    const links = [{ text: 'Дашборд', link: 'dashboard' }, { text: 'Заказы', link: 'orders' }, { text: 'Товары', link: 'products' }];
+    const links = [{ text: 'Дашборд', link: 'dashboard' }, { text: 'Заказы', link: 'orders' }, { text: 'Товары', link: 'products' }, { text: 'Склад', link: 'warehouse' }];
 
     return <div className={styles.sideMenu}>
         <div className={styles.sideMenuContent}>

@@ -275,6 +275,20 @@
     display: none;
 }
 
+.itemNameColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.itemNameStat {
+    font-family: Tenor Sans;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16.38px;
+    text-align: left;
+}
+
 @media (max-width: 475px) {
     .main {
         align-items: center;
@@ -409,5 +423,14 @@
 
     .hrMobile {
         display: block;
+    }
+
+    .itemNameColumn {
+        gap: 3px;
+    }
+    
+    .itemNameStat {
+        font-size: 10px;
+        line-height: 11px;
     }
 }

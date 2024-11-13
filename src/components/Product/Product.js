@@ -168,7 +168,7 @@ export function Product() {
 
     function buy() {
         if (localStorage.getItem('token')) {
-            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[countOfColor] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(() => {
                     setIsOpenModal(true);
                 })
@@ -210,7 +210,7 @@ export function Product() {
                     <div className={styles.infoColumnText}>
                         <div className={styles.infoTitleLine} >
                             <p className={styles.infoTitle}>{data.name}</p>
-                            <FavouriteButton idProduct={data._id} />
+                            {data?.articles?.length > 0 ? <FavouriteButton idProduct={data._id} size={sizeOfProduct} color={colorOfProduct} article={data?.articles[countOfColor]} /> : <></>}
                         </div>
                         <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
                         {(data.type === 'ring' || data.type === 'necklace' || data.type === 'bracelets') && <div className={styles.sizeColumn}>

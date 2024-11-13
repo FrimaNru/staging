@@ -92,7 +92,7 @@ export function Bag() {
     };
 
     const itemCounts = data.reduce((acc, item) => {
-        const key = JSON.stringify({ id: item.id, size: item.size });
+        const key = JSON.stringify({ id: item.id, size: item.size, color: item.color, article: item.article });
         acc[key] = (acc[key] || 0) + 1;
         return acc;
     }, {});
@@ -391,7 +391,12 @@ function ProductItem({ item, count, load, setData }) {
             <img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
                 <div className={styles.itemNameLine}>
-                    <p className={styles.itemName}>{data?.name}</p>
+                    <div className={styles.itemNameColumn}>
+                        <p className={styles.itemName}>{data?.name}</p>
+                        <p className={styles.itemNameStat}>Артикул: {item.article}</p>
+                        <p className={styles.itemNameStat}>Цвет: {item.color}</p>
+                        <p className={styles.itemNameStat}>Размер: {item.size}</p>
+                    </div>
                     <img src='/cross.svg' className={styles.itemCrossMobile} onClick={deleteProduct} />
                 </div>
                 <div className={styles.itemCountLineMobile}>
@@ -403,6 +408,7 @@ function ProductItem({ item, count, load, setData }) {
                         <img src='/plus.svg' />
                     </button>
                 </div>
+
                 <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>
             </div>
         </div>
