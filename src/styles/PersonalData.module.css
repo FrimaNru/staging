@@ -419,7 +419,7 @@
 
     .inputColumn {
         gap: 5px;
-        padding: 0 45px;
+        padding: 0 25px;
     }
 
     .inputTitle {
@@ -440,7 +440,7 @@
     }
 
     .sexText {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .lineSex {
@@ -449,8 +449,8 @@
     }
 
     .sexCircle {
-        width: 16px;
-        height: 16px;
+        width: 13px;
+        height: 13px;
     }
 
     .hrMobile {

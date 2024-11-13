@@ -165,6 +165,10 @@ export function PersonalData() {
                             <img src={mailing === 'Телефон' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
                             <p className={styles.sexText} >Телефон</p>
                         </div>
+                        <div className={styles.lineLilSex} onClick={() => setMailing('Всё отключить')}>
+                            <img src={mailing === 'Всё отключить' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
+                            <p className={styles.sexText} >Всё отключить</p>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.inputColumn}>
