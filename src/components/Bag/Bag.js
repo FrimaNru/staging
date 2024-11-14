@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import InputMask from "react-input-mask";
 import { formatNumber } from "@/lib/Formatting";
 import WidgetPVZ from "../Common/WidgetPVZ";
+import { Link } from "react-scroll"
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -158,7 +159,7 @@ export function Bag() {
                         return (
                             <div key={i} className={styles.itemColumn}>
                                 <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} setData={setData} />
-                                <hr className={styles.hr} />
+                                <hr className={styles.hr}/>
                             </div>
                         );
                     })
@@ -198,11 +199,14 @@ export function Bag() {
                     </div>
                 </div>
                 {data.length > 0 && !order && <>
-                    <button className={styles.totalButton} onClick={() => setOrder(true)} >ОФОРМИТЬ ЗАКАЗ</button>
+                    <Link to='personalData' smooth={true} offset={-180} >
+                        <button className={styles.totalButton} onClick={() => setOrder(true)} >ОФОРМИТЬ ЗАКАЗ</button>
+                    </Link>
                     <button className={styles.countinueShoppingButton} onClick={handleGoToCatalog} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
                 </>}
             </div>}
         </div>
+        <div id="personalData" />
         {order && <div className={styles.order}>
             <div className={styles.orderColumn}>
                 <hr className={`${styles.hr} ${styles.hrMobile}`} />
@@ -360,7 +364,7 @@ function ProductItem({ item, count, load, setData }) {
     };
 
     function deleteProduct() {
-        axios.post(`${API_BASE_URL}deleteProductFromBag`, { id: item.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        axios.post(`${API_BASE_URL}deleteProductFromBag`, { id: item.id, size: item.size, color: item.color, article: item.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 setData([]);
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Товар успешно удален</div>), duration: 3000 });
@@ -370,7 +374,7 @@ function ProductItem({ item, count, load, setData }) {
     };
 
     function plusProduct() {
-        axios.post(`${API_BASE_URL}plusProductToBag`, { id: item.id, size: item.size }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        axios.post(`${API_BASE_URL}plusProductToBag`, { id: item.id, size: item.size, color: item.color, article: item.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 load();
             })
@@ -378,9 +382,8 @@ function ProductItem({ item, count, load, setData }) {
     };
 
     function minusProduct() {
-        axios.post(`${API_BASE_URL}minusProductFromBag`, { id: item.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        axios.post(`${API_BASE_URL}minusProductFromBag`, { id: item.id, size: item.size, color: item.color, article: item.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
-                setData([]);
                 load();
             })
             .catch((e) => console.log(e));
