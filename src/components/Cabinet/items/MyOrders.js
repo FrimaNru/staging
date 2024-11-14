@@ -188,7 +188,7 @@ function ProductItemOrder({ item, count }) {
                 <div className={styles.itemNameColumn}> 
                     <p className={styles.itemNameStat}>Артикул: {item.article}</p>
                     <p className={styles.itemNameStat}>Цвет: {item.color}</p>
-                    <p className={styles.itemNameStat}>Размер: {item.size}</p>
+                    {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}
                 </div>
                 <div className={styles.itemCountNumber}>{count} шт</div>
                 <p className={styles.itemCostMobile} >{formatNumber(Number(data?.cost))} руб.</p>

@@ -395,7 +395,7 @@ function ProductItem({ item, count, load, setData }) {
                         <p className={styles.itemName}>{data?.name}</p>
                         <p className={styles.itemNameStat}>Артикул: {item.article}</p>
                         <p className={styles.itemNameStat}>Цвет: {item.color}</p>
-                        <p className={styles.itemNameStat}>Размер: {item.size}</p>
+                        {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}
                     </div>
                     <img src='/cross.svg' className={styles.itemCrossMobile} onClick={deleteProduct} />
                 </div>

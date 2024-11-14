@@ -103,7 +103,7 @@ export function FavouriteBlock() {
                                     <div className={styles.itemLilTextColumn}>
                                         <p className={styles.itemTexLil}>Артикул: {x.article}</p>
                                         <p className={styles.itemTexLil}>Цвет: {x.color}</p>
-                                        <p className={styles.itemTexLil}>Размер: {x.size}</p>
+                                        {x.type !== "earrings" && <p className={styles.itemTexLil}>Размер: {x.size}</p>}
                                     </div>
                                     <p className={styles.itemCost}>{formatNumber(x?.cost)} руб.</p>
                                 </div>

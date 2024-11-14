@@ -94,7 +94,7 @@ export function AdminOrders() {
                             <div className={styles.accordionPanel}>
                                 <UserItem id={x.userId} />
                                 <hr className={styles.hr} />
-                                {x.products.map((x, i) => <ProductItem id={x} key={i} />)}
+                                {x.products.map((x, i) => <ProductItem id={x.id} key={i} />)}
                                 <hr className={styles.hr} />
                                 <div className={styles.ordersUserLine} >
                                     <p className={styles.ordersUserItem}>{formatDate(x.createDate)}</p>
@@ -142,7 +142,7 @@ export function AdminOrders() {
                             <div className={styles.accordionPanel}>
                                 <UserItem id={x.userId} />
                                 <hr className={styles.hr} />
-                                {x.products.map((x, i) => <ProductItem id={x} key={i} />)}
+                                {x.products.map((x, i) => <ProductItem id={x.id} key={i} />)}
                                 <hr className={styles.hr} />
                                 <div className={styles.ordersUserLine} >
                                     <p className={styles.ordersUserItem}>{formatDate(x.createDate)}</p>
@@ -155,7 +155,7 @@ export function AdminOrders() {
                                     <button disabled={x.status === 'delivery' && true} className={`${styles.ordersButton} ${x.status === 'delivery' && styles.ordersButtonDisabled}`} onClick={() => changeStatus('delivery', x.id, x.userId)}>В доставке</button>
                                     <button disabled={x.status === 'complete' && true} className={`${styles.ordersButton} ${x.status === 'complete' && styles.ordersButtonDisabled}`} onClick={() => changeStatus('complete', x.id, x.userId)}>Доставлен</button>
                                     <button disabled={x.status === 'processed' && true} className={`${styles.ordersButton} ${x.status === 'processed' && styles.ordersButtonDisabled}`} onClick={() => changeStatus('processed', x.id, x.userId)}>В обработку</button>
-                                    <button className={styles.ordersDeleteButton}>
+                                    <button className={styles.ordersDeleteButton} onClick={() => deleteOrder(x.status, x.id, x.userId)}>
                                         <img src='/deleteIcon.svg' />
                                     </button>
                                 </div>

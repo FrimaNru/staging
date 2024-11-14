@@ -147,7 +147,7 @@ function ProductItemHistory({ item }) {
     }, []);
 
     function loadNow() {
-        axios.post(`${API_BASE_URL}getOneProduct`, { id: item })
+        axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
                 setData(res.data);
             })
@@ -168,7 +168,7 @@ function ProductItemOrderHistory({ item, count }) {
     }, []);
 
     function loadNow() {
-        axios.post(`${API_BASE_URL}getOneProduct`, { id: item })
+        axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
                 setData(res.data);
             })
