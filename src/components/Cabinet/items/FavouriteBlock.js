@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useToast } from "@chakra-ui/react";
 import { useDisclosure, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import { useFavourite } from "@/contexts/FavouriteContext";
 
 function formatNumber(number) {
     let numStr = number.toString();
@@ -20,6 +21,7 @@ export function FavouriteBlock() {
     const { onOpen, isOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
+    const { removeLastFromFavourite, startSetFavourite } = useFavourite();
 
     useEffect(() => {
         load();
@@ -45,13 +47,8 @@ export function FavouriteBlock() {
         axios.post(`${API_BASE_URL}daleteOneFavourite`, { id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 load();
-                toast({
-                    position: 'bottom-right',
-                    render: () => (
-                        <div className="toast">Товар удален из избранного</div>
-                    ),
-                    duration: 3000
-                })
+                removeLastFromFavourite();
+                toast({ position: 'bottom-right', render: () => (<div className="toast">Товар удален из избранного</div>), duration: 3000 })
             })
             .catch((e) => console.log(e));
     };
@@ -59,6 +56,7 @@ export function FavouriteBlock() {
     function deleteAllProducts() {
         axios.delete(`${API_BASE_URL}deleteAllFavourites`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
+                startSetFavourite([]);
                 onClose();
                 load();
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Все товары удалены из избранных</div>), duration: 3000 });

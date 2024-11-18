@@ -8,6 +8,7 @@ import { API_BASE_URL } from "../../../apiConfig";
 import { useRouter } from "next/router";
 import { AuthModal } from "../Header/items/AuthModal";
 import { BigImage, Breadcrumb } from "@/components";
+import { useCart } from "@/contexts/CartContext";
 
 function formatNumber(number) {
     let numStr = number.toString();
@@ -18,6 +19,7 @@ function formatNumber(number) {
 
 export function Product() {
 
+    const { addToCart } = useCart();
     let sliderRef = useRef(null);
     const elementRef = useRef(null);
     const [data, setData] = useState({});
@@ -144,7 +146,7 @@ export function Product() {
                 mm >= minCircumference && mm <= maxCircumference
         );
         return sizeObj ? sizeObj.size : null;
-    }
+    };
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -170,6 +172,7 @@ export function Product() {
         if (localStorage.getItem('token')) {
             axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[countOfColor] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(() => {
+                    addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[countOfColor] });
                     setIsOpenModal(true);
                 })
                 .catch((e) => console.log(e));

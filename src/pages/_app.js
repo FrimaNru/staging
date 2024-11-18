@@ -6,6 +6,8 @@ import '@fontsource/tenor-sans';
 import '@fontsource/dela-gothic-one';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { CartProvider } from '@/contexts/CartContext';
+import { FavouriteProvider } from '@/contexts/FavouriteContext';
 
 export default function App({ Component, pageProps }) {
 
@@ -22,7 +24,11 @@ export default function App({ Component, pageProps }) {
     };
   }, []);
 
-  return <ChakraProvider>
-    <Component {...pageProps} />
-  </ChakraProvider>
+  return <CartProvider>
+    <FavouriteProvider>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </FavouriteProvider>
+  </CartProvider>
 }

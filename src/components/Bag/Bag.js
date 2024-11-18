@@ -8,6 +8,7 @@ import InputMask from "react-input-mask";
 import { formatNumber } from "@/lib/Formatting";
 import WidgetPVZ from "../Common/WidgetPVZ";
 import { Link } from "react-scroll"
+import { useCart } from "@/contexts/CartContext";
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -22,6 +23,7 @@ function formatDate(dateString) {
 export function Bag() {
 
     const router = useRouter();
+    const { startSetCart } = useCart();
     const [prevPath, setPrevPath] = useState(null);
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
@@ -69,12 +71,9 @@ export function Bag() {
     };
 
     function load() {
-        axios.get(`${API_BASE_URL}getUser`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
+                startSetCart(res.data.bag);
                 setData(res.data.bag);
                 setDataUser(res.data);
                 let d = 0
@@ -103,6 +102,7 @@ export function Bag() {
             .then(() => {
                 onClose();
                 load();
+                startSetCart([]);
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Корзина успешно очищена</div>), duration: 3000 });
                 setOrder(false);
             })
@@ -159,7 +159,7 @@ export function Bag() {
                         return (
                             <div key={i} className={styles.itemColumn}>
                                 <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} setData={setData} />
-                                <hr className={styles.hr}/>
+                                <hr className={styles.hr} />
                             </div>
                         );
                     })
@@ -350,6 +350,7 @@ function ProductItem({ item, count, load, setData }) {
 
     const [data, setDataProduct] = useState({});
     const toast = useToast();
+    const { removeLastFromCart, addToCart } = useCart();
 
     useEffect(() => {
         loadNow();
@@ -376,6 +377,7 @@ function ProductItem({ item, count, load, setData }) {
     function plusProduct() {
         axios.post(`${API_BASE_URL}plusProductToBag`, { id: item.id, size: item.size, color: item.color, article: item.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
+                addToCart({ id: item.id, size: item.size, color: item.color, article: item.article });
                 load();
             })
             .catch((e) => console.log(e));
@@ -385,6 +387,7 @@ function ProductItem({ item, count, load, setData }) {
         axios.post(`${API_BASE_URL}minusProductFromBag`, { id: item.id, size: item.size, color: item.color, article: item.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 load();
+                removeLastFromCart();
             })
             .catch((e) => console.log(e));
     };

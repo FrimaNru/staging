@@ -7,23 +7,25 @@ import { useDisclosure, Drawer, DrawerContent, DrawerOverlay } from "@chakra-ui/
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { formatNumber } from "@/lib/Formatting";
+import { useCart } from "@/contexts/CartContext";
+import { useFavourite } from "@/contexts/FavouriteContext";
 
 const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
 
 export function Header() {
 
     const router = useRouter();
-    const [data, setData] = useState([]);
+    const { startSetCart, cart } = useCart();
+    const { startSetFavourite, favourite } = useFavourite();
     const [products, setProducts] = useState([]);
     const [stateNew, setStateNew] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [search, setSearch] = useState('');
-    const [favLength, setFavLength] = useState(0);
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     useEffect(() => {
-        setInterval(() => load(), 1000);
+        load();
         getAllProducts();
         if (typeof window !== undefined && window.location.href.includes('new')) setStateNew(true);
         const handleRouteChange = (url) => {
@@ -49,14 +51,10 @@ export function Header() {
 
     function load() {
         if (!localStorage.getItem('token')) return;
-        axios.get(`${API_BASE_URL}getUser`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
-                setData(res.data.bag);
-                setFavLength(res.data.favourite.length)
+                startSetCart(res.data.bag);
+                startSetFavourite(res.data.favourite);
             })
             .catch((e) => {
                 console.log(e);
@@ -108,16 +106,16 @@ export function Header() {
             <div className={styles.iconLine} >
                 <>
                     <img src='/favIcon.svg' className={styles.icon} onClick={() => favPage()} />
-                    {favLength > 0 && <div className={styles.favCount}>
-                        <p className={styles.favCountText}>{favLength}</p>
+                    {favourite.length > 0 && <div className={styles.favCount}>
+                        <p className={styles.favCountText}>{favourite.length}</p>
                     </div>}
                 </>
                 <AuthModal onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
                 <Authorization />
                 <Link href='/bag' style={{ width: 'max-content' }} >
                     <img src='/shopIcon.svg' className={styles.icon} />
-                    {data.length > 0 && <div className={styles.bagCount}>
-                        <p className={styles.bagCountText}>{data.length}</p>
+                    {cart.length > 0 && <div className={styles.bagCount}>
+                        <p className={styles.bagCountText}>{cart.length}</p>
                     </div>}
                 </Link>
             </div>
