@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { CartProvider } from '@/contexts/CartContext';
 import { FavouriteProvider } from '@/contexts/FavouriteContext';
+import { UserProvider } from '@/contexts/UserContext';
 
 export default function App({ Component, pageProps }) {
 
@@ -25,10 +26,12 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return <CartProvider>
-    <FavouriteProvider>
-      <ChakraProvider>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </FavouriteProvider>
+    <UserProvider>
+      <FavouriteProvider>
+        <ChakraProvider>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </FavouriteProvider>
+    </UserProvider>
   </CartProvider>
 }

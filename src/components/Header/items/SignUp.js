@@ -4,10 +4,12 @@ import { useState } from "react";
 import InputMask from 'react-input-mask';
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
+import { useUser } from "@/contexts/UserContext";
 
 export function SignUp({ setStateAuth, onClose }) {
 
     const router = useRouter();
+    const { setUser } = useUser();
 
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -64,6 +66,7 @@ export function SignUp({ setStateAuth, onClose }) {
                 .then((res) => {
                     setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
+                    setUser(res.data.data);
                     if (window.location.href.includes('product?id=')) {
                         onClose();
                     } else router.push('/cabinet?page=personaldata');

@@ -3,9 +3,11 @@ import { useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
+import { useUser } from "@/contexts/UserContext";
 
 export function SignIn({ setStateAuth, onClose }) {
 
+    const { setUser } = useUser();
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -33,6 +35,7 @@ export function SignIn({ setStateAuth, onClose }) {
                 .then((res) => {
                     setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
+                    setUser(res.data.data);
                     if (window.location.href.includes('product?id=')) {
                         onClose();
                     } else router.push('/cabinet?page=personaldata');

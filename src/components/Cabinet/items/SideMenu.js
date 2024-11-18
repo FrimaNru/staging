@@ -4,11 +4,13 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
+import { useUser } from "@/contexts/UserContext";
 
 export function SideMenu() {
 
     const router = useRouter();
     const { page } = router.query;
+    const { clearUser } = useUser();
 
     const links = [
         { text: 'Личные данные', link: 'personaldata' },
@@ -22,11 +24,7 @@ export function SideMenu() {
     }, []);
 
     function load() {
-        axios.get(`${API_BASE_URL}getUser`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .catch((e) => {
                 console.log(e);
                 if (e?.response?.status === 404 || e?.response?.status === 401) {
@@ -44,6 +42,7 @@ export function SideMenu() {
                 </Link>)}
             </div>
             <div className={styles.logOutButton} onClick={() => {
+                clearUser();
                 localStorage.removeItem('token');
                 router.push('/');
             }}>

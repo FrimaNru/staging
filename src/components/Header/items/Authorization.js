@@ -3,16 +3,13 @@ import { useDisclosure } from "@chakra-ui/react";
 import { AuthModal } from "@/components";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useUser } from "@/contexts/UserContext";
 
 export function Authorization() {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
-    const [isAuth, setIsAuth] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) setIsAuth(true);
-    }, []);
+    const { user } = useUser();
 
     function auth() {
         if (localStorage.getItem('token')) {
@@ -23,7 +20,7 @@ export function Authorization() {
     };
 
     return <>
-        <img src={isAuth ? '/userIconFill.svg' : '/userIcon.svg'} className={styles.icon} onClick={auth} />
+        <img src={user?._id ? '/userIconFill.svg' : '/userIcon.svg'} className={styles.icon} onClick={auth} />
         <AuthModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </>
 }

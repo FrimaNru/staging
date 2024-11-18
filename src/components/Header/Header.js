@@ -9,6 +9,7 @@ import { API_BASE_URL } from "../../../apiConfig";
 import { formatNumber } from "@/lib/Formatting";
 import { useCart } from "@/contexts/CartContext";
 import { useFavourite } from "@/contexts/FavouriteContext";
+import { useUser } from "@/contexts/UserContext";
 
 const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
 
@@ -17,6 +18,7 @@ export function Header() {
     const router = useRouter();
     const { startSetCart, cart } = useCart();
     const { startSetFavourite, favourite } = useFavourite();
+    const { setUser, clearUser } = useUser();
     const [products, setProducts] = useState([]);
     const [stateNew, setStateNew] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,9 +52,10 @@ export function Header() {
     };
 
     function load() {
-        if (!localStorage.getItem('token')) return;
+        if (!localStorage.getItem('token')) return clearUser();
         axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
+                setUser(res.data);
                 startSetCart(res.data.bag);
                 startSetFavourite(res.data.favourite);
             })
