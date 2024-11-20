@@ -67,7 +67,7 @@ export function SignUp({ setStateAuth, onClose }) {
                     setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
                     setUser(res.data.data);
-                    if (window.location.href.includes('product?id=')) {
+                    if (window.location.href.includes('product?id=') || window.location.href.includes('catalog')) {
                         onClose();
                     } else router.push('/cabinet?page=personaldata');
                 })

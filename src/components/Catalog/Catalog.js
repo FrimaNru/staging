@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
-import { Breadcrumb, PopularBlock } from "@/components";
+import { Breadcrumb, FavouriteButton, PopularBlock } from "@/components";
 
 function formatNumber(number) {
     let numStr = number.toString();
@@ -147,7 +147,7 @@ export function Catalog() {
                                 </div>
                             </MenuButton>
                             <MenuList boxShadow='none' p={0} border='none' bg='none' pos='relative' zIndex={0}>
-                                <div className={styles.menuList} >
+                                <div className={styles.menuList}>
                                     {sortItems.filter(x => x !== stateSortItems).map((x, i) => <MenuItem bg='none' p={0} key={i} onClick={() => setStateSortItems(x)}>
                                         <div className={styles.menuItemColumn} >
                                             <p className={styles.menuItem} >{x}</p>
@@ -221,15 +221,20 @@ export function Catalog() {
                                 <div className={styles.rowIndex} key={rowIndex}>
                                     <div className={styles.lineOrders}>
                                         {row.map((x, i) => (
-                                            <Link key={i} href={`/product?id=${x._id}`} className={styles.sliderItemLink}>
-                                                <div className={styles.sliderItem}>
-                                                    <div className={styles.sliderItemContent}>
+                                            <div key={i} className={styles.sliderItem}>
+                                                <div className={styles.sliderItemContent}>
+                                                    <Link href={`/product?id=${x._id}`} className={styles.sliderItemLink}>
                                                         <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
-                                                        <p className={styles.sliderItemTitle}>{x.name}</p>
+                                                    </Link>
+                                                    <p className={styles.sliderItemTitle}>{x.name}</p>
+                                                    <p className={styles.productItemArticle}>Артикул: {x.articles[0]}</p>
+                                                    <div className={styles.productItemCostLine}>
+                                                        <div className={styles.productItemCostEmpty} />
                                                         <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                                                        <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.colors[0]} article={x.articles[0]} type='small' />
                                                     </div>
                                                 </div>
-                                            </Link>
+                                            </div>
                                         ))}
                                     </div>
                                     {rowIndex < arr.length - 1 && <hr className={styles.orderHr} />}

@@ -1,0 +1,129 @@
+.main {
+    width: 85%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    margin: 215px 0 200px 0;
+}
+
+.lilLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.mainTitle {
+    font-family: Dela Gothic One;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28.96px;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.text {
+    font-family: Tenor Sans;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23.4px;
+    text-align: left;
+    width: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.lilColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.title {
+    font-family: Dela Gothic One;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28.96px;
+    text-align: left;
+}
+
+.titleAndroid {
+    font-family: Dela Gothic One;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28.96px;
+    text-align: left;
+}
+
+.hr {
+    border: none;
+    width: 100%;
+    border-bottom: solid 1px rgba(20, 7, 2, 1);
+}
+
+.mainIcon {
+    width: 35px;
+    height: auto;
+}
+
+.titleLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+@media (width < 475px) {
+    .main {
+        width: 100%;
+        gap: 30px;
+        margin: 63px 0 50px 0;
+    }
+
+    .lilLine {
+        gap: 20px;
+        padding: 15px 40px;
+        border-bottom: solid 1px rgba(20, 7, 2, 1);
+    }
+
+    .mainTitle {
+        font-size: 18px;
+        line-height: 26px;
+    }
+
+    .text {
+        font-size: 13px;
+        line-height: 15px;
+        width: 100%;
+        padding: 0 30px;
+    }
+
+    .column {
+        gap: 15px;
+    }
+
+    .lilColumn {
+        gap: 20px;
+    }
+
+    .title {
+        font-size: 16px;
+        line-height: 23px;
+        width: 100%;
+        padding: 0 30px;
+    }
+
+    .titleAndroid {
+        font-size: 16px;
+        line-height: 23px;
+    }
+
+    .titleLine {
+        padding: 0 30px;
+    }
+}

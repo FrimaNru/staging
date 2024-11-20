@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import { API_BASE_URL } from "../../../apiConfig";
 import Link from "next/link";
 import { formatNumber } from "@/lib/Formatting";
+import { FavouriteButton } from "../Common/FavouriteButton";
 
 function SampleNextArrow(props) {
     const { onClick } = props;
@@ -96,12 +97,17 @@ export function PopularBlock() {
                         </Link>
                         <div className={styles.sliderItemColumn}>
                             <p className={styles.sliderItemTitle}>{x.name}</p>
+                            <p className={styles.sliderItemText}>Артикул: {x.articles[0]}</p>
                         </div>
-                        <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                        <div className={styles.productItemCostLine}>
+                            <div className={styles.productItemCostEmpty} />
+                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.colors[0]} article={x.articles[0]} type='small' />
+                        </div>
                     </div>
                 </div>)}
             </Slider>
-        </div>
+        </div >
 
         <div className={styles.sliderBlockMobile}>
             <Slider {...settingsMobile}>
@@ -110,8 +116,15 @@ export function PopularBlock() {
                         <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
                             <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
                         </Link>
-                        <p className={styles.sliderItemTitle}>{x.name}</p>
-                        <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                        <div className={styles.sliderItemColumn}>
+                            <p className={styles.sliderItemTitle}>{x.name}</p>
+                            <p className={styles.sliderItemText}>Артикул: {x.articles[0]}</p>
+                        </div>
+                        <div className={styles.productItemCostLine}>
+                            <div className={styles.productItemCostEmpty} />
+                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.colors[0]} article={x.articles[0]} type='small' />
+                        </div>
                     </div>
                 </div>)}
             </Slider>

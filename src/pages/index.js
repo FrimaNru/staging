@@ -1,5 +1,6 @@
 
 import { Footer, Header, PopularBlock, StartBlock } from "@/components";
+import BannerMainPage from "@/components/StartBlock/Banner";
 import Head from "next/head";
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
       <center>
         <main>
           <Header />
+          <BannerMainPage />
           <StartBlock />
           <PopularBlock />
           <Footer />

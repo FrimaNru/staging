@@ -35,7 +35,6 @@ export function FavouriteBlock() {
                     axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
                         .then((res) => {
                             setData(old => [...old, { ...res.data, color: x.color, size: x.size, article: x.article }]);
-                            console.log({ ...res.data, color: x.color, size: x.size, article: x.article })
                         })
                         .catch((e) => console.log(e));
                 })

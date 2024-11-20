@@ -48,8 +48,7 @@
 }
 
 .sliderItemText {
-    width: 200px;
-    font-size: 15px;
+    font-size: 14px;
     text-align: center;
     color: #140702;
 }
@@ -84,6 +83,20 @@
 
 .sliderBlockMobile {
     display: none;
+}
+
+.productItemCostLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0px;
+    width: 100%;
+    padding: 0 50px;
+}
+
+.productItemCostEmpty {
+    width: 25px;
 }
 
 @media (max-width: 475px) {

@@ -26,7 +26,7 @@ export function Breadcrumb() {
 
                 axios.post(`${API_BASE_URL}getOneProduct`, { id })
                     .then((res) => {
-                        array.push({ text: res.data.name, link: `/product?id=${res.data._id}` });
+                        array.push({ text: res.data?.name, link: `/product?id=${res.data?._id}` });
                         setBreadcrumbsArray([...array]);
                     })
                     .catch((e) => console.log(e));
