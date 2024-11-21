@@ -29,23 +29,28 @@ export function PersonalData() {
 
     const [initialData, setInitialData] = useState(null);
 
+    const [phoneCode, setPhoneCode] = useState('');
+    const [emailCode, setEmailCode] = useState('');
+    const [isPhoneCodeSend, setIsPhoneCodeSend] = useState(false);
+    const [isEmailCodeSend, setIsEmailCodeSend] = useState(false);
+
     useEffect(() => {
         load();
     }, []);
 
     function load() {
-        axios.get(`${API_BASE_URL}getUser`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        })
+        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 const userData = {
                     phone: res.data.phone,
                     email: res.data.email,
+                    isVerified: res.data.isVerified,
                     name: res.data.name,
                     lastName: res.data.personalData.lastName,
                     sex: res.data.personalData.sex,
                     dateBirthday: res.data.personalData.dateBirthday,
                     mailing: res.data.personalData.mailing,
+                    isVerifiedPhone: res.data.isVerifiedPhone
                 };
 
                 // Устанавливаем состояния
@@ -92,8 +97,6 @@ export function PersonalData() {
         };
     }, [phone, email, name, lastName, sex, dateBirthday, mailing, initialData]);
 
-
-
     function saveData() {
         if (password === '') {
             axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
@@ -119,6 +122,40 @@ export function PersonalData() {
         }
     };
 
+    const sendMessage = async () => {
+        if (initialData.phone === phone && initialData.isVerifiedPhone === true) return toast({ position: 'bottom-right', render: () => (<div className="toast">Этот номер уже подтвержден</div>), duration: 3000 });
+        await axios.post(`${API_BASE_URL}verifiedPhone`, { phone }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then(() => setIsPhoneCodeSend(true))
+            .catch((e) => console.log(e));
+    };
+
+    const mobilePhoneCheck = async () => {
+        await axios.post(`${API_BASE_URL}verifiedPhoneCode`, { code: phoneCode }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then(() => {
+                toast({ position: 'bottom-right', render: () => (<div className="toast">Телефон успешно подтвержден</div>), duration: 3000 });
+                setIsPhoneCodeSend(false);
+                setPhoneCode('');
+            })
+            .catch((e) => console.log(e));
+    };
+
+    const sendEmailCode = async () => {
+        if (initialData.email === email && initialData.isVerified === true) return toast({ position: 'bottom-right', render: () => (<div className="toast">Эта почта уже подтвержден</div>), duration: 3000 });
+        await axios.post(`${API_BASE_URL}verifiedEmail`, { email }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then(() => setIsEmailCodeSend(true))
+            .catch((e) => console.log(e));
+    };
+
+    const emailCheck = async () => {
+        await axios.post(`${API_BASE_URL}verifiedEmailCode`, { code: emailCode }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then(() => {
+                toast({ position: 'bottom-right', render: () => (<div className="toast">Почта успешно подтверждена</div>), duration: 3000 });
+                setIsEmailCodeSend(false);
+                setEmailCode('');
+            })
+            .catch((e) => console.log(e));
+    };
+
     return <div className={styles.main}>
         <div className={styles.dataColumn}>
             <div className={styles.titleColumn}>
@@ -138,21 +175,43 @@ export function PersonalData() {
                     <div className={styles.lineSex}>
                         <div className={styles.lineLilSex} onClick={() => setSex('женский')} >
                             <img src={sex === 'женский' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
-                            <p className={styles.sexText} >Женский</p>
+                            <p className={styles.sexText}>Женский</p>
                         </div>
                         <div className={styles.lineLilSex} onClick={() => setSex('мужской')}>
                             <img src={sex === 'мужской' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
-                            <p className={styles.sexText} >Мужской</p>
+                            <p className={styles.sexText}>Мужской</p>
                         </div>
                     </div>
                 </div>
-                <div className={styles.inputColumn}>
-                    <p className={styles.inputTitle}>E-mail</p>
-                    <input className={styles.input} onChange={(e) => setEmail(e.target.value)} value={email} />
+                <div className={styles.inputLilColumn}>
+                    <div className={styles.inputColumn}>
+                        <p className={styles.inputTitle}>E-mail</p>
+                        <input className={styles.input} onChange={(e) => setEmail(e.target.value)} value={email} />
+                    </div>
+                    <div className={styles.inputColumn}>
+                        <p className={styles.inputTitle}>Код подтверждения E-mail</p>
+                        <div className={styles.codeLine}>
+                            <input className={styles.lilInputCode} onChange={(e) => setEmailCode(e.target.value)} value={emailCode} />
+                            {isEmailCodeSend
+                                ? <button className={styles.buttonCode} onClick={emailCheck}>ПОДТВЕРДИТЬ</button>
+                                : <button className={styles.buttonCode} onClick={sendEmailCode}>ОТПРАВИТЬ ПИСЬМО</button>}
+                        </div>
+                    </div>
                 </div>
-                <div className={styles.inputColumn}>
-                    <p className={styles.inputTitle}>Телефон</p>
-                    <InputMask mask="+7 (999) 999-99-99" className={styles.input} value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <div className={styles.inputLilColumn}>
+                    <div className={styles.inputColumn}>
+                        <p className={styles.inputTitle}>Телефон</p>
+                        <InputMask mask="+7 (999) 999-99-99" className={styles.input} value={phone} onChange={(e) => setPhone(e.target.value)} />
+                    </div>
+                    <div className={styles.inputColumn}>
+                        <p className={styles.inputTitle}>Код подтверждения телефона</p>
+                        <div className={styles.codeLine}>
+                            <input className={styles.lilInputCode} onChange={(e) => setPhoneCode(e.target.value)} value={phoneCode} />
+                            {isPhoneCodeSend
+                                ? <button className={styles.buttonCode} onClick={mobilePhoneCheck}>ПОДТВЕРДИТЬ</button>
+                                : <button className={styles.buttonCode} onClick={sendMessage}>ОТПРАВИТЬ SMS</button>}
+                        </div>
+                    </div>
                 </div>
                 <div className={styles.inputColumn}>
                     <p className={styles.inputTitle}>Получать рассылки</p>
