@@ -9,7 +9,7 @@ export function Footer() {
             {links.map((x, i) => <div key={i} className={styles.column}>
                 <p className={styles.title} >{x.title}</p>
                 {x.links.map((y, n) => x.title === 'Соц сети' || x.title === 'МОБИЛЬНАЯ ВЕРСИЯ'
-                    ? <Link href={y.link} key={n}>
+                    ? <Link href={y.link} key={n} target={x.title === 'Соц сети' ? '_blank' : ''}>
                         <div className={styles.line}>
                             <img src={`/${y.text}.svg`} />
                             <p className={styles.text}>{y.text}</p>
@@ -21,7 +21,7 @@ export function Footer() {
                 {linksMobile.map((x, i) => (x.title === 'КЛИЕНТАМ' || x.title === 'Информация' || x.title === 'Документация') && <div key={i} className={styles.columnMobile}>
                     <p className={styles.title} >{x.title}</p>
                     {x.links.map((y, n) => x.title === 'Соц сети' || x.title === 'МОБИЛЬНАЯ ВЕРСИЯ'
-                        ? <Link href={y.link} key={n}>
+                        ? <Link href={y.link} key={n} target={x.title === 'Соц сети' ? '_blank' : ''}>
                             <div className={styles.line}>
                                 <img src={`/${y.text}.svg`} />
                             </div>
@@ -34,7 +34,7 @@ export function Footer() {
                     <p className={styles.title} >{x.title}</p>
                     <div className={styles.columnMobileLine}>
                         {x.links.map((y, n) => x.title === 'Соц сети' || x.title === 'МОБИЛЬНАЯ ВЕРСИЯ'
-                            ? <Link href={y.link} key={n}>
+                            ? <Link href={y.link} key={n} target={x.title === 'Соц сети' ? '_blank' : ''}>
                                 <div className={styles.line}>
                                     <img src={`/${y.text}.svg`} className={styles.icon} />
                                 </div>
@@ -50,7 +50,7 @@ export function Footer() {
 const links = [
     { title: 'КЛИЕНТАМ', links: [{ text: 'О бренде', link: '/brand' }, { text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }] },
     { title: 'Информация', links: [{ text: 'Частые вопросы', link: '/faq' }, { text: 'Доставка', link: '/delivery' }] },
-    { title: 'Соц сети', links: [{ text: 'Telegram', link: '/' }, { text: 'WhatsApp', link: '/' }, { text: 'ВКонтакте', link: '/' }] },
+    { title: 'Соц сети', links: [{ text: 'Telegram', link: 'https://t.me/miAlegriaru' }, { text: 'WhatsApp', link: 'https://wa.me/79165850585' }, { text: 'ВКонтакте', link: 'https://vk.com/mialegriashop' }] },
     { title: 'Документация', links: [{ text: 'Политика конфиденциальности', link: '/policy' }, { text: 'Обратная связь', link: '/feedback' }] },
     { title: 'МОБИЛЬНАЯ ВЕРСИЯ', links: [{ text: 'IOS', link: '/mobileApp/ios' }, { text: 'Android', link: '/mobileApp/android' }] },
 ];
@@ -59,6 +59,6 @@ const linksMobile = [
     { title: 'КЛИЕНТАМ', links: [{ text: 'О бренде', link: '/brand' }, { text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }] },
     { title: 'Информация', links: [{ text: 'Частые вопросы', link: '/faq' }, { text: 'Доставка', link: '/delivery' }] },
     { title: 'Документация', links: [{ text: 'Политика конфиденциальности', link: '/policy' }, { text: 'Обратная связь', link: '/feedback' }] },
-    { title: 'Соц сети', links: [{ text: 'Telegram', link: '/' }, { text: 'WhatsApp', link: '/' }, { text: 'ВКонтакте', link: '/' }] },
+    { title: 'Соц сети', links: [{ text: 'Telegram', link: 'https://t.me/miAlegriaru' }, { text: 'WhatsApp', link: 'https://wa.me/79165850585' }, { text: 'ВКонтакте', link: 'https://vk.com/mialegriashop' }] },
     { title: 'МОБИЛЬНАЯ ВЕРСИЯ', links: [{ text: 'IOS', link: '/mobileApp/ios' }, { text: 'Android', link: '/mobileApp/android' }] },
 ];
