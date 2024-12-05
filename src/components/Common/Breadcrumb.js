@@ -43,6 +43,14 @@ export function Breadcrumb() {
                 array.push({ text: 'Частые вопросы', link: '/faq' });
                 setBreadcrumbsArray(array);
                 break;
+            case '/documents/policy':
+                array.push({ text: 'Политика конфиденциальности', link: '/documents/policy' });
+                setBreadcrumbsArray(array);
+                break;
+            case '/documents/agreement':
+                array.push({ text: 'Пользовательское соглашение', link: '/documents/policy' });
+                setBreadcrumbsArray(array);
+                break;
         }
     }, [router.pathname, id]);
 

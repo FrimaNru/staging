@@ -5,12 +5,14 @@ import axios from "axios";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useUser } from "@/contexts/UserContext";
+import { useFavourite } from "@/contexts/FavouriteContext";
 
 export function SideMenu() {
 
     const router = useRouter();
     const { page } = router.query;
     const { clearUser } = useUser();
+    const { startSetFavourite } = useFavourite();
 
     const links = [
         { text: 'Личные данные', link: 'personaldata' },
@@ -43,6 +45,7 @@ export function SideMenu() {
             </div>
             <div className={styles.logOutButton} onClick={() => {
                 clearUser();
+                startSetFavourite([]);
                 localStorage.removeItem('token');
                 router.push('/');
             }}>

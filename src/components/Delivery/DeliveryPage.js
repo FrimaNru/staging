@@ -1,11 +1,8 @@
 import styles from "@/styles/Delivery.module.css";
 import Link from "next/link";
-import { useState } from "react";
 import { Breadcrumb } from "@/components";
 
 export function DeliveryPage() {
-
-
     return <div className={styles.main}>
         <Breadcrumb />
         <div className={styles.mainRow}>
@@ -14,8 +11,11 @@ export function DeliveryPage() {
                     <p className={`${styles.navigationLink} ${styles.navigationLinkSelect}`}>Доставка и оплата</p>
                     <hr className={styles.hrLink} />
                 </div>
-                <Link href='/policy'>
+                <Link href='/documents/policy'>
                     <p className={`${styles.navigationLink}`}>Политика конфиденциальности</p>
+                </Link>
+                <Link href='/documents/agreement'>
+                    <p className={`${styles.navigationLink}`}>Пользовательское соглашение</p>
                 </Link>
             </div>
             <div className={styles.contentColumn}>
