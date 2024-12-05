@@ -5,6 +5,7 @@ import InputMask from 'react-input-mask';
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
 import { useUser } from "@/contexts/UserContext";
+import DocumentsModal from "@/components/Common/DocumentsModal";
 
 export function SignUp({ setStateAuth, onClose }) {
 
@@ -27,6 +28,12 @@ export function SignUp({ setStateAuth, onClose }) {
     const [errorPassword, setErrorPassword] = useState(false);
     const [errorUser, setErrorUser] = useState(false);
     const [errorCodeCorrect, setErrorCodeCorrect] = useState(false);
+
+    const [checkBoxes, setCheckBoxes] = useState({ news: false, policy: true });
+
+    const [policy, setPolicy] = useState(false);
+    const [personal, setPersonal] = useState(false);
+    const [news, setNews] = useState(false);
 
     function sendCode() {
         if (email.length > 0) {
@@ -60,9 +67,9 @@ export function SignUp({ setStateAuth, onClose }) {
     };
 
     function signUp(email, password, phone) {
-        if (code.length === 6 && password.length > 0 && phone.length > 0) {
+        if (code.length === 6 && password.length > 0 && phone.length > 0 && checkBoxes.policy) {
             setIsLoading(true);
-            axios.post(`${API_BASE_URL}signUp`, { email, code, phone, password })
+            axios.post(`${API_BASE_URL}signUp`, { email, code, phone, password, mailing: checkBoxes.policy ? 'E-mail' : '' })
                 .then((res) => {
                     setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
@@ -123,8 +130,8 @@ export function SignUp({ setStateAuth, onClose }) {
                 </div>
                 <div className={styles.inputColumn}>
                     {!errorPassword
-                        ? <p className={styles.inputTitle} style={{ textAlign: 'left' }} >Пароль</p>
-                        : <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }} >Придумайте и введите пароль</p>}
+                        ? <p className={styles.inputTitle} style={{ textAlign: 'left' }}>Пароль</p>
+                        : <p className={`${styles.inputTitle} ${styles.errorText}`} style={{ textAlign: 'left' }}>Придумайте и введите пароль</p>}
                     <div className={styles.inputIconLine}>
                         <input onKeyDown={handleKeyDown} className={styles.input} type={hidePassword ? 'password' : 'text'} onChange={(e) => { setPassword(e.target.value); setErrorPassword(false); }} value={password} />
                         <>
@@ -135,14 +142,29 @@ export function SignUp({ setStateAuth, onClose }) {
                     </div>
                 </div>
                 <div className={styles.lilColumn}>
-                    <div className={`${styles.mainButtonBlack} ${isLoading && styles.loading}`} onClick={() => signUp(email, password, phone)} >ЗАРЕГИСТРИРОВАТЬСЯ</div>
+                    <div
+                        className={`${styles.mainButtonBlack} ${isLoading && styles.loading} ${!checkBoxes.policy && styles.noPolicy}`}
+                        onClick={() => { if (!checkBoxes.policy) return; signUp(email, password, phone) }} >ЗАРЕГИСТРИРОВАТЬСЯ</div>
                     <p className={styles.agreementText}>Регистрируясь, я подтверждаю свое согласие на обработку персональных данных в соответствии с Политикой конфиденциальности.</p>
                 </div>
             </div>
+        </div>
+        <div className={styles.checkBoxLine}>
+            {checkBoxes.news
+                ? <img src='/checkbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, news: false })} />
+                : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, news: true })} />}
+            <p className={styles.checkBoxText}>Я хочу получать <span className={styles.checkBoxSpan} onClick={() => setNews(true)}>сообщения о новостях, акциях и персональные рекомендации</span></p>
+        </div>
+        <div className={styles.checkBoxLine}>
+            {checkBoxes.policy
+                ? <img src='/checkbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, policy: false })} />
+                : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, policy: true })} />}
+            <p className={styles.checkBoxText}>Я подтверждаю свое согласие с условиями доставки и оплаты, <span className={styles.checkBoxSpan} onClick={() => setPolicy(true)} >политикой конфиденциальности</span> и даю <span className={styles.checkBoxSpan} onClick={() => setPersonal(true)} >согласие на обработку персональных данных</span></p>
         </div>
         <div className={styles.lilColumnSignUp} >
             <p className={styles.inputTitle}>Уже есть аккаунта?</p>
             <div className={styles.mainButton} onClick={() => setStateAuth('signIn')} >ВОЙТИ</div>
         </div>
+        <DocumentsModal policy={policy} setPolicy={setPolicy} personal={personal} setPersonal={setPersonal} news={news} setNews={setNews} />
     </div>
 }

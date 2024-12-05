@@ -105,13 +105,13 @@ export function SignIn({ setStateAuth, onClose }) {
             {checkBoxes.news
                 ? <img src='/checkbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, news: false })} />
                 : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, news: true })} />}
-            <p className={styles.checkBoxText}>Я хочу получать <span className={styles.checkBoxSpan}>сообщения о новостях, акциях и персональные рекомендации</span></p>
+            <p className={styles.checkBoxText}>Я хочу получать <span className={styles.checkBoxSpan} onClick={() => setNews(true)}>сообщения о новостях, акциях и персональные рекомендации</span></p>
         </div>
         <div className={styles.checkBoxLine}>
             {checkBoxes.policy
                 ? <img src='/checkbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, policy: false })} />
                 : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, policy: true })} />}
-            <p className={styles.checkBoxText}>Я подтверждаю свое согласие с условиями доставки и оплаты, <span className={styles.checkBoxSpan} onClick={() => setPolicy(true)} >политикой конфиденциальности</span> и даю <span className={styles.checkBoxSpan}>согласие на обработку персональных данных</span></p>
+            <p className={styles.checkBoxText}>Я подтверждаю свое согласие с условиями доставки и оплаты, <span className={styles.checkBoxSpan} onClick={() => setPolicy(true)} >политикой конфиденциальности</span> и даю <span className={styles.checkBoxSpan} onClick={() => setPersonal(true)} >согласие на обработку персональных данных</span></p>
         </div>
         <div className={styles.lilColumnSignUp}>
             <p className={styles.inputTitle}>Еще нет аккаунта?</p>

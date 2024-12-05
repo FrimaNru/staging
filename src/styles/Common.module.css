@@ -1,0 +1,65 @@
+.documentsModal {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 35px 80px;
+}
+
+.documentsModalLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.documentsModalTitle {
+    font-family: Dela Gothic One;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28.96px;
+    text-align: left;
+    color: rgba(20, 7, 2, 1);
+}
+
+.documentsModalItem {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.documentsModalColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.documentsModalParagraph {
+    font-family: Tenor Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18.72px;
+    text-align: left;
+}
+
+@media (width < 475px) {
+    .documentsModal {
+        gap: 30px;
+        padding: 16px;
+    }
+
+    .documentsModalTitle {
+        font-size: 16px;
+        line-height: 20px;;
+        width: 90%;
+    }
+
+    .documentsModalItem {
+        gap: 15px;
+    }
+
+    .documentsModalParagraph {
+        font-size: 12px;
+        line-height: 14px;
+    }
+}

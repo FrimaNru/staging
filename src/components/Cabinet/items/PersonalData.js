@@ -5,6 +5,7 @@ import InputMask from "react-input-mask";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import DocumentsModal from "@/components/Common/DocumentsModal";
 
 export function PersonalData() {
 
@@ -34,6 +35,9 @@ export function PersonalData() {
     const [isPhoneCodeSend, setIsPhoneCodeSend] = useState(false);
     const [isEmailCodeSend, setIsEmailCodeSend] = useState(false);
 
+    const [checkBoxes, setCheckBoxes] = useState({ news: false });
+    const [news, setNews] = useState(false);
+
     useEffect(() => {
         load();
     }, []);
@@ -53,7 +57,6 @@ export function PersonalData() {
                     isVerifiedPhone: res.data.isVerifiedPhone
                 };
 
-                // Устанавливаем состояния
                 setPhone(userData.phone);
                 setEmail(userData.email);
                 setName(userData.name);
@@ -62,7 +65,8 @@ export function PersonalData() {
                 setDateBirthday(userData.dateBirthday);
                 setMailing(userData.mailing);
 
-                // Сохраняем начальные данные для отслеживания изменений
+                if (res.data.personalData.mailing !== '') setCheckBoxes({ ...checkBoxes, news: true });
+
                 setInitialData(userData);
             })
             .catch((e) => console.log(e));
@@ -224,11 +228,14 @@ export function PersonalData() {
                             <img src={mailing === 'Телефон' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
                             <p className={styles.sexText} >Телефон</p>
                         </div>
-                        <div className={styles.lineLilSex} onClick={() => setMailing('Всё отключить')}>
-                            <img src={mailing === 'Всё отключить' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
-                            <p className={styles.sexText} >Всё отключить</p>
-                        </div>
                     </div>
+                    <div className={styles.checkBoxLine}>
+                        {checkBoxes.news
+                            ? <img src='/checkbox.svg' style={{ cursor: 'pointer' }} onClick={() => { setCheckBoxes({ ...checkBoxes, news: false }); setMailing(''); }} />
+                            : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => { setCheckBoxes({ ...checkBoxes, news: true }); setMailing('E-mail'); }} />}
+                        <p className={styles.checkBoxText}>Я хочу получать <span className={styles.checkBoxSpan} onClick={() => setNews(true)}>сообщения о новостях, акциях и персональные рекомендации</span></p>
+                    </div>
+                    <DocumentsModal news={news} setNews={setNews} />
                 </div>
                 <div className={styles.inputColumn}>
                     <p className={styles.inputTitle}>Дата рождения</p>
