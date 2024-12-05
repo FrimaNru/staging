@@ -42,6 +42,10 @@
     text-align: left;
 }
 
+.documentsModalCross {
+    cursor: pointer;
+}
+
 @media (width < 475px) {
     .documentsModal {
         gap: 30px;

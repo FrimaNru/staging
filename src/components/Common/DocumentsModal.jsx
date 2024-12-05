@@ -12,7 +12,7 @@ export default function DocumentsModal({ policy, setPolicy, personal, setPersona
                 <div className={styles.documentsModal}>
                     <div className={styles.documentsModalLine}>
                         <p className={styles.documentsModalTitle}>Политика конфиденциальности</p>
-                        <img src="/cross.svg" onClick={() => setPolicy(false)} style={{ cursor: 'pointer' }} />
+                        <img src="/cross.svg" onClick={() => setPolicy(false)} className={styles.documentsModalCross} />
                     </div>
                     {policyText.map((item, index) => <div key={index} className={styles.documentsModalItem}>
                         <p className={styles.documentsModalTitle}>{index + 1}. {item.title}</p>
@@ -29,7 +29,7 @@ export default function DocumentsModal({ policy, setPolicy, personal, setPersona
                 <div className={styles.documentsModal}>
                     <div className={styles.documentsModalLine}>
                         <p className={styles.documentsModalTitle}>Согласие на обработку персональных данных</p>
-                        <img src="/cross.svg" onClick={() => setPersonal(false)} style={{ cursor: 'pointer' }} />
+                        <img src="/cross.svg" onClick={() => setPersonal(false)} className={styles.documentsModalCross} />
                     </div>
                     <div className={styles.documentsModalColumn}>
                         {contestPersonalData.map((item, index) => <div key={index} className={styles.documentsModalItem}>
@@ -44,9 +44,9 @@ export default function DocumentsModal({ policy, setPolicy, personal, setPersona
             <ModalContent p={0} borderRadius={0}>
                 <div className={styles.documentsModal}>
                     <div className={styles.documentsModalLine}>
-                        <p className={styles.documentsModalTitle}>Согласие на получение рекламных и информационных 
-                        сообщений</p>
-                        <img src="/cross.svg" onClick={() => setNews(false)} style={{ cursor: 'pointer' }} />
+                        <p className={styles.documentsModalTitle}>Согласие на получение рекламных и информационных
+                            сообщений</p>
+                        <img src="/cross.svg" onClick={() => setNews(false)} className={styles.documentsModalCross} />
                     </div>
                     <div className={styles.documentsModalColumn}>
                         {contestAdvertisement.map((item, index) => <div key={index} className={styles.documentsModalItem}>
