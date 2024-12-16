@@ -3,8 +3,10 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
-import { AdminCreateProduct, AdminDashboard, AdminEditProduct, AdminOrders, AdminProducts, SideMenuAdmin } from "@/components";
+import { AdminCreateProduct, AdminDashboard, AdminEditProduct, AdminOrders, AdminProducts } from "@/components";
 import AdminWarehouse from "./items/AdminWarehouse";
+import { SideMenu } from "./items/SideMenu";
+import AdminBanners from "./items/AdminBanners/AdminBanners";
 
 export function AdminPanel() {
 
@@ -34,13 +36,15 @@ export function AdminPanel() {
                 return <AdminEditProduct />;
             case 'warehouse':
                 return <AdminWarehouse />
+            case 'banners':
+                return <AdminBanners />
             default:
                 return <AdminDashboard />;
         }
     };
 
     return <div className={styles.adminMain}>
-        <SideMenuAdmin />
+        <SideMenu />
         <div className={styles.adminMainBox}>
             {selectPage()}
         </div>

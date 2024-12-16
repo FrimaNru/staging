@@ -1,0 +1,103 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 40px;
+}
+
+.title {
+    font-family: Dela Gothic One;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 34.75px;
+    text-align: left;
+    color: #140702;
+}
+
+.selectLine {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.sectionButton {
+    padding: 10px 20px;
+    border: solid 1px #140702;
+    border-radius: 100px;
+    font-family: Tenor Sans;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 21.83px;
+    text-align: center;
+    color: #140702;
+    text-transform: uppercase;
+}
+
+.sectionButtonSelect {
+    border: solid 1px #FDEDBF;
+    background: #FDEDBF;
+}
+
+.mainPage {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.mainPageColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: solid 1px #140702;
+}
+
+.mainPageCount {
+    font-family: Tenor Sans;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 21.83px;
+    text-align: center;
+    color: #140702;
+    padding: 10px 20px;
+    background: #FDEDBF;
+    border-radius: 100px;
+    width: max-content;
+}
+
+.mainPageButton {
+    background: #FDEDBF;
+    padding: 7.5px 5px;
+}
+
+.mainPageButtonsLine {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.mainPageButtonArrow {
+    transform: rotate(180deg);
+}
+
+.mainPageButtonDelete {
+    font-family: Tenor Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18.72px;
+    text-align: center;
+    text-decoration-line: underline;
+}
+
+.mainPagePlusButton {
+    width: 130px;
+    height: 130px;
+    background: #FDEDBF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}

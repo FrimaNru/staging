@@ -2,10 +2,10 @@ import styles from "@/styles/Admin.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-export function SideMenuAdmin() {
+export function SideMenu() {
 
     const router = useRouter();
-    const links = [{ text: 'Дашборд', link: 'dashboard' }, { text: 'Заказы', link: 'orders' }, { text: 'Товары', link: 'products' }, { text: 'Склад', link: 'warehouse' }];
+    const links = [{ text: 'Дашборд', link: 'dashboard' }, { text: 'Заказы', link: 'orders' }, { text: 'Товары', link: 'products' }, { text: 'Склад', link: 'warehouse' }, { text: 'Баннеры', link: 'banners' }];
 
     return <div className={styles.sideMenu}>
         <div className={styles.sideMenuContent}>
