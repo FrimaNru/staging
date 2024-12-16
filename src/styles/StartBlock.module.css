@@ -189,13 +189,10 @@
     transition: all 0.3s;
 }
 
-.imageBlock {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.sliderImage {
     height: 325px;
-    margin-top: 160px;
+    width: 100%;
+    object-fit: cover;
 }
 
 .backImg {
@@ -215,6 +212,40 @@
     font-style: normal;
     font-weight: 400;
     line-height: 100%;
+}
+
+.sliderColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 160px;
+    height: 350px;
+}
+
+.sliderDotsLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 5px;
+}
+
+.sliderDot {
+    background: #FDEDBF;
+    width: 10px;
+    height: 10px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.sliderDotSelect {
+    background: #C39748;
+    width: 12px;
+    height: 12px;
+    transition: all 0.3s;
 }
 
 @media (max-width: 475px) {
@@ -250,5 +281,29 @@
 
     .logoText {
         font-size: 12px;
+    }
+
+    .sliderColumn {
+        gap: 0px;
+        margin-top: 60px;
+        height: 165px;
+    }
+
+    .sliderDotsLine {
+        gap: 3px;
+    }
+
+    .sliderDot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .sliderDotSelect {
+        width: 8px;
+        height: 8px;
+    }
+
+    .sliderImage {
+        height: 150px;
     }
 }

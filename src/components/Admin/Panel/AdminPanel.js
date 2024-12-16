@@ -3,10 +3,11 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
-import { AdminCreateProduct, AdminDashboard, AdminEditProduct, AdminOrders, AdminProducts } from "@/components";
+import { AdminCreateProduct, AdminEditProduct, AdminOrders, AdminProducts } from "@/components";
 import AdminWarehouse from "./items/AdminWarehouse";
 import { SideMenu } from "./items/SideMenu";
 import AdminBanners from "./items/AdminBanners/AdminBanners";
+import AdminDashboard from "./items/AdminDashboard/AdminDashboard";
 
 export function AdminPanel() {
 

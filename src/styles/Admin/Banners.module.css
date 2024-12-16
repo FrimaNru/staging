@@ -101,3 +101,7 @@
     justify-content: center;
     margin-top: 20px;
 }
+
+.mainPagePlusButtonBox {
+    width: max-content;
+}

@@ -9,11 +9,8 @@ export default function MainPage() {
     useEffect(() => { load(); }, []);
 
     const load = async () => {
-        axios.get(`${API_BASE_URL}/constans/banners`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
-            .then((res) => {
-                console.log(res.data)
-                setBanners(res.data);
-            })
+        axios.get(`${API_BASE_URL}constans/banners`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
+            .then((res) => { setBanners(res.data); })
             .catch((e) => console.log(e));
     };
 
@@ -45,7 +42,7 @@ export default function MainPage() {
 
     const saveBanners = async (banners) => {
         try {
-            await axios.post(`${API_BASE_URL}/constans/banners/update`, { banners }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
+            await axios.post(`${API_BASE_URL}constans/banners/update`, { banners }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
         } catch (error) {
             console.error("Ошибка сохранения баннеров:", error);
         }
@@ -54,7 +51,7 @@ export default function MainPage() {
     const deleteBanner = async (imagePath) => {
         try {
             const response = await axios.post(
-                `${API_BASE_URL}/constans/banners/delete`,
+                `${API_BASE_URL}constans/banners/delete`,
                 { imagePath },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } }
             );
@@ -66,6 +63,20 @@ export default function MainPage() {
         }
     };
 
+    const uploadBanner = async (file) => {
+        const formData = new FormData();
+        formData.append("banner", file);
+
+        try {
+            const response = await axios.post(`${API_BASE_URL}constans/banners/upload`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`, "Content-Type": "multipart/form-data" } });
+
+            if (response.status === 200) {
+                setBanners((prev) => [...prev, response.data.bannerUrl]);
+            }
+        } catch (error) {
+            console.error("Ошибка загрузки баннера:", error);
+        }
+    };
 
     return (
         <div className={styles.mainPage}>
@@ -85,9 +96,20 @@ export default function MainPage() {
                 </div>
             ))
             }
-            <button className={styles.mainPagePlusButton}>
-                <img src="/plusBanner.svg" alt="Add Banner" />
-            </button>
+            <div className={styles.mainPagePlusButtonBox}>
+                <label className="input-file">
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            if (e.target.files[0]) uploadBanner(e.target.files[0]);
+                        }}
+                    />
+                    <span className={styles.mainPagePlusButton}>
+                        <img src="/plusBanner.svg" alt="Upload" />
+                    </span>
+                </label>
+            </div>
         </div>
     );
 };

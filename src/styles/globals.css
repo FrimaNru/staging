@@ -20,18 +20,20 @@ p {
   line-height: normal;
 }
 
-.input-file input[type=file] {
+.input-file {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.input-file input[type="file"] {
   position: absolute;
   z-index: -1;
   opacity: 0;
-  display: block;
   width: 0;
   height: 0;
 }
 
-.input-file span {
-  cursor: pointer;
-}
 
 .toast {
   display: flex;

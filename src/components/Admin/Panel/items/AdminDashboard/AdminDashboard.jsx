@@ -1,7 +1,7 @@
 import styles from "@/styles/Admin.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../../../../../apiConfig";
+import { API_BASE_URL } from "../../../../../../apiConfig";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useToast } from '@chakra-ui/react';
 import { formatDateFromTimestamp, formatNumber } from "@/lib/Formatting";
 import Link from "next/link";
@@ -18,7 +18,7 @@ const status = {
     'REJECTED': 'Не оплачено'
 };
 
-export function AdminDashboard() {
+export default function AdminDashboard() {
 
     const [statistick, setStatistick] = useState({});
     const [users, setUsers] = useState([]);
@@ -36,6 +36,7 @@ export function AdminDashboard() {
             .catch((e) => console.log(e));
         axios.get(`${API_BASE_URL}allUsers`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
             .then((res) => {
+                console.log(res.data);
                 setUsers(res.data);
             })
             .catch((e) => console.log(e));
@@ -65,19 +66,15 @@ export function AdminDashboard() {
                     <div className={styles.dashboardAccordionTableInfo}>
                         <p className={styles.dashboardAccordionButtonTextLil}>Имя</p>
                         <p className={styles.dashboardAccordionButtonTextLil}>Телефон</p>
-                        <p className={styles.dashboardAccordionButtonTextLil}>Почта</p>
+                        <p className={styles.dashboardAccordionHeaderTextMiddle}>Почта</p>
                         <div className={styles.dashboardAccordionButtonBlockLil}>Активные заказы</div>
-                        <div className={styles.dashboardAccordionButtonBlockLil}>Заверш. заказы</div>
-                        <div className={styles.dashboardAccordionButtonBlockLil}>Избранные</div>
                     </div>
                     {users.length > 0 && users.map((x, i) => <AccordionItem border='none' key={i}>
                         <div className={styles.dashboardAccordionButton}>
                             <p className={styles.dashboardAccordionButtonText}>{x.name}</p>
-                            <p className={styles.dashboardAccordionButtonText}>{x.phone}</p>
-                            <p className={styles.dashboardAccordionButtonText}>{x.email}</p>
+                            <p className={styles.dashboardAccordionButtonText}>{x.phone} {x.isVerifiedPhone && '✔'}</p>
+                            <p className={styles.dashboardAccordionButtonTextMiddle}>{x.email} ✔</p>
                             <div className={styles.dashboardAccordionButtonBlock}>{x.orders.length}</div>
-                            <div className={styles.dashboardAccordionButtonBlock}>{x.history.length}</div>
-                            <div className={styles.dashboardAccordionButtonBlock}>{x.favourite.length}</div>
                             <div className={`${styles.dashboardAccordionButtonBlock} ${styles.dashboarNoBorder}`}>
                                 <AccordionButton p={0} alignItems='center' justifyContent='center' _hover={{ bg: 'none' }}>
                                     <AccordionIcon />
