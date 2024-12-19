@@ -14,7 +14,7 @@ export default function BannerMainPage() {
 
     const load = async () => {
         await axios.get(`${API_BASE_URL}mainPage/banners`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then((res) => { setBanners(res.data); console.log(res.data) })
+            .then((res) => { setBanners(res.data); })
             .catch((e) => console.log(e));
     };
 
@@ -25,6 +25,7 @@ export default function BannerMainPage() {
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: false,
+        autoplay: true,
         afterChange: (current) => {
             setActiveSlide(current);
         }

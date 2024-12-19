@@ -1,6 +1,7 @@
 import styles from "@/styles/Admin/Banners.module.css";
 import { useState } from "react";
 import MainPage from "./Sections/MainPage";
+import Sections from "./Sections/Sections";
 
 export default function AdminBanners() {
 
@@ -11,9 +12,9 @@ export default function AdminBanners() {
     function section() {
         switch (selectSection) {
             case 'разделы':
-                return;
+                return <Sections />;
             default:
-                return <MainPage />
+                return <MainPage />;
         }
     };
 

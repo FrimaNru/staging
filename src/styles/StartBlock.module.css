@@ -51,12 +51,12 @@
     line-height: normal;
     position: absolute;
     transition: all 0.3s;
+    text-transform: uppercase;
 }
 
 .blockImage {
     width: 100%;
     height: 100%;
-    background-image: url(../../public/start1.png);
     background-size: cover;
     background-repeat: no-repeat;
     transition: all 0.3s;
@@ -97,48 +97,9 @@
 .blockImage2 {
     width: 100%;
     height: 100%;
-    background-image: url(../../public/start2.png);
     background-size: cover;
     background-repeat: no-repeat;
     transition: all 0.3s;
-}
-
-
-.block3 {
-    width: 33%;
-    height: 270px;
-    background-image: url(../../public/start3.png);
-    background-size: auto 100%;
-    background-repeat: repeat-x;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    padding-top: 99px;
-}
-
-.block4 {
-    width: 33%;
-    height: 270px;
-    background-image: url(../../public/start4.png);
-    background-size: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    padding-top: 99px;
-}
-
-.block5 {
-    width: 33%;
-    height: 270px;
-    background-image: url(../../public/start5.png);
-    background-size: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    padding-top: 99px;
 }
 
 .block6 {
@@ -159,7 +120,6 @@
 .blockImage6 {
     width: 100%;
     height: 100%;
-    background-image: url(../../public/start3.png);
     background-size: cover;
     background-repeat: no-repeat;
     transition: all 0.3s;
@@ -183,7 +143,6 @@
 .blockImage7 {
     width: 100%;
     height: 100%;
-    background-image: url(../../public/start4.png);
     background-size: cover;
     background-repeat: no-repeat;
     transition: all 0.3s;
