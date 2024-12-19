@@ -1,7 +1,7 @@
 import React from "react";
 import { Workbook } from "exceljs";
 import { saveAs } from "file-saver";
-import styles from "@/styles/Admin.module.css";
+import styles from "@/styles/Admin/Admin.module.css";
 
 export function ButtonDownloadExcel({ data, type }) {
     const handleDownload = async () => {

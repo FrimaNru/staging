@@ -1,4 +1,4 @@
-import styles from "@/styles/Admin/Banners.module.css";
+import styles from "@/styles/Admin/Banners/Banners.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../../../../../../apiConfig";

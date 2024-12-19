@@ -1,11 +1,11 @@
-import styles from "@/styles/Admin.module.css";
+import styles from "@/styles/Admin/Admin.module.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { API_BASE_URL } from "../../../../../apiConfig";
+import { API_BASE_URL } from "../../../../../../apiConfig";
 import { Accordion, AccordionItem, AccordionPanel, AccordionIcon, AccordionButton, useToast } from "@chakra-ui/react";
 import { formatNumber, formatDate } from "@/lib/Formatting";
 import Link from "next/link";
-import { ButtonDownloadExcel } from "./DownloadExcel";
+import { ButtonDownloadExcel } from "../../items/DownloadExcel";
 
 const stataTitle = {
     'total': 'Общее количество заказов',
@@ -20,7 +20,7 @@ const status = {
     'canceled': 'Отменён'
 };
 
-export function AdminOrders() {
+export default function AdminOrders() {
 
     const toast = useToast();
     const [statistick, setStatistick] = useState({});
@@ -33,10 +33,9 @@ export function AdminOrders() {
 
     function load() {
         axios.get(`${API_BASE_URL}statistickOrders`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
-            .then((res) => {
-                setStatistick(res.data);
-            })
+            .then((res) => { setStatistick(res.data); })
             .catch((e) => console.log(e));
+
         axios.get(`${API_BASE_URL}allOrders`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
             .then((res) => {
                 console.log(res.data);
@@ -44,7 +43,6 @@ export function AdminOrders() {
                 setHistory(res.data.history);
             })
             .catch((e) => console.log(e));
-
     };
 
     function changeStatus(status, orderId, userId) {

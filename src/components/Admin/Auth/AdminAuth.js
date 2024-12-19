@@ -1,4 +1,4 @@
-import styles from "@/styles/Admin.module.css";
+import styles from "@/styles/Admin/Admin.module.css";
 import { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";

@@ -29,10 +29,4 @@ export * from "./Common/BigImage";
 export * from "./Common/WidgetPVZ";
 
 export * from "./Admin/Auth/AdminAuth";
-export * from "./Admin/Panel/AdminPanel";
-export * from "./Admin/Panel/items/AdminDashboard/AdminDashboard.jsx";
 export * from "./Admin/Panel/items/DownloadExcel";
-export * from "./Admin/Panel/items/AdminProducts";
-export * from "./Admin/Panel/items/AdminOrders";
-export * from "./Admin/Panel/items/AdminCreateProduct";
-export * from "./Admin/Panel/items/AdminEditProduct";

@@ -1,15 +1,17 @@
-import styles from "@/styles/Admin.module.css";
+import styles from "@/styles/Admin/Admin.module.css";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
-import { AdminCreateProduct, AdminEditProduct, AdminOrders, AdminProducts } from "@/components";
-import AdminWarehouse from "./items/AdminWarehouse";
 import { SideMenu } from "./items/SideMenu";
-import AdminBanners from "./items/AdminBanners/AdminBanners";
-import AdminDashboard from "./items/AdminDashboard/AdminDashboard";
+import AdminBanners from "./tabs/AdminBanners/AdminBanners";
+import AdminDashboard from "./tabs/AdminDashboard/AdminDashboard";
+import AdminProducts from "./tabs/AdminProducts/AdminProducts";
+import AdminCreateProduct from "./tabs/AdminProducts/AdminCreateProduct";
+import AdminEditProduct from "./tabs/AdminProducts/AdminEditProduct";
+import AdminOrders from "./tabs/AdminOrders/AdminOrders";
 
-export function AdminPanel() {
+export default function AdminPanel() {
 
     const router = useRouter();
     const { page } = router.query;
@@ -32,11 +34,9 @@ export function AdminPanel() {
             case 'orders':
                 return <AdminOrders />;
             case 'createProduct':
-                return <AdminCreateProduct />;
+                return <AdminCreateProduct />
             case 'editProduct':
-                return <AdminEditProduct />;
-            case 'warehouse':
-                return <AdminWarehouse />
+                return <AdminEditProduct />
             case 'banners':
                 return <AdminBanners />
             default:

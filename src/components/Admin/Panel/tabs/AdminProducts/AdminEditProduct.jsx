@@ -1,8 +1,8 @@
-import styles from "@/styles/Admin.module.css";
-import { useState } from "react";
+import styles from "@/styles/Admin/Admin.module.css";
+import { useEffect, useState } from "react";
 import { Menu, MenuButton, MenuList, MenuItem, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { API_BASE_URL } from "../../../../../apiConfig";
+import { API_BASE_URL } from "../../../../../../apiConfig";
 import { useRouter } from "next/router";
 
 const types = {
@@ -20,7 +20,7 @@ const additionally = {
 
 const colors = ['Золотой цвет с патиной', 'Серебряный цвет с патиной', 'Бронзовый цвет с патиной', 'Золотой цвет', 'Серебряный цвет', 'Золотой цвет патина с серебренным цветом патина', 'Золотой цвет патина с деревянными чёрными элементами'];
 
-export function AdminCreateProduct() {
+export default function AdminEditProduct() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState({
@@ -35,23 +35,36 @@ export function AdminCreateProduct() {
     const [imageURLs, setImageURLs] = useState([]);
     const toast = useToast();
     const router = useRouter();
+    const { id } = router.query;
+
+    useEffect(() => {
+        if (id) {
+            axios.post(`${API_BASE_URL}getOneProduct`, { id }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
+                .then((res) => {
+                    setData(res.data);
+                    setCountColors(res.data.colors.length)
+                })
+                .catch((e) => console.log(e));
+        }
+    }, [id]);
 
     const addProduct = async () => {
-        if (data?.name?.length > 0 && data?.cost?.length > 0 && data?.type?.length > 0 && data.colors.length > 0 && data.articles.length > 0 && cover !== null && images.length > 0) {
+
+        if (data?.name?.length > 0 && String(data?.cost)?.length > 0 && data?.type?.length > 0 && data.colors.length > 0 && data.articles.length > 0) {
             setIsLoading(true);
 
-            const formData = new FormData();
+            // const formData = new FormData();
 
-            if (cover) formData.append('cover', cover);
+            // if (cover) formData.append('cover', cover);
 
-            images.forEach(image => {
-                formData.append('images', image);
-            });
+            // images.forEach(image => {
+            //     formData.append('images', image);
+            // });
 
-            formData.append('data', JSON.stringify(data));
+            // formData.append('data', JSON.stringify(data));
 
-            axios.post(`${API_BASE_URL}addProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`, 'Content-Type': 'multipart/form-data' } })
-                .then((res) => {
+            axios.post(`${API_BASE_URL}editProduct`, { data }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`} })
+                .then(() => {
                     setIsLoading(false);
                     router.push('/adminpanel?page=products')
                 })
@@ -69,6 +82,7 @@ export function AdminCreateProduct() {
             if (images.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили фотографии товара</div>), duration: 3000 });
         }
     };
+
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -94,7 +108,7 @@ export function AdminCreateProduct() {
     };
 
     return <div className={styles.dashboard}>
-        <p className={styles.title}>Новый товар</p>
+        <p className={styles.title}>Редактировать товар</p>
         <div className={styles.createColumn}>
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Название</p>
@@ -117,13 +131,13 @@ export function AdminCreateProduct() {
                     ))}
                 </div>
             </div>
-            <div className={styles.createLilColumn}>
+            {/* <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Обложка</p>
                 <div className={styles.newsImageButtonBox} >
-                    {photoURL ? (
+                    {data.cover ? (
                         <div className={styles.newsCoverBox}>
-                            <img src={photoURL} className={styles.newsCoverImage} />
-                            <button className={styles.createCountButton} onClick={() => { setPhotoURL(''); setCover(null); }} >
+                            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.newsCoverImage} />
+                            <button className={styles.createCountButton} onClick={() => { setPhotoURL(''); setCover(null); setData({ ...data, cover: '' }) }}>
                                 <img src='/trash.svg' />
                             </button>
                         </div>
@@ -136,7 +150,7 @@ export function AdminCreateProduct() {
                         </label>
                     }
                 </div>
-            </div>
+            </div> */}
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Цвета</p>
                 <div className={styles.createCountLine}>
@@ -190,12 +204,12 @@ export function AdminCreateProduct() {
                         />
                     ))}</>}
             </div>
-            <div className={styles.createLilColumn}>
+            {/* <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Фотографии</p>
                 <div className={styles.newsCoverBox}>
-                    {imageURLs.map((url, index) => (
+                    {data?.images?.map((url, index) => (
                         <div key={index} className={styles.newsCoverBox}>
-                            <img src={url} className={styles.newsCoverImage} />
+                            <img src={`https://api.mi-alegria.shop/uploads/${url}`} className={styles.newsCoverImage} />
                             <button className={styles.createCountButton} onClick={() => removeImage(index)}>
                                 <img src='/trash.svg' />
                             </button>
@@ -210,7 +224,7 @@ export function AdminCreateProduct() {
                         </div>
                     </label>
                 </div>
-            </div>
+            </div> */}
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Дополнительно</p>
                 <div className={styles.createLineAdditionally}>

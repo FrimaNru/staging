@@ -1,4 +1,4 @@
-import styles from "@/styles/Admin/Sections.module.css";
+import styles from "@/styles/Admin/Banners/Sections.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../apiConfig";

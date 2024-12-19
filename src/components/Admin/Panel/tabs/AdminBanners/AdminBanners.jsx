@@ -1,4 +1,4 @@
-import styles from "@/styles/Admin/Banners.module.css";
+import styles from "@/styles/Admin/Banners/Banners.module.css";
 import { useState } from "react";
 import MainPage from "./Sections/MainPage";
 import Sections from "./Sections/Sections";
