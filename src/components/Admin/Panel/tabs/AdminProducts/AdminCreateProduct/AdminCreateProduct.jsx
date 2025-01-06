@@ -1,9 +1,10 @@
-import styles from "@/styles/Admin/Admin.module.css";
+import styles from "@/styles/Admin/Products/ProductItem.module.css";
 import { useState } from "react";
 import { Menu, MenuButton, MenuList, MenuItem, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { API_BASE_URL } from "../../../../../../apiConfig";
+import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { useRouter } from "next/router";
+import ArtcilesLine from "./items/ArticlesLine";
 
 const types = {
     'earrings': 'серьги',
@@ -24,10 +25,15 @@ export default function AdminCreateProduct() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState({
+        name: [],
+        cost: [],
+        cover: [],
+        images: [],
         colors: [],
         articles: [],
         additionally: []
     });
+    const [activeArticleNumber, setActiveArticleNumber] = useState(0);
     const [countColors, setCountColors] = useState(1);
     const [photoURL, setPhotoURL] = useState('');
     const [cover, setCover] = useState(null);
@@ -93,9 +99,9 @@ export default function AdminCreateProduct() {
         setImageURLs(updatedImageURLs);
     };
 
-    return <div className={styles.dashboard}>
-        <p className={styles.title}>Новый товар</p>
-        <div className={styles.createColumn}>
+    return <div className={styles.createColumn}>
+        <ArtcilesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} setActiveArticleNumber={setActiveArticleNumber} />
+        {data.articles.length !== 0 ? <>
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Название</p>
                 <input className={styles.productsInput} placeholder="Введите название товара" onChange={(e) => setData({ ...data, name: e.target.value })} value={data?.name} />
@@ -117,7 +123,7 @@ export default function AdminCreateProduct() {
                     ))}
                 </div>
             </div>
-            <div className={styles.createLilColumn}>
+            {/* <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Обложка</p>
                 <div className={styles.newsImageButtonBox} >
                     {photoURL ? (
@@ -136,8 +142,8 @@ export default function AdminCreateProduct() {
                         </label>
                     }
                 </div>
-            </div>
-            <div className={styles.createLilColumn}>
+            </div> */}
+            {/* <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Цвета</p>
                 <div className={styles.createCountLine}>
                     <p className={styles.createCountTitle}>Количество цветов:</p>
@@ -171,8 +177,8 @@ export default function AdminCreateProduct() {
                         </MenuList>
                     </Menu>
                 ))}
-            </div>
-            <div className={styles.createLilColumn}>
+            </div> */}
+            {/* <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Артикулы</p>
                 {data.colors.length === 0
                     ? <p className={styles.createCountTitle}>Для начала выберите цвета изделий</p>
@@ -189,8 +195,8 @@ export default function AdminCreateProduct() {
                             }}
                         />
                     ))}</>}
-            </div>
-            <div className={styles.createLilColumn}>
+            </div> */}
+            {/* <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Фотографии</p>
                 <div className={styles.newsCoverBox}>
                     {imageURLs.map((url, index) => (
@@ -210,7 +216,7 @@ export default function AdminCreateProduct() {
                         </div>
                     </label>
                 </div>
-            </div>
+            </div> */}
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Дополнительно</p>
                 <div className={styles.createLineAdditionally}>
@@ -230,6 +236,6 @@ export default function AdminCreateProduct() {
                 </div>
             </div>
             <button className={`${styles.createButton} ${isLoading ? styles.loading : ''}`} onClick={addProduct}>Создать товар</button>
-        </div>
+        </> : <p>Для начала создания товара добавьте артикул</p>}
     </div>
 }

@@ -7,7 +7,7 @@ import { SideMenu } from "./items/SideMenu";
 import AdminBanners from "./tabs/AdminBanners/AdminBanners";
 import AdminDashboard from "./tabs/AdminDashboard/AdminDashboard";
 import AdminProducts from "./tabs/AdminProducts/AdminProducts";
-import AdminCreateProduct from "./tabs/AdminProducts/AdminCreateProduct";
+import AdminCreateProduct from "./tabs/AdminProducts/AdminCreateProduct/AdminCreateProduct";
 import AdminEditProduct from "./tabs/AdminProducts/AdminEditProduct";
 import AdminOrders from "./tabs/AdminOrders/AdminOrders";
 

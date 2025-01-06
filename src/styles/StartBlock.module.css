@@ -43,7 +43,6 @@
 }
 
 .blockText {
-    color: #140702;
     font-family: "Dela Gothic One";
     font-size: 24px;
     font-style: normal;
@@ -52,6 +51,14 @@
     position: absolute;
     transition: all 0.3s;
     text-transform: uppercase;
+}
+
+.blockTextLight {
+    color: #FDEDBF;
+}
+
+.blockTextDark {
+    color: #140702;
 }
 
 .blockImage {
@@ -71,10 +78,18 @@
     transition: all 0.3s;
 }
 
-.block:hover .blockText,
-.block2:hover .blockText,
-.block6:hover .blockText,
-.block7:hover .blockText {
+.block:hover .blockTextLight,
+.block2:hover .blockTextLight,
+.block6:hover .blockTextLight,
+.block7:hover .blockTextLight {
+    color: #140702;
+    transition: all 0.3s;
+}
+
+.block:hover .blockTextDark,
+.block2:hover .blockTextDark,
+.block6:hover .blockTextDark,
+.block7:hover .blockTextDark {
     color: #FDEDBF;
     transition: all 0.3s;
 }

@@ -33,6 +33,7 @@ export default function AdminProducts() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [sortType, setSortType] = useState('Все виды');
     const [sortSection, setSortSection] = useState('Все разделы');
+    const [search, setSearch] = useState('');
     const toast = useToast();
 
     useEffect(() => {
@@ -65,7 +66,7 @@ export default function AdminProducts() {
 
     const filteredProducts = products.filter(item => {
         const sortTypeKey = Object.keys(stataTitle).find(key => stataTitle[key].toLowerCase() === sortType.toLowerCase());
-        console.log(sortTypeKey, sortType, item.type)
+
         const typeFilter =
             sortType === 'Все виды' ||
             item.type === sortTypeKey;
@@ -74,7 +75,12 @@ export default function AdminProducts() {
             sortSection === 'Все разделы' ||
             item.additionally.includes(Object.keys(additionally).find(key => additionally[key] === sortSection));
 
-        return typeFilter && sectionFilter;
+        const searchFilter =
+            search === '' ||
+            item.name.toLowerCase().includes(search.toLowerCase()) ||
+            (item.articles && item.articles.some(article => article.toLowerCase().includes(search.toLowerCase())));
+
+        return typeFilter && sectionFilter && searchFilter;
     });
 
 
@@ -85,7 +91,7 @@ export default function AdminProducts() {
         </div>
         <div className={styles.sortColumn}>
             <div className={styles.productsLine}>
-                <input placeholder="Поиск" className={styles.productsInput} />
+                <input placeholder="Введите название товара или артикул" className={styles.productsInput} value={search} onChange={(e) => setSearch(e.target.value)} />
                 <button className={styles.productsButtonAddProduct} onClick={() => router.push('/adminpanel?page=createProduct')} >Добавить товар</button>
             </div>
             <div className={styles.sortLine}>
@@ -139,6 +145,10 @@ function ProductItem({ item, setDeleteProduct, onOpen, load }) {
         <div className={styles.productsGridItemColumn}>
             <p className={styles.productsGridItemTitle}>{item.name.toUpperCase()}</p>
             <p className={styles.productsGridItemCost}>{formatNumber(item.cost)} руб.</p>
+            <div className={styles.productsGridItemLilColumn}>
+                <p className={styles.productsGridItemText}>Цвета: {item.colors.join(", ")}</p>
+                <p className={styles.productsGridItemText}>Артикулы: {item.articles.join(", ")}</p>
+            </div>
             <div className={styles.addtitionallyLine}>
                 {Object.entries(additionally).map(([key, value], index) => <button key={index} className={`${styles.additionallyButton} ${item.additionally.includes(key) ? styles.additionallyButtonSelect : ''}`} onClick={() => changeAdditional(key)} >{value}</button>)}
             </div>
