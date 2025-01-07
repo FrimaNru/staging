@@ -2,7 +2,7 @@ import styles from "@/styles/Admin/Products/ProductItem.module.css";
 import { Modal, ModalContent, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 
-export default function ArtcilesLine({ data, setData, activeArticleNumber, setActiveArticleNumber }) {
+export default function ArticlesLine({ data, setData, activeArticleNumber, setActiveArticleNumber }) {
 
     const { onOpen, isOpen, onClose } = useDisclosure();
     const [article, setArticle] = useState('');

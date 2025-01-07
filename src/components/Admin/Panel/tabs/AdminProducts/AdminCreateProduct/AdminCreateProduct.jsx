@@ -4,7 +4,8 @@ import { Menu, MenuButton, MenuList, MenuItem, useToast } from "@chakra-ui/react
 import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { useRouter } from "next/router";
-import ArtcilesLine from "./items/ArticlesLine";
+import ArticlesLine from "./items/ArticlesLine";
+import ImagesLine from "./items/ImagesLine";
 
 const types = {
     'earrings': 'серьги',
@@ -31,77 +32,58 @@ export default function AdminCreateProduct() {
         images: [],
         colors: [],
         articles: [],
-        additionally: []
+        additionally: [],
+        weight: []
     });
     const [activeArticleNumber, setActiveArticleNumber] = useState(0);
-    const [countColors, setCountColors] = useState(1);
-    const [photoURL, setPhotoURL] = useState('');
-    const [cover, setCover] = useState(null);
-    const [images, setImages] = useState([]);
-    const [imageURLs, setImageURLs] = useState([]);
+    const [countColors, setCountColors] = useState(1);        
+    
     const toast = useToast();
     const router = useRouter();
 
     const addProduct = async () => {
-        if (data?.name?.length > 0 && data?.cost?.length > 0 && data?.type?.length > 0 && data.colors.length > 0 && data.articles.length > 0 && cover !== null && images.length > 0) {
-            setIsLoading(true);
+        console.log(data);
+        // if (data?.name?.length > 0 && data?.cost?.length > 0 && data?.type?.length > 0 && data.colors.length > 0 && data.articles.length > 0 && cover !== null && images.length > 0) {
+        //     setIsLoading(true);
 
-            const formData = new FormData();
+        //     const formData = new FormData();
 
-            if (cover) formData.append('cover', cover);
+        //     if (cover) formData.append('cover', cover);
 
-            images.forEach(image => {
-                formData.append('images', image);
-            });
+        //     images.forEach(image => {
+        //         formData.append('images', image);
+        //     });
 
-            formData.append('data', JSON.stringify(data));
+        //     formData.append('data', JSON.stringify(data));
 
-            axios.post(`${API_BASE_URL}addProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`, 'Content-Type': 'multipart/form-data' } })
-                .then((res) => {
-                    setIsLoading(false);
-                    router.push('/adminpanel?page=products')
-                })
-                .catch((e) => {
-                    console.log(e);
-                    setIsLoading(false);
-                });
-        } else {
-            if (data?.name?.length === 0 || !data.name) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели название товара</div>), duration: 3000 });
-            if (data?.cost?.length === 0 || !data.cost) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели стоимость товара</div>), duration: 3000 });
-            if (data?.type?.length === 0 || !data.type) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввыбрали тип товара</div>), duration: 3000 });
-            if (cover === null) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили обложку товара</div>), duration: 3000 });
-            if (data.colors.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали цвета товаров</div>), duration: 3000 });
-            if (data.articles.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели артикулы товаров</div>), duration: 3000 });
-            if (images.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили фотографии товара</div>), duration: 3000 });
-        }
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setCover(file);
-        setPhotoURL(URL.createObjectURL(file));
-    };
-
-    const handleImagesChange = (e) => {
-        const files = Array.from(e.target.files);
-        const newImages = [...images, ...files];
-        setImages(newImages);
-
-        const newImageURLs = newImages.map(file => URL.createObjectURL(file));
-        setImageURLs(newImageURLs);
-    };
-
-    const removeImage = (index) => {
-        const updatedImages = images.filter((_, i) => i !== index);
-        setImages(updatedImages);
-
-        const updatedImageURLs = updatedImages.map(file => URL.createObjectURL(file));
-        setImageURLs(updatedImageURLs);
+        //     axios.post(`${API_BASE_URL}addProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`, 'Content-Type': 'multipart/form-data' } })
+        //         .then((res) => {
+        //             setIsLoading(false);
+        //             router.push('/adminpanel?page=products')
+        //         })
+        //         .catch((e) => {
+        //             console.log(e);
+        //             setIsLoading(false);
+        //         });
+        // } else {
+        //     if (data?.name?.length === 0 || !data.name) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели название товара</div>), duration: 3000 });
+        //     if (data?.cost?.length === 0 || !data.cost) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели стоимость товара</div>), duration: 3000 });
+        //     if (data?.type?.length === 0 || !data.type) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввыбрали тип товара</div>), duration: 3000 });
+        //     if (cover === null) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили обложку товара</div>), duration: 3000 });
+        //     if (data.colors.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали цвета товаров</div>), duration: 3000 });
+        //     if (data.articles.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели артикулы товаров</div>), duration: 3000 });
+        //     if (images.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили фотографии товара</div>), duration: 3000 });
+        // }
     };
 
     return <div className={styles.createColumn}>
-        <ArtcilesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} setActiveArticleNumber={setActiveArticleNumber} />
+        <ArticlesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} setActiveArticleNumber={setActiveArticleNumber} />
         {data.articles.length !== 0 ? <>
+            <div className={styles.createLilColumn}>
+                <p className={styles.createSubtitle}>Артикул</p>
+                <input className={styles.productsInput} placeholder="Введите артикул товара" onChange={(e) => setData({ ...data, articles: [...data.articles.slice(0, activeArticleNumber), e.target.value, ...data.articles.slice(activeArticleNumber + 1)] })} value={data?.articles[activeArticleNumber] || ""} />
+            </div>
+            <ImagesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} />
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Название</p>
                 <input className={styles.productsInput} placeholder="Введите название товара" onChange={(e) => setData({ ...data, name: e.target.value })} value={data?.name} />
@@ -123,26 +105,6 @@ export default function AdminCreateProduct() {
                     ))}
                 </div>
             </div>
-            {/* <div className={styles.createLilColumn}>
-                <p className={styles.createSubtitle}>Обложка</p>
-                <div className={styles.newsImageButtonBox} >
-                    {photoURL ? (
-                        <div className={styles.newsCoverBox}>
-                            <img src={photoURL} className={styles.newsCoverImage} />
-                            <button className={styles.createCountButton} onClick={() => { setPhotoURL(''); setCover(null); }} >
-                                <img src='/trash.svg' />
-                            </button>
-                        </div>
-                    ) :
-                        <label className="input-file">
-                            <input type='file' onChange={handleFileChange} />
-                            <div className={styles.newsImageButton}>
-                                <img src='/plusIcon.svg' className={styles.newsPlus} />
-                            </div>
-                        </label>
-                    }
-                </div>
-            </div> */}
             {/* <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Цвета</p>
                 <div className={styles.createCountLine}>
@@ -178,45 +140,10 @@ export default function AdminCreateProduct() {
                     </Menu>
                 ))}
             </div> */}
-            {/* <div className={styles.createLilColumn}>
-                <p className={styles.createSubtitle}>Артикулы</p>
-                {data.colors.length === 0
-                    ? <p className={styles.createCountTitle}>Для начала выберите цвета изделий</p>
-                    : <>{Array.from({ length: data.colors.length }).map((_, i) => (
-                        <input
-                            key={i}
-                            className={styles.productsInputArticle}
-                            placeholder={`Введите артикул для "${data.colors[i]}"`}
-                            value={data.articles[i] || ''}
-                            onChange={(e) => {
-                                const updatedArticles = [...data.articles];
-                                updatedArticles[i] = e.target.value;
-                                setData({ ...data, articles: updatedArticles });
-                            }}
-                        />
-                    ))}</>}
-            </div> */}
-            {/* <div className={styles.createLilColumn}>
-                <p className={styles.createSubtitle}>Фотографии</p>
-                <div className={styles.newsCoverBox}>
-                    {imageURLs.map((url, index) => (
-                        <div key={index} className={styles.newsCoverBox}>
-                            <img src={url} className={styles.newsCoverImage} />
-                            <button className={styles.createCountButton} onClick={() => removeImage(index)}>
-                                <img src='/trash.svg' />
-                            </button>
-                        </div>
-                    ))}
-                </div>
-                <div className={styles.newsImageButtonBox}>
-                    <label className="input-file">
-                        <input type='file' multiple onChange={handleImagesChange} />
-                        <div className={styles.newsImageButton}>
-                            <img src='/plusIcon.svg' className={styles.newsPlus} />
-                        </div>
-                    </label>
-                </div>
-            </div> */}
+            <div className={styles.createLilColumn}>
+                <p className={styles.createSubtitle}>Вес товара, <span className={styles.createSubtitleSpan}>кг</span></p>
+                <input className={styles.productsInput} placeholder="Введите вес товара" onChange={(e) => setData({ ...data, weight: [...data.weight.slice(0, activeArticleNumber), e.target.value, ...data.weight.slice(activeArticleNumber + 1)] })} value={data?.weight[activeArticleNumber] || ""} />
+            </div>
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Дополнительно</p>
                 <div className={styles.createLineAdditionally}>
@@ -236,6 +163,6 @@ export default function AdminCreateProduct() {
                 </div>
             </div>
             <button className={`${styles.createButton} ${isLoading ? styles.loading : ''}`} onClick={addProduct}>Создать товар</button>
-        </> : <p>Для начала создания товара добавьте артикул</p>}
+        </> : <p className={styles.noArticlesText}>Для начала создания товара добавьте артикул</p>}
     </div>
-}
+};

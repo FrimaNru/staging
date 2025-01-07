@@ -684,27 +684,6 @@
     justify-content: left;
 }
 
-.createLilLine {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    gap: 20px;
-    align-items: center;
-}
-
-.createTypeItem {
-    padding: 10px 25px;
-    border-radius: 20px;
-    border: solid 1px #000;
-    color: #140702;
-    font-family: "Tenor Sans";
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    text-transform: uppercase;
-}
-
 .createCountButton {
     background: #FDEDBF;
     width: 40px;
@@ -795,50 +774,6 @@
 
 .productsInputArticle:focus {
     outline: none;
-}
-
-.createButton {
-    display: flex;
-    width: 500px;
-    padding: 15px 20px;
-    justify-content: center;
-    align-items: center;
-    gap: 880px;
-    border-radius: 104px;
-    background: #140702;
-    color: #FDEDBF;
-    text-align: center;
-    font-family: "Dela Gothic One";
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    text-transform: uppercase;
-}
-
-.createLineAdditionally {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.createAdditionallyItem {
-    width: 33%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    font-size: 20px;
-    border: solid 1px #000;
-    height: 55px;
-}
-
-.createTypeItemSelect {
-    background: #FDEDBF;
-    border: solid 1px #FDEDBF;
 }
 
 .loading {
