@@ -1,7 +1,7 @@
 import styles from "@/styles/Faq.module.css";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react'
 import { useState } from "react";
-import { Breadcrumb } from "@/components";
+import Breadcrumb from "../Common/Breadcrumb";
 
 export function Faq() {
 

@@ -9,18 +9,9 @@ import { formatNumber } from "@/lib/Formatting";
 import WidgetPVZ from "../Common/WidgetPVZ";
 import { Link } from "react-scroll"
 import { useCart } from "@/contexts/CartContext";
+import { formatDate } from "@/lib/Formatting";
 
-function formatDate(dateString) {
-    const date = new Date(dateString);
-
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}.${month}.${year}`;
-};
-
-export function Bag() {
+export default function Bag() {
 
     const router = useRouter();
     const { startSetCart } = useCart();
@@ -70,19 +61,21 @@ export function Bag() {
         }
     };
 
-    function load() {
-        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+    const load = async () => {
+        await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 startSetCart(res.data.bag);
                 setData(res.data.bag);
                 setDataUser(res.data);
                 let d = 0
-                setSuccessData(res.data.orders[res.data.orders.length - 1])
+                setSuccessData(res.data.orders[res.data.orders.length - 1]);
                 if (res.data.bag.length === 0) return setTotal(0);
                 res.data.bag.map(x => {
                     axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
                         .then((r) => {
-                            d = d + r.data.cost;
+                            console.log(r.data)
+                            const index = r.data.articles.findIndex(y => y === x.article);
+                            d = Number(d) + Number(r.data.cost[index]);
                             setTotal(d);
                         })
                         .catch((e) => console.log(e));
@@ -94,6 +87,7 @@ export function Bag() {
     const itemCounts = data.reduce((acc, item) => {
         const key = JSON.stringify({ id: item.id, size: item.size, color: item.color, article: item.article });
         acc[key] = (acc[key] || 0) + 1;
+        console.log(acc)
         return acc;
     }, {});
 
@@ -351,6 +345,7 @@ function ProductItem({ item, count, load, setData }) {
     const [data, setDataProduct] = useState({});
     const toast = useToast();
     const { removeLastFromCart, addToCart } = useCart();
+    const [activeCount, setActiveCount] = useState(0);
 
     useEffect(() => {
         loadNow();
@@ -359,6 +354,8 @@ function ProductItem({ item, count, load, setData }) {
     function loadNow() {
         axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
+                const index = res.data.articles.findIndex(x => x === item.article);
+                setActiveCount(index);
                 setDataProduct(res.data);
             })
             .catch((e) => console.log(e));
@@ -394,11 +391,11 @@ function ProductItem({ item, count, load, setData }) {
 
     return <div className={styles.item}>
         <div className={styles.itemRow}>
-            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} />
+            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
                 <div className={styles.itemNameLine}>
                     <div className={styles.itemNameColumn}>
-                        <p className={styles.itemName}>{data?.name}</p>
+                        <p className={styles.itemName}>{data?.name?.length > 0 && data?.name[activeCount]}</p>
                         <p className={styles.itemNameStat}>Артикул: {item.article}</p>
                         <p className={styles.itemNameStat}>Цвет: {item.color}</p>
                         {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}
@@ -415,7 +412,7 @@ function ProductItem({ item, count, load, setData }) {
                     </button>
                 </div>
 
-                <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>
+                <p className={styles.itemCost} >{formatNumber(Number(data?.cost?.length > 0 && data?.cost[activeCount]))} руб.</p>
             </div>
         </div>
         <div className={styles.itemRowLil}>

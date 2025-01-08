@@ -1,6 +1,7 @@
 
-import { Footer, Header } from "@/components";
+import { Footer } from "@/components";
 import Agreement from "@/components/Documents/Agreement";
+import Header from "@/components/Header/Header";
 import Head from "next/head";
 
 export default function PolicyPage() {

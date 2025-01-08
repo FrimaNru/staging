@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../../apiConfig";
 import { capitalizeFirstLetter } from "@/lib/Formatting";
 
-export function Breadcrumb() {
+export default function Breadcrumb() {
     const router = useRouter();
     const { id } = router.query;
 
@@ -26,7 +26,7 @@ export function Breadcrumb() {
 
                 axios.post(`${API_BASE_URL}getOneProduct`, { id })
                     .then((res) => {
-                        array.push({ text: res.data?.name, link: `/product?id=${res.data?._id}` });
+                        array.push({ text: res.data?.name[0], link: `/product?id=${res.data?._id}` });
                         setBreadcrumbsArray([...array]);
                     })
                     .catch((e) => console.log(e));

@@ -5,14 +5,10 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
-import { Breadcrumb, FavouriteButton, PopularBlock } from "@/components";
-
-function formatNumber(number) {
-    let numStr = number.toString();
-    let parts = numStr.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return parts.join('.');
-};
+import { FavouriteButton } from "@/components";
+import PopularBlock from "../PopularBlock/PopularBlock";
+import Breadcrumb from "../Common/Breadcrumb";
+import { formatNumber } from "@/lib/Formatting";
 
 const shuffle = (array) => {
     let shuffled = array.slice();
@@ -23,7 +19,7 @@ const shuffle = (array) => {
     return shuffled;
 };
 
-export function Catalog() {
+export default function Catalog() {
 
     const router = useRouter();
     const { product, text } = router.query;
@@ -217,29 +213,7 @@ export function Catalog() {
                                 if (index % 3 === 0) rows.push([]);
                                 rows[rows.length - 1].push(item);
                                 return rows;
-                            }, []).map((row, rowIndex, arr) => (
-                                <div className={styles.rowIndex} key={rowIndex}>
-                                    <div className={styles.lineOrders}>
-                                        {row.map((x, i) => (
-                                            <div key={i} className={styles.sliderItem}>
-                                                <div className={styles.sliderItemContent}>
-                                                    <Link href={`/product?id=${x._id}`} className={styles.sliderItemLink}>
-                                                        <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
-                                                    </Link>
-                                                    <p className={styles.sliderItemTitle}>{x.name}</p>
-                                                    <p className={styles.productItemArticle}>Артикул: {x.articles[0]}</p>
-                                                    <div className={styles.productItemCostLine}>
-                                                        <div className={styles.productItemCostEmpty} />
-                                                        <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
-                                                        <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.colors[0]} article={x.articles[0]} type='small' />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {rowIndex < arr.length - 1 && <hr className={styles.orderHr} />}
-                                </div>
-                            ))}
+                            }, []).map((row, rowIndex, arr) => <CatalogItem key={rowIndex} row={row} rowIndex={rowIndex} arr={arr} />)}
                         </div>
                     </div>
                 </div>
@@ -248,3 +222,27 @@ export function Catalog() {
         <PopularBlock />
     </div >
 }
+
+function CatalogItem({ row, rowIndex, arr }) {
+    return <div className={styles.rowIndex}>
+        <div className={styles.lineOrders}>
+            {row.map((x, i) => (
+                <div key={i} className={styles.sliderItem}>
+                    <div className={styles.sliderItemContent}>
+                        <Link href={`/product?id=${x._id}`} className={styles.sliderItemLink}>
+                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover[0]}`} className={styles.sliderItemImage} />
+                        </Link>
+                        <p className={styles.sliderItemTitle}>{x.name[0]}</p>
+                        <p className={styles.productItemArticle}>Артикул: {x.articles[0]}</p>
+                        <div className={styles.productItemCostLine}>
+                            <div className={styles.productItemCostEmpty} />
+                            <p className={styles.sliderItemCost}>{formatNumber(x.cost[0])} руб.</p>
+                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.colors[0]} article={x.articles[0]} type='small' />
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+        {rowIndex < arr.length - 1 && <hr className={styles.orderHr} />}
+    </div>
+};

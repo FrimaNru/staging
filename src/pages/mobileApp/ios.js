@@ -1,5 +1,6 @@
 
-import { Footer, Header } from "@/components";
+import { Footer } from "@/components";
+import Header from "@/components/Header/Header";
 import IOSMobileApp from "@/components/MobileApp/IOSMobileApp";
 import Head from "next/head";
 

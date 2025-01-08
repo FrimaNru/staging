@@ -210,9 +210,9 @@ function ProductItem({ id }) {
 
     return (data.name && <Link href={`/product?id=${data._id}`} target="_blank">
         <div className={styles.accrdionPanelItem}>
-            <p className={styles.accordionPanelText}>{data.name.toUpperCase()}</p>
-            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.productImg} />
-            <p className={styles.accordionPanelText}>{formatNumber(Number(data.cost))} руб.</p>
+            <p className={styles.accordionPanelText}>{data.name[0]?.toUpperCase()}</p>
+            <img src={`https://api.mi-alegria.shop/uploads/${data.cover[0]}`} className={styles.productImg} />
+            <p className={styles.accordionPanelText}>{formatNumber(Number(data.cost[0]))} руб.</p>
         </div>
     </Link>)
 };

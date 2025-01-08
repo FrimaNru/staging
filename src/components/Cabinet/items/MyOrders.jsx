@@ -3,27 +3,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
-import { useToast } from "@chakra-ui/react";
 import React from "react";
+import { formatDate, formatNumber } from "@/lib/Formatting";
 
-function formatNumber(number) {
-    let numStr = number.toString();
-    let parts = numStr.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return parts.join('.');
-};
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}.${month}.${year}`;
-};
-
-export function MyOrders() {
+export default function MyOrders() {
 
     const router = useRouter();
     const [data, setData] = useState({});
@@ -67,15 +50,6 @@ export function MyOrders() {
             case 'canceled':
                 return 'Ваш заказ отменен'
         }
-    };
-
-    function checkOrder(x) {
-        axios.post(`${API_BASE_URL}checkOrder`, { OrderId: x.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then(() => {
-                setIsLoading(false);
-                load();
-            })
-            .catch((e) => console.log(e));
     };
 
     function pay(total, OrderId) {
@@ -166,7 +140,7 @@ function ProductItemOrder({ item, count }) {
 
     const [data, setData] = useState({});
     const router = useRouter();
-    const toast = useToast();
+    const [activeCount, setActiveCount] = useState(0);
 
     useEffect(() => {
         loadNow();
@@ -175,6 +149,8 @@ function ProductItemOrder({ item, count }) {
     function loadNow() {
         axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
+                const index = res.data.articles.findIndex(x => x === item.article);
+                setActiveCount(index);
                 setData(res.data);
             })
             .catch((e) => console.log(e));
@@ -182,18 +158,18 @@ function ProductItemOrder({ item, count }) {
 
     return <div className={styles.item} onClick={() => router.push(`/product?id=${data._id}`)} >
         <div className={styles.itemRow}>
-            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} />
+            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
-                <p className={styles.itemName}>{data?.name}</p>
-                <div className={styles.itemNameColumn}> 
+                <p className={styles.itemName}>{data?.name?.length > 0 && data?.name[activeCount]}</p>
+                <div className={styles.itemNameColumn}>
                     <p className={styles.itemNameStat}>Артикул: {item.article}</p>
                     <p className={styles.itemNameStat}>Цвет: {item.color}</p>
                     {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}
                 </div>
                 <div className={styles.itemCountNumber}>{count} шт</div>
-                <p className={styles.itemCostMobile} >{formatNumber(Number(data?.cost))} руб.</p>
+                <p className={styles.itemCostMobile} >{formatNumber(Number(data?.cost?.length > 0 && data?.cost[activeCount]))} руб.</p>
             </div>
         </div>
-        <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>
+        <p className={styles.itemCost} >{formatNumber(Number(data?.cost?.length > 0 && data?.cost[activeCount]))} руб.</p>
     </div>
 };

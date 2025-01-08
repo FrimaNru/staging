@@ -1,5 +1,6 @@
 
-import { Brand, Footer, Header } from "@/components";
+import { Brand, Footer } from "@/components";
+import Header from "@/components/Header/Header";
 import Head from "next/head";
 
 export default function BrandPage() {

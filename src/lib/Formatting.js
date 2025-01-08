@@ -1,5 +1,5 @@
 export function capitalizeFirstLetter(text) {
-    return text?.charAt(0).toUpperCase() + text?.slice(1);
+    return text?.toString()?.charAt(0).toUpperCase() + text?.slice(1);
 };
 
 export function formatNumber(number) {
@@ -25,11 +25,9 @@ export function formatDateFromTimestamp(timestamp) {
 export function formatDate(isoDateString) {
     const date = new Date(isoDateString);
 
-    // Получаем день, месяц и год
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
     const year = date.getFullYear();
 
-    // Форматируем дату
     return `${day}.${month}.${year}`;
 }

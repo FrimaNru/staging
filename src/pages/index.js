@@ -1,5 +1,7 @@
 
-import { Footer, Header, PopularBlock, StartBlock } from "@/components";
+import { Footer, StartBlock } from "@/components";
+import Header from "@/components/Header/Header";
+import PopularBlock from "@/components/PopularBlock/PopularBlock";
 import BannerMainPage from "@/components/StartBlock/Banner";
 import Head from "next/head";
 

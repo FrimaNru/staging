@@ -1,5 +1,6 @@
 
-import { Faq, Footer, Header } from "@/components";
+import { Faq, Footer } from "@/components";
+import Header from "@/components/Header/Header";
 import Head from "next/head";
 
 export default function FaqPage() {

@@ -1,4 +1,6 @@
-import { Cabinet, Footer, Header } from "@/components";
+import { Footer } from "@/components";
+import Cabinet from "@/components/Cabinet/Cabinet";
+import Header from "@/components/Header/Header";
 import Head from "next/head";
 
 export default function Delivery() {

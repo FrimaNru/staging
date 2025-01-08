@@ -47,9 +47,10 @@ export default function AdminProducts() {
             })
             .catch((e) => console.log(e));
 
-        axios.get(`${API_BASE_URL}getProducts`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
+        axios.get(`${API_BASE_URL}getProducts`)
             .then((res) => {
-                setProducts(res.data);
+                const p = res.data.reverse();
+                setProducts(p);
             })
             .catch((e) => console.log(e));
     };
@@ -113,8 +114,8 @@ export default function AdminProducts() {
             <ModalCloseButton />
             <ModalContent>
                 <div className={styles.createModal}>
-                    <p className={styles.createModalTitle}>Вы уверены, что хотите удалить {deleteProduct?.name?.toUpperCase()}?</p>
-                    <img className={styles.createModalCover} src={`https://api.mi-alegria.shop/uploads/${deleteProduct.cover}`} />
+                    <p className={styles.createModalTitle}>Вы уверены, что хотите удалить {deleteProduct?.name?.length > 0 && deleteProduct?.name[0]?.toUpperCase()}?</p>
+                    <img className={styles.createModalCover} src={`https://api.mi-alegria.shop/uploads/${deleteProduct?.cover?.length > 0 && deleteProduct?.cover[0]}`} />
                     <div className={styles.createModalLine} >
                         <button className={styles.createModalButton} onClick={delProduct}>Удалить</button>
                         <button className={styles.createModalButtonCancel} onClick={() => { onClose(); setDeleteProduct({}); }}>Отменить</button>
@@ -141,10 +142,10 @@ function ProductItem({ item, setDeleteProduct, onOpen, load }) {
     };
 
     return <div className={styles.productsGridItem}>
-        <img src={`https://api.mi-alegria.shop/uploads/${item.cover}`} className={styles.productsGridItemCover} />
+        <img src={`https://api.mi-alegria.shop/uploads/${item.cover[0]}`} className={styles.productsGridItemCover} />
         <div className={styles.productsGridItemColumn}>
-            <p className={styles.productsGridItemTitle}>{item.name.toUpperCase()}</p>
-            <p className={styles.productsGridItemCost}>{formatNumber(item.cost)} руб.</p>
+            <p className={styles.productsGridItemTitle}>{item.name[0].toUpperCase()}</p>
+            <p className={styles.productsGridItemCost}>{formatNumber(item.cost[0])} руб.</p>
             <div className={styles.productsGridItemLilColumn}>
                 <p className={styles.productsGridItemText}>Цвета: {item.colors.join(", ")}</p>
                 <p className={styles.productsGridItemText}>Артикулы: {item.articles.join(", ")}</p>

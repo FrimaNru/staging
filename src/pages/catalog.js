@@ -1,5 +1,7 @@
 
-import { Catalog, Footer, Header } from "@/components";
+import { Footer } from "@/components";
+import Catalog from "@/components/Catalog/Catalog";
+import Header from "@/components/Header/Header";
 import Head from "next/head";
 
 export default function Delivery() {

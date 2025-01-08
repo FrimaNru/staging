@@ -1,8 +1,11 @@
 import styles from "@/styles/Cabinet.module.css";
-import { FavouriteBlock, HistoryOrders, MyOrders, PersonalData, SideMenu } from "@/components";
+import { PersonalData, SideMenu } from "@/components";
 import { useRouter } from "next/router";
+import FavouriteBlock from "./items/FavouriteBlock";
+import MyOrders from "./items/MyOrders";
+import HistoryOrders from "./items/HistoryOrders";
 
-export function Cabinet() {
+export default function Cabinet() {
 
     const router = useRouter();
     const { page } = router.query;

@@ -1,11 +1,13 @@
 import styles from "@/styles/Admin/Products/ProductItem.module.css";
 import { useState } from "react";
-import { Menu, MenuButton, MenuList, MenuItem, useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { useRouter } from "next/router";
-import ArticlesLine from "./items/ArticlesLine";
-import ImagesLine from "./items/ImagesLine";
+import ArticlesLine from "../items/ArticlesLine";
+import ImagesLine from "../items/ImagesLine";
+import SizeLine from "../items/SizeLine";
+import ColorsLine from "../items/ColorsLine";
 
 const types = {
     'earrings': 'серьги',
@@ -20,8 +22,6 @@ const additionally = {
     'sale': 'Добавить в "Скидки"'
 };
 
-const colors = ['Золотой цвет с патиной', 'Серебряный цвет с патиной', 'Бронзовый цвет с патиной', 'Золотой цвет', 'Серебряный цвет', 'Золотой цвет патина с серебренным цветом патина', 'Золотой цвет патина с деревянными чёрными элементами'];
-
 export default function AdminCreateProduct() {
 
     const [isLoading, setIsLoading] = useState(false);
@@ -33,47 +33,60 @@ export default function AdminCreateProduct() {
         colors: [],
         articles: [],
         additionally: [],
-        weight: []
+        weight: [],
+        sizes: [],
+        type: ''
     });
     const [activeArticleNumber, setActiveArticleNumber] = useState(0);
-    const [countColors, setCountColors] = useState(1);        
-    
+
     const toast = useToast();
     const router = useRouter();
 
     const addProduct = async () => {
-        console.log(data);
-        // if (data?.name?.length > 0 && data?.cost?.length > 0 && data?.type?.length > 0 && data.colors.length > 0 && data.articles.length > 0 && cover !== null && images.length > 0) {
-        //     setIsLoading(true);
+        if (data?.name?.length === data?.articles?.length && data?.cost?.length === data?.articles?.length && data?.type !== '' && data.colors.length === data?.articles?.length && data.weight.length === data?.articles?.length && data.cover.length === data?.articles?.length && data.images.length === data?.articles?.length) {
+            setIsLoading(true);
 
-        //     const formData = new FormData();
+            const formData = new FormData();
 
-        //     if (cover) formData.append('cover', cover);
+            data.cover.forEach((file, index) => {
+                formData.append(`cover[${index}]`, file);
+            });
 
-        //     images.forEach(image => {
-        //         formData.append('images', image);
-        //     });
+            data.images.forEach((imageArray, arrayIndex) => {
+                imageArray.forEach((file, fileIndex) => {
+                    formData.append(`images[${arrayIndex}][${fileIndex}]`, file);
+                });
+            });
 
-        //     formData.append('data', JSON.stringify(data));
+            formData.append('data', JSON.stringify(data));
 
-        //     axios.post(`${API_BASE_URL}addProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`, 'Content-Type': 'multipart/form-data' } })
-        //         .then((res) => {
-        //             setIsLoading(false);
-        //             router.push('/adminpanel?page=products')
-        //         })
-        //         .catch((e) => {
-        //             console.log(e);
-        //             setIsLoading(false);
-        //         });
-        // } else {
-        //     if (data?.name?.length === 0 || !data.name) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели название товара</div>), duration: 3000 });
-        //     if (data?.cost?.length === 0 || !data.cost) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели стоимость товара</div>), duration: 3000 });
-        //     if (data?.type?.length === 0 || !data.type) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввыбрали тип товара</div>), duration: 3000 });
-        //     if (cover === null) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили обложку товара</div>), duration: 3000 });
-        //     if (data.colors.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали цвета товаров</div>), duration: 3000 });
-        //     if (data.articles.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели артикулы товаров</div>), duration: 3000 });
-        //     if (images.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили фотографии товара</div>), duration: 3000 });
-        // }
+            for (let pair of formData.entries()) {
+                console.log(pair[0], pair[1]);
+            }
+
+            try {
+                await axios.post(`${API_BASE_URL}addProduct`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                setIsLoading(false);
+                router.push('/adminpanel?page=products');
+            } catch (e) {
+                console.log(e);
+                setIsLoading(false);
+            }
+
+        } else {
+            if (data?.name?.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде ввели названия товаров</div>), duration: 3000 });
+            if (data?.cost?.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде ввели стоимости товаров</div>), duration: 3000 });
+            if (data?.type === '') return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали тип товара</div>), duration: 3000 });
+            if (data.colors.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде выбрали цвета товаров</div>), duration: 3000 });
+            if (data.weight.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде ввели веса товаров</div>), duration: 3000 });
+            if (data.cover.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде добавили обложки товаров</div>), duration: 3000 });
+            if (data.images.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде добавили фотографии товаров</div>), duration: 3000 });
+        }
     };
 
     return <div className={styles.createColumn}>
@@ -86,11 +99,11 @@ export default function AdminCreateProduct() {
             <ImagesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} />
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Название</p>
-                <input className={styles.productsInput} placeholder="Введите название товара" onChange={(e) => setData({ ...data, name: e.target.value })} value={data?.name} />
+                <input className={styles.productsInput} placeholder="Введите название товара" onChange={(e) => setData({ ...data, name: [...data.name.slice(0, activeArticleNumber), e.target.value, ...data.name.slice(activeArticleNumber + 1)] })} value={data?.name[activeArticleNumber] || ""} />
             </div>
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Стоимость</p>
-                <input className={styles.productsInput} type="number" placeholder="Введите стоимость товара" onChange={(e) => setData({ ...data, cost: e.target.value })} value={data?.cost} />
+                <input className={styles.productsInput} type="number" placeholder="Введите стоимость товара" onChange={(e) => setData({ ...data, cost: [...data.cost.slice(0, activeArticleNumber), e.target.value, ...data.cost.slice(activeArticleNumber + 1)] })} value={data?.cost[activeArticleNumber] || ""} />
             </div>
             <div className={styles.createLilColumn}>
                 <p className={styles.createSubtitle}>Тип товара</p>
@@ -105,43 +118,10 @@ export default function AdminCreateProduct() {
                     ))}
                 </div>
             </div>
-            {/* <div className={styles.createLilColumn}>
-                <p className={styles.createSubtitle}>Цвета</p>
-                <div className={styles.createCountLine}>
-                    <p className={styles.createCountTitle}>Количество цветов:</p>
-                    {[1, 2, 3, 4, 5, 6, 7].map((x, i) => <button key={i} className={`${styles.createCountButton} ${x === countColors ? styles.createCountButtonSelect : ''}`} onClick={() => { setCountColors(x); setData({ ...data, colors: [] }) }}>{x}</button>)}
-                </div>
-                {Array.from({ length: countColors }).map((_, index) => (
-                    <Menu key={index}>
-                        <MenuButton>
-                            <div className={styles.createColorButton}>
-                                {data?.colors?.length < index + 1 ? 'Выберите цвет' : data?.colors[index]}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
-                                    <path d="M1 0.5L8 7.5L15 0.5" stroke="#140702" strokeLinecap="round" />
-                                </svg>
-                            </div>
-                        </MenuButton>
-                        <MenuList boxShadow='none' border='none' p={0} bg='none'>
-                            <div className={styles.createColorsPanel}>
-                                {colors.map((x, i) => (
-                                    <MenuItem key={i} p={0} bg='none' _hover={{ bg: 'none' }}
-                                        onClick={() => {
-                                            const updatedColors = [...data.colors];
-                                            updatedColors[index] = x;
-                                            setData({ ...data, colors: updatedColors });
-                                        }}>
-                                        <p className={`${styles.createColorsItem} ${i === colors.length - 1 ? styles.createColorsItemLast : ''}`}>
-                                            {x}
-                                        </p>
-                                    </MenuItem>
-                                ))}
-                            </div>
-                        </MenuList>
-                    </Menu>
-                ))}
-            </div> */}
+            <SizeLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} />
+            <ColorsLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} />
             <div className={styles.createLilColumn}>
-                <p className={styles.createSubtitle}>Вес товара, <span className={styles.createSubtitleSpan}>кг</span></p>
+                <p className={styles.createSubtitle}>Вес товара, <span className={styles.createSubtitleSpan}>гр</span></p>
                 <input className={styles.productsInput} placeholder="Введите вес товара" onChange={(e) => setData({ ...data, weight: [...data.weight.slice(0, activeArticleNumber), e.target.value, ...data.weight.slice(activeArticleNumber + 1)] })} value={data?.weight[activeArticleNumber] || ""} />
             </div>
             <div className={styles.createLilColumn}>

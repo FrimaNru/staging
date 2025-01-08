@@ -1,5 +1,6 @@
 
-import { DeliveryPage, Footer, Header } from "@/components";
+import { DeliveryPage, Footer } from "@/components";
+import Header from "@/components/Header/Header";
 import Head from "next/head";
 
 export default function Delivery() {

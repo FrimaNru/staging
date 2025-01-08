@@ -3,7 +3,7 @@ import styles from "@/styles/Product.module.css";
 import Slider from "react-slick";
 import { useRef } from "react";
 
-export function BigImage({ data, onOpen, onClose, isOpen }) {
+export default function BigImage({ data, onOpen, onClose, isOpen }) {
 
     let sliderRef = useRef(null);
 

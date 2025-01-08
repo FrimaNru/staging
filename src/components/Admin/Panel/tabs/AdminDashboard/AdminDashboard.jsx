@@ -36,7 +36,6 @@ export default function AdminDashboard() {
             .catch((e) => console.log(e));
         axios.get(`${API_BASE_URL}allUsers`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
             .then((res) => {
-                console.log(res.data);
                 setUsers(res.data);
             })
             .catch((e) => console.log(e));

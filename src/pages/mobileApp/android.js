@@ -1,5 +1,6 @@
 
-import { Footer, Header } from "@/components";
+import { Footer } from "@/components";
+import Header from "@/components/Header/Header";
 import AndroidMobileApp from "@/components/MobileApp/AndroidMobileApp";
 import Head from "next/head";
 

@@ -717,38 +717,6 @@
     text-align: left;
 }
 
-.createColorButton {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 22px;
-    width: 500px;
-    border-radius: 50px;
-    border: solid 1px #000;
-    font-size: 20px;
-}
-
-.createColorsPanel {
-    background: white;
-    padding: 0px;
-    border-radius: 20px;
-    border: solid 1px #000;
-    display: flex;
-    flex-direction: column;
-    gap: 0px;
-}
-
-.createColorsItem {
-    border-bottom: solid 1px #000;
-    padding: 10px 20px;
-    width: 100%;
-}
-
-.createColorsItemLast {
-    border-bottom: none;
-}
-
 .productsInputArticle {
     width: 75%;
     height: 50px;

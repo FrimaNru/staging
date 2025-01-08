@@ -7,18 +7,15 @@ import Link from "next/link";
 import { useToast } from "@chakra-ui/react";
 import { useDisclosure, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
 import { useFavourite } from "@/contexts/FavouriteContext";
+import { useCart } from "@/contexts/CartContext";
+import { formatNumber } from "@/lib/Formatting";
 
-function formatNumber(number) {
-    let numStr = number.toString();
-    let parts = numStr.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return parts.join('.');
-};
-
-export function FavouriteBlock() {
+export default function FavouriteBlock() {
 
     const [data, setData] = useState([]);
     const { onOpen, isOpen, onClose } = useDisclosure();
+    const [activeCount, setActiveCount] = useState(0);
+    const { addToCart } = useCart();
     const router = useRouter();
     const toast = useToast();
     const { removeLastFromFavourite, startSetFavourite } = useFavourite();
@@ -31,10 +28,13 @@ export function FavouriteBlock() {
         setData([]);
         axios.get(`${API_BASE_URL}getFavourites`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
+                console.log(res.data)
                 res.data.forEach(x => {
                     axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
-                        .then((res) => {
-                            setData(old => [...old, { ...res.data, color: x.color, size: x.size, article: x.article }]);
+                        .then((r) => {
+                            const index = r.data.articles.findIndex(item => item === x.article);
+                            setActiveCount(index);
+                            setData(old => [...old, { ...r.data, color: x.color, size: x.size, article: x.article }]);
                         })
                         .catch((e) => console.log(e));
                 })
@@ -66,14 +66,18 @@ export function FavouriteBlock() {
     function buy(id, size, color, article) {
         axios.post(`${API_BASE_URL}addProductToBag`, { id, size, color, article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
+                addToCart({ id, size, color, article });
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Товар добавлен в корзину</div>), duration: 3000 });
             })
             .catch((e) => console.log(e));
     };
 
     function buyAll() {
-        data.map((x, i) => {
-            axios.post(`${API_BASE_URL}addProductToBag`, { id: x._id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        data.map((x, _) => {
+            axios.post(`${API_BASE_URL}addProductToBag`, { id: x._id, size: x.size, color: x.color, article: x.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                .then(() => {
+                    addToCart({ id: x._id, size: x.size, color: x.color, article: x.article });
+                })
                 .catch((e) => console.log(e));
         })
         return toast({ position: 'bottom-right', render: () => (<div className="toast">Все товары добавлены в корзину</div>), duration: 3000 });
@@ -89,22 +93,21 @@ export function FavouriteBlock() {
                     <div className={styles.item}>
                         <div className={styles.itemRow}>
                             <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${x?.cover} `} className={styles.itemImg} />
+                                <img src={`https://api.mi-alegria.shop/uploads/${x?.cover[activeCount]} `} className={styles.itemImg} />
                             </Link>
                             <div className={styles.itemColumn}>
                                 <div className={styles.itemLilColumn}>
                                     <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
-                                        <p className={styles.itemName}>{x?.name}</p>
+                                        <p className={styles.itemName}>{x?.name[activeCount]}</p>
                                     </Link>
-                                    <p className={styles.itemText}>{x.totalCount > 0 ? 'В наличии' : 'Нет в наличии'}</p>
                                     <div className={styles.itemLilTextColumn}>
                                         <p className={styles.itemTexLil}>Артикул: {x.article}</p>
                                         <p className={styles.itemTexLil}>Цвет: {x.color}</p>
                                         {x.type !== "earrings" && <p className={styles.itemTexLil}>Размер: {x.size}</p>}
                                     </div>
-                                    <p className={styles.itemCost}>{formatNumber(x?.cost)} руб.</p>
+                                    <p className={styles.itemCost}>{formatNumber(x?.cost[activeCount])} руб.</p>
                                 </div>
-                                {x.totalCount > 0 && <div className={styles.lilButton} onClick={() => buy(x?._id, x.size, x.color, x.article)}>В КОРЗИНУ</div>}
+                                <div className={styles.lilButton} onClick={() => buy(x?._id, x.size, x.color, x.article)}>В КОРЗИНУ</div>
                             </div>
                         </div>
                         <img src='/cross.svg' className={styles.itemCross} onClick={() => deleteOneProduct(x._id)} />

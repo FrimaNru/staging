@@ -1,5 +1,5 @@
 import styles from "@/styles/Brand.module.css";
-import { Breadcrumb } from "@/components";
+import Breadcrumb from "../Common/Breadcrumb";
 
 export function Brand() {
     return <div className={styles.main}>

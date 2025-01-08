@@ -13,7 +13,7 @@ import { useUser } from "@/contexts/UserContext";
 
 const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
 
-export function Header() {
+export default function Header() {
 
     const router = useRouter();
     const { startSetCart, cart } = useCart();
@@ -51,9 +51,9 @@ export function Header() {
         }
     };
 
-    function load() {
+    const load = async () => {
         if (!localStorage.getItem('token')) return clearUser();
-        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 setUser(res.data);
                 startSetCart(res.data.bag);
@@ -96,13 +96,24 @@ export function Header() {
                         </div>
                     </Link>
                     <>
-                        {products.map((x, i) => x.name.includes(search) && <Link key={i} href={`/product?id=${x._id}`}>
-                            <div className={styles.inputPanelLine} >
-                                <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.inputPanelCover} />
-                                <p className={styles.inputPanelName}>{x.name}</p>
-                                <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
-                            </div>
-                        </Link>)}
+                        {products.map((x, i) => {
+                            const matchIndex = x.name.findIndex((name) => name.includes(search));
+                            if (matchIndex !== -1) {
+                                return (
+                                    <Link key={i} href={`/product?id=${x._id}`}>
+                                        <div className={styles.inputPanelLine}>
+                                            <img
+                                                src={`https://api.mi-alegria.shop/uploads/${x.cover[matchIndex]}`}
+                                                className={styles.inputPanelCover}
+                                            />
+                                            <p className={styles.inputPanelName}>{x.name[matchIndex]}</p>
+                                            <p className={styles.inputPanelCost}>{formatNumber(x.cost[matchIndex])} руб.</p>
+                                        </div>
+                                    </Link>
+                                );
+                            }
+                            return null;
+                        })}
                     </>
                 </div>}
             </div>

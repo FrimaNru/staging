@@ -1,6 +1,6 @@
 import styles from "@/styles/Delivery.module.css";
 import Link from "next/link";
-import { Breadcrumb } from "@/components";
+import Breadcrumb from "../Common/Breadcrumb";
 
 export function DeliveryPage() {
     return <div className={styles.main}>

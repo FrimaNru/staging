@@ -7,15 +7,10 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { useRouter } from "next/router";
 import { AuthModal } from "../Header/items/AuthModal";
-import { BigImage, Breadcrumb } from "@/components";
 import { useCart } from "@/contexts/CartContext";
-
-function formatNumber(number) {
-    let numStr = number.toString();
-    let parts = numStr.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return parts.join('.');
-};
+import BigImage from "../Common/BigImage";
+import Breadcrumb from "../Common/Breadcrumb";
+import { formatNumber } from "@/lib/Formatting";
 
 export function Product() {
 
@@ -27,7 +22,8 @@ export function Product() {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [colorOfProduct, setColorOfProduct] = useState('');
     const [sizeOfProduct, setSizeOfProduct] = useState(0);
-    const [countOfColor, setCountOfColor] = useState(0);
+
+    const [activeCount, setActiveCount] = useState(0);
 
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenModalSize, setIsOpenModalSize] = useState(false);
@@ -50,8 +46,8 @@ export function Product() {
         };
     }, []);
 
-    function load() {
-        axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
+    const load = async () => {
+        await axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
             .then((res) => {
                 setData(res.data);
                 setColorOfProduct(res.data.colors[0]);
@@ -97,10 +93,6 @@ export function Product() {
         { title: 'ДОСТАВКА, ОПЛАТА И ВОЗВРАТ', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' },
         { title: 'ГАРАНТИЯ И УХОД', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' }
     ];
-
-    const ringSize = [16, 16.5, 17, 17.5, 18];
-    const necklaceSize = [28, 30, 38, 42, 50];
-    const braceletsSize = [16, 17, 18, 19];
 
     const textSizeRings = [
         { img: 'threads.svg', text: 'Закрутите нитку, шнурок или бумажную ленту вокругнужного пальца.' },
@@ -170,9 +162,9 @@ export function Product() {
 
     function buy() {
         if (localStorage.getItem('token')) {
-            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[countOfColor] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[activeCount] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(() => {
-                    addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[countOfColor] });
+                    addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[activeCount] });
                     setIsOpenModal(true);
                 })
                 .catch((e) => console.log(e));
@@ -190,59 +182,52 @@ export function Product() {
                         <Slider {...settings} ref={slider => {
                             sliderRef = slider;
                         }}>
-                            <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
-                            </div>
-                            <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
-                            </div>
-                            <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
-                            </div>
-                            <div className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.sliderItemImg} />
-                            </div>
+                            {[0, 1, 2, 3].map((x, index) => <div key={index} className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
+                                <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.sliderItemImg} />
+                            </div>)}
                         </Slider>
                     </div>
                     <div className={styles.lineDots} >
-                        {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
+                        {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
                     </div>
-                    <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={data.cover} />
+                    <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={data?.cover?.length > 0 && data.cover[activeCount]} />
                 </div>
                 <div className={styles.infoColumn}>
                     <div className={styles.infoColumnText}>
                         <div className={styles.infoTitleLine} >
-                            <p className={styles.infoTitle}>{data.name}</p>
-                            {data?.articles?.length > 0 ? <FavouriteButton idProduct={data._id} size={sizeOfProduct} color={colorOfProduct} article={data?.articles[countOfColor]} /> : <></>}
+                            <p className={styles.infoTitle}>{data?.name?.length > 0 && data.name[activeCount]}</p>
+                            {data?.articles?.length > 0 ? <FavouriteButton idProduct={data._id} size={sizeOfProduct} color={colorOfProduct} article={data?.articles[activeCount]} /> : <></>}
                         </div>
                         <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
                         {(data.type === 'ring' || data.type === 'necklace' || data.type === 'bracelets') && <div className={styles.sizeColumn}>
                             <p className={styles.sizeTitle}>Размер, <span className={styles.sizeTitleMM}>{data.type === 'ring' ? 'мм' : 'см'}</span></p>
                             <div className={styles.sizeLine}>
-                                {(data.type === 'ring' ? ringSize : data.type === 'necklace' ? necklaceSize : braceletsSize).map((x, i) => <button
-                                    key={i}
-                                    className={`${styles.sizeItem} ${x === sizeOfProduct ? styles.sizeItemSelect : ''}`}
-                                    onClick={() => setSizeOfProduct(x)}>{x}</button>)}
+                                {
+                                    // (data.type === 'ring' ? ringSize : data.type === 'necklace' ? necklaceSize : braceletsSize)
+                                    (data?.sizes?.length > 0 && data.sizes[activeCount]).map((x, i) => <button
+                                        key={i}
+                                        className={`${styles.sizeItem} ${x === sizeOfProduct ? styles.sizeItemSelect : ''}`}
+                                        onClick={() => setSizeOfProduct(x)}>{x}</button>)}
                             </div>
                             <button className={styles.sizeButton} onClick={() => setIsOpenModalSize(true)}>Как определить размер?</button>
                         </div>}
                         <Menu autoSelect={false}>
                             <MenuButton pos='relative' zIndex={10} p={0} ref={elementRef}>
                                 <div className={styles.menuButton} >
-                                    <p className={styles.menuButtonText} >{colorOfProduct}</p>
+                                    <p className={styles.menuButtonText}>{colorOfProduct}</p>
                                     {data?.colors?.length > 1 && <img src='/colorArrow.svg' />}
                                 </div>
                             </MenuButton>
                             <MenuList p={0} border='none' boxShadow='none' mt='-30px' pos='relative' zIndex={0} >
                                 {data?.colors?.length > 0 && data.colors.map((x, i) => x !== colorOfProduct && <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
-                                    <div className={styles.menuItem} style={{ width }} onClick={() => { setColorOfProduct(x); setCountOfColor(i); }}>{x}</div>
+                                    <div className={styles.menuItem} style={{ width }} onClick={() => { setColorOfProduct(x); setActiveCount(i); }}>{x}</div>
                                 </MenuItem>)}
                             </MenuList>
                         </Menu>
-                        {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.articles[countOfColor]}</p>}
+                        {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.articles[activeCount]}</p>}
                     </div>
                     <div className={styles.infoButtonColumn}>
-                        <p className={styles.infoCost} >{formatNumber(Number(data.cost))} руб.</p>
+                        <p className={styles.infoCost} >{formatNumber(Number(data?.cost?.length > 0 && data.cost[activeCount]))} руб.</p>
                         <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
                     </div>
                 </div>
@@ -291,8 +276,8 @@ export function Product() {
                         </div>
                         <div className={styles.modalBody}>
                             <div className={styles.modalBodyColumn}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.modalBodyImg} />
-                                <p className={styles.modalBodyTitle}>{data.name}</p>
+                                <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data.cover[activeCount]}`} className={styles.modalBodyImg} />
+                                <p className={styles.modalBodyTitle}>{data?.name?.length > 0 && data.name[activeCount]}</p>
                             </div>
                             <div className={styles.modalBodyColumnButtons}>
                                 <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
