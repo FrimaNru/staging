@@ -1,5 +1,5 @@
 import styles from "@/styles/Documents.module.css";
-import { Breadcrumb } from "../Common/Breadcrumb";
+import Breadcrumb from "@/components/Common/Breadcrumb";
 import Link from "next/link";
 import { policyText } from "@/constans/policyText";
 

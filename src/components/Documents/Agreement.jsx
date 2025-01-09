@@ -1,7 +1,7 @@
 import styles from "@/styles/Documents.module.css";
-import { Breadcrumb } from "../Common/Breadcrumb";
 import Link from "next/link";
 import { agreementText } from "@/constans/agreementText";
+import Breadcrumb from "@/components/Common/Breadcrumb";
 
 export default function Agreement() {
     return <div className={styles.main}>
