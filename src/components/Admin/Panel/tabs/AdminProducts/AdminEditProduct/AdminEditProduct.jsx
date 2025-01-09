@@ -5,7 +5,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { useRouter } from "next/router";
 import ArticlesLine from "../items/ArticlesLine";
-import ImagesLine from "../items/ImagesLine";
+import ImagesLine from "./ImagesLine";
 import SizeLine from "../items/SizeLine";
 import ColorsLine from "../items/ColorsLine";
 
@@ -19,7 +19,7 @@ const types = {
 const additionally = {
     'popular': 'Добавить в "Популярное"',
     'new': 'Добавить в "Новинки"',
-    'sale': 'Добавить в "Скидки"'
+    'sales': 'Добавить в "Скидки"'
 };
 
 export default function AdminEditProduct() {
@@ -54,27 +54,26 @@ export default function AdminEditProduct() {
     };
 
     const editProduct = async () => {
+        console.log(data);
         if (data?.name?.length === data?.articles?.length && data?.cost?.length === data?.articles?.length && data?.type !== '' && data.colors.length === data?.articles?.length && data.weight.length === data?.articles?.length && data.cover.length === data?.articles?.length && data.images.length === data?.articles?.length) {
             setIsLoading(true);
 
             const formData = new FormData();
 
-            // Обработка cover
             data.cover.forEach((item, index) => {
-                if (item instanceof File) {
-                    formData.append(`cover[${index}]`, item); // Если это файл
+                if (item instanceof File || (item && item.name && item.size)) {
+                    formData.append(`cover[${index}]`, item);
                 } else {
-                    formData.append(`coverNames[${index}]`, item); // Если это имя файла
+                    formData.append(`coverNames[${index}]`, item); 
                 }
             });
 
-            // Обработка images
             data.images.forEach((imageArray, arrayIndex) => {
                 imageArray.forEach((item, fileIndex) => {
-                    if (item instanceof File) {
-                        formData.append(`images[${arrayIndex}][${fileIndex}]`, item); // Если это файл
+                    if (item instanceof File || (item && item.name && item.size)) {
+                        formData.append(`images[${arrayIndex}][${fileIndex}]`, item); 
                     } else {
-                        formData.append(`imageNames[${arrayIndex}][${fileIndex}]`, item); // Если это имя файла
+                        formData.append(`imageNames[${arrayIndex}][${fileIndex}]`, item); 
                     }
                 });
             });
@@ -82,12 +81,7 @@ export default function AdminEditProduct() {
             formData.append('data', JSON.stringify(data));
 
             try {
-                await axios.post(`${API_BASE_URL}editProduct`, formData, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}`,
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
+                await axios.post(`${API_BASE_URL}editProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` }});
                 setIsLoading(false);
                 router.push('/adminpanel?page=products');
             } catch (e) {

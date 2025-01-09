@@ -69,7 +69,7 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
             <p className={styles.createSubtitle}>Размер, <span className={styles.createSubtitleSpan}>мм</span></p>
             {(data.type !== '' && data.type !== 'earrings')
                 ? <div className={styles.sizesLine}>
-                    {sizes[data.type].map((item, index) => <div key={index} className={styles.sizeColumn}>
+                    {sizes[data.type]?.map((item, index) => <div key={index} className={styles.sizeColumn}>
                         <button className={`${styles.sizeItem} ${data.sizes[activeArticleNumber]?.includes(item) ? styles.sizeItemSelect : ''}`} onClick={() => handleToggleSize(item)}>{item}</button>
                         <button className={styles.sizeDelete} onClick={() => { setSelectDeleteSize(item); setIsOpenDelete(true); }} >Удалить</button>
                     </div>)}

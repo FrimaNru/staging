@@ -5,7 +5,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { useRouter } from "next/router";
 import ArticlesLine from "../items/ArticlesLine";
-import ImagesLine from "../items/ImagesLine";
+import ImagesLine from "./ImagesLine";
 import SizeLine from "../items/SizeLine";
 import ColorsLine from "../items/ColorsLine";
 
@@ -19,7 +19,7 @@ const types = {
 const additionally = {
     'popular': 'Добавить в "Популярное"',
     'new': 'Добавить в "Новинки"',
-    'sale': 'Добавить в "Скидки"'
+    'sales': 'Добавить в "Скидки"'
 };
 
 export default function AdminCreateProduct() {
