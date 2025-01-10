@@ -7,7 +7,7 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import { useUser } from "@/contexts/UserContext";
 import { useFavourite } from "@/contexts/FavouriteContext";
 
-export function SideMenu() {
+export default function SideMenu() {
 
     const router = useRouter();
     const { page } = router.query;
@@ -25,8 +25,8 @@ export function SideMenu() {
         load();
     }, []);
 
-    function load() {
-        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+    const load = async () => {
+        await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .catch((e) => {
                 console.log(e);
                 if (e?.response?.status === 404 || e?.response?.status === 401) {

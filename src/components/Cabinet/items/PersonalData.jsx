@@ -7,11 +7,12 @@ import { Modal, ModalBody, ModalContent, ModalOverlay, useDisclosure, useToast }
 import { useRouter } from "next/router";
 import DocumentsModal from "@/components/Common/DocumentsModal";
 
-export function PersonalData() {
+export default function PersonalData() {
 
     const toast = useToast();
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
+    const [data, setData] = useState(null);
     const [name, setName] = useState('');
     const [lastName, setLastName] = useState('');
     const [sex, setSex] = useState('');
@@ -42,8 +43,8 @@ export function PersonalData() {
         load();
     }, []);
 
-    function load() {
-        axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+    const load = async () => {
+        await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 const userData = {
                     phone: res.data.phone,
@@ -56,6 +57,8 @@ export function PersonalData() {
                     mailing: res.data.personalData.mailing,
                     isVerifiedPhone: res.data.isVerifiedPhone
                 };
+
+                setData(userData);
 
                 setPhone(userData.phone);
                 setEmail(userData.email);
@@ -189,7 +192,7 @@ export function PersonalData() {
                 </div>
                 <div className={styles.inputLilColumn}>
                     <div className={styles.inputColumn}>
-                        <p className={styles.inputTitle}>E-mail</p>
+                        <p className={styles.inputTitle}>E-mail {data?.isVerified && '✔'}</p>
                         <input className={styles.input} onChange={(e) => setEmail(e.target.value)} value={email} />
                     </div>
                     <div className={styles.inputColumn}>
@@ -204,7 +207,7 @@ export function PersonalData() {
                 </div>
                 <div className={styles.inputLilColumn}>
                     <div className={styles.inputColumn}>
-                        <p className={styles.inputTitle}>Телефон</p>
+                        <p className={styles.inputTitle}>Телефон {data?.isVerifiedPhone && '✔'}</p>
                         <InputMask mask="+7 (999) 999-99-99" className={styles.input} value={phone} onChange={(e) => setPhone(e.target.value)} />
                     </div>
                     <div className={styles.inputColumn}>

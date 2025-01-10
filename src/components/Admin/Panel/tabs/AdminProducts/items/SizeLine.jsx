@@ -66,7 +66,7 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
 
     return <>
         <div className={styles.createLilColumn}>
-            <p className={styles.createSubtitle}>Размер, <span className={styles.createSubtitleSpan}>мм</span></p>
+            <p className={styles.createSubtitle}>Размер<span className={styles.createSubtitleSpan}>{data.type === 'ring' ? ', мм' : data.type === 'earrings' ? '' : ', см'}</span></p>
             {(data.type !== '' && data.type !== 'earrings')
                 ? <div className={styles.sizesLine}>
                     {sizes[data.type]?.map((item, index) => <div key={index} className={styles.sizeColumn}>

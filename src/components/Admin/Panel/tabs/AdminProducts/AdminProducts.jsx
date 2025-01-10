@@ -40,14 +40,14 @@ export default function AdminProducts() {
         load();
     }, []);
 
-    function load() {
-        axios.get(`${API_BASE_URL}statistickProducts`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
+    const load = async () => {
+        await axios.get(`${API_BASE_URL}statistickProducts`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
             .then((res) => {
                 setStatistick(res.data);
             })
             .catch((e) => console.log(e));
 
-        axios.get(`${API_BASE_URL}getProducts`)
+        await axios.get(`${API_BASE_URL}getProducts`)
             .then((res) => {
                 const p = res.data.reverse();
                 setProducts(p);
@@ -78,12 +78,13 @@ export default function AdminProducts() {
 
         const searchFilter =
             search === '' ||
-            item.name.toLowerCase().includes(search.toLowerCase()) ||
+            (Array.isArray(item.name)
+                ? item.name.some(name => name.toLowerCase().includes(search.toLowerCase()))
+                : item.name.toLowerCase().includes(search.toLowerCase())) ||
             (item.articles && item.articles.some(article => article.toLowerCase().includes(search.toLowerCase())));
 
         return typeFilter && sectionFilter && searchFilter;
     });
-
 
     return <div className={styles.main}>
         <p className={styles.title}>Товары</p>

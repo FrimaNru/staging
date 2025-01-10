@@ -11,9 +11,6 @@ export * from "./Header/items/SignUp";
 export * from "./Header/items/SignIn";
 export * from "./Header/items/RefreshPassword";
 
-export * from "./Cabinet/items/SideMenu";
-export * from "./Cabinet/items/PersonalData";
-
 export * from "./Common/FavouriteButton";
 export * from "./Common/WidgetPVZ";
 
