@@ -140,6 +140,7 @@
 .sliderItemImg {
     width: 458px;
     height: 454px;
+    object-fit: cover;
 }
 
 .sliderItemImg:hover {
@@ -173,6 +174,7 @@
 .dot {
     width: 100px;
     height: 100px;
+    object-fit: cover;
 }
 
 .dot:hover {
