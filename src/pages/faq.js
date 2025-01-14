@@ -1,5 +1,6 @@
 
-import { Faq, Footer } from "@/components";
+import { Footer } from "@/components";
+import Faq from "@/components/Faq/Faq";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
 

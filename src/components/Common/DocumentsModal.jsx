@@ -1,6 +1,6 @@
-import { contestAdvertisement } from "@/constans/contestAdvertisеment";
-import { contestPersonalData } from "@/constans/contestPersonalData";
-import { policyText } from "@/constans/policyText";
+import { contestAdvertisement } from "@/constants/contestAdvertisеment";
+import { contestPersonalData } from "@/constants/contestPersonalData";
+import { policyText } from "@/constants/policyText";
 import styles from "@/styles/Common.module.css";
 import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 

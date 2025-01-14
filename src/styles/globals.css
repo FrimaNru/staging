@@ -62,6 +62,10 @@ p {
   width: max-content;
 }
 
+.mainPage {
+  padding-top: 160px;
+}
+
 @media (max-width: 475px) {
   .toast {
     padding: 9.5px 20px;
@@ -73,5 +77,9 @@ p {
     height: 300px;
     position: relative;
     z-index: 1;
+  }
+
+  .mainPage {
+    padding-top: 60px;
   }
 }

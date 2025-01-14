@@ -2,8 +2,9 @@ import styles from "@/styles/Faq.module.css";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react'
 import { useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
+import Banner from "../Common/Banner/Banner";
 
-export function Faq() {
+export default function Faq() {
 
     const [open, setOpen] = useState('');
 
@@ -15,10 +16,7 @@ export function Faq() {
     ];
 
     return <div className={styles.main}>
-        <div className={styles.imageBlock} >
-            <img className={styles.backImg} src='/backHandImage.png' />
-            <img src='/logoText.svg' className={styles.logoText} />
-        </div>
+        <Banner />
         <div className={styles.mainColumn}>
             <Breadcrumb />
             <div className={styles.titleBlock}>

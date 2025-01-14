@@ -1,8 +1,7 @@
 .main {
     display: flex;
     flex-direction: column;
-    width: 85%;
-    max-width: 1400px;
+    width: 100%;
     gap: 100px;
     margin-top: 163px;
     align-items: center;

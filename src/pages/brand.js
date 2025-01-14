@@ -1,5 +1,5 @@
-
-import { Brand, Footer } from "@/components";
+import { Footer } from "@/components";
+import { Brand } from "@/components/Brand/Brand";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
 

@@ -9,6 +9,7 @@ import { FavouriteButton } from "@/components";
 import PopularBlock from "../PopularBlock/PopularBlock";
 import Breadcrumb from "../Common/Breadcrumb";
 import { formatNumber } from "@/lib/Formatting";
+import Banner from "../Common/Banner/Banner";
 
 const shuffle = (array) => {
     let shuffled = array.slice();
@@ -98,10 +99,7 @@ export default function Catalog() {
     }, [data, stateSortItems, stateType, stateSales, text]);
 
     return <div className={styles.main}>
-        <div className={styles.imageBlock} >
-            <img className={styles.backImg} src='/backCatalog.png' />
-            <p className={styles.logoText}>ДИЗАЙНЕРСКИЕ УКРАШЕНИЯ</p>
-        </div>
+        <Banner />
         <div className={styles.mainColumn}>
             <Breadcrumb />
             <div className={styles.row}>

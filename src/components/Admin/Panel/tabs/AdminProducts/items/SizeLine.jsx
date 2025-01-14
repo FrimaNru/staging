@@ -17,7 +17,7 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
 
     const load = async () => {
         await axios.get(`${API_BASE_URL}constans/product/sizes`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
-            .then((res) => { setSizes(res.data); })
+            .then((res) => { setSizes(res.data); console.log(res.data); })
             .catch((e) => console.log(e));
     };
 
@@ -69,10 +69,37 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
             <p className={styles.createSubtitle}>Размер<span className={styles.createSubtitleSpan}>{data.type === 'ring' ? ', мм' : data.type === 'earrings' ? '' : ', см'}</span></p>
             {(data.type !== '' && data.type !== 'earrings')
                 ? <div className={styles.sizesLine}>
-                    {sizes[data.type]?.map((item, index) => <div key={index} className={styles.sizeColumn}>
-                        <button className={`${styles.sizeItem} ${data.sizes[activeArticleNumber]?.includes(item) ? styles.sizeItemSelect : ''}`} onClick={() => handleToggleSize(item)}>{item}</button>
-                        <button className={styles.sizeDelete} onClick={() => { setSelectDeleteSize(item); setIsOpenDelete(true); }} >Удалить</button>
-                    </div>)}
+                    {sizes[data.type]
+                        ?.sort((a, b) => {
+                            const parseValue = (value) => {
+                                if (value.includes('-')) {
+                                    const [min] = value.replace(',', '.').split('-').map(Number);
+                                    return min;
+                                }
+                                return parseFloat(value.replace(',', '.'));
+                            };
+
+                            return parseValue(a) - parseValue(b);
+                        })
+                        .map((item, index) => (
+                            <div key={index} className={styles.sizeColumn}>
+                                <button
+                                    className={`${styles.sizeItem} ${data.sizes[activeArticleNumber]?.includes(item) ? styles.sizeItemSelect : ''}`}
+                                    onClick={() => handleToggleSize(item)}
+                                >
+                                    {item}
+                                </button>
+                                <button
+                                    className={styles.sizeDelete}
+                                    onClick={() => {
+                                        setSelectDeleteSize(item);
+                                        setIsOpenDelete(true);
+                                    }}
+                                >
+                                    Удалить
+                                </button>
+                            </div>
+                        ))}
                     <button className={styles.sizeItem} onClick={onOpen}>
                         <img src='/plus.svg' className={styles.sizeItemIcon} />
                     </button>
@@ -90,7 +117,7 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
                         <img src='/cross.svg' className={styles.modalCross} onClick={onClose} />
                     </div>
                     <div className={styles.modalContent}>
-                        <input className={styles.modalInput} value={newSize} type="number" onChange={(e) => setNewSize(e.target.value)} />
+                        <input className={styles.modalInput} value={newSize} onChange={(e) => setNewSize(e.target.value)} />
                         <button className={styles.modalButton} onClick={addNewSize}>ДОБАВИТЬ РАЗМЕР</button>
                     </div>
                 </div>

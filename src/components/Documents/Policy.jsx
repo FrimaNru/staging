@@ -1,7 +1,7 @@
 import styles from "@/styles/Documents.module.css";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Link from "next/link";
-import { policyText } from "@/constans/policyText";
+import { policyText } from "@/constants/policyText";
 
 export default function Policy() {
     return <div className={styles.main}>

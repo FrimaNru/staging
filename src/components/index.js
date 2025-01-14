@@ -1,8 +1,5 @@
-export * from "./StartBlock/StartBlock";
 export * from "./Footer/Footer";
 export * from "./Delivery/DeliveryPage";
-export * from "./Brand/Brand";
-export * from "./Faq/Faq";
 export * from "./Feedback/Feedback";
 
 export * from "./Header/items/Authorization";

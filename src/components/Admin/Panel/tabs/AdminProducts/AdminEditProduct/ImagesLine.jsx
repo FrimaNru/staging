@@ -6,11 +6,25 @@ export default function ImagesLine({ data, setData, activeArticleNumber }) {
     const [coverURL, setCoverURL] = useState([]);
     const [imageURLs, setImageURLs] = useState([]);
 
+    console.log(coverURL)
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setData({ ...data, cover: [...data.cover.slice(0, activeArticleNumber), file, ...data.cover.slice(activeArticleNumber + 1)] })
-        setCoverURL([...coverURL.slice(0, activeArticleNumber), URL.createObjectURL(file), ...coverURL.slice(activeArticleNumber + 1)]);
+
+        const fillArray = (arr, length, filler = '') => {
+            return [...arr, ...Array(Math.max(length - arr.length, 0)).fill(filler)];
+        };
+
+        const updatedCover = fillArray(data.cover, activeArticleNumber + 1);
+        updatedCover[activeArticleNumber] = file;
+
+        const updatedCoverURL = fillArray(coverURL, activeArticleNumber + 1);
+        updatedCoverURL[activeArticleNumber] = URL?.createObjectURL(file);
+
+        setData({ ...data, cover: updatedCover });
+        setCoverURL(updatedCoverURL);
     };
+
 
     const handleImagesChange = (e) => {
         const files = Array.from(e.target.files);

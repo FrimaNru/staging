@@ -1,6 +1,6 @@
 import styles from "@/styles/Documents.module.css";
 import Link from "next/link";
-import { agreementText } from "@/constans/agreementText";
+import { agreementText } from "@/constants/agreementText";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 
 export default function Agreement() {

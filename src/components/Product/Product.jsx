@@ -1,22 +1,22 @@
-import { useEffect, useRef, useState } from "react";
-import styles from "@/styles/Product.module.css";
-import Slider from "react-slick";
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, useDisclosure, Modal, ModalOverlay, ModalContent, ModalBody, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
+import { useEffect, useState } from "react";
+import styles from "@/styles/Product/Product.module.css";
+import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react';
 import { FavouriteButton } from "../Common/FavouriteButton";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { useRouter } from "next/router";
 import { AuthModal } from "../Header/items/AuthModal";
 import { useCart } from "@/contexts/CartContext";
-import BigImage from "../Common/BigImage";
 import Breadcrumb from "../Common/Breadcrumb";
 import { formatNumber } from "@/lib/Formatting";
+import ImageSlider from "./items/ImageSlider";
+import SizeSelector from "./items/SizeSelector";
+import ColorSelector from "./items/ColorSelector";
+import CharasteristicBlock from "./items/CharasteristicBlock";
 
 export function Product() {
 
     const { addToCart } = useCart();
-    let sliderRef = useRef(null);
-    const elementRef = useRef(null);
     const [data, setData] = useState({});
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
@@ -26,16 +26,8 @@ export function Product() {
     const [activeCount, setActiveCount] = useState(0);
 
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [isOpenModalSize, setIsOpenModalSize] = useState(false);
-    const [openBigImage, setOpenBigImage] = useState(false);
-    const [width, setWidth] = useState(0);
 
     useEffect(() => {
-        const element = elementRef.current;
-        if (element) {
-            const width = element.offsetWidth;
-            setWidth(width - 2);
-        };
         load();
         const handleRouteChange = (url) => {
             load();
@@ -57,109 +49,6 @@ export function Product() {
             .catch((e) => console.log(e));
     };
 
-    const SampleNextArrow = (props) => {
-        const { className, style, onClick } = props;
-        return (
-            <div className={className} onClick={onClick}>
-                <img src='/productArrowNext.svg' className={styles.sliderArrow} />
-            </div>
-        );
-    };
-
-    const SamplePrevArrow = (props) => {
-        const { className, style, onClick } = props;
-        return (
-            <div className={className} onClick={onClick}>
-                <svg className={styles.sliderArrow} width="23" height="36" viewBox="0 0 23 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19.5 3L4.5 18L19.5 33" stroke="#140702" strokeWidth="6" strokeLinecap="round" />
-                </svg>
-            </div>
-        );
-    };
-
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />
-    };
-
-    const dataCharacteristic = [
-        { title: 'МАТЕРИАЛ', text: 'Наши украшения созданы из уникального сплава Zamak и покрыты гальваническим методом для большей прочности и износостойкости. <br />Zamak - это идеальный материал для изготовления премиальной бижутерии, потому что в первую очередь он является гипоаллергенным, так как не содержит никеля, который и  является основным источником аллергии людей. Состав сплава zamak: цинк, магний, алюминий, медь. <br />Также физические и механические свойства сплавов Zamak позволяют изготавливать изделия с точностью до одной сотой миллиметра, но при этом они очень твердые и прочные, не боятся больших нагрузок. <br />Гальваническое покрытие обеспечивает изделиям устойчивость к истиранию и коррозии, придает украшениям еще более привлекательный внешний вид, добавляя блеска, делая  элегантными. <br />Обеспечьте для своего нового украшения сухое чистое место хранения, лучше исключить соседство с другой бижутерией, чтобы не образовалось царапин. Избегайте посещения бань, саун и пляжей, а также попадания химии на поверхность изделия. Загрязнения легко убрать мягкой влажной тканью и при необходимости шампунем, после чего насухо вытереть.<br />При правильном хранении и уходе наши украшения будут радовать вас своим неизменно превосходным видом долгие годы.' },
-        { title: 'ГАБАРИТЫ', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' },
-        { title: 'ДОСТАВКА, ОПЛАТА И ВОЗВРАТ', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' },
-        { title: 'ГАРАНТИЯ И УХОД', text: 'Серьги Caramel — воплощение тренда этого года на крупные текучие украшения. Словно застывшая капля сладкого текучего лакомства. Изделие изготовлено из ювелирной латуни с покрытием из 18-каратного золота' }
-    ];
-
-    const textSizeRings = [
-        { img: 'threads.svg', text: 'Закрутите нитку, шнурок или бумажную ленту вокругнужного пальца.' },
-        { img: 'ruler.svg', text: 'Используйте линейку, чтобы определить длину нитки.' },
-        { img: 'ringSize.svg', text: 'Введите длину в миллиметрах и ответ будет вашим размером кольца.' }
-    ];
-    const textSizeNecklace = [
-        { img: 'threads.svg', text: 'Возьмите нитку и оберните её вокруг шеи, закрепив на необходимой высоте.' },
-        { img: 'ruler.svg', text: 'Расположите нить так, как вы хотите, чтобы лежало колье, а затем измерьте её длину.' },
-        { img: 'necklaceSize.svg', text: 'Округлите полученное значение до ближайшего 0 или 5 — это и будет ваш размер колье.' }
-    ];
-    const textSizeBracelets = [
-        { img: 'threads.svg', text: 'Возьмите нитку и оберните её вокруг руки, закрепив на необходимой высоте.' },
-        { img: 'ruler.svg', text: 'Расположите нить так, как вы хотите, чтобы лежал браслет, а затем измерьте её длину.' },
-        { img: 'necklaceSize.svg', text: 'Округлите полученное значение до ближайшего 0 или 5 — это и будет ваш размер браслета.' }
-    ];
-
-    const [millimeters, setMillimeters] = useState('');
-    const [ringSizeCalculate, setRingSize] = useState(null);
-    const [buttonText, setButtonText] = useState('Рассчитать');
-
-    const ringSizes = [
-        { size: 15, minCircumference: 47, maxCircumference: 48 },
-        { size: 15.5, minCircumference: 48, maxCircumference: 49 },
-        { size: 16, minCircumference: 49, maxCircumference: 50 },
-        { size: 16.5, minCircumference: 50, maxCircumference: 52 },
-        { size: 17, minCircumference: 52, maxCircumference: 53 },
-        { size: 17.5, minCircumference: 53, maxCircumference: 55 },
-        { size: 18, minCircumference: 55, maxCircumference: 57 },
-        { size: 18.5, minCircumference: 58, maxCircumference: 59 },
-        { size: 19, minCircumference: 56, maxCircumference: 60 },
-        { size: 19.5, minCircumference: 60.3, maxCircumference: 60.3 },
-        { size: 20, minCircumference: 61, maxCircumference: 63 },
-        { size: 20.5, minCircumference: 63, maxCircumference: 64 },
-        { size: 21, minCircumference: 64, maxCircumference: 65 },
-        { size: 21.5, minCircumference: 67, maxCircumference: 68 },
-        { size: 22, minCircumference: 69.1, maxCircumference: 69.1 },
-    ];
-
-    function getRingSize(mm) {
-        const sizeObj = ringSizes.find(
-            ({ minCircumference, maxCircumference }) =>
-                mm >= minCircumference && mm <= maxCircumference
-        );
-        return sizeObj ? sizeObj.size : null;
-    };
-
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-
-        if (value === '' || (/^\d{1,2}$/.test(value) && Number(value) <= 99)) {
-            setMillimeters(value);
-            setRingSize(null);
-            setButtonText('Рассчитать');
-        }
-    };
-
-    const handleCalculateClick = () => {
-        const size = getRingSize(Number(millimeters));
-        if (size !== null) {
-            setRingSize(size);
-            setButtonText(`Ваш размер: ${size}`);
-        } else {
-            setButtonText('Не существует');
-        }
-    };
-
     function buy() {
         if (localStorage.getItem('token')) {
             axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[activeCount] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
@@ -177,53 +66,16 @@ export function Product() {
         <div className={styles.mainColumn} >
             <Breadcrumb />
             <div className={styles.infoLine}>
-                <div className={styles.imgSliderBoxColumn} >
-                    <div className={styles.imgSliderBox} >
-                        <Slider {...settings} ref={slider => {
-                            sliderRef = slider;
-                        }}>
-                            {[0, 1, 2, 3].map((x, index) => <div key={index} className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.sliderItemImg} />
-                            </div>)}
-                        </Slider>
-                    </div>
-                    <div className={styles.lineDots} >
-                        {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
-                    </div>
-                    <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={data?.cover?.length > 0 && data.cover[activeCount]} />
-                </div>
+                <ImageSlider data={data} activeCount={activeCount} />
                 <div className={styles.infoColumn}>
                     <div className={styles.infoColumnText}>
-                        <div className={styles.infoTitleLine} >
+                        <div className={styles.infoTitleLine}>
                             <p className={styles.infoTitle}>{data?.name?.length > 0 && data.name[activeCount]}</p>
                             {data?.articles?.length > 0 ? <FavouriteButton idProduct={data._id} size={sizeOfProduct} color={colorOfProduct} article={data?.articles[activeCount]} /> : <></>}
                         </div>
                         <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
-                        {(data.type === 'ring' || data.type === 'necklace' || data.type === 'bracelets') && <div className={styles.sizeColumn}>
-                            <p className={styles.sizeTitle}>Размер, <span className={styles.sizeTitleMM}>{data.type === 'ring' ? 'мм' : 'см'}</span></p>
-                            <div className={styles.sizeLine}>
-                                {
-                                    // (data.type === 'ring' ? ringSize : data.type === 'necklace' ? necklaceSize : braceletsSize)
-                                    (data?.sizes?.length > 0 && data.sizes[activeCount]).map((x, i) => <button
-                                        key={i}
-                                        className={`${styles.sizeItem} ${x === sizeOfProduct ? styles.sizeItemSelect : ''}`}
-                                        onClick={() => setSizeOfProduct(x)}>{x}</button>)}
-                            </div>
-                            <button className={styles.sizeButton} onClick={() => setIsOpenModalSize(true)}>Как определить размер?</button>
-                        </div>}
-                        <Menu autoSelect={false}>
-                            <MenuButton pos='relative' zIndex={10} p={0} ref={elementRef}>
-                                <div className={styles.menuButton} >
-                                    <p className={styles.menuButtonText}>{colorOfProduct}</p>
-                                    {data?.colors?.length > 1 && <img src='/colorArrow.svg' />}
-                                </div>
-                            </MenuButton>
-                            <MenuList p={0} border='none' boxShadow='none' mt='-30px' pos='relative' zIndex={0} >
-                                {data?.colors?.length > 0 && data.colors.map((x, i) => x !== colorOfProduct && <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
-                                    <div className={styles.menuItem} style={{ width }} onClick={() => { setColorOfProduct(x); setActiveCount(i); }}>{x}</div>
-                                </MenuItem>)}
-                            </MenuList>
-                        </Menu>
+                        <SizeSelector data={data} activeCount={activeCount} sizeOfProduct={sizeOfProduct} setSizeOfProduct={setSizeOfProduct} />
+                        <ColorSelector data={data} colorOfProduct={colorOfProduct} setColorOfProduct={setColorOfProduct} setActiveCount={setActiveCount} />
                         {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.articles[activeCount]}</p>}
                     </div>
                     <div className={styles.infoButtonColumn}>
@@ -233,33 +85,7 @@ export function Product() {
                 </div>
             </div>
         </div>
-        <div className={styles.charasteristicColumn}>
-            <Accordion allowToggle >
-                {dataCharacteristic.map((x, i) => <AccordionItem key={i} border='none' style={{ borderBottom: dataCharacteristic.length === i + 1 ? 'solid 1px #140702' : null }}>
-                    {({ isExpanded }) => (
-                        <>
-                            <h2>
-                                <AccordionButton _hover={{}} p={0} >
-                                    <div className={styles.accordionButton}>
-                                        <div dangerouslySetInnerHTML={{ __html: x.title }} className={styles.accordionButtonTitle} />
-                                        {isExpanded ? <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M21 11.5L11 1.5L1 11.5" stroke="#140702" strokeLinecap="round" />
-                                        </svg>
-                                            : <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M1 0.5L11 10.5L21 0.5" stroke="#140702" strokeLinecap="round" />
-                                            </svg>}
-
-                                    </div>
-                                </AccordionButton>
-                            </h2>
-                            <AccordionPanel p={0}>
-                                <p className={styles.accordionText} dangerouslySetInnerHTML={{ __html: x.text }} />
-                            </AccordionPanel>
-                        </>
-                    )}
-                </AccordionItem>)}
-            </Accordion>
-        </div>
+        <CharasteristicBlock />
         <Modal isOpen={isOpenModal} size='xl' onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
             <ModalOverlay />
             <ModalContent bg='none' boxShadow='none'>
@@ -283,57 +109,6 @@ export function Product() {
                                 <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
                                 <button className={styles.modalBodyButtonBag} onClick={() => router.push('/bag')}>ОФОРМИТЬ ЗАКАЗ</button>
                             </div>
-                        </div>
-                    </div>
-                </ModalBody>
-            </ModalContent>
-        </Modal>
-        <Modal isOpen={isOpenModalSize} size='xl' onClose={() => {
-            setIsOpenModalSize(false); setMillimeters(''); setRingSize(null); setButtonText('Рассчитать');
-        }} isCentered autoFocus={false}>
-            <ModalOverlay />
-            <ModalContent bg='none' boxShadow='none'>
-                <ModalBody p={0}>
-                    <div className={styles.modal}>
-                        <div className={styles.modalHeader}>
-                            <div className={styles.modalHeaderLine}>
-                                <p className={styles.modalHeaderTitleSize}>КАК ОПРЕДЕЛИТЬ РАЗМЕР?</p>
-                                <img src='/cross.svg' className={styles.modalHeaderCross} onClick={() => setIsOpenModalSize(false)} />
-                                <img src='/crossMobile.svg' className={styles.modalHeaderCrossMobile} onClick={() => setIsOpenModalSize(false)} />
-                            </div>
-                            <hr className={styles.modalHeaderHr} />
-                        </div>
-                        <div className={styles.modalBodySize}>
-                            {data.type === 'ring'
-                                ? <>
-                                    {textSizeRings.map((x, i) => <div key={i} className={styles.modalSizeLine}>
-                                        <img src={x.img} className={styles.modalSizeIcon} />
-                                        <p className={styles.modalSizeText}>{x.text}</p>
-                                    </div>)}
-                                    <div className={`${styles.modalSizeLine} ${styles.modalSizeLineMobile}`}>
-                                        <input
-                                            type="text"
-                                            value={millimeters}
-                                            onChange={handleInputChange}
-                                            placeholder="Введите мм"
-                                            className={styles.modalSizeInput}
-                                        />
-                                        <button onClick={handleCalculateClick} className={styles.modalSizeButton}>{buttonText}</button>
-                                    </div>
-                                </>
-                                : data.type === 'necklace'
-                                    ? <>
-                                        {textSizeNecklace.map((x, i) => <div key={i} className={styles.modalSizeLine}>
-                                            <img src={x.img} className={styles.modalSizeIcon} />
-                                            <p className={styles.modalSizeText}>{x.text}</p>
-                                        </div>)}
-                                    </>
-                                    : <>
-                                        {textSizeBracelets.map((x, i) => <div key={i} className={styles.modalSizeLine}>
-                                            <img src={x.img} className={styles.modalSizeIcon} />
-                                            <p className={styles.modalSizeText}>{x.text}</p>
-                                        </div>)}
-                                    </>}
                         </div>
                     </div>
                 </ModalBody>

@@ -1,4 +1,4 @@
-import styles from "@/styles/Product.module.css";
+import styles from "@/styles/Product/Product.module.css";
 import { AuthModal } from "@/components";
 import { useDisclosure } from "@chakra-ui/react";
 import axios from "axios";

@@ -1,12 +1,10 @@
 import styles from "@/styles/Brand.module.css";
 import Breadcrumb from "../Common/Breadcrumb";
+import Banner from "../Common/Banner/Banner";
 
 export function Brand() {
     return <div className={styles.main}>
-        <div className={styles.imageBlock} >
-            <img className={styles.backImg} src='/backHandImage.png' />
-            <img src='/logoText.svg' className={styles.logoText} />
-        </div>
+        <Banner />
         <div className={styles.mainColumn}>
             <Breadcrumb />
             <div className={styles.contentColumn}>

@@ -1,8 +1,9 @@
 
-import { Footer, StartBlock } from "@/components";
+import { Footer } from "@/components";
+import Banner from "@/components/Common/Banner/Banner";
 import Header from "@/components/Header/Header";
 import PopularBlock from "@/components/PopularBlock/PopularBlock";
-import BannerMainPage from "@/components/StartBlock/Banner";
+import StartBlock from "@/components/StartBlock/StartBlock";
 import Head from "next/head";
 
 export default function Home() {
@@ -33,9 +34,9 @@ export default function Home() {
         <meta name="theme-color" content="#EEEEEE" />
       </Head>
       <center>
-        <main>
+        <main className="mainPage">
           <Header />
-          <BannerMainPage />
+          <Banner />
           <StartBlock />
           <PopularBlock />
           <Footer />

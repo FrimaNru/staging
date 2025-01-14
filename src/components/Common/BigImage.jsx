@@ -1,5 +1,5 @@
 import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
-import styles from "@/styles/Product.module.css";
+import styles from "@/styles/Product/Product.module.css";
 import Slider from "react-slick";
 import { useRef } from "react";
 
