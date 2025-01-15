@@ -12,6 +12,7 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
     const [isOpenDelete, setIsOpenDelete] = useState(false);
     const [selectDeleteSize, setSelectDeleteSize] = useState('');
     const toast = useToast();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => { load(); }, []);
 
@@ -55,13 +56,15 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
     };
 
     const deleteSize = async () => {
+        setLoading(true);
         await axios.post(`${API_BASE_URL}constans/product/sizes/delete`, { deleteSize: selectDeleteSize, type: data.type }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
             .then(() => {
                 setIsOpenDelete(false);
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Успешно удалено</div>), duration: 3000 });
                 load();
+                setLoading(false);
             })
-            .catch((e) => console.log(e));
+            .catch((e) => { console.log(e); setLoading(false); });
     };
 
     return <>
@@ -133,8 +136,8 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
                         <img src='/cross.svg' className={styles.modalCross} onClick={() => setIsOpenDelete(false)} />
                     </div>
                     <div className={styles.modalContent}>
-                        <p className={styles.modalText}>Вы хотите удалить {selectDeleteSize} размер</p>
-                        <button className={styles.modalButton} onClick={deleteSize}>УДАЛИТЬ РАЗМЕР</button>
+                        <p className={styles.modalText}>Размер удалиться полностью из базы данных и из всех товаров. Если вы хотите убрать размер только из этого товара, тогда закройте это окно и просто кликните по размеру.<br /><br /> Вы хотите удалить <b>{selectDeleteSize}</b> размер</p>
+                        <button className={`${styles.modalButton} ${loading ? styles.loading : ''}`} onClick={deleteSize}>УДАЛИТЬ РАЗМЕР</button>
                     </div>
                 </div>
             </ModalContent>
