@@ -30,21 +30,12 @@ export default function MyOrders() {
             .catch((e) => console.log(e));
     };
 
-    function selectStatus(status, paymentStatus) {
-        if (paymentStatus !== 'CONFIRMED') {
-            switch (paymentStatus) {
-                case 'REFUNDED':
-                    return 'Вам были возвращены средства'
-                case 'REJECTED':
-                    return 'Заказ не оплачен'
-                case 'FORM_SHOWED':
-                    return 'Заказ не оплачен'
-            };
-        };
-
+    function selectStatus(status) {
         switch (status) {
             case 'processed':
                 return 'Ваш заказ обрабатывается'
+            case 'confirmed':
+                return 'Ваш заказ подтвержден'
             case 'delivery':
                 return 'Ваш заказ передан в доставку'
             case 'canceled':
@@ -92,7 +83,7 @@ export default function MyOrders() {
                                 </div>
                                 <div className={styles.statusBlock} >
                                     <img src='/infoIcon.svg' className={styles.statusBlockIcon} />
-                                    <p className={styles.statusBlockText}>{selectStatus(x.status, x.paymentStatus)}</p>
+                                    <p className={styles.statusBlockText}>{selectStatus(x.status)}</p>
                                 </div>
                                 <div className={styles.lilColumnOrder}>
                                     {Object.entries(itemCounts).map(([key, count], i) => {
