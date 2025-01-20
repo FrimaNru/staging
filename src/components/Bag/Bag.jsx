@@ -34,16 +34,9 @@ export default function Bag() {
 
     useEffect(() => {
         load();
-        if (window.location.href.includes('paymentType') && window.location.href?.split('/bag?')[1].split('&')[0] === 'paymentType=success') {
-            setSuccessModal(true);
-            setOrder(false);
-            load();
+        if (window.location.href.includes('orderId')) {
+            checkOrderStatus();
         };
-        if (window.location.href.includes('paymentType') && window.location.href?.split('/bag?')[1].split('&')[0] === 'paymentType=error') {
-            setErrorModal(true);
-            setOrder(false);
-            load();
-        }
     }, []);
 
     useEffect(() => {
@@ -52,6 +45,17 @@ export default function Bag() {
             setPrevPath(path);
         }
     }, []);
+
+    const checkOrderStatus = async () => {
+        await axios.post(`${API_BASE_URL}orders/status`, { orderId: window.location.href.split('orderId=')[1].split('&')[0] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            .then((res) => {
+                if (res.status === 201) return;
+                setSuccessModal(true);
+                setOrder(false);
+                setSuccessData(res.data.order);
+            })
+            .catch((e) => { console.log(e); });
+    };
 
     const handleGoToCatalog = () => {
         if (prevPath) {
@@ -68,17 +72,17 @@ export default function Bag() {
                 setData(res.data.bag);
                 setDataUser(res.data);
                 let d = 0
-                setSuccessData(res.data.orders[res.data.orders.length - 1]);
                 if (res.data.bag.length === 0) return setTotal(0);
                 res.data.bag.map(x => {
                     axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
                         .then((r) => {
-                            console.log(r.data)
                             const index = r.data.articles.findIndex(y => y === x.article);
                             d = Number(d) + Number(r.data.cost[index]);
                             setTotal(d);
                         })
-                        .catch((e) => console.log(e));
+                        .catch((e) => {
+                            console.log(e);
+                        });
                 });
             })
             .catch((e) => console.log(e));
@@ -87,7 +91,6 @@ export default function Bag() {
     const itemCounts = data.reduce((acc, item) => {
         const key = JSON.stringify({ id: item.id, size: item.size, color: item.color, article: item.article });
         acc[key] = (acc[key] || 0) + 1;
-        console.log(acc)
         return acc;
     }, {});
 
@@ -109,8 +112,9 @@ export default function Bag() {
 
             axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + (total >= 3000 ? 0 : deliveryCost), delivery: { street: selectedPVZ?.address, date: deliveryDate, pvzCode: selectedPVZ?.code } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
+                    console.log(res.data);
                     setIsLoading(false);
-                    router.push(res.data.PaymentURL);
+                    router.push(res.data.formUrl);
                 })
                 .catch((e) => { console.log(e); setIsLoading(false); });
         } else {
@@ -130,7 +134,6 @@ export default function Bag() {
 
         axios.post(`${API_BASE_URL}calculateDelivery`, { address: pvz.address, postal_code: pvz.postal_code }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
-                console.log(res.data);
                 setDeliveryDate(`${res.data.period_min} - ${res.data.period_max} дня`);
                 setDeliveryCost(res.data.total_sum);
             })
@@ -273,7 +276,7 @@ export default function Bag() {
                                 <img src='/infoIcon.svg' className={styles.modalSuccessStatusIcon} />
                                 <p className={styles.modalSuccessText}>Ваш заказ обрабатывается </p>
                             </div>
-                            <div className={styles.modalSuccessColumnMiddle} >
+                            <div className={styles.modalSuccessColumnMiddle}>
                                 <p className={styles.modalSuccessTitle}>Доставка</p>
                                 <div className={styles.itemTextColumn}>
                                     <div className={styles.modalSuccessLine}>

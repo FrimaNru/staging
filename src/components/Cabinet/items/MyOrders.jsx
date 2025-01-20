@@ -55,12 +55,12 @@ export default function MyOrders() {
     function pay(total, OrderId) {
         setIsLoading(true);
 
-        axios.post(`${API_BASE_URL}payOrder`, { dataUser, total, OrderId }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then((res) => {
-                setIsLoading(false);
-                router.push(res.data.PaymentURL);
-            })
-            .catch((e) => { console.log(e); setIsLoading(false); });
+        // axios.post(`${API_BASE_URL}payOrder`, { dataUser, total, OrderId }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        //     .then((res) => {
+        //         setIsLoading(false);
+        //         router.push(res.data.PaymentURL);
+        //     })
+        //     .catch((e) => { console.log(e); setIsLoading(false); });
     };
 
     return <div className={styles.main}>
