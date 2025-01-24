@@ -10,6 +10,7 @@ import AdminProducts from "./tabs/AdminProducts/AdminProducts";
 import AdminCreateProduct from "./tabs/AdminProducts/AdminCreateProduct/AdminCreateProduct";
 import AdminEditProduct from "./tabs/AdminProducts/AdminEditProduct/AdminEditProduct";
 import AdminOrders from "./tabs/AdminOrders/AdminOrders";
+import AdminEditOrder from "./tabs/AdminOrders/items/AdminEditOrder";
 
 export default function AdminPanel() {
 
@@ -37,6 +38,8 @@ export default function AdminPanel() {
                 return <AdminCreateProduct />
             case 'editProduct':
                 return <AdminEditProduct />
+            case 'editOrder':
+                return <AdminEditOrder />
             case 'banners':
                 return <AdminBanners />
             default:

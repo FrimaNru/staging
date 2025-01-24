@@ -20,7 +20,7 @@ export function Authorization() {
     };
 
     return <>
-        <img src={user?._id ? '/userIconFill.svg' : '/userIcon.svg'} className={styles.icon} onClick={auth} />
+        <img src={user ? '/userIconFill.svg' : '/userIcon.svg'} className={styles.icon} onClick={auth} />
         <AuthModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </>
 }

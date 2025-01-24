@@ -11,5 +11,4 @@ export * from "./Header/items/RefreshPassword";
 export * from "./Common/FavouriteButton";
 export * from "./Common/WidgetPVZ";
 
-export * from "./Admin/Auth/AdminAuth";
 export * from "./Admin/Panel/items/DownloadExcel";

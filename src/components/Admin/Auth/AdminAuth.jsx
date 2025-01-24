@@ -5,7 +5,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
 
-export function AdminAuth() {
+export default function AdminAuth() {
 
     const toast = useToast();
     const router = useRouter();
@@ -17,7 +17,7 @@ export function AdminAuth() {
             axios.post(`${API_BASE_URL}loginAdmin`, { login, password })
                 .then((res) => {
                     localStorage.setItem('tokenAdmin', res.data.token);
-                    router.push('/adminpanel?page=dashboard');
+                    router.push('/adminpanel?page=users');
                 })
                 .catch((e) => {
                     console.log(e);

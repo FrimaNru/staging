@@ -1,7 +1,7 @@
 import styles from "@/styles/Cabinet.module.css";
 import { useRouter } from "next/router";
 import FavouriteBlock from "./items/FavouriteBlock";
-import MyOrders from "./items/MyOrders";
+import MyOrders from "./items/MyOrders/MyOrders";
 import HistoryOrders from "./items/HistoryOrders";
 import PersonalData from "./items/PersonalData";
 import SideMenu from "./items/SideMenu";

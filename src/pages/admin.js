@@ -1,4 +1,4 @@
-import { AdminAuth } from "@/components";
+import AdminAuth from "@/components/Admin/Auth/AdminAuth";
 import Head from "next/head";
 
 export default function AdminPage() {

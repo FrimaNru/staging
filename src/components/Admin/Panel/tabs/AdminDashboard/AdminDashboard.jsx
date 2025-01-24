@@ -7,12 +7,6 @@ import { formatDateFromTimestamp, formatNumber } from "@/lib/Formatting";
 import Link from "next/link";
 import { ButtonDownloadExcel } from "@/components";
 
-const stataTitle = {
-    'accounts': 'Созданных аккаунтов',
-    'orders': 'Оформленных заказов',
-    'products': 'Купленных товаров'
-};
-
 const status = {
     'CONFIRMED': 'Оплачено',
     'REJECTED': 'Не оплачено'
@@ -20,7 +14,6 @@ const status = {
 
 export default function AdminDashboard() {
 
-    const [statistick, setStatistick] = useState({});
     const [users, setUsers] = useState([]);
     const toast = useToast();
 
@@ -29,11 +22,6 @@ export default function AdminDashboard() {
     }, []);
 
     function load() {
-        axios.get(`${API_BASE_URL}statistickDashboard`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
-            .then((res) => {
-                setStatistick(res.data);
-            })
-            .catch((e) => console.log(e));
         axios.get(`${API_BASE_URL}allUsers`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
             .then((res) => {
                 setUsers(res.data);
@@ -51,15 +39,8 @@ export default function AdminDashboard() {
     };
 
     return <div className={styles.dashboard}>
-        <p className={styles.title}>Дашборд</p>
-        <div className={styles.dashboardLine}>
-            {['accounts', 'orders', 'products'].map((x, i) => <div key={i} className={styles.dashboardLineItem} >{stataTitle[x]}: {statistick[x]}</div>)}
-        </div>
+        <p className={styles.title}>Пользователи</p>
         <div className={styles.dashboardColumn}>
-            <div className={styles.dashboardSubtitleLine}>
-                <p className={styles.subtitle}>Пользователи</p>
-                <ButtonDownloadExcel data={users} type='users' />
-            </div>
             <Accordion allowToggle>
                 <div className={styles.dashboardColumnUsers}>
                     <div className={styles.dashboardAccordionTableInfo}>
@@ -101,7 +82,7 @@ export default function AdminDashboard() {
                                             <p className={styles.accordionPanelText}>Сумма: <span style={{ fontWeight: 800 }}>{formatNumber(y.total)} руб.</span></p>
                                             <div className={styles.accordionPanelProductLine}>
                                                 <p className={styles.accordionPanelText}>Товары:</p>
-                                                <div className={styles.accordionPanelProductLineLil}>{y.products.map((z, j) => <ProductItem key={j} id={z.id} type='img' />)}</div>
+                                                <div className={styles.accordionPanelProductLineLil}>{y?.products?.map((z, j) => <ProductItem key={j} id={z.id} type='img' />)}</div>
                                             </div>
                                             <p className={styles.accordionPanelText}>Статус: <span style={{ fontWeight: 800 }}>{status[y.paymentStatus] ?? 'Не оплачено'}</span></p>
                                         </div>)}

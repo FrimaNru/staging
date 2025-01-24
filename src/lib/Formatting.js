@@ -3,6 +3,7 @@ export function capitalizeFirstLetter(text) {
 };
 
 export function formatNumber(number) {
+    number = Number(number);
     let numStr = number?.toString();
     let parts = numStr?.split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -26,7 +27,7 @@ export function formatDate(isoDateString) {
     const date = new Date(isoDateString);
 
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
 
     return `${day}.${month}.${year}`;

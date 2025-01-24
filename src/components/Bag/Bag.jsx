@@ -10,11 +10,13 @@ import WidgetPVZ from "../Common/WidgetPVZ";
 import { Link } from "react-scroll"
 import { useCart } from "@/contexts/CartContext";
 import { formatDate } from "@/lib/Formatting";
+import { useUser } from "@/contexts/UserContext";
 
 export default function Bag() {
 
     const router = useRouter();
     const { startSetCart } = useCart();
+    const { setUser } = useUser();
     const [prevPath, setPrevPath] = useState(null);
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
@@ -50,6 +52,7 @@ export default function Bag() {
         await axios.post(`${API_BASE_URL}orders/status`, { orderId: window.location.href.split('orderId=')[1].split('&')[0] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 if (res.status === 201) return;
+                setUser(res.data.user);
                 setSuccessModal(true);
                 setOrder(false);
                 setSuccessData(res.data.order);
@@ -255,7 +258,7 @@ export default function Bag() {
             <hr className={styles.hr} />
             <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
         </div>}
-        <Modal onClose={() => setSuccessModal(false)} isOpen={successModal} autoFocus={false} isCentered size='xl' >
+        <Modal onClose={async () => { setSuccessModal(false); await load(); }} isOpen={successModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent p={0} bg='none' boxShadow='none' >
                 <ModalBody p={0}>
