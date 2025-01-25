@@ -272,7 +272,7 @@ export default function Bag() {
                         </div>
                         <div className={styles.modalSuccessColumn}>
                             <div className={styles.modalSuccessColumnLil}>
-                                <p className={styles.modalSuccessTitle}>ЗАКАЗ № {successData.id}</p>
+                                <p className={styles.modalSuccessTitle}>ЗАКАЗ № {successData.number}</p>
                                 <p className={styles.modalSuccessText}>{formatDate(successData.createDate)}</p>
                             </div>
                             <div className={styles.modalSuccessStatus} >
