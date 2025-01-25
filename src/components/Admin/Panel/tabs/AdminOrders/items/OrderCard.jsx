@@ -22,7 +22,7 @@ export default function OrderCard({ item, complete = false, load }) {
     return <div className={`${styles.orderCard} ${complete ? styles.orderCardComplete : ''}`}>
         <div className={styles.orderCardTitleLine}>
             <p className={styles.orderCardTitle}>Заказ №{item.number}</p>
-            <Link href={`/adminpanel?page=editOrder&id=${item._id}`} className="link">
+            <Link href={`/adminpanel?page=editOrder&id=${item._id}${complete ? '&complete=true' : ''}`} className="link">
                 <button className={`${styles.orderCardMoreDetailButton} ${complete ? styles.detailButtonComplete : ''}`}>Подробнее</button>
             </Link>
         </div>

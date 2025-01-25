@@ -95,7 +95,7 @@ export default function AdminOrders() {
                         />
                     ))
                 ) : (
-                    <p className={styles.noOrders}>По заданным фильтрам не найдены заказы</p>
+                    <p className={styles.noOrders}>Заказы не найдены</p>
                 )}
             </div>
         </div>

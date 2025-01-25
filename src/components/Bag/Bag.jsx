@@ -277,7 +277,7 @@ export default function Bag() {
                             </div>
                             <div className={styles.modalSuccessStatus} >
                                 <img src='/infoIcon.svg' className={styles.modalSuccessStatusIcon} />
-                                <p className={styles.modalSuccessText}>Ваш заказ обрабатывается </p>
+                                <p className={styles.modalSuccessText}>Ваш заказ создан</p>
                             </div>
                             <div className={styles.modalSuccessColumnMiddle}>
                                 <p className={styles.modalSuccessTitle}>Доставка</p>
