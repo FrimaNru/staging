@@ -80,6 +80,7 @@ export default function PopularBlock() {
     const load = async () => {
         await axios.get(`${API_BASE_URL}getPopularProducts`)
             .then((res) => {
+                console.log(res.data);
                 setData(res.data);
             })
             .catch((e) => console.log(e));
@@ -89,7 +90,7 @@ export default function PopularBlock() {
         <p className={styles.title}>Популярное</p>
 
         <div className={styles.sliderBlock}>
-            <Slider {...settings}>
+            {data.length > 1 && <Slider {...settings}>
                 {data.map((x, i) => <div className={styles.sliderItem} key={i}>
                     <div className={styles.sliderItemContent}>
                         <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
@@ -106,11 +107,11 @@ export default function PopularBlock() {
                         </div>
                     </div>
                 </div>)}
-            </Slider>
+            </Slider>}
         </div >
 
         <div className={styles.sliderBlockMobile}>
-            <Slider {...settingsMobile}>
+            {data.length > 1 && <Slider {...settingsMobile}>
                 {data.map((x, i) => <div className={styles.sliderItem} key={i}>
                     <div className={styles.sliderItemContent}>
                         <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
@@ -127,7 +128,7 @@ export default function PopularBlock() {
                         </div>
                     </div>
                 </div>)}
-            </Slider>
+            </Slider>}
         </div>
     </div >
 }
