@@ -64,16 +64,16 @@ export default function AdminEditProduct() {
                 if (item instanceof File || (item && item.name && item.size)) {
                     formData.append(`cover[${index}]`, item);
                 } else {
-                    formData.append(`coverNames[${index}]`, item); 
+                    formData.append(`coverNames[${index}]`, item);
                 }
             });
 
             data.images.forEach((imageArray, arrayIndex) => {
                 imageArray.forEach((item, fileIndex) => {
                     if (item instanceof File || (item && item.name && item.size)) {
-                        formData.append(`images[${arrayIndex}][${fileIndex}]`, item); 
+                        formData.append(`images[${arrayIndex}][${fileIndex}]`, item);
                     } else {
-                        formData.append(`imageNames[${arrayIndex}][${fileIndex}]`, item); 
+                        formData.append(`imageNames[${arrayIndex}][${fileIndex}]`, item);
                     }
                 });
             });
@@ -81,7 +81,7 @@ export default function AdminEditProduct() {
             formData.append('data', JSON.stringify(data));
 
             try {
-                await axios.post(`${API_BASE_URL}editProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` }});
+                await axios.post(`${API_BASE_URL}editProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
                 setIsLoading(false);
                 router.push('/adminpanel?page=products');
             } catch (e) {
@@ -100,11 +100,23 @@ export default function AdminEditProduct() {
         }
     };
 
+    const changeVisible = async () => {
+        try {
+            await axios.post(`${API_BASE_URL}admin/product/visible`, { id: router.query.id, activeArticleNumber }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
+            load();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return <div className={styles.createColumn}>
         <ArticlesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} setActiveArticleNumber={setActiveArticleNumber} />
         <div className={styles.createLilColumn}>
             <p className={styles.createSubtitle}>Артикул</p>
-            <input className={styles.productsInput} placeholder="Введите артикул товара" onChange={(e) => setData({ ...data, articles: [...data.articles.slice(0, activeArticleNumber), e.target.value, ...data.articles.slice(activeArticleNumber + 1)] })} value={data?.articles[activeArticleNumber] || ""} />
+            <div className={styles.inputLine}>
+                <input className={styles.productsInput} placeholder="Введите артикул товара" onChange={(e) => setData({ ...data, articles: [...data.articles.slice(0, activeArticleNumber), e.target.value, ...data.articles.slice(activeArticleNumber + 1)] })} value={data?.articles[activeArticleNumber] || ""} />
+                <button className={styles.lilBlackButton} style={{ opacity: !data.isVisible?.[activeArticleNumber] ? 0.5 : 1 }} onClick={changeVisible}>{data && data.isVisible?.[activeArticleNumber] === true ? 'СКРЫТЬ' : 'ОТОБРАЖАТЬ'}</button>
+            </div>
         </div>
         <ImagesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} />
         <div className={styles.createLilColumn}>

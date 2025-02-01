@@ -38,6 +38,7 @@
 .sliderItemImage {
     width: 222px;
     height: 220px;
+    object-fit: cover;
 }
 
 .sliderItemTitle {

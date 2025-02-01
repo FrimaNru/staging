@@ -47,7 +47,7 @@ export default function AdminProducts() {
             })
             .catch((e) => console.log(e));
 
-        await axios.get(`${API_BASE_URL}getProducts`)
+        await axios.get(`${API_BASE_URL}admin/products`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
             .then((res) => {
                 const p = res.data.reverse();
                 setProducts(p);
