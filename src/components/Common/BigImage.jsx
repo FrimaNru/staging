@@ -3,7 +3,7 @@ import styles from "@/styles/Product/Product.module.css";
 import Slider from "react-slick";
 import { useRef } from "react";
 
-export default function BigImage({ data, onOpen, onClose, isOpen }) {
+export default function BigImage({ data, onClose, isOpen, activeSlide }) {
 
     let sliderRef = useRef(null);
 
@@ -39,9 +39,9 @@ export default function BigImage({ data, onOpen, onClose, isOpen }) {
         slidesToShow: 1,
         slidesToScroll: 1,
         nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />
+        prevArrow: <SamplePrevArrow />,
+        initialSlide: activeSlide, 
     };
-
 
     return <>
         <Modal size='full' isOpen={isOpen} onClose={onClose} autoFocus={false} >
@@ -51,30 +51,15 @@ export default function BigImage({ data, onOpen, onClose, isOpen }) {
                     <img src='/crossGold.svg' className={styles.bigImageCross} onClick={onClose} />
                     <div className={styles.bigSliderBox} >
                         <Slider {...settings} ref={slider => { sliderRef = slider; }}>
-                            <div className={styles.bigImageSliderItem}>
+                            {data.map((item, index) => <div key={index} className={styles.bigImageSliderItem}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }} >
-                                    <img src={`https://api.mi-alegria.shop/uploads/${data}`} className={styles.bigImage} />
+                                    <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.bigImage} />
                                 </div>
-                            </div>
-                            <div className={styles.bigImageSliderItem} >
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }} >
-                                    <img src={`https://api.mi-alegria.shop/uploads/${data}`} className={styles.bigImage} />
-                                </div>
-                            </div>
-                            <div className={styles.bigImageSliderItem} >
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }} >
-                                    <img src={`https://api.mi-alegria.shop/uploads/${data}`} className={styles.bigImage} />
-                                </div>
-                            </div>
-                            <div className={styles.bigImageSliderItem} >
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }} >
-                                    <img src={`https://api.mi-alegria.shop/uploads/${data}`} className={styles.bigImage} />
-                                </div>
-                            </div>
+                            </div>)}
                         </Slider>
                     </div>
-                    <div className={styles.lineDots} >
-                        {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
+                    <div className={styles.lineDots}>
+                        {data.map((item, i) => <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(i)} />)}
                     </div>
                 </div>
             </ModalContent>

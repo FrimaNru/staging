@@ -142,7 +142,7 @@ function ProductItem({ item, setDeleteProduct, onOpen, load }) {
             .catch((e) => console.log(e));
     };
 
-    return <div className={styles.productsGridItem}>
+    return <div className={`${styles.productsGridItem} ${!item.isVisible[0] ? styles.productsGridItemHide : ''}`}>
         <img src={`https://api.mi-alegria.shop/uploads/${item.cover[0]}`} className={styles.productsGridItemCover} />
         <div className={styles.productsGridItemColumn}>
             <p className={styles.productsGridItemTitle}>{item.name[0].toUpperCase()}</p>

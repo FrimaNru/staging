@@ -26,6 +26,7 @@ const SamplePrevArrow = (props) => {
 export default function ImageSlider({ data, activeCount }) {
 
     const [openBigImage, setOpenBigImage] = useState(false);
+    const [activeSlide, setActiveSlide] = useState(0);
     let sliderRef = useRef(null);
 
     const settings = {
@@ -35,7 +36,8 @@ export default function ImageSlider({ data, activeCount }) {
         slidesToShow: 1,
         slidesToScroll: 1,
         nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />
+        prevArrow: <SamplePrevArrow />,
+        afterChange: (current) => setActiveSlide(current),
     };
 
     return <div className={styles.imgSliderBoxColumn} >
@@ -43,14 +45,14 @@ export default function ImageSlider({ data, activeCount }) {
             <Slider {...settings} ref={slider => {
                 sliderRef = slider;
             }}>
-                {[0, 1, 2, 3].map((x, index) => <div key={index} className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
-                    <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.sliderItemImg} />
+                {[data?.cover?.[activeCount], data?.images?.[activeCount]].flat().map((item, index) => <div key={index} className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
+                    <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.sliderItemImg} />
                 </div>)}
             </Slider>
         </div>
         <div className={styles.lineDots} >
-            {[0, 1, 2, 3].map((x, i) => <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(x)} />)}
+            {[data?.cover?.[activeCount], data?.images?.[activeCount]].flat().map((item, i) => <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(i)} />)}
         </div>
-        <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={data?.cover?.length > 0 && data.cover[activeCount]} />
+        <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={[data?.cover?.[activeCount], data?.images?.[activeCount]]} activeSlide={activeSlide} />
     </div>
 };

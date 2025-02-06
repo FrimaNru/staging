@@ -176,6 +176,16 @@
     align-items: flex-start;
 }
 
+.productsGridItemHide {
+    opacity: 0.5;
+    transition: all 0.3s;
+}
+
+.productsGridItemHide:hover {
+    opacity: 1;
+    transition: all 0.3s;
+}
+
 .productsGridItemCover {
     width: 166px;
     height: 166px;
