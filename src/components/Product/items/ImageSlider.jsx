@@ -53,6 +53,6 @@ export default function ImageSlider({ data, activeCount }) {
         <div className={styles.lineDots} >
             {[data?.cover?.[activeCount], data?.images?.[activeCount]].flat().map((item, i) => <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(i)} />)}
         </div>
-        <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={[data?.cover?.[activeCount], data?.images?.[activeCount]]} activeSlide={activeSlide} />
+        <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={[data?.cover?.[activeCount], data?.images?.[activeCount]].flat()} activeSlide={activeSlide} />
     </div>
 };
