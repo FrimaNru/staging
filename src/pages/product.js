@@ -30,7 +30,7 @@ export default function ProductPage() {
     return (
         <>
             <Head>
-                <title>{data?.name?.length > 0 && data?.name[0]?.toUpperCase()} – Купить в Mi Alegria</title>
+                <title>{data?.name?.length > 0 && data?.name?.toUpperCase()} – Купить в Mi Alegria</title>
                 <meta name="description" content='Серьги CARAMEL от Mi Alegria. Высокое качество, эксклюзивный дизайн и выгодные цены. Бесплатная доставка и гарантия на все ювелирные изделия.' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />

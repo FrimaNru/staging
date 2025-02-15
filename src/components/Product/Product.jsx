@@ -41,8 +41,9 @@ export function Product() {
     const load = async () => {
         await axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
             .then((res) => {
+                console.log(res.data)
                 setData(res.data);
-                setColorOfProduct(res.data.colors[0]);
+                setColorOfProduct(res.data.color);
                 if (res.data.type === 'ring' || res.data.type === 'bracelets') setSizeOfProduct(16)
                 else if (res.data.type === 'necklace') setSizeOfProduct(28);
             })
@@ -51,9 +52,9 @@ export function Product() {
 
     function buy() {
         if (localStorage.getItem('token')) {
-            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[activeCount] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(() => {
-                    addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.articles[activeCount] });
+                    addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article });
                     setIsOpenModal(true);
                 })
                 .catch((e) => console.log(e));
@@ -70,16 +71,16 @@ export function Product() {
                 <div className={styles.infoColumn}>
                     <div className={styles.infoColumnText}>
                         <div className={styles.infoTitleLine}>
-                            <p className={styles.infoTitle}>{data?.name?.length > 0 && data.name[activeCount]}</p>
-                            {data?.articles?.length > 0 ? <FavouriteButton idProduct={data._id} size={sizeOfProduct} color={colorOfProduct} article={data?.articles[activeCount]} /> : <></>}
+                            <p className={styles.infoTitle}>{data?.name?.length > 0 && data.name}</p>
+                            {data?.article?.length > 0 ? <FavouriteButton idProduct={data._id} size={sizeOfProduct} color={colorOfProduct} article={data?.article} /> : <></>}
                         </div>
                         <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
                         <SizeSelector data={data} activeCount={activeCount} sizeOfProduct={sizeOfProduct} setSizeOfProduct={setSizeOfProduct} />
                         <ColorSelector data={data} colorOfProduct={colorOfProduct} setColorOfProduct={setColorOfProduct} setActiveCount={setActiveCount} />
-                        {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.articles[activeCount]}</p>}
+                        {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.article}</p>}
                     </div>
                     <div className={styles.infoButtonColumn}>
-                        <p className={styles.infoCost} >{formatNumber(Number(data?.cost?.length > 0 && data.cost[activeCount]))} руб.</p>
+                        <p className={styles.infoCost} >{formatNumber(Number(data.cost))} руб.</p>
                         <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
                     </div>
                 </div>
@@ -102,8 +103,8 @@ export function Product() {
                         </div>
                         <div className={styles.modalBody}>
                             <div className={styles.modalBodyColumn}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data.cover[activeCount]}`} className={styles.modalBodyImg} />
-                                <p className={styles.modalBodyTitle}>{data?.name?.length > 0 && data.name[activeCount]}</p>
+                                <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data.cover}`} className={styles.modalBodyImg} />
+                                <p className={styles.modalBodyTitle}>{data?.name?.length > 0 && data.name}</p>
                             </div>
                             <div className={styles.modalBodyColumnButtons}>
                                 <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)} >ПРОДОЛЖИТЬ ПОКУПКИ</button>

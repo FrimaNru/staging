@@ -45,14 +45,14 @@ export default function ImageSlider({ data, activeCount }) {
             <Slider {...settings} ref={slider => {
                 sliderRef = slider;
             }}>
-                {[data?.cover?.[activeCount], data?.images?.[activeCount]].flat().map((item, index) => <div key={index} className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
+                {[data?.cover, data?.images].flat().map((item, index) => <div key={index} className={styles.sliderItem} onClick={() => setOpenBigImage(true)}>
                     <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.sliderItemImg} />
                 </div>)}
             </Slider>
         </div>
         <div className={styles.lineDots} >
-            {[data?.cover?.[activeCount], data?.images?.[activeCount]].flat().map((item, i) => <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(i)} />)}
+            {[data?.cover, data?.images].flat().map((item, i) => <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(i)} />)}
         </div>
-        <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={[data?.cover?.[activeCount], data?.images?.[activeCount]].flat()} activeSlide={activeSlide} />
+        <BigImage isOpen={openBigImage} onClose={() => setOpenBigImage(false)} data={[data?.cover, data?.images].flat()} activeSlide={activeSlide} />
     </div>
 };

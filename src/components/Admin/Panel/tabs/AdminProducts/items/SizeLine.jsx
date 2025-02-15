@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { Modal, ModalContent, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
 
-export default function SizeLine({ data, setData, activeArticleNumber }) {
+export default function SizeLine({ data, setData }) {
 
     const [sizes, setSizes] = useState({});
     const [newSize, setNewSize] = useState('');
@@ -18,23 +18,23 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
 
     const load = async () => {
         await axios.get(`${API_BASE_URL}constans/product/sizes`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
-            .then((res) => { setSizes(res.data); console.log(res.data); })
+            .then((res) => { setSizes(res.data); })
             .catch((e) => console.log(e));
     };
 
     const handleToggleSize = (item) => {
-        const updatedSizes = [...data.sizes];
+        let updatedSizes = [...data.sizes];
 
-        if (!updatedSizes[activeArticleNumber]) {
-            updatedSizes[activeArticleNumber] = [];
+        if (!updatedSizes) {
+            updatedSizes = [];
         }
 
-        const itemIndex = updatedSizes[activeArticleNumber].indexOf(item);
+        const itemIndex = updatedSizes.indexOf(item);
 
         if (itemIndex !== -1) {
-            updatedSizes[activeArticleNumber].splice(itemIndex, 1);
+            updatedSizes.splice(itemIndex, 1);
         } else {
-            updatedSizes[activeArticleNumber] = [...updatedSizes[activeArticleNumber], item];
+            updatedSizes = [...updatedSizes, item];
         }
 
         setData({ ...data, sizes: updatedSizes });
@@ -87,7 +87,7 @@ export default function SizeLine({ data, setData, activeArticleNumber }) {
                         .map((item, index) => (
                             <div key={index} className={styles.sizeColumn}>
                                 <button
-                                    className={`${styles.sizeItem} ${data.sizes[activeArticleNumber]?.includes(item) ? styles.sizeItemSelect : ''}`}
+                                    className={`${styles.sizeItem} ${data.sizes?.includes(item) ? styles.sizeItemSelect : ''}`}
                                     onClick={() => handleToggleSize(item)}
                                 >
                                     {item}

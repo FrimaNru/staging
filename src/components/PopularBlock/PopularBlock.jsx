@@ -94,16 +94,16 @@ export default function PopularBlock() {
                 {data.map((x, i) => <div className={styles.sliderItem} key={i}>
                     <div className={styles.sliderItemContent}>
                         <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
-                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover[0]}`} className={styles.sliderItemImage} />
+                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
                         </Link>
                         <div className={styles.sliderItemColumn}>
-                            <p className={styles.sliderItemTitle}>{x.name[0]}</p>
-                            <p className={styles.sliderItemText}>Артикул: {x.articles[0]}</p>
+                            <p className={styles.sliderItemTitle}>{x.name}</p>
+                            <p className={styles.sliderItemText}>Артикул: {x.article}</p>
                         </div>
                         <div className={styles.productItemCostLine}>
                             <div className={styles.productItemCostEmpty} />
-                            <p className={styles.sliderItemCost}>{formatNumber(x.cost[0])} руб.</p>
-                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.colors[0]} article={x.articles[0]} type='small' />
+                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
                         </div>
                     </div>
                 </div>)}
@@ -115,16 +115,16 @@ export default function PopularBlock() {
                 {data.map((x, i) => <div className={styles.sliderItem} key={i}>
                     <div className={styles.sliderItemContent}>
                         <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
-                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover[0]}`} className={styles.sliderItemImage} />
+                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
                         </Link>
                         <div className={styles.sliderItemColumn}>
-                            <p className={styles.sliderItemTitle}>{x.name[0]}</p>
-                            <p className={styles.sliderItemText}>Артикул: {x.articles[0]}</p>
+                            <p className={styles.sliderItemTitle}>{x.name}</p>
+                            <p className={styles.sliderItemText}>Артикул: {x.article}</p>
                         </div>
                         <div className={styles.productItemCostLine}>
                             <div className={styles.productItemCostEmpty} />
-                            <p className={styles.sliderItemCost}>{formatNumber(x.cost[0])} руб.</p>
-                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.colors[0]} article={x.articles[0]} type='small' />
+                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
                         </div>
                     </div>
                 </div>)}

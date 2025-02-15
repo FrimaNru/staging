@@ -79,8 +79,7 @@ export default function Bag() {
                 res.data.bag.map(x => {
                     axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
                         .then((r) => {
-                            const index = r.data.articles.findIndex(y => y === x.article);
-                            d = Number(d) + Number(r.data.cost[index]);
+                            d = Number(d) + Number(r.data.cost);
                             setTotal(d);
                         })
                         .catch((e) => {
@@ -153,7 +152,7 @@ export default function Bag() {
                     {data.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen} >Очистить корзину</button>}
                 </div>
                 {data.length > 0 && Object.entries(itemCounts)
-                    .filter(([key, count], index, self) => self.findIndex(([x]) => x === key) === index)
+                    .filter(([key, count], index, self) => ([x]) => x === key)
                     .map(([key, count], i) => {
                         const item = JSON.parse(key);
                         return (
@@ -360,8 +359,6 @@ function ProductItem({ item, count, load, setData }) {
     function loadNow() {
         axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
-                const index = res.data.articles.findIndex(x => x === item.article);
-                setActiveCount(index);
                 setDataProduct(res.data);
             })
             .catch((e) => console.log(e));
@@ -397,11 +394,11 @@ function ProductItem({ item, count, load, setData }) {
 
     return <div className={styles.item}>
         <div className={styles.itemRow}>
-            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.itemCover} />
+            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover}`} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
                 <div className={styles.itemNameLine}>
                     <div className={styles.itemNameColumn}>
-                        <p className={styles.itemName}>{data?.name?.length > 0 && data?.name[activeCount]}</p>
+                        <p className={styles.itemName}>{data?.name?.length > 0 && data?.name}</p>
                         <p className={styles.itemNameStat}>Артикул: {item.article}</p>
                         <p className={styles.itemNameStat}>Цвет: {item.color}</p>
                         {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}
@@ -418,7 +415,7 @@ function ProductItem({ item, count, load, setData }) {
                     </button>
                 </div>
 
-                <p className={styles.itemCost} >{formatNumber(Number(data?.cost?.length > 0 && data?.cost[activeCount]))} руб.</p>
+                <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>
             </div>
         </div>
         <div className={styles.itemRowLil}>

@@ -25,19 +25,20 @@ const additionally = {
 export default function AdminEditProduct() {
 
     const [isLoading, setIsLoading] = useState(false);
+    const [family, setFamily] = useState([]);
     const [data, setData] = useState({
-        name: [],
-        cost: [],
-        cover: [],
+        name: '',
+        cost: 0,
+        cover: null,
         images: [],
-        colors: [],
-        articles: [],
+        color: null,
+        article: '',
         additionally: [],
-        weight: [],
+        weight: '',
         sizes: [],
-        type: ''
+        type: '',
+        family: []
     });
-    const [activeArticleNumber, setActiveArticleNumber] = useState(0);
 
     const toast = useToast();
     const router = useRouter();
@@ -47,62 +48,57 @@ export default function AdminEditProduct() {
     const load = async () => {
         await axios.post(`${API_BASE_URL}getOneProduct`, { id: router.query.id })
             .then((res) => {
-                console.log(res.data);
                 setData(res.data);
+                setFamily(res.data.family[0]._id);
+                console.log(res.data)
             })
             .catch((e) => console.log(e));
     };
 
     const editProduct = async () => {
-        console.log(data);
-        if (data?.name?.length === data?.articles?.length && data?.cost?.length === data?.articles?.length && data?.type !== '' && data.colors.length === data?.articles?.length && data.weight.length === data?.articles?.length && data.cover.length === data?.articles?.length && data.images.length === data?.articles?.length) {
+        if (data?.name !== '' && data?.cost !== 0 && data?.type !== '' && data.color && data.weight !== '' && data.cover && data.images.length !== 0) {
             setIsLoading(true);
 
             const formData = new FormData();
+            if (data.cover instanceof File) {
+                formData.append(`cover`, data.cover);
+            } else {
+                formData.append(`coverNames`, data.cover);
+            }
 
-            data.cover.forEach((item, index) => {
-                if (item instanceof File || (item && item.name && item.size)) {
-                    formData.append(`cover[${index}]`, item);
-                } else {
-                    formData.append(`coverNames[${index}]`, item);
+            data.images.forEach((item, index) => {
+                if (item instanceof File) {
+                    formData.append(`images[${index}]`, item); // Новые файлы
+                } else if (typeof item === 'string') {
+                    formData.append(`imageNames[${index}]`, item); // Существующие имена файлов
                 }
-            });
-
-            data.images.forEach((imageArray, arrayIndex) => {
-                imageArray.forEach((item, fileIndex) => {
-                    if (item instanceof File || (item && item.name && item.size)) {
-                        formData.append(`images[${arrayIndex}][${fileIndex}]`, item);
-                    } else {
-                        formData.append(`imageNames[${arrayIndex}][${fileIndex}]`, item);
-                    }
-                });
             });
 
             formData.append('data', JSON.stringify(data));
 
             try {
                 await axios.post(`${API_BASE_URL}editProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
-                setIsLoading(false);
                 router.push('/adminpanel?page=products');
             } catch (e) {
                 console.error(e);
+            } finally {
                 setIsLoading(false);
             }
 
         } else {
-            if (data?.name?.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде ввели названия товаров</div>), duration: 3000 });
-            if (data?.cost?.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде ввели стоимости товаров</div>), duration: 3000 });
+            if (data?.name === '') return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели название товара</div>), duration: 3000 });
+            if (data?.cost === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели стоимость товара</div>), duration: 3000 });
             if (data?.type === '') return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали тип товара</div>), duration: 3000 });
-            if (data.colors.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде выбрали цвета товаров</div>), duration: 3000 });
-            if (data.weight.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде ввели веса товаров</div>), duration: 3000 });
-            if (data.cover.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде добавили обложки товаров</div>), duration: 3000 });
-            if (data.images.length !== data?.articles?.length) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не везде добавили фотографии товаров</div>), duration: 3000 });
+            if (!data.color) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали цвет товара</div>), duration: 3000 });
+            if (data.weight === '') return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не ввели вес товара</div>), duration: 3000 });
+            if (!data.cover) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили обложку товара</div>), duration: 3000 });
+            if (data.images.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не добавили фотографии товара</div>), duration: 3000 });
         }
     };
 
     const changeVisible = async () => {
         try {
-            await axios.post(`${API_BASE_URL}admin/product/visible`, { id: router.query.id, activeArticleNumber }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
+            await axios.post(`${API_BASE_URL}admin/product/visible`, { id: router.query.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
             load();
         } catch (error) {
             console.log(error);
@@ -110,22 +106,25 @@ export default function AdminEditProduct() {
     }
 
     return <div className={styles.createColumn}>
-        <ArticlesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} setActiveArticleNumber={setActiveArticleNumber} />
+        <div className={styles.createLilColumn}>
+            <p className={styles.createSubtitle}>Id товара</p>
+            <p className={styles.createSubtitle}>{data._id}</p>
+        </div>
         <div className={styles.createLilColumn}>
             <p className={styles.createSubtitle}>Артикул</p>
             <div className={styles.inputLine}>
-                <input className={styles.productsInput} placeholder="Введите артикул товара" onChange={(e) => setData({ ...data, articles: [...data.articles.slice(0, activeArticleNumber), e.target.value, ...data.articles.slice(activeArticleNumber + 1)] })} value={data?.articles[activeArticleNumber] || ""} />
-                <button className={styles.lilBlackButton} style={{ opacity: !data.isVisible?.[activeArticleNumber] ? 0.5 : 1 }} onClick={changeVisible}>{data && data.isVisible?.[activeArticleNumber] === true ? 'СКРЫТЬ' : 'ОТОБРАЖАТЬ'}</button>
+                <input className={styles.productsInput} placeholder="Введите артикул товара" onChange={(e) => setData({ ...data, article: e.target.value })} value={data?.article || ""} />
+                <button className={styles.lilBlackButton} style={{ opacity: !data.isVisible ? 0.5 : 1 }} onClick={changeVisible}>{data && data.isVisible === true ? 'СКРЫТЬ' : 'ОТОБРАЖАТЬ'}</button>
             </div>
         </div>
-        <ImagesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} />
+        <ImagesLine data={data} setData={setData} />
         <div className={styles.createLilColumn}>
             <p className={styles.createSubtitle}>Название</p>
-            <input className={styles.productsInput} placeholder="Введите название товара" onChange={(e) => setData({ ...data, name: [...data.name.slice(0, activeArticleNumber), e.target.value, ...data.name.slice(activeArticleNumber + 1)] })} value={data?.name[activeArticleNumber] || ""} />
+            <input className={styles.productsInput} placeholder="Введите название товара" onChange={(e) => setData({ ...data, name: e.target.value })} value={data?.name || ""} />
         </div>
         <div className={styles.createLilColumn}>
             <p className={styles.createSubtitle}>Стоимость</p>
-            <input className={styles.productsInput} type="number" placeholder="Введите стоимость товара" onChange={(e) => setData({ ...data, cost: [...data.cost.slice(0, activeArticleNumber), e.target.value, ...data.cost.slice(activeArticleNumber + 1)] })} value={data?.cost[activeArticleNumber] || ""} />
+            <input className={styles.productsInput} type="number" placeholder="Введите стоимость товара" onChange={(e) => setData({ ...data, cost: e.target.value })} value={data?.cost || ""} />
         </div>
         <div className={styles.createLilColumn}>
             <p className={styles.createSubtitle}>Тип товара</p>
@@ -140,11 +139,11 @@ export default function AdminEditProduct() {
                 ))}
             </div>
         </div>
-        <SizeLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} />
-        <ColorsLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} />
+        <SizeLine data={data} setData={setData} />
+        <ColorsLine data={data} setData={setData} />
         <div className={styles.createLilColumn}>
             <p className={styles.createSubtitle}>Вес товара, <span className={styles.createSubtitleSpan}>гр</span></p>
-            <input className={styles.productsInput} placeholder="Введите вес товара" onChange={(e) => setData({ ...data, weight: [...data.weight.slice(0, activeArticleNumber), e.target.value, ...data.weight.slice(activeArticleNumber + 1)] })} value={data?.weight[activeArticleNumber] || ""} />
+            <input className={styles.productsInput} placeholder="Введите вес товара" onChange={(e) => setData({ ...data, weight: e.target.value })} value={data?.weight || ""} />
         </div>
         <div className={styles.createLilColumn}>
             <p className={styles.createSubtitle}>Дополнительно</p>
@@ -163,6 +162,10 @@ export default function AdminEditProduct() {
                     </button>
                 ))}
             </div>
+        </div>
+        <div className={styles.createLilColumn}>
+            <p className={styles.createSubtitle}>Второй товар</p>
+            <input className={styles.productsInput} placeholder="Введите ID товара" onChange={(e) => setFamily(e.target.value)} value={family || ""} />
         </div>
         <button className={`${styles.createButton} ${isLoading ? styles.loading : ''}`} onClick={editProduct}>Обновить товар</button>
     </div>

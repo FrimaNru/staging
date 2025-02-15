@@ -100,7 +100,6 @@ function ProductItemOrder({ item, count }) {
 
     const [data, setData] = useState({});
     const router = useRouter();
-    const [activeCount, setActiveCount] = useState(0);
 
     useEffect(() => {
         loadNow();
@@ -109,8 +108,6 @@ function ProductItemOrder({ item, count }) {
     function loadNow() {
         axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
-                const index = res.data.articles.findIndex(x => x === item.article);
-                setActiveCount(index);
                 setData(res.data);
             })
             .catch((e) => console.log(e));
@@ -118,18 +115,18 @@ function ProductItemOrder({ item, count }) {
 
     return <div className={styles.item} onClick={() => router.push(`/product?id=${data._id}`)} >
         <div className={styles.itemRow}>
-            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.itemCover} />
+            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
-                <p className={styles.itemName}>{data?.name?.length > 0 && data?.name[activeCount]}</p>
+                <p className={styles.itemName}>{data?.name?.length > 0 && data?.name}</p>
                 <div className={styles.itemNameColumn}>
                     <p className={styles.itemNameStat}>Артикул: {item.article}</p>
                     <p className={styles.itemNameStat}>Цвет: {item.color}</p>
                     {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}
                 </div>
                 <div className={styles.itemCountNumber}>{count} шт</div>
-                <p className={styles.itemCostMobile} >{formatNumber(Number(data?.cost?.length > 0 && data?.cost[activeCount]))} руб.</p>
+                <p className={styles.itemCostMobile}>{formatNumber(Number(data?.cost?.length > 0 && data?.cost))} руб.</p>
             </div>
         </div>
-        <p className={styles.itemCost} >{formatNumber(Number(data?.cost?.length > 0 && data?.cost[activeCount]))} руб.</p>
+        <p className={styles.itemCost}>{formatNumber(Number(data?.cost))} руб.</p>
     </div>
 };

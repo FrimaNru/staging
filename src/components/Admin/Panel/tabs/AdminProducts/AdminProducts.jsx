@@ -78,10 +78,8 @@ export default function AdminProducts() {
 
         const searchFilter =
             search === '' ||
-            (Array.isArray(item.name)
-                ? item.name.some(name => name.toLowerCase().includes(search.toLowerCase()))
-                : item.name.toLowerCase().includes(search.toLowerCase())) ||
-            (item.articles && item.articles.some(article => article.toLowerCase().includes(search.toLowerCase())));
+            (item.name.toLowerCase().includes(search.toLowerCase())) ||
+            (item.article.toLowerCase().includes(search.toLowerCase()));
 
         return typeFilter && sectionFilter && searchFilter;
     });
@@ -115,8 +113,8 @@ export default function AdminProducts() {
             <ModalCloseButton />
             <ModalContent>
                 <div className={styles.createModal}>
-                    <p className={styles.createModalTitle}>Вы уверены, что хотите удалить {deleteProduct?.name?.length > 0 && deleteProduct?.name[0]?.toUpperCase()}?</p>
-                    <img className={styles.createModalCover} src={`https://api.mi-alegria.shop/uploads/${deleteProduct?.cover?.length > 0 && deleteProduct?.cover[0]}`} />
+                    <p className={styles.createModalTitle}>Вы уверены, что хотите удалить {deleteProduct?.name?.length > 0 && deleteProduct?.name?.toUpperCase()}?</p>
+                    <img className={styles.createModalCover} src={`https://api.mi-alegria.shop/uploads/${deleteProduct?.cover}`} />
                     <div className={styles.createModalLine} >
                         <button className={styles.createModalButton} onClick={delProduct}>Удалить</button>
                         <button className={styles.createModalButtonCancel} onClick={() => { onClose(); setDeleteProduct({}); }}>Отменить</button>
@@ -142,14 +140,14 @@ function ProductItem({ item, setDeleteProduct, onOpen, load }) {
             .catch((e) => console.log(e));
     };
 
-    return <div className={`${styles.productsGridItem} ${!item.isVisible[0] ? styles.productsGridItemHide : ''}`}>
-        <img src={`https://api.mi-alegria.shop/uploads/${item.cover[0]}`} className={styles.productsGridItemCover} />
+    return <div className={`${styles.productsGridItem} ${!item.isVisible ? styles.productsGridItemHide : ''}`}>
+        <img src={`https://api.mi-alegria.shop/uploads/${item.cover}`} className={styles.productsGridItemCover} />
         <div className={styles.productsGridItemColumn}>
-            <p className={styles.productsGridItemTitle}>{item.name[0].toUpperCase()}</p>
-            <p className={styles.productsGridItemCost}>{formatNumber(item.cost[0])} руб.</p>
+            <p className={styles.productsGridItemTitle}>{item.name.toUpperCase()}</p>
+            <p className={styles.productsGridItemCost}>{formatNumber(item.cost)} руб.</p>
             <div className={styles.productsGridItemLilColumn}>
-                <p className={styles.productsGridItemText}>Цвета: {item.colors.join(", ")}</p>
-                <p className={styles.productsGridItemText}>Артикулы: {item.articles.join(", ")}</p>
+                <p className={styles.productsGridItemText}>Цвет: {item?.color}</p>
+                <p className={styles.productsGridItemText}>Артикул: {item?.article}</p>
             </div>
             <div className={styles.addtitionallyLine}>
                 {Object.entries(additionally).map(([key, value], index) => <button key={index} className={`${styles.additionallyButton} ${item.additionally.includes(key) ? styles.additionallyButtonSelect : ''}`} onClick={() => changeAdditional(key)} >{value}</button>)}

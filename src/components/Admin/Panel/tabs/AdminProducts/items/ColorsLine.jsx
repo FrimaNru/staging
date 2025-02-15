@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
 
-export default function ColorsLine({ data, setData, activeArticleNumber }) {
+export default function ColorsLine({ data, setData }) {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [colors, setColors] = useState([]);
@@ -38,7 +38,7 @@ export default function ColorsLine({ data, setData, activeArticleNumber }) {
             <Menu>
                 <MenuButton>
                     <div className={styles.createColorButton}>
-                        <p>{data.colors[activeArticleNumber] ?? 'Выберите цвет'}</p>
+                        <p>{data.color ?? 'Выберите цвет'}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
                             <path d="M1 0.5L8 7.5L15 0.5" stroke="#140702" strokeLinecap="round" />
                         </svg>
@@ -48,7 +48,7 @@ export default function ColorsLine({ data, setData, activeArticleNumber }) {
                     <div className={styles.createColorsPanel}>
                         {colors.map((item, i) => (
                             <MenuItem key={i} p={0} bg='none' _hover={{ bg: 'none' }}>
-                                <p className={`${styles.createColorsItem} ${i === colors.length - 1 ? styles.createColorsItemLast : ''}`} onClick={() => setData({ ...data, colors: [...data.colors.slice(0, activeArticleNumber), item, ...data.colors.slice(activeArticleNumber + 1)] })}>{item}</p>
+                                <p className={`${styles.createColorsItem} ${i === colors.length - 1 ? styles.createColorsItemLast : ''}`} onClick={() => setData({ ...data, color: item })}>{item}</p>
                             </MenuItem>
                         ))}
                     </div>

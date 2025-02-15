@@ -1,106 +1,91 @@
 import styles from "@/styles/Admin/Products/ProductItem.module.css";
 import { useState } from "react";
 
-export default function ImagesLine({ data, setData, activeArticleNumber }) {
+export default function ImagesLine({ data, setData }) {
 
-    const [coverURL, setCoverURL] = useState([]);
+    const [coverURL, setCoverURL] = useState(null);
     const [imageURLs, setImageURLs] = useState([]);
-
-    console.log(coverURL)
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        const updatedCoverURL = URL?.createObjectURL(file);
 
-        const fillArray = (arr, length, filler = '') => {
-            return [...arr, ...Array(Math.max(length - arr.length, 0)).fill(filler)];
-        };
-
-        const updatedCover = fillArray(data.cover, activeArticleNumber + 1);
-        updatedCover[activeArticleNumber] = file;
-
-        const updatedCoverURL = fillArray(coverURL, activeArticleNumber + 1);
-        updatedCoverURL[activeArticleNumber] = URL?.createObjectURL(file);
-
-        setData({ ...data, cover: updatedCover });
+        setData({ ...data, cover: file });
         setCoverURL(updatedCoverURL);
+        e.target.value = '';
     };
-
 
     const handleImagesChange = (e) => {
         const files = Array.from(e.target.files);
 
-        const updatedImages = [...data.images];
-        updatedImages[activeArticleNumber] = [
-            ...(updatedImages[activeArticleNumber] || []),
-            ...files
-        ];
-        setData({ ...data, images: updatedImages });
+        setData(prevData => ({
+            ...prevData,
+            images: [...(prevData.images || []), ...files]
+        }));
 
-        const updatedImageURLs = [...imageURLs];
-        updatedImageURLs[activeArticleNumber] = [
-            ...(updatedImageURLs[activeArticleNumber] || []),
+        setImageURLs(prevURLs => [
+            ...(prevURLs || []),
             ...files.map(file => URL.createObjectURL(file))
-        ];
-        setImageURLs(updatedImageURLs);
+        ]);
+
+        e.target.value = '';
     };
 
     const removeImage = (index) => {
-        const updatedImages = [...data.images];
-        const updatedImageURLs = [...imageURLs];
-
-        if (updatedImages[activeArticleNumber]) {
-            updatedImages[activeArticleNumber] = updatedImages[activeArticleNumber].filter((_, i) => i !== index);
-        }
-        if (updatedImageURLs[activeArticleNumber]) {
-            updatedImageURLs[activeArticleNumber] = updatedImageURLs[activeArticleNumber].filter((_, i) => i !== index);
-        }
-
-        setData({ ...data, images: updatedImages });
-        setImageURLs(updatedImageURLs);
+        setData(prevData => ({
+            ...prevData,
+            images: prevData.images?.filter((_, i) => i !== index) || []
+        }));
+        setImageURLs(prevURLs => prevURLs?.filter((_, i) => i !== index) || []);
     };
 
     const moveImageLeft = (index) => {
-        const updatedImages = [...data.images];
-        const updatedImageURLs = [...imageURLs];
+        if (index > 0) {
+            setData(prevData => {
+                const updatedImages = [...prevData.images];
+                [updatedImages[index - 1], updatedImages[index]] =
+                    [updatedImages[index], updatedImages[index - 1]];
+                return { ...prevData, images: updatedImages };
+            });
 
-        if (updatedImages[activeArticleNumber] && index > 0) {
-            [updatedImages[activeArticleNumber][index - 1], updatedImages[activeArticleNumber][index]] =
-                [updatedImages[activeArticleNumber][index], updatedImages[activeArticleNumber][index - 1]];
-
-            [updatedImageURLs[activeArticleNumber][index - 1], updatedImageURLs[activeArticleNumber][index]] =
-                [updatedImageURLs[activeArticleNumber][index], updatedImageURLs[activeArticleNumber][index - 1]];
+            setImageURLs(prevURLs => {
+                const updatedImageURLs = [...prevURLs];
+                [updatedImageURLs[index - 1], updatedImageURLs[index]] =
+                    [updatedImageURLs[index], updatedImageURLs[index - 1]];
+                return updatedImageURLs;
+            });
         }
-
-        setData({ ...data, images: updatedImages });
-        setImageURLs(updatedImageURLs);
     };
 
     const moveImageRight = (index) => {
-        const updatedImages = [...data.images];
-        const updatedImageURLs = [...imageURLs];
+        setData(prevData => {
+            const updatedImages = [...prevData.images];
+            if (index < updatedImages.length - 1) {
+                [updatedImages[index], updatedImages[index + 1]] =
+                    [updatedImages[index + 1], updatedImages[index]];
+                return { ...prevData, images: updatedImages };
+            }
+            return prevData; 
+        });
 
-        if (
-            updatedImages[activeArticleNumber] &&
-            index < updatedImages[activeArticleNumber].length - 1
-        ) {
-            [updatedImages[activeArticleNumber][index], updatedImages[activeArticleNumber][index + 1]] =
-                [updatedImages[activeArticleNumber][index + 1], updatedImages[activeArticleNumber][index]];
-
-            [updatedImageURLs[activeArticleNumber][index], updatedImageURLs[activeArticleNumber][index + 1]] =
-                [updatedImageURLs[activeArticleNumber][index + 1], updatedImageURLs[activeArticleNumber][index]];
-        }
-
-        setData({ ...data, images: updatedImages });
-        setImageURLs(updatedImageURLs);
+        setImageURLs(prevURLs => {
+            const updatedImageURLs = [...prevURLs];
+            if (index < updatedImageURLs.length - 1) {
+                [updatedImageURLs[index], updatedImageURLs[index + 1]] =
+                    [updatedImageURLs[index + 1], updatedImageURLs[index]];
+                return updatedImageURLs;
+            }
+            return prevURLs;
+        });
     };
 
     return <div className={styles.imagesLine}>
         <div className={styles.imageColumn}>
             <p className={styles.createSubtitle}>Обложка</p>
             <div className={styles.newsImageButtonBox} >
-                {(coverURL[activeArticleNumber] || data.cover[activeArticleNumber]) ? (
+                {(coverURL || data.cover) ? (
                     <div className={styles.coverColumn}>
-                        <img src={(data.cover[activeArticleNumber] && !coverURL[activeArticleNumber]) ? `https://api.mi-alegria.shop/uploads/${data.cover[activeArticleNumber]}` : coverURL[activeArticleNumber]} className={styles.cover} />
+                        <img src={(data.cover && !coverURL) ? `https://api.mi-alegria.shop/uploads/${data.cover}` : coverURL} className={styles.cover} />
                         <label className="input-file">
                             <input type='file' onChange={handleFileChange} accept="image/*" />
                             <div className={styles.coverChangeButton}>Заменить</div>
@@ -119,8 +104,8 @@ export default function ImagesLine({ data, setData, activeArticleNumber }) {
         <div className={styles.imageColumn}>
             <p className={styles.createSubtitle}>Добавить фото</p>
             <div className={styles.anotherImagesLine}>
-                {data.images[activeArticleNumber]?.length > 0 && <div className={styles.anotherImagesLine}>
-                    {data.images[activeArticleNumber].map((url, index) => (
+                {data.images?.length > 0 && <div className={styles.anotherImagesLine}>
+                    {data.images.map((url, index) => (
                         <div key={index} className={styles.coverColumn}>
                             <img src={url instanceof File ? URL.createObjectURL(url) : `https://api.mi-alegria.shop/uploads/${url}`} className={styles.cover} />
                             <div className={styles.imageLilRow}>

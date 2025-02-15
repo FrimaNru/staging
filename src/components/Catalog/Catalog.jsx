@@ -130,7 +130,7 @@ export default function Catalog() {
                 </div>
                 <div className={styles.catalogColumn}>
                     <div className={styles.lineSort} >
-                        <p className={styles.lineSortText} >Сортировать</p>
+                        <p className={styles.lineSortText}>Сортировать</p>
                         <Menu>
                             <MenuButton pos='relative' zIndex={1}>
                                 <div className={styles.menuButton} zIndex={5} pos='relative' >
@@ -228,14 +228,14 @@ function CatalogItem({ row, rowIndex, arr }) {
                 <div key={i} className={styles.sliderItem}>
                     <div className={styles.sliderItemContent}>
                         <Link href={`/product?id=${x._id}`} className={styles.sliderItemLink}>
-                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover[0]}`} className={styles.sliderItemImage} />
+                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
                         </Link>
-                        <p className={styles.sliderItemTitle}>{x.name[0]}</p>
-                        <p className={styles.productItemArticle}>Артикул: {x.articles[0]}</p>
+                        <p className={styles.sliderItemTitle}>{x.name}</p>
+                        <p className={styles.productItemArticle}>Артикул: {x.article}</p>
                         <div className={styles.productItemCostLine}>
                             <div className={styles.productItemCostEmpty} />
-                            <p className={styles.sliderItemCost}>{formatNumber(x.cost[0])} руб.</p>
-                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.colors[0]} article={x.articles[0]} type='small' />
+                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
                         </div>
                     </div>
                 </div>

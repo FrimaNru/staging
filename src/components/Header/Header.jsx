@@ -96,23 +96,19 @@ export default function Header() {
                         </div>
                     </Link>
                     <>
-                        {products.map((x, i) => {
-                            const matchIndex = x.name.findIndex((name) => name.includes(search));
-                            if (matchIndex !== -1) {
-                                return (
-                                    <Link key={i} href={`/product?id=${x._id}`}>
-                                        <div className={styles.inputPanelLine}>
-                                            <img
-                                                src={`https://api.mi-alegria.shop/uploads/${x.cover[matchIndex]}`}
-                                                className={styles.inputPanelCover}
-                                            />
-                                            <p className={styles.inputPanelName}>{x.name[matchIndex]}</p>
-                                            <p className={styles.inputPanelCost}>{formatNumber(x.cost[matchIndex])} руб.</p>
-                                        </div>
-                                    </Link>
-                                );
-                            }
-                            return null;
+                        {products.filter(item => item.name.toLowerCase().includes(search.toLowerCase())).map((x, i) => {
+                            return (
+                                <Link key={i} href={`/product?id=${x._id}`}>
+                                    <div className={styles.inputPanelLine}>
+                                        <img
+                                            src={`https://api.mi-alegria.shop/uploads/${x.cover}`}
+                                            className={styles.inputPanelCover}
+                                        />
+                                        <p className={styles.inputPanelName}>{x.name}</p>
+                                        <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
+                                    </div>
+                                </Link>
+                            );
                         })}
                     </>
                 </div>}

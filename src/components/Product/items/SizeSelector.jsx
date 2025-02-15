@@ -39,21 +39,20 @@ export default function SizeSelector({ data, activeCount, sizeOfProduct, setSize
         {(data.type === 'ring' || data.type === 'necklace' || data.type === 'bracelets') && <div className={styles.sizeColumn}>
             <p className={styles.sizeTitle}>Размер, <span className={styles.sizeTitleMM}>{data.type === 'ring' ? 'мм' : 'см'}</span></p>
             <div className={styles.sizeLine}>
-                {(data?.sizes?.length > 0 &&
-                    data.sizes[activeCount]?.sort((a, b) => {
+                {data.sizes.length > 0 &&
+                    data.sizes?.sort((a, b) => {
                         const numA = parseFloat(String(a).replace(',', '.'));
                         const numB = parseFloat(String(b).replace(',', '.'));
                         return numA - numB;
-                    })
-                ).map((item, index) => (
-                    <button
-                        key={index}
-                        className={`${styles.sizeItem} ${item === sizeOfProduct ? styles.sizeItemSelect : ''}`}
-                        onClick={() => setSizeOfProduct(item)}
-                    >
-                        {item}
-                    </button>
-                ))}
+                    })?.map((item, index) => (
+                        <button
+                            key={index}
+                            className={`${styles.sizeItem} ${item === sizeOfProduct ? styles.sizeItemSelect : ''}`}
+                            onClick={() => setSizeOfProduct(item)}
+                        >
+                            {item}
+                        </button>
+                    ))}
             </div>
             <button className={styles.sizeButton} onClick={() => setIsOpenModalSize(true)}>Как определить размер?</button>
         </div>}

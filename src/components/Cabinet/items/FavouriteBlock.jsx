@@ -32,8 +32,6 @@ export default function FavouriteBlock() {
                 res.data.forEach(x => {
                     axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
                         .then((r) => {
-                            const index = r.data.articles.findIndex(item => item === x.article);
-                            setActiveCount(index);
                             setData(old => [...old, { ...r.data, color: x.color, size: x.size, article: x.article }]);
                         })
                         .catch((e) => console.log(e));
@@ -93,19 +91,19 @@ export default function FavouriteBlock() {
                     <div className={styles.item}>
                         <div className={styles.itemRow}>
                             <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${x?.cover[activeCount]} `} className={styles.itemImg} />
+                                <img src={`https://api.mi-alegria.shop/uploads/${x?.cover} `} className={styles.itemImg} />
                             </Link>
                             <div className={styles.itemColumn}>
                                 <div className={styles.itemLilColumn}>
                                     <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
-                                        <p className={styles.itemName}>{x?.name[activeCount]}</p>
+                                        <p className={styles.itemName}>{x?.name}</p>
                                     </Link>
                                     <div className={styles.itemLilTextColumn}>
                                         <p className={styles.itemTexLil}>Артикул: {x.article}</p>
                                         <p className={styles.itemTexLil}>Цвет: {x.color}</p>
                                         {x.type !== "earrings" && <p className={styles.itemTexLil}>Размер: {x.size}</p>}
                                     </div>
-                                    <p className={styles.itemCost}>{formatNumber(x?.cost[activeCount])} руб.</p>
+                                    <p className={styles.itemCost}>{formatNumber(x?.cost)} руб.</p>
                                 </div>
                                 <div className={styles.lilButton} onClick={() => buy(x?._id, x.size, x.color, x.article)}>В КОРЗИНУ</div>
                             </div>
