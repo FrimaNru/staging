@@ -68,9 +68,9 @@ export default function AdminEditProduct() {
 
             data.images.forEach((item, index) => {
                 if (item instanceof File) {
-                    formData.append(`images[${index}]`, item); // Новые файлы
+                    formData.append(`images[${index}]`, item);
                 } else if (typeof item === 'string') {
-                    formData.append(`imageNames[${index}]`, item); // Существующие имена файлов
+                    formData.append(`imageNames[${index}]`, item);
                 }
             });
 

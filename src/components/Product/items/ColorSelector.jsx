@@ -24,7 +24,7 @@ export default function ColorSelector({ data, colorOfProduct, setColorOfProduct,
                 {data?.family?.length > 0 && <img src='/colorArrow.svg' />}
             </div>
         </MenuButton>
-        <MenuList p={0} border='none' boxShadow='none' mt='-30px' pos='relative' zIndex={0} >
+        <MenuList p={0} border='none' boxShadow='none' mt='-35px' pos='relative' zIndex={0} >
             {data?.family?.length > 0 && [data.color, data.family[0]].map((x, i) => x !== colorOfProduct && <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
                 <div className={styles.menuItem} style={{ width }} onClick={() => router.push(`/product?id=${x._id}`)}>{x?.color}</div>
             </MenuItem>)}
