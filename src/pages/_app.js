@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { CartProvider } from '@/contexts/CartContext';
 import { FavouriteProvider } from '@/contexts/FavouriteContext';
 import { UserProvider } from '@/contexts/UserContext';
+import { ProductsProvider } from '@/contexts/ProductsContext';
 
 export default function App({ Component, pageProps }) {
 
@@ -26,12 +27,14 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return <CartProvider>
-    <UserProvider>
-      <FavouriteProvider>
-        <ChakraProvider>
-          <Component {...pageProps} />
-        </ChakraProvider>
-      </FavouriteProvider>
-    </UserProvider>
+    <ProductsProvider>
+      <UserProvider>
+        <FavouriteProvider>
+          <ChakraProvider>
+            <Component {...pageProps} />
+          </ChakraProvider>
+        </FavouriteProvider>
+      </UserProvider>
+    </ProductsProvider>
   </CartProvider>
 }
