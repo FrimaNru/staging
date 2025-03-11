@@ -4,140 +4,81 @@
     justify-content: center;
     width: 100%;
     height: 100vh;
+    background: var(--adminBg);
+}
+
+.authLogoLink {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    width: max-content;
+}
+
+.authLogo {
+    width: 150px;
 }
 
 .authBlock {
     width: 500px;
-    border: solid 1px #000;
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+    border-radius: 20px;
+    background: var(--light);
+    box-shadow: var(--box-sh-main);
 }
 
-.authInput {
+.authTitle {
+    font-size: 32px;
+    line-height: 100%;
     width: 100%;
-    border: solid 1px #000;
-    border-radius: 100px;
-    height: 50px;
-    color: #140702;
-    font-family: "Tenor Sans";
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 109.152%;
-    padding: 0 25px;
-}
-
-.authInput::placeholder {
-    color: #140702;
-    font-family: "Tenor Sans";
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 109.152%;
-}
-
-.authInput:focus {
-    outline: none;
-}
-
-.authButton {
-    display: flex;
-    width: 100%;
-    height: 46px;
-    padding: 15px 20px;
-    justify-content: center;
-    align-items: center;
-    gap: 880px;
-    border-radius: 104px;
-    background: #140702;
-    color: #FDEDBF;
     text-align: center;
-    font-family: "Dela Gothic One";
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    text-transform: uppercase;
 }
 
-.sideMenu {
-    width: 200px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    border-right: solid 1px #000;
+.authInputColumn {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 50px 20px;
-}
-
-.sideMenuContent {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
     width: 100%;
-}
-
-.sideMenuLogo {
-    width: 160px;
-}
-
-.sideMenuColumn {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: left;
-    justify-content: left;
-    width: 100%;
-}
-
-.sideMenuItem {
-    color: #140702;
-    font-family: "Tenor Sans";
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    text-align: left;
-    width: max-content;
-    transition: all 0.1s;
-    float: left;
-}
-
-.sideMenuItemSelect {
-    font-weight: 800;
-    border-bottom: solid 1px #000;
-    width: max-content;
-    float: left;
-    transition: all 0.3s;
-}
-
-.logOutButton {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
     gap: 10px;
 }
 
-.logOutButton:hover {
-    cursor: pointer;
+.authUserDisclaimer {
+    position: absolute;
+    bottom: 30px;
+    text-align: center;
+    width: 375px;
+    font-size: 12px;
+    line-height: 120%;
+}
+
+.authUserDisclaimerSpan {
+    font-weight: 600;
+    text-decoration: underline;
+    color: var(--gold);
+    transition: all 0.3s;
+}
+
+.authUserDisclaimerSpan:hover {
+    color: var(--dark);
+    transition: all 0.3s;
 }
 
 .adminMainBox {
     display: flex;
-    width: calc(100% - 250px);
-    margin-left: 200px;
+    width: calc(100% - 230px);
+    margin-left: 230px;
     padding: 50px;
+    background-color: none;
 }
 
 .adminMain {
     display: flex;
     width: 100%;
+    background: var(--adminBg);
+    min-height: 100vh;
+    position: relative;
+    z-index: 0;
 }
 
 .dashboard {

@@ -11,9 +11,14 @@ main {
 
 :root {
   --dark: #140702;
+  --light: #FFFFFF;
   --beige: rgba(253, 237, 191, 1);
   --gold: rgba(195, 151, 72, 1);
   --red: rgba(149, 0, 0, 1);
+  --lightgray: rgba(239, 239, 239, 1);
+  --adminBg: #FAFAFA;
+
+  --box-sh-main: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 a {

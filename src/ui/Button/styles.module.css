@@ -1,0 +1,47 @@
+.button {
+    font-family: inherit;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-radius: 10px;
+    background: none;
+    font-family: 'Dela Gothic One', system-ui;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.primary {
+    background-color: var(--dark);
+    color: var(--beige);
+    letter-spacing: 0.3px;
+    transition: all 0.5s;
+}
+
+.primary:hover {
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
+}
+
+.secondary {
+    color: var(--dark);
+}
+
+.medium {
+    padding: 14.5px 20px;
+    font-size: 16px;
+    font-weight: 510;
+    line-height: 17.9px;
+    text-align: center;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.mediumBold {
+    font-family: medium;
+}

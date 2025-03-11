@@ -1,0 +1,53 @@
+.input {
+    border: none;
+    background: var(--lightgray);
+    outline: none;
+}
+
+.input::placeholder {
+    font-size: 17px;
+    line-height: 20.29px;
+    text-align: left;
+    color: var(--gray);
+}
+
+.medium {
+    height: 40px;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 17px;
+}
+
+.big {
+    height: 50px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 20px;
+}
+
+.big::placeholder {
+    font-size: 20px;
+}
+
+.full {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 17px;
+    height: auto;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.center {
+    text-align: center;
+}
+
+.center::placeholder {
+    text-align: center;
+}
+
+.error::placeholder {
+    color: var(--red);
+}

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
-import { SideMenu } from "./items/SideMenu";
+import { SideMenu } from "./items/SideMenu/SideMenu";
 import AdminBanners from "./tabs/AdminBanners/AdminBanners";
 import AdminDashboard from "./tabs/AdminDashboard/AdminDashboard";
 import AdminProducts from "./tabs/AdminProducts/AdminProducts";

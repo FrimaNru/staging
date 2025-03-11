@@ -1,0 +1,108 @@
+.sideMenu {
+    width: 230px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 50px 10px 20px 10px;
+    z-index: 999;
+    box-shadow: 5px 0 25px rgba(94, 92, 154, 0.1);
+    background: var(--light);
+}
+
+.sideMenuContent {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+}
+
+.sideMenuLogo {
+    width: 160px;
+}
+
+.sideMenuColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: left;
+    justify-content: left;
+    width: 100%;
+}
+
+.sideMenuItemBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 45px;
+    border-radius: 10px;
+    padding: 5px;
+    transition: all 0.5s;
+}
+
+.sideMenuItemBox:hover {
+    background: var(--lightgray);
+    transition: all 0.5s;
+}
+
+.sideMenuItem {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+    width: max-content;
+    transition: all 0.5s;
+    float: left;
+}
+
+.sideMenuItemBoxSelect {
+    background: var(--lightgray);
+    transition: all 0.5s;
+}
+
+.logOutButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 10px;
+    height: 40px;
+    transition: all 0.5s;
+}
+
+.logOutButton:hover {
+    background: var(--lightgray);
+    transition: all 0.5s;
+}
+
+.logOutButtonIcon {
+    transform: rotate(180deg);
+}
+
+.logOutButtonText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+    width: max-content;
+    transition: all 0.1s;
+}
+
+.itemIcon {
+    height: 28px;
+    width: auto;
+}
