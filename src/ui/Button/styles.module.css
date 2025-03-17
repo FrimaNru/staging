@@ -45,3 +45,14 @@
 .mediumBold {
     font-family: medium;
 }
+
+.small {
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 100%;
+}
+
+.delete {
+    color: var(--red);
+}

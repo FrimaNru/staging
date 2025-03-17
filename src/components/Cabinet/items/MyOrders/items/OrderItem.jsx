@@ -115,7 +115,7 @@ function ProductItemOrder({ item, count }) {
 
     return <div className={styles.item} onClick={() => router.push(`/product?id=${data._id}`)} >
         <div className={styles.itemRow}>
-            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover}`} className={styles.itemCover} />
+            <img src={data?.cover} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
                 <p className={styles.itemName}>{data?.name?.length > 0 && data?.name}</p>
                 <div className={styles.itemNameColumn}>

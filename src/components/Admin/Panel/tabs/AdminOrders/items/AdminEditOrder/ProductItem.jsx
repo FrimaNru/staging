@@ -28,14 +28,14 @@ export default function ProductItem({ item }) {
 
     return <Link href={`/product?id=${data._id}`} target="_blank">
         <div className={styles.productItem}>
-            <img src={`https://api.mi-alegria.shop/uploads/${data.cover[numberOfProduct]}`} className={styles.productItemCover} />
+            <img src={data.cover} className={styles.productItemCover} />
             <div className={styles.productItemColumn}>
-                <p className={styles.productItemTitle}>{data.name[numberOfProduct]?.toUpperCase()}</p>
+                <p className={styles.productItemTitle}>{data.name?.toUpperCase()}</p>
                 <p className={styles.productItemText}>Артикул: {item.article}</p>
                 <p className={styles.productItemText}>Цвет: {item.color}</p>
                 {item.size !== 0 && <p className={styles.productItemText}>Размер: {item.size}</p>}
                 <p className={styles.productItemText}>{item.count} шт.</p>
-                <p className={styles.productItemCost}>{formatNumber(Number(data.cost[numberOfProduct]))} руб.</p>
+                <p className={styles.productItemCost}>{formatNumber(Number(data.cost))} руб.</p>
             </div>
         </div>
     </Link>

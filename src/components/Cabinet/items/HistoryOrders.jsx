@@ -140,7 +140,7 @@ function ProductItemHistory({ item }) {
             .catch((e) => console.log(e));
     };
 
-    return <Link href={`/product?id=${data?._id}`}><img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover[activeCount]}`} className={styles.itemCover} /></Link>
+    return <Link href={`/product?id=${data?._id}`}><img src={data?.cover?.length > 0 && data?.cover[activeCount]} className={styles.itemCover} /></Link>
 };
 
 function ProductItemOrderHistory({ item, count }) {
@@ -167,7 +167,7 @@ function ProductItemOrderHistory({ item, count }) {
 
     return <div className={styles.itemHistory} onClick={() => router.push(`/product?id=${data._id}`)} >
         <div className={styles.itemRowHistory}>
-            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data.cover[activeCount]}`} className={styles.itemCoverHistory} />
+            <img src={data?.cover?.length > 0 && data.cover[activeCount]} className={styles.itemCoverHistory} />
             <div className={styles.itemTextColumnHistory}>
                 <p className={styles.itemNameHistory}>{data?.name?.length > 0 && data.name[activeCount]?.toUpperCase()}</p>
                 <div className={styles.itemCountNumberHistory}>{count} шт</div>

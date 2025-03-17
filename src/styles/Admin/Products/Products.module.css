@@ -1,7 +1,7 @@
 .main {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 20px;
     width: 100%;
 }
 
@@ -15,22 +15,43 @@
     text-align: left;
 }
 
-.mainLine {
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    background: var(--light);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: var(--box-sh-main);
+}
+
+.subtitle {
+    font-size: 18px;
+    line-height: 100%;
+    text-align: left;
+}
+
+.subtitleLine {
     display: flex;
     flex-direction: row;
     width: 100%;
-    gap: 30px;
+    align-items: center;
     justify-content: space-between;
 }
 
+.cardLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 20px;
+}
+
 .mainItem {
-    width: 25%;
+    width: auto;
     border-radius: 40px;
-    background: #FDEDBF;
-    padding: 10px 20px;
-    color: #140702;
+    color: var(--dark);
     text-align: center;
-    font-family: "Dela Gothic One";
     font-size: 15px;
     font-style: normal;
     font-weight: 400;

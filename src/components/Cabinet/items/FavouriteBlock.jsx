@@ -91,7 +91,7 @@ export default function FavouriteBlock() {
                     <div className={styles.item}>
                         <div className={styles.itemRow}>
                             <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${x?.cover} `} className={styles.itemImg} />
+                                <img src={x?.cover} className={styles.itemImg} />
                             </Link>
                             <div className={styles.itemColumn}>
                                 <div className={styles.itemLilColumn}>

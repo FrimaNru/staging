@@ -103,7 +103,7 @@ export function Product() {
                         </div>
                         <div className={styles.modalBody}>
                             <div className={styles.modalBodyColumn}>
-                                <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data.cover}`} className={styles.modalBodyImg} />
+                                <img src={data?.cover?.length > 0 && data.cover} className={styles.modalBodyImg} />
                                 <p className={styles.modalBodyTitle}>{data?.name?.length > 0 && data.name}</p>
                             </div>
                             <div className={styles.modalBodyColumnButtons}>

@@ -101,7 +101,7 @@ export default function Header() {
                                 <Link key={i} href={`/product?id=${x._id}`}>
                                     <div className={styles.inputPanelLine}>
                                         <img
-                                            src={`https://api.mi-alegria.shop/uploads/${x.cover}`}
+                                            src={x.cover}
                                             className={styles.inputPanelCover}
                                         />
                                         <p className={styles.inputPanelName}>{x.name}</p>
@@ -199,7 +199,7 @@ function SearchDrawerBlock({ isSearchOpen, setIsSearchOpen, products }) {
                     <>
                         {products.map((x, i) => x.name.includes(search) && <Link key={i} href={`/product?id=${x._id}`} onClick={() => setIsSearchOpen(false)} >
                             <div className={styles.inputPanelLine} >
-                                <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.inputPanelCover} />
+                                <img src={x.cover} className={styles.inputPanelCover} />
                                 <p className={styles.inputPanelName}>{x.name}</p>
                                 <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
                             </div>

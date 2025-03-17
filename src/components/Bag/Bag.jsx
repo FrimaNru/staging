@@ -394,7 +394,7 @@ function ProductItem({ item, count, load, setData }) {
 
     return <div className={styles.item}>
         <div className={styles.itemRow}>
-            <img src={`https://api.mi-alegria.shop/uploads/${data?.cover?.length > 0 && data?.cover}`} className={styles.itemCover} />
+            <img src={data?.cover?.length > 0 && data?.cover} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
                 <div className={styles.itemNameLine}>
                     <div className={styles.itemNameColumn}>

@@ -146,12 +146,12 @@ function ProductItem({ id, type }) {
 
     return (type === 'img'
         ? (data._id && <Link href={`https://mi-alegria.shop/product?id=${data._id}`} className="link" target="_blank" >
-            <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.productImg} />
+            <img src={data.cover} className={styles.productImg} />
         </Link>)
         : (data.name && <Link href={`https://mi-alegria.shop/product?id=${data._id}`} target="_blank">
             <div className={styles.accrdionPanelItem}>
                 <p className={styles.accordionPanelText}><span style={{ fontWeight: 800 }}>{data.name.toUpperCase()}</span></p>
-                <img src={`https://api.mi-alegria.shop/uploads/${data.cover}`} className={styles.productImg} />
+                <img src={data.cover} className={styles.productImg} />
                 <p className={styles.accordionPanelText}><span style={{ fontWeight: 800 }}>{formatNumber(data.cost)} руб.</span></p>
             </div>
         </Link>))

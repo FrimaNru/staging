@@ -65,7 +65,7 @@ export default function ImagesLine({ data, setData }) {
                     [updatedImages[index + 1], updatedImages[index]];
                 return { ...prevData, images: updatedImages };
             }
-            return prevData; 
+            return prevData;
         });
 
         setImageURLs(prevURLs => {
@@ -85,7 +85,7 @@ export default function ImagesLine({ data, setData }) {
             <div className={styles.newsImageButtonBox} >
                 {(coverURL || data.cover) ? (
                     <div className={styles.coverColumn}>
-                        <img src={(data.cover && !coverURL) ? `https://api.mi-alegria.shop/uploads/${data.cover}` : coverURL} className={styles.cover} />
+                        <img src={(data.cover && !coverURL) ? data.cover : coverURL} className={styles.cover} />
                         <label className="input-file">
                             <input type='file' onChange={handleFileChange} accept="image/*" />
                             <div className={styles.coverChangeButton}>Заменить</div>
@@ -107,7 +107,7 @@ export default function ImagesLine({ data, setData }) {
                 {data.images?.length > 0 && <div className={styles.anotherImagesLine}>
                     {data.images.map((url, index) => (
                         <div key={index} className={styles.coverColumn}>
-                            <img src={url instanceof File ? URL.createObjectURL(url) : `https://api.mi-alegria.shop/uploads/${url}`} className={styles.cover} />
+                            <img src={url instanceof File ? URL.createObjectURL(url) : url} className={styles.cover} />
                             <div className={styles.imageLilRow}>
                                 <button className={styles.imageButton} onClick={() => moveImageLeft(index)}>
                                     <img src='/bannerArrow.svg' className={styles.imageButtonLeft} />

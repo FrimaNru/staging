@@ -53,13 +53,13 @@ export default function BigImage({ data, onClose, isOpen, activeSlide }) {
                         <Slider {...settings} ref={slider => { sliderRef = slider; }}>
                             {data.map((item, index) => <div key={index} className={styles.bigImageSliderItem}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }} >
-                                    <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.bigImage} />
+                                    <img src={item} className={styles.bigImage} />
                                 </div>
                             </div>)}
                         </Slider>
                     </div>
                     <div className={styles.lineDots}>
-                        {data.map((item, i) => <img src={`https://api.mi-alegria.shop/uploads/${item}`} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(i)} />)}
+                        {data.map((item, i) => <img src={item} className={styles.dot} key={i} onClick={() => sliderRef.slickGoTo(i)} />)}
                     </div>
                 </div>
             </ModalContent>

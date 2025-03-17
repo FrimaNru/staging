@@ -8,7 +8,7 @@ export default function ProductItem({ product }) {
         <div className={styles.sliderItem}>
             <div className={styles.sliderItemContent}>
                 <Link href={`/product?id=${product._id}`} className={styles.sliderItemLink}>
-                    <img src={`https://api.mi-alegria.shop/uploads/${product.cover}`} className={styles.sliderItemImage} />
+                    <img src={product.cover} className={styles.sliderItemImage} />
                 </Link>
                 <p className={styles.sliderItemTitle}>{product.name}</p>
                 <p className={styles.productItemArticle}>Артикул: {product.article}</p>

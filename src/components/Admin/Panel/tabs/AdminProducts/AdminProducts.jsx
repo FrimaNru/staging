@@ -7,7 +7,7 @@ import { formatNumber } from "@/lib/Formatting";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useDisclosure, Modal, ModalOverlay, ModalCloseButton, ModalContent } from "@chakra-ui/react";
-import CustomMenu from "@/components/Common/Menu/Menu";
+import FilterBlock from "./items/FilterBlock";
 
 const stataTitle = {
     'earrings': 'СЕРЬГИ',
@@ -21,9 +21,6 @@ const additionally = {
     'new': 'Новинки',
     'sales': 'Скидки'
 };
-
-const sortTypes = ['Все виды', 'Кольца', 'Серьги', 'Браслеты', 'Колье'];
-const sortSections = ['Все разделы', 'Новинки', 'Популярное', 'Скидки'];
 
 export default function AdminProducts() {
     const router = useRouter();
@@ -86,19 +83,13 @@ export default function AdminProducts() {
 
     return <div className={styles.main}>
         <p className={styles.title}>Товары</p>
-        <div className={styles.mainLine}>
-            {['earrings', 'ring', 'bracelets', 'necklace'].map((x, i) => <div key={i} className={styles.mainItem}>{stataTitle[x]}: {statistick[x]} шт.</div>)}
-        </div>
-        <div className={styles.sortColumn}>
-            <div className={styles.productsLine}>
-                <input placeholder="Введите название товара или артикул" className={styles.productsInput} value={search} onChange={(e) => setSearch(e.target.value)} />
-                <button className={styles.productsButtonAddProduct} onClick={() => router.push('/adminpanel?page=createProduct')} >Добавить товар</button>
+        {/* <div className={styles.card}>
+            <p className={styles.subtitle}>Количество единиц товаров</p>
+            <div className={styles.cardLine} >
+                {['earrings', 'ring', 'bracelets', 'necklace'].map((x, i) => <div key={i} className={styles.mainItem}>{stataTitle[x]}: {statistick[x]} шт.</div>)}
             </div>
-            <div className={styles.sortLine}>
-                <CustomMenu title={sortType} items={sortTypes} setState={setSortType} />
-                <CustomMenu title={sortSection} items={sortSections} setState={setSortSection} />
-            </div>
-        </div>
+        </div> */}
+        <FilterBlock sortType={sortType} setSortSection={setSortSection} setSortType={setSortType} sortSection={sortSection} search={search} setSearch={setSearch} />
         <div className={styles.productsGrid}>
             {filteredProducts.length > 0 ? (
                 filteredProducts.map((item, index) => (
@@ -114,7 +105,7 @@ export default function AdminProducts() {
             <ModalContent>
                 <div className={styles.createModal}>
                     <p className={styles.createModalTitle}>Вы уверены, что хотите удалить {deleteProduct?.name?.length > 0 && deleteProduct?.name?.toUpperCase()}?</p>
-                    <img className={styles.createModalCover} src={`https://api.mi-alegria.shop/uploads/${deleteProduct?.cover}`} />
+                    <img className={styles.createModalCover} src={deleteProduct?.cover} />
                     <div className={styles.createModalLine} >
                         <button className={styles.createModalButton} onClick={delProduct}>Удалить</button>
                         <button className={styles.createModalButtonCancel} onClick={() => { onClose(); setDeleteProduct({}); }}>Отменить</button>
@@ -141,7 +132,7 @@ function ProductItem({ item, setDeleteProduct, onOpen, load }) {
     };
 
     return <div className={`${styles.productsGridItem} ${!item.isVisible ? styles.productsGridItemHide : ''}`}>
-        <img src={`https://api.mi-alegria.shop/uploads/${item.cover}`} className={styles.productsGridItemCover} />
+        <img src={item.cover} className={styles.productsGridItemCover} />
         <div className={styles.productsGridItemColumn}>
             <p className={styles.productsGridItemTitle}>{item.name.toUpperCase()}</p>
             <p className={styles.productsGridItemCost}>{formatNumber(item.cost)} руб.</p>

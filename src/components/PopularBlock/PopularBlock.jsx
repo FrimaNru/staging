@@ -94,7 +94,7 @@ export default function PopularBlock() {
                 {data.map((x, i) => <div className={styles.sliderItem} key={i}>
                     <div className={styles.sliderItemContent}>
                         <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
-                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
+                            <img src={x.cover} className={styles.sliderItemImage} />
                         </Link>
                         <div className={styles.sliderItemColumn}>
                             <p className={styles.sliderItemTitle}>{x.name}</p>
@@ -115,7 +115,7 @@ export default function PopularBlock() {
                 {data.map((x, i) => <div className={styles.sliderItem} key={i}>
                     <div className={styles.sliderItemContent}>
                         <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
-                            <img src={`https://api.mi-alegria.shop/uploads/${x.cover}`} className={styles.sliderItemImage} />
+                            <img src={x.cover} className={styles.sliderItemImage} />
                         </Link>
                         <div className={styles.sliderItemColumn}>
                             <p className={styles.sliderItemTitle}>{x.name}</p>
