@@ -105,3 +105,8 @@
 .mainPagePlusButtonBox {
     width: max-content;
 }
+
+.banners {
+    height: auto;
+    width: 100%;
+}

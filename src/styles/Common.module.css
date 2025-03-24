@@ -62,7 +62,7 @@
     border-radius: 10px;
     border: solid 1px rgba(20, 7, 2, 1);
     position: relative;
-    z-index: 1;
+    z-index: 11;
     background: #FFF;
     transition: all 0.3s;
 }
@@ -91,7 +91,7 @@
     visibility: hidden;
     transform: translateY(-5px);
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-    z-index: 0;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     padding: 0px;

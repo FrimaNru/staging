@@ -51,8 +51,22 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 100%;
+    transition: all 0.5s;
+}
+
+.small:hover {
+    opacity: 0.5;
+    transition: all 0.5s;
 }
 
 .delete {
     color: var(--red);
+}
+
+.success {
+    color: var(--green);
+}
+
+.download {
+    color: var(--blue);
 }

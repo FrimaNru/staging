@@ -189,12 +189,19 @@
 
 .productsGridItem {
     display: flex;
-    flex-direction: row;
-    background: #FDEDBF;
+    flex-direction: column;
+    border: solid 1px var(--lightgray);
     border-radius: 20px;
     padding: 20px;
     gap: 20px;
     align-items: flex-start;
+}
+
+.productsGridItemLine {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
 
 .productsGridItemHide {
@@ -208,16 +215,19 @@
 }
 
 .productsGridItemCover {
-    width: 166px;
-    height: 166px;
+    width: 150px;
+    height: 150px;
     object-fit: cover;
+    border-radius: 10px;
 }
 
 .productsGridItemColumn {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: calc(100% - 186px);
+    width: calc(100% - 170px);
+    height: auto;
+    justify-content: space-between;
 }
 
 .productsGridItemTextLine {
@@ -230,7 +240,9 @@
 .productsGridItemLineButtons {
     display: flex;
     flex-direction: row;
-    gap: 40px;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .productsGridItemButton {
@@ -269,13 +281,13 @@
 
 .additionallyButton {
     font-family: Tenor Sans;
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 13.1px;
+    line-height: 100%;
     text-align: center;
     color: rgba(20, 7, 2, 1);
     padding: 10px;
-    border-radius: 100px;
+    border-radius: 10px;
     width: 33%;
     border: solid 1px rgba(20, 7, 2, 1);
 }
@@ -330,4 +342,134 @@
     font-weight: 400;
     line-height: 16.38px;
     text-align: left;
+}
+
+.lilColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.fullLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 50px;
+}
+
+.lilLine {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.sortButton {
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    gap: 5px;
+    transition: all 0.5s;
+}
+
+.sortButton:hover {
+    background: var(--lightgray);
+    transition: all 0.5s;
+}
+
+.sortButtonSelect {
+    background: var(--lightgray);
+}
+
+.fullLineBig {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tableHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 40px;
+    background: var(--lightgray);
+    padding: 0 16px;
+}
+
+.tableHeaderItem {
+    width: 20%;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 100%;
+    text-align: left;
+}
+
+.tableContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tableItem {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding: 15px 16px;
+    border-bottom: solid 1px var(--bottomBorder);
+}
+
+.tableItemValue {
+    width: 20%;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.tableItemId {
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 100%;
+}
+
+.tableItemIcon {
+    cursor: pointer;
+}
+
+.alignRight {
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.alignTextRight {
+    text-align: right;
+}
+
+.tableItemLine {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.tableItemValueIcon {
+    cursor: pointer;
+    font-size: 30px;
 }

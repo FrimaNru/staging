@@ -10,7 +10,7 @@ export default function MainPage() {
 
     const load = async () => {
         axios.get(`${API_BASE_URL}constans/banners`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
-            .then((res) => { setBanners(res.data); })
+            .then((res) => { setBanners(res.data); console.log(res.data) })
             .catch((e) => console.log(e));
     };
 
@@ -83,7 +83,7 @@ export default function MainPage() {
             {banners.map((item, index) => (
                 <div className={styles.mainPageColumn} key={index}>
                     <p className={styles.mainPageCount}>{index + 1}</p>
-                    <img src={item} alt={`Banner ${index + 1}`} />
+                    <img src={item} alt={`Banner ${index + 1}`} className={styles.banners} />
                     <div className={styles.mainPageButtonsLine}>
                         <button className={styles.mainPageButton} onClick={() => coverUp(item)}>
                             <img src="/bannerArrow.svg" alt="Up" />

@@ -17,6 +17,11 @@ main {
   --red: rgba(149, 0, 0, 1);
   --lightgray: rgba(239, 239, 239, 1);
   --adminBg: #FAFAFA;
+  --circleCheckBox: rgba(120, 120, 128, 0.16);
+  --circleCheckBoxActive: rgba(52, 199, 89, 1);
+  --green: rgba(0, 128, 0, 1);
+  --blue: rgba(10, 132, 255, 1);
+  --bottomBorder: rgba(221, 221, 221, 1);
 
   --box-sh-main: 0 1px 3px rgba(0, 0, 0, 0.2);
 }

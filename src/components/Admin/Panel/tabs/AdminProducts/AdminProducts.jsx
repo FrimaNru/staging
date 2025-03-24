@@ -8,6 +8,8 @@ import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useDisclosure, Modal, ModalOverlay, ModalCloseButton, ModalContent } from "@chakra-ui/react";
 import FilterBlock from "./items/FilterBlock";
+import Button from "@/ui/Button/Button";
+import Link from "next/link";
 
 const stataTitle = {
     'earrings': 'СЕРЬГИ',
@@ -32,6 +34,8 @@ export default function AdminProducts() {
     const [sortSection, setSortSection] = useState('Все разделы');
     const [search, setSearch] = useState('');
     const toast = useToast();
+    const [onlyActive, setOnlyActive] = useState(false);
+    const [productsView, setProductsView] = useState('blocks');
 
     useEffect(() => {
         load();
@@ -78,7 +82,9 @@ export default function AdminProducts() {
             (item.name.toLowerCase().includes(search.toLowerCase())) ||
             (item.article.toLowerCase().includes(search.toLowerCase()));
 
-        return typeFilter && sectionFilter && searchFilter;
+        const activeFilter = onlyActive === true ? item.isVisible : true;
+
+        return typeFilter && sectionFilter && searchFilter && activeFilter;
     });
 
     return <div className={styles.main}>
@@ -89,15 +95,60 @@ export default function AdminProducts() {
                 {['earrings', 'ring', 'bracelets', 'necklace'].map((x, i) => <div key={i} className={styles.mainItem}>{stataTitle[x]}: {statistick[x]} шт.</div>)}
             </div>
         </div> */}
-        <FilterBlock sortType={sortType} setSortSection={setSortSection} setSortType={setSortType} sortSection={sortSection} search={search} setSearch={setSearch} />
-        <div className={styles.productsGrid}>
-            {filteredProducts.length > 0 ? (
-                filteredProducts.map((item, index) => (
-                    <ProductItem key={index} item={item} setDeleteProduct={setDeleteProduct} onOpen={onOpen} load={load} />
-                ))
-            ) : (
-                <p className={styles.noItems}>Нет подходящих товаров.</p>
-            )}
+        <FilterBlock sortType={sortType} setSortSection={setSortSection} setSortType={setSortType} sortSection={sortSection} search={search} setSearch={setSearch} onlyActive={onlyActive} setOnlyActive={setOnlyActive} productsView={productsView} setProductsView={setProductsView} />
+        <div className={styles.card}>
+            <div className={styles.fullLineBig}>
+                <p className={styles.subtitle}>Товары</p>
+                <Button
+                    size="small"
+                    variant="success"
+                    onClick={() => router.push('/adminpanel?page=createProduct')}
+                >Создать товар</Button>
+            </div>
+            {productsView === 'lines'
+                ? <div className={styles.table}>
+                    <div className={styles.tableHeader}>
+                        <p className={styles.tableHeaderItem}>Артикул</p>
+                        <p className={styles.tableHeaderItem}>Название</p>
+                        <p className={styles.tableHeaderItem}>Цена</p>
+                        <p className={styles.tableHeaderItem}>Цвет</p>
+                        <p className={`${styles.tableHeaderItem} ${styles.alignTextRight}`}>Действие</p>
+                    </div>
+                    <div className={styles.tableContent}>
+                        {filteredProducts.length > 0
+                            ? filteredProducts.map((item, index) => (
+                                <div key={index} className={`${styles.tableItem} ${!item.isVisible ? styles.productsGridItemHide : ''}`}>
+                                    <div className={styles.tableItemValue}>{item.article}</div>
+                                    <div className={styles.tableItemValue}>{item.name}</div>
+                                    <div className={styles.tableItemValue}>{formatNumber(item.cost)}</div>
+                                    <div className={styles.tableItemValue}>{item.color}</div>
+                                    <div className={`${styles.tableItemValue} ${styles.alignRight} ${styles.tableItemLine}`}>
+                                        <img
+                                            src='/assets/icons/trash.svg'
+                                            className={styles.tableItemValueIcon}
+                                            onClick={() => { setDeleteProduct(item); onOpen(); }}
+                                        />
+                                        <img
+                                            src='/assets/icons/editIcon.svg'
+                                            onClick={() => router.push(`/adminpanel?page=editProduct&id=${item._id}`)}
+                                            className={styles.tableItemValueIcon}
+                                        />
+                                    </div>
+                                </div>
+                            ))
+                            : <p className={styles.tableNoItems}>На данный момент пользователи отсутствуют</p>
+                        }
+                    </div>
+                </div>
+                : <div className={styles.productsGrid}>
+                    {filteredProducts.length > 0 ? (
+                        filteredProducts.map((item, index) => (
+                            <ProductItem key={index} item={item} setDeleteProduct={setDeleteProduct} onOpen={onOpen} load={load} />
+                        ))
+                    ) : (
+                        <p className={styles.noItems}>Нет подходящих товаров.</p>
+                    )}
+                </div>}
         </div>
         <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false} size='lg'>
             <ModalOverlay />
@@ -132,21 +183,31 @@ function ProductItem({ item, setDeleteProduct, onOpen, load }) {
     };
 
     return <div className={`${styles.productsGridItem} ${!item.isVisible ? styles.productsGridItemHide : ''}`}>
-        <img src={item.cover} className={styles.productsGridItemCover} />
-        <div className={styles.productsGridItemColumn}>
-            <p className={styles.productsGridItemTitle}>{item.name.toUpperCase()}</p>
-            <p className={styles.productsGridItemCost}>{formatNumber(item.cost)} руб.</p>
-            <div className={styles.productsGridItemLilColumn}>
-                <p className={styles.productsGridItemText}>Цвет: {item?.color}</p>
-                <p className={styles.productsGridItemText}>Артикул: {item?.article}</p>
+        <div className={styles.productsGridItemLine} >
+            <img src={item.cover} className={styles.productsGridItemCover} />
+            <div className={styles.productsGridItemColumn}>
+                <p className={styles.productsGridItemTitle}>{item.name.toUpperCase()}</p>
+                <div className={styles.productsGridItemLilColumn}>
+                    <p className={styles.productsGridItemText}>Цвет: {item?.color}</p>
+                    <p className={styles.productsGridItemText}>Артикул: {item?.article}</p>
+                </div>
+                <p className={styles.productsGridItemCost}>{formatNumber(item.cost)} руб.</p>
             </div>
-            <div className={styles.addtitionallyLine}>
-                {Object.entries(additionally).map(([key, value], index) => <button key={index} className={`${styles.additionallyButton} ${item.additionally.includes(key) ? styles.additionallyButtonSelect : ''}`} onClick={() => changeAdditional(key)} >{value}</button>)}
-            </div>
-            <div className={styles.productsGridItemLineButtons}>
-                <button className={styles.productsGridItemButton} onClick={() => router.push(`/adminpanel?page=editProduct&id=${item._id}`)} >Изменить</button>
-                <button className={styles.productsGridItemButton} onClick={() => { setDeleteProduct(item); onOpen(); }}>Удалить</button>
-            </div>
+        </div>
+        <div className={styles.addtitionallyLine}>
+            {Object.entries(additionally).map(([key, value], index) => <button key={index} className={`${styles.additionallyButton} ${item.additionally.includes(key) ? styles.additionallyButtonSelect : ''}`} onClick={() => changeAdditional(key)} >{value}</button>)}
+        </div>
+        <div className={styles.productsGridItemLineButtons}>
+            <Button
+                size="small"
+                variant="delete"
+                onClick={() => { setDeleteProduct(item); onOpen(); }}
+            >Удалить</Button>
+            <Button
+                size="small"
+                variant="download"
+                onClick={() => router.push(`/adminpanel?page=editProduct&id=${item._id}`)}
+            >Изменить</Button>
         </div>
     </div>
 };

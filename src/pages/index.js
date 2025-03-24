@@ -32,6 +32,7 @@ export default function Home() {
         <meta name="msapplication-TileColor" content="#EEEEEE" />
         <meta name="msapplication-TileImage" content="/faviconsNoBg/ms-icon-144x144.png" />
         <meta name="theme-color" content="#EEEEEE" />
+        <meta name="yandex-verification" content="4dbde89ff58f9bab" />
       </Head>
       <center>
         <main className="mainPage">
