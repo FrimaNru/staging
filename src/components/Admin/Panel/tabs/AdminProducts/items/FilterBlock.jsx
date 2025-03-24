@@ -40,10 +40,6 @@ export default function FilterBlock({ sortType, sortSection, setSortType, setSor
         </div>
         <div className={styles.fullLine}>
             <div className={styles.lilColumn}>
-                <p>Только активные товары</p>
-                <CircleCheckBox active={onlyActive} onClick={() => setOnlyActive(!onlyActive)} />
-            </div>
-            <div className={styles.lilColumn}>
                 <p>Отображение списка товаров</p>
                 <div className={styles.lilLine}>
                     <div
@@ -61,6 +57,10 @@ export default function FilterBlock({ sortType, sortSection, setSortType, setSor
                         Таблицей
                     </div>
                 </div>
+            </div>
+            <div className={styles.lilColumn}>
+                <p>Только активные товары</p>
+                <CircleCheckBox active={onlyActive} onClick={() => setOnlyActive(!onlyActive)} />
             </div>
         </div>
     </div>

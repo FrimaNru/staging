@@ -81,7 +81,7 @@ export default function ImagesLine({ data, setData }) {
 
     return <div className={styles.imagesLine}>
         <div className={styles.imageColumn}>
-            <p className={styles.createSubtitle}>Обложка</p>
+            <p className={styles.subtitle}>Обложка</p>
             <div className={styles.newsImageButtonBox} >
                 {(coverURL || data.cover) ? (
                     <div className={styles.coverColumn}>
@@ -101,34 +101,36 @@ export default function ImagesLine({ data, setData }) {
             </div>
         </div>
 
-        <div className={styles.imageColumn}>
-            <p className={styles.createSubtitle}>Добавить фото</p>
-            <div className={styles.anotherImagesLine}>
-                {data.images?.length > 0 && <div className={styles.anotherImagesLine}>
-                    {data.images.map((url, index) => (
-                        <div key={index} className={styles.coverColumn}>
-                            <img src={url instanceof File ? URL.createObjectURL(url) : url} className={styles.cover} />
-                            <div className={styles.imageLilRow}>
-                                <button className={styles.imageButton} onClick={() => moveImageLeft(index)}>
-                                    <img src='/bannerArrow.svg' className={styles.imageButtonLeft} />
-                                </button>
-                                <button className={styles.createCountButton} onClick={() => removeImage(index)}>
-                                    <div className={styles.coverChangeButton}>Удалить</div>
-                                </button>
-                                <button className={styles.imageButton} onClick={() => moveImageRight(index)}>
-                                    <img src='/bannerArrow.svg' className={styles.imageButtonRight} />
-                                </button>
+        <div className={styles.imageColumnBig}>
+            <p className={styles.subtitle}>Добавить фото</p>
+            <div className={styles.anotherImagesLineBox}>
+                <div className={styles.anotherImagesLine}>
+                    {data.images?.length > 0 && <div className={styles.anotherImagesLine}>
+                        {data.images.map((url, index) => (
+                            <div key={index} className={styles.coverColumn}>
+                                <img src={url instanceof File ? URL.createObjectURL(url) : url} className={styles.cover} />
+                                <div className={styles.imageLilRow}>
+                                    <button className={styles.imageButton} onClick={() => moveImageLeft(index)}>
+                                        <img src='/bannerArrow.svg' className={styles.imageButtonLeft} />
+                                    </button>
+                                    <button className={styles.createCountButton} onClick={() => removeImage(index)}>
+                                        <div className={styles.coverChangeButton}>Удалить</div>
+                                    </button>
+                                    <button className={styles.imageButton} onClick={() => moveImageRight(index)}>
+                                        <img src='/bannerArrow.svg' className={styles.imageButtonRight} />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>}
-                <div className={styles.newsImageButtonBox}>
-                    <label className="input-file">
-                        <input type='file' multiple onChange={handleImagesChange} accept="image/*" />
-                        <div className={styles.newsImageButton}>
-                            <img src='/plusBanner.svg' className={styles.newsPlus} />
-                        </div>
-                    </label>
+                        ))}
+                    </div>}
+                    <div className={styles.newsImageButtonBox}>
+                        <label className="input-file">
+                            <input type='file' multiple onChange={handleImagesChange} accept="image/*" />
+                            <div className={styles.newsImageButton}>
+                                <img src='/plusBanner.svg' className={styles.newsPlus} />
+                            </div>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>

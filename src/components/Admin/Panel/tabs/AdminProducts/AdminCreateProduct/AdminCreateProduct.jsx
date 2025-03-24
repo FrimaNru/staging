@@ -4,10 +4,11 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { useRouter } from "next/router";
-import ArticlesLine from "../items/ArticlesLine";
 import ImagesLine from "./ImagesLine";
 import SizeLine from "../items/SizeLine";
 import ColorsLine from "../items/ColorsLine";
+import Input from "@/ui/Inputs/Input/Input";
+import Button from "@/ui/Button/Button";
 
 const types = {
     'earrings': 'серьги',
@@ -84,57 +85,79 @@ export default function AdminCreateProduct() {
     };
 
     return <div className={styles.createColumn}>
-        {/* <ArticlesLine data={data} setData={setData} activeArticleNumber={activeArticleNumber} setActiveArticleNumber={setActiveArticleNumber} /> */}
-        <div className={styles.createLilColumn}>
-            <p className={styles.createSubtitle}>Артикул</p>
-            <input className={styles.productsInput} placeholder="Введите артикул товара" onChange={(e) => setData({ ...data, article: e.target.value })} value={data?.article || ""} />
-        </div>
-        <ImagesLine data={data} setData={setData} />
-        <div className={styles.createLilColumn}>
-            <p className={styles.createSubtitle}>Название</p>
-            <input className={styles.productsInput} placeholder="Введите название товара" onChange={(e) => setData({ ...data, name: e.target.value })} value={data?.name || ""} />
-        </div>
-        <div className={styles.createLilColumn}>
-            <p className={styles.createSubtitle}>Стоимость</p>
-            <input className={styles.productsInput} type="number" placeholder="Введите стоимость товара" onChange={(e) => setData({ ...data, cost: e.target.value })} value={data?.cost || ""} />
-        </div>
-        <div className={styles.createLilColumn}>
-            <p className={styles.createSubtitle}>Тип товара</p>
-            <div className={styles.createLilLine}>
-                {Object.entries(types).map(([key, value], i) => (
-                    <button
-                        key={i}
-                        onClick={() => setData({ ...data, type: key })}
-                        className={`${styles.createTypeItem} ${key === data.type ? styles.createTypeItemSelect : ''}`}>
-                        {value}
-                    </button>
-                ))}
+        <p className={styles.title}>Новый товар</p>
+        <div className={styles.card}>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Артикул</p>
+                <Input
+                    placeholder="Введите артикул товара"
+                    onChange={(e) => setData({ ...data, article: e.target.value })}
+                    value={data?.article || ""}
+                />
             </div>
-        </div>
-        <SizeLine data={data} setData={setData} />
-        <ColorsLine data={data} setData={setData} />
-        <div className={styles.createLilColumn}>
-            <p className={styles.createSubtitle}>Вес товара, <span className={styles.createSubtitleSpan}>гр</span></p>
-            <input className={styles.productsInput} placeholder="Введите вес товара" onChange={(e) => setData({ ...data, weight: e.target.value })} value={data?.weight || ""} />
-        </div>
-        <div className={styles.createLilColumn}>
-            <p className={styles.createSubtitle}>Дополнительно</p>
-            <div className={styles.createLineAdditionally}>
-                {Object.entries(additionally).map(([key, value], i) => (
-                    <button
-                        key={i}
-                        onClick={() => {
-                            const updatedAdditionally = data.additionally.includes(key)
-                                ? data.additionally.filter(x => x !== key)
-                                : [...data.additionally, key];
-                            setData({ ...data, additionally: updatedAdditionally });
-                        }}
-                        className={`${styles.createAdditionallyItem} ${data.additionally.includes(key) ? styles.createTypeItemSelect : ''}`}>
-                        {value}
-                    </button>
-                ))}
+            <ImagesLine data={data} setData={setData} />
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Название</p>
+                <Input
+                    placeholder="Введите название товара"
+                    onChange={(e) => setData({ ...data, name: e.target.value })}
+                    value={data?.name || ""}
+                />
             </div>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Стоимость</p>
+                <Input
+                    type="number"
+                    placeholder="Введите стоимость товара"
+                    onChange={(e) => setData({ ...data, cost: e.target.value })}
+                    value={data?.cost || ""}
+                />
+            </div>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Тип товара</p>
+                <div className={styles.createLilLine}>
+                    {Object.entries(types).map(([key, value], i) => (
+                        <button
+                            key={i}
+                            onClick={() => setData({ ...data, type: key })}
+                            className={`${styles.createTypeItem} ${key === data.type ? styles.createTypeItemSelect : ''}`}>
+                            {value}
+                        </button>
+                    ))}
+                </div>
+            </div>
+            <SizeLine data={data} setData={setData} />
+            <ColorsLine data={data} setData={setData} />
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Вес товара, <span className={styles.createSubtitleSpan}>гр</span></p>
+                <Input
+                    placeholder="Введите вес товара"
+                    onChange={(e) => setData({ ...data, weight: e.target.value })}
+                    value={data?.weight || ""}
+                />
+            </div>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Дополнительно</p>
+                <div className={styles.createLineAdditionally}>
+                    {Object.entries(additionally).map(([key, value], i) => (
+                        <button
+                            key={i}
+                            onClick={() => {
+                                const updatedAdditionally = data.additionally.includes(key)
+                                    ? data.additionally.filter(x => x !== key)
+                                    : [...data.additionally, key];
+                                setData({ ...data, additionally: updatedAdditionally });
+                            }}
+                            className={`${styles.createAdditionallyItem} ${data.additionally.includes(key) ? styles.createTypeItemSelect : ''}`}>
+                            {value}
+                        </button>
+                    ))}
+                </div>
+            </div>
+            <Button
+                disabled={isLoading}
+                onClick={addProduct}
+            >Создать товар</Button>
         </div>
-        <button className={`${styles.createButton} ${isLoading ? styles.loading : ''}`} onClick={addProduct}>Создать товар</button>
     </div>
 };

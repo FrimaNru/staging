@@ -3,6 +3,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { Modal, ModalContent, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
+import Button from "@/ui/Button/Button";
+import Input from "@/ui/Inputs/Input/Input";
 
 export default function SizeLine({ data, setData }) {
 
@@ -69,7 +71,7 @@ export default function SizeLine({ data, setData }) {
 
     return <>
         <div className={styles.createLilColumn}>
-            <p className={styles.createSubtitle}>Размер<span className={styles.createSubtitleSpan}>{data.type === 'ring' ? ', мм' : data.type === 'earrings' ? '' : ', см'}</span></p>
+            <p className={styles.subtitle}>Размер<span className={styles.createSubtitleSpan}>{data.type === 'ring' ? ', мм' : data.type === 'earrings' ? '' : ', см'}</span></p>
             {(data.type !== '' && data.type !== 'earrings')
                 ? <div className={styles.sizesLine}>
                     {sizes[data.type]
@@ -120,16 +122,23 @@ export default function SizeLine({ data, setData }) {
                         <img src='/cross.svg' className={styles.modalCross} onClick={onClose} />
                     </div>
                     <div className={styles.modalContent}>
-                        <input className={styles.modalInput} value={newSize} onChange={(e) => setNewSize(e.target.value)} />
-                        <button className={styles.modalButton} onClick={addNewSize}>ДОБАВИТЬ РАЗМЕР</button>
+                        <Input
+                            size="big"
+                            value={newSize}
+                            onChange={(e) => setNewSize(e.target.value)}
+                            placeholder="Введите новый размер"
+                        />
+                        <Button
+                            onClick={addNewSize}
+                        >ДОБАВИТЬ РАЗМЕР</Button>
                     </div>
                 </div>
             </ModalContent>
         </Modal>
 
-        <Modal isOpen={isOpenDelete} onClose={() => setIsOpenDelete(false)} autoFocus={false} isCentered size='lg'>
+        <Modal isOpen={isOpenDelete} onClose={() => setIsOpenDelete(false)} autoFocus={false} isCentered size='xl'>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent bg='none'>
                 <div className={styles.modal}>
                     <div className={styles.modalColumn}>
                         <p className={styles.modalTitle}>Вы уверены, что хотите удалить?</p>
@@ -137,7 +146,10 @@ export default function SizeLine({ data, setData }) {
                     </div>
                     <div className={styles.modalContent}>
                         <p className={styles.modalText}>Размер удалиться полностью из базы данных и из всех товаров. Если вы хотите убрать размер только из этого товара, тогда закройте это окно и просто кликните по размеру.<br /><br /> Вы хотите удалить <b>{selectDeleteSize}</b> размер</p>
-                        <button className={`${styles.modalButton} ${loading ? styles.loading : ''}`} onClick={deleteSize}>УДАЛИТЬ РАЗМЕР</button>
+                        <Button
+                            disabled={loading}
+                            onClick={deleteSize}
+                        >УДАЛИТЬ РАЗМЕР</Button>
                     </div>
                 </div>
             </ModalContent>
