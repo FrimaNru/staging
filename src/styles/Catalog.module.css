@@ -385,6 +385,72 @@
     color: rgba(20, 7, 2, 1);
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 65px;
+    margin-top: 30px;
+}
+
+.paginationLine {
+    display: flex;
+    flex-direction: row;
+}
+
+.paginationButton {
+    width: 60px;
+    height: 60px;
+    padding: 16px;
+    border: 1px solid var(--dark);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.2s;
+}
+
+.paginationButtonIcon {
+    width: 14px;
+    margin-left: 4px;
+}
+
+.paginationButtonIconLeft {
+    width: 14px;
+    transform: rotate(180deg);
+    margin-left: -3px;
+}
+
+.paginationButton:hover:not(:disabled) {
+    background: var(--gold);
+    color: var(--light);
+    border: none;
+}
+
+.paginationButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.paginationButtonActive {
+    background: var(--beige);
+    color: var(--dark);
+    border: none;
+}
+
+.paginationDots {
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    width: 60px;
+    height: 60px;
+    border: solid 1px var(--dark);
+    user-select: none;
+}
+
 @media (max-width: 475px) {
     .main {
         margin: 64px 0 0px 0;
@@ -531,5 +597,29 @@
 
     .productItemCostLine {
         padding: 0 32px;
+    }
+
+    .paginationButton,
+    .paginationDots {
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+        font-size: 16px;
+    }
+
+    .paginationButtonIcon {
+        width: 12px;
+        margin-left: 4px;
+    }
+
+    .paginationButtonIconLeft {
+        width: 12px;
+        transform: rotate(180deg);
+        margin-left: -3px;
+    }
+
+    .pagination {
+        gap: 5px;
+        justify-content: space-between;
     }
 }

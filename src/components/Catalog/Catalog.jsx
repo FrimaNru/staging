@@ -10,6 +10,7 @@ import SortSection from "./items/SortSection";
 import ProductGrid from "./items/ProductGrid";
 import NoResults from "./items/NoResults";
 import AccordionFilters from "./items/AccordionFilters";
+import Pagination from "./items/Pagination";
 
 const shuffle = (array) => {
     let shuffled = array.slice();
@@ -27,11 +28,17 @@ export default function Catalog() {
     const [stateSales, setStateSales] = useState([]);
     const [stateType, setStateType] = useState('');
     const [search, setSearch] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 15;
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
     const types = ['Кольца', 'Серьги', 'Браслеты', 'Колье'];
     const sortItems = ['По популярности', 'По возрастанию цены', 'По убыванию цены'];
     const [stateSortItems, setStateSortItems] = useState('По популярности');
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [stateSortItems, stateType, stateSales, text]);
 
     useEffect(() => {
         if (text) setSearch(true);
@@ -85,6 +92,21 @@ export default function Catalog() {
         return d;
     }, [products, stateSortItems, stateType, stateSales, text]);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [stateSortItems, stateType, stateSales, text]);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        if (pageNumber < 1 || pageNumber > totalPages) return;
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className={styles.main}>
             <Banner />
@@ -97,7 +119,15 @@ export default function Catalog() {
                         <div className={styles.columnOrders}>
                             {search && filteredData.length === 0 && <NoResults text={text} />}
                             <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
-                            <ProductGrid filteredData={filteredData} />
+                            <ProductGrid filteredData={currentItems} />
+
+                            {filteredData.length > itemsPerPage && (
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

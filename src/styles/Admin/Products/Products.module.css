@@ -473,3 +473,68 @@
     cursor: pointer;
     font-size: 30px;
 }
+
+.paginationContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.paginationInfo {
+    font-size: 14px;
+    color: #666;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.paginationButton {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    border: 1px solid var(--lightgray);
+    background: var(--light);
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.paginationButton:hover:not(:disabled) {
+    background: var(--lightgray);
+    color: var(--dark);
+    transition: all 0.3s;
+}
+
+.paginationButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transition: all 0.3s;
+}
+
+.paginationButtonActive {
+    background: var(--blue);
+    color: var(--light);
+    border-color: var(--blue);
+    transition: all 0.3s;
+}
+
+.paginationDots {
+    padding: 0 8px;
+}
+
+.tableNoItems {
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    line-height: 40px;
+}

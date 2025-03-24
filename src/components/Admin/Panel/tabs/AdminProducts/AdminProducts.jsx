@@ -1,7 +1,6 @@
-
 import styles from "@/styles/Admin/Products/Products.module.css";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { API_BASE_URL } from "../../../../../../apiConfig";
 import { formatNumber } from "@/lib/Formatting";
 import { useToast } from "@chakra-ui/react";
@@ -37,6 +36,9 @@ export default function AdminProducts() {
     const [onlyActive, setOnlyActive] = useState(false);
     const [productsView, setProductsView] = useState('blocks');
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 16;
+
     useEffect(() => {
         load();
     }, []);
@@ -52,6 +54,7 @@ export default function AdminProducts() {
             .then((res) => {
                 const p = res.data.reverse();
                 setProducts(p);
+                setCurrentPage(1);
             })
             .catch((e) => console.log(e));
     };
@@ -66,35 +69,46 @@ export default function AdminProducts() {
             .catch((e) => console.log(e));
     };
 
-    const filteredProducts = products.filter(item => {
-        const sortTypeKey = Object.keys(stataTitle).find(key => stataTitle[key].toLowerCase() === sortType.toLowerCase());
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [sortType, sortSection, search, onlyActive]);
 
-        const typeFilter =
-            sortType === 'Все виды' ||
-            item.type === sortTypeKey;
+    const filteredProducts = useMemo(() => {
+        return products.filter(item => {
+            const sortTypeKey = Object.keys(stataTitle).find(key => stataTitle[key].toLowerCase() === sortType.toLowerCase());
 
-        const sectionFilter =
-            sortSection === 'Все разделы' ||
-            item.additionally.includes(Object.keys(additionally).find(key => additionally[key] === sortSection));
+            const typeFilter =
+                sortType === 'Все виды' ||
+                item.type === sortTypeKey;
 
-        const searchFilter =
-            search === '' ||
-            (item.name.toLowerCase().includes(search.toLowerCase())) ||
-            (item.article.toLowerCase().includes(search.toLowerCase()));
+            const sectionFilter =
+                sortSection === 'Все разделы' ||
+                item.additionally.includes(Object.keys(additionally).find(key => additionally[key] === sortSection));
 
-        const activeFilter = onlyActive === true ? item.isVisible : true;
+            const searchFilter =
+                search === '' ||
+                (item.name.toLowerCase().includes(search.toLowerCase().trim())) ||
+                (item.article.toLowerCase().includes(search.toLowerCase().trim()));
 
-        return typeFilter && sectionFilter && searchFilter && activeFilter;
-    });
+            const activeFilter = onlyActive === true ? item.isVisible : true;
+
+            return typeFilter && sectionFilter && searchFilter && activeFilter;
+        });
+    }, [products, sortType, sortSection, search, onlyActive]);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+    const paginate = (pageNumber) => {
+        if (pageNumber < 1) pageNumber = 1;
+        if (pageNumber > totalPages) pageNumber = totalPages;
+        setCurrentPage(pageNumber);
+    };
 
     return <div className={styles.main}>
         <p className={styles.title}>Товары</p>
-        {/* <div className={styles.card}>
-            <p className={styles.subtitle}>Количество единиц товаров</p>
-            <div className={styles.cardLine} >
-                {['earrings', 'ring', 'bracelets', 'necklace'].map((x, i) => <div key={i} className={styles.mainItem}>{stataTitle[x]}: {statistick[x]} шт.</div>)}
-            </div>
-        </div> */}
         <FilterBlock sortType={sortType} setSortSection={setSortSection} setSortType={setSortType} sortSection={sortSection} search={search} setSearch={setSearch} onlyActive={onlyActive} setOnlyActive={setOnlyActive} productsView={productsView} setProductsView={setProductsView} />
         <div className={styles.card}>
             <div className={styles.fullLineBig}>
@@ -115,8 +129,8 @@ export default function AdminProducts() {
                         <p className={`${styles.tableHeaderItem} ${styles.alignTextRight}`}>Действие</p>
                     </div>
                     <div className={styles.tableContent}>
-                        {filteredProducts.length > 0
-                            ? filteredProducts.map((item, index) => (
+                        {currentItems.length > 0
+                            ? currentItems.map((item, index) => (
                                 <div key={index} className={`${styles.tableItem} ${!item.isVisible ? styles.productsGridItemHide : ''}`}>
                                     <div className={styles.tableItemValue}>{item.article}</div>
                                     <div className={styles.tableItemValue}>{item.name}</div>
@@ -136,19 +150,97 @@ export default function AdminProducts() {
                                     </div>
                                 </div>
                             ))
-                            : <p className={styles.tableNoItems}>На данный момент пользователи отсутствуют</p>
+                            : <p className={styles.tableNoItems}>Нет подходящих товаров.</p>
                         }
                     </div>
                 </div>
                 : <div className={styles.productsGrid}>
-                    {filteredProducts.length > 0 ? (
-                        filteredProducts.map((item, index) => (
+                    {currentItems.length > 0 ? (
+                        currentItems.map((item, index) => (
                             <ProductItem key={index} item={item} setDeleteProduct={setDeleteProduct} onOpen={onOpen} load={load} />
                         ))
                     ) : (
                         <p className={styles.noItems}>Нет подходящих товаров.</p>
                     )}
                 </div>}
+
+            {filteredProducts.length > 0 && (
+                <div className={styles.paginationContainer}>
+                    <div className={styles.paginationInfo}>
+                        Показано {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredProducts.length)} из {filteredProducts.length} товаров
+                    </div>
+
+                    {totalPages > 1 && (
+                        <div className={styles.pagination}>
+                            <button
+                                onClick={() => paginate(1)}
+                                disabled={currentPage === 1}
+                                className={styles.paginationButton}
+                            >
+                                «
+                            </button>
+                            <button
+                                onClick={() => paginate(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className={styles.paginationButton}
+                            >
+                                Назад
+                            </button>
+
+                            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                let pageNum;
+                                if (totalPages <= 5) {
+                                    pageNum = i + 1;
+                                } else if (currentPage <= 3) {
+                                    pageNum = i + 1;
+                                } else if (currentPage >= totalPages - 2) {
+                                    pageNum = totalPages - 4 + i;
+                                } else {
+                                    pageNum = currentPage - 2 + i;
+                                }
+
+                                return (
+                                    <button
+                                        key={pageNum}
+                                        onClick={() => paginate(pageNum)}
+                                        className={`${styles.paginationButton} ${currentPage === pageNum ? styles.paginationButtonActive : ''}`}
+                                    >
+                                        {pageNum}
+                                    </button>
+                                );
+                            })}
+
+                            {totalPages > 5 && currentPage < totalPages - 2 && (
+                                <span className={styles.paginationDots}>...</span>
+                            )}
+
+                            {totalPages > 5 && currentPage < totalPages - 2 && (
+                                <button
+                                    onClick={() => paginate(totalPages)}
+                                    className={`${styles.paginationButton} ${currentPage === totalPages ? styles.paginationButtonActive : ''}`}
+                                >
+                                    {totalPages}
+                                </button>
+                            )}
+
+                            <button
+                                onClick={() => paginate(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className={styles.paginationButton}
+                            >
+                                Вперед
+                            </button>
+                            <button
+                                onClick={() => paginate(totalPages)}
+                                disabled={currentPage === totalPages}
+                                className={styles.paginationButton}
+                            >
+                                »
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
         <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false} size='lg'>
             <ModalOverlay />
@@ -167,9 +259,7 @@ export default function AdminProducts() {
     </div>
 };
 
-
 function ProductItem({ item, setDeleteProduct, onOpen, load }) {
-
     const toast = useToast();
     const router = useRouter();
 
