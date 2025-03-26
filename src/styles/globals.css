@@ -83,6 +83,10 @@ p {
   padding-top: 160px;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 @media (max-width: 475px) {
   .toast {
     padding: 9.5px 20px;
