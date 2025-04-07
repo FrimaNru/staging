@@ -8,7 +8,7 @@ import CircleCheckBox from "@/ui/CircleCheckbox/CircleCheckbox";
 const sortTypes = ['Все виды', 'Кольца', 'Серьги', 'Браслеты', 'Колье'];
 const sortSections = ['Все разделы', 'Новинки', 'Популярное', 'Скидки'];
 
-export default function FilterBlock({ sortType, sortSection, setSortType, setSortSection, search, setSearch, onlyActive, setOnlyActive, productsView, setProductsView }) {
+export default function FilterBlock({ sortType, sortSection, setSortType, setSortSection, search, setSearch, onlyActive, setOnlyActive, productsView, setProductsView, setOnlyNotActive, onlyNotActive }) {
 
     const router = useRouter();
 
@@ -60,7 +60,11 @@ export default function FilterBlock({ sortType, sortSection, setSortType, setSor
             </div>
             <div className={styles.lilColumn}>
                 <p>Только активные товары</p>
-                <CircleCheckBox active={onlyActive} onClick={() => setOnlyActive(!onlyActive)} />
+                <CircleCheckBox active={onlyActive} onClick={() => { setOnlyActive(!onlyActive); setOnlyNotActive(false); }} />
+            </div>
+            <div className={styles.lilColumn}>
+                <p>Только отсутсвующие товары</p>
+                <CircleCheckBox active={onlyNotActive} onClick={() => { setOnlyNotActive(!onlyNotActive); setOnlyActive(false); }} />
             </div>
         </div>
     </div>

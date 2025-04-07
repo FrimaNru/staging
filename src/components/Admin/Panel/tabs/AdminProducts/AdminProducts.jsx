@@ -34,6 +34,7 @@ export default function AdminProducts() {
     const [search, setSearch] = useState('');
     const toast = useToast();
     const [onlyActive, setOnlyActive] = useState(false);
+    const [onlyNotActive, setOnlyNotActive] = useState(false);
     const [productsView, setProductsView] = useState('blocks');
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -92,9 +93,11 @@ export default function AdminProducts() {
 
             const activeFilter = onlyActive === true ? item.isVisible : true;
 
-            return typeFilter && sectionFilter && searchFilter && activeFilter;
+            const notActiveFilter = onlyNotActive === true ? item.isVisible === false : true;
+
+            return typeFilter && sectionFilter && searchFilter && activeFilter && notActiveFilter;
         });
-    }, [products, sortType, sortSection, search, onlyActive]);
+    }, [products, sortType, sortSection, search, onlyActive, onlyNotActive]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -109,7 +112,7 @@ export default function AdminProducts() {
 
     return <div className={styles.main}>
         <p className={styles.title}>Товары</p>
-        <FilterBlock sortType={sortType} setSortSection={setSortSection} setSortType={setSortType} sortSection={sortSection} search={search} setSearch={setSearch} onlyActive={onlyActive} setOnlyActive={setOnlyActive} productsView={productsView} setProductsView={setProductsView} />
+        <FilterBlock sortType={sortType} setSortSection={setSortSection} setSortType={setSortType} sortSection={sortSection} search={search} setSearch={setSearch} onlyActive={onlyActive} setOnlyActive={setOnlyActive} productsView={productsView} setProductsView={setProductsView} onlyNotActive={onlyNotActive} setOnlyNotActive={setOnlyNotActive} />
         <div className={styles.card}>
             <div className={styles.fullLineBig}>
                 <p className={styles.subtitle}>Товары</p>
