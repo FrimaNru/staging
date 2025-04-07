@@ -95,13 +95,13 @@ export function SignIn({ setStateAuth, onClose }) {
                 <div className={styles.lilColumn} style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }} >
                     <button
                         className={`${styles.mainButtonBlack} ${isLoading && styles.loading} ${!checkBoxes.policy && styles.noPolicy}`}
-                        onClick={() => { if (!checkBoxes.policy) return; signIn(email, password) }}
+                        onClick={() => { signIn(email, password) }}
                     >ВОЙТИ</button>
                     <p className={styles.forgotPassword} style={{ width: 'max-content' }} onClick={() => setStateAuth('refresh')}>Забыли пароль?</p>
                 </div>
             </div>
         </div>
-        <div className={styles.checkBoxLine}>
+        {/* <div className={styles.checkBoxLine}>
             {checkBoxes.news
                 ? <img src='/checkbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, news: false })} />
                 : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, news: true })} />}
@@ -112,7 +112,7 @@ export function SignIn({ setStateAuth, onClose }) {
                 ? <img src='/checkbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, policy: false })} />
                 : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => setCheckBoxes({ ...checkBoxes, policy: true })} />}
             <p className={styles.checkBoxText}>Я подтверждаю свое согласие с условиями доставки и оплаты, <span className={styles.checkBoxSpan} onClick={() => setPolicy(true)} >политикой конфиденциальности</span> и даю <span className={styles.checkBoxSpan} onClick={() => setPersonal(true)} >согласие на обработку персональных данных</span></p>
-        </div>
+        </div> */}
         <div className={styles.lilColumnSignUp}>
             <p className={styles.inputTitle}>Еще нет аккаунта?</p>
             <button className={styles.mainButton} onClick={() => setStateAuth('signUp')}>ЗАРЕГИСТРИРОВАТЬСЯ</button>

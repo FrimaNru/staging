@@ -20,6 +20,7 @@ export default function PersonalData() {
     const [phone, setPhone] = useState('');
     const [dateBirthday, setDateBirthday] = useState('');
     const [mailing, setMailing] = useState('');
+    const [disabled, setDisabled] = useState(false);
 
     const [hidePassword, setHidePassword] = useState(true);
     const [hidePassword2, setHidePassword2] = useState(true);
@@ -131,19 +132,35 @@ export default function PersonalData() {
 
     const sendMessage = async () => {
         if (initialData.phone === phone && initialData.isVerifiedPhone === true) return toast({ position: 'bottom-right', render: () => (<div className="toast">Этот номер уже подтвержден</div>), duration: 3000 });
-        await axios.post(`${API_BASE_URL}verifiedPhone`, { phone }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then(() => setIsPhoneCodeSend(true))
-            .catch((e) => console.log(e));
+        try {
+            setDisabled(true);
+
+            await axios.post(`${API_BASE_URL}verifiedPhone`, { phone }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+
+            setIsPhoneCodeSend(true);
+            toast({ position: 'bottom-right', render: () => (<div className="toast">Код успешно отправлен</div>), duration: 3000 });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setDisabled(false);
+        }
     };
 
     const mobilePhoneCheck = async () => {
-        await axios.post(`${API_BASE_URL}verifiedPhoneCode`, { code: phoneCode }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then(() => {
-                toast({ position: 'bottom-right', render: () => (<div className="toast">Телефон успешно подтвержден</div>), duration: 3000 });
-                setIsPhoneCodeSend(false);
-                setPhoneCode('');
-            })
-            .catch((e) => console.log(e));
+        try {
+            setDisabled(true);
+
+            await axios.post(`${API_BASE_URL}verifiedPhoneCode`, { code: phoneCode }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+
+            load();
+            toast({ position: 'bottom-right', render: () => (<div className="toast">Телефон успешно подтвержден</div>), duration: 3000 });
+            setIsPhoneCodeSend(false);
+            setPhoneCode('');
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setDisabled(false);
+        }
     };
 
     const sendEmailCode = async () => {
@@ -214,9 +231,10 @@ export default function PersonalData() {
                         <p className={styles.inputTitle}>Код подтверждения телефона</p>
                         <div className={styles.codeLine}>
                             <input className={styles.lilInputCode} onChange={(e) => setPhoneCode(e.target.value)} value={phoneCode} />
-                            {isPhoneCodeSend
-                                ? <button className={styles.buttonCode} onClick={mobilePhoneCheck}>ПОДТВЕРДИТЬ</button>
-                                : <button className={styles.buttonCode} onClick={sendMessage}>ОТПРАВИТЬ SMS</button>}
+                            <button className={`${styles.buttonCode} ${disabled ? styles.buttonDisabled : ''}`} onClick={() => {
+                                if (isPhoneCodeSend) return mobilePhoneCheck()
+                                else sendMessage();
+                            }}>{isPhoneCodeSend ? 'ПОДТВЕРДИТЬ' : 'ОТПРАВИТЬ SMS'}</button>
                         </div>
                     </div>
                 </div>

@@ -439,6 +439,13 @@
     line-height: 23.17px;
     text-align: center;
     color: rgba(253, 237, 191, 1);
+    transition: all 0.5s;
+}
+
+.buttonCode:hover {
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
 }
 
 .checkBoxLine {
@@ -463,6 +470,14 @@
 .checkBoxSpan {
     cursor: pointer;
     color: rgba(154, 116, 48, 1);
+}
+
+.buttonDisabled {
+    opacity: 0.5;
+}
+
+.buttonDisabled:hover {
+    cursor: auto;
 }
 
 @media (max-width: 475px) {
