@@ -19,6 +19,7 @@ export function Product() {
     const { addToCart } = useCart();
     const [data, setData] = useState({});
     const router = useRouter();
+    const { id } = router.query;
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [colorOfProduct, setColorOfProduct] = useState('');
     const [sizeOfProduct, setSizeOfProduct] = useState(0);
@@ -28,6 +29,7 @@ export function Product() {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     useEffect(() => {
+        if (!id) return;
         load();
         const handleRouteChange = (url) => {
             load();
@@ -36,12 +38,11 @@ export function Product() {
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
         };
-    }, []);
+    }, [id]);
 
     const load = async () => {
-        await axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
+        await axios.post(`${API_BASE_URL}getOneProduct`, { id })
             .then((res) => {
-                console.log(res.data)
                 setData(res.data);
                 setColorOfProduct(res.data.color);
                 if (res.data.type === 'ring' || res.data.type === 'bracelets') setSizeOfProduct(16)

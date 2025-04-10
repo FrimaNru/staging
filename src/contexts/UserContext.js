@@ -5,16 +5,8 @@ import { API_BASE_URL } from '../../apiConfig';
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
-        if (typeof window !== 'undefined') {
-            const storedUser = localStorage.getItem('user');
-            return storedUser ? JSON.parse(storedUser) : {};
-        }
-        return {};
-    });
-    const [isLoadingUser, setIsLoading] = useState(
-        typeof window === 'undefined' || !localStorage.getItem('user')
-    );
+    const [user, setUser] = useState(null);
+    const [isLoadingUser, setIsLoading] = useState(true);
 
     const saveToLocalStorage = (data) => {
         if (typeof window !== 'undefined') {
@@ -22,11 +14,23 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const clearLocalStorage = () => {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+        }
+    };
+
     const load = async () => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') {
+            setIsLoading(false);
+            return;
+        }
 
         const token = localStorage.getItem('token');
         if (!token) {
+            clearLocalStorage();
+            setUser(null);
             setIsLoading(false);
             return;
         }
@@ -39,6 +43,8 @@ export const UserProvider = ({ children }) => {
             saveToLocalStorage(res.data);
         } catch (error) {
             console.error(error);
+            clearLocalStorage();
+            setUser(null);
         } finally {
             setIsLoading(false);
         }
@@ -53,10 +59,8 @@ export const UserProvider = ({ children }) => {
     };
 
     const clearUser = () => {
-        setUser({});
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('user');
-        }
+        setUser(null);
+        clearLocalStorage();
     };
 
     return (

@@ -122,10 +122,14 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    cursor: pointer;
+    transition: all 0.5s;
 }
 
 .infoButton:hover {
-    cursor: pointer;
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
 }
 
 .imgSliderBox {

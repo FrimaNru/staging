@@ -80,7 +80,6 @@ export default function PopularBlock() {
     const load = async () => {
         await axios.get(`${API_BASE_URL}getPopularProducts`)
             .then((res) => {
-                console.log(res.data);
                 setData(res.data);
             })
             .catch((e) => console.log(e));

@@ -15,9 +15,6 @@ export default function ProductItem({ item }) {
     const load = async () => {
         try {
             const res = await axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id });
-            const index = res.data.articles.findIndex(x => x === item.article);
-
-            setNumberOfProduct(index);
             setData(res.data);
         } catch (error) {
             console.log(error);

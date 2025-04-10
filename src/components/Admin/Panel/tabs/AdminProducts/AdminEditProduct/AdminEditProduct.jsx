@@ -102,7 +102,7 @@ export default function AdminEditProduct() {
     const changeVisible = async () => {
         try {
             await axios.post(`${API_BASE_URL}admin/product/visible`, { id: router.query.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
-            load();
+            setData({ ...data, isVisible: !data.isVisible });
         } catch (error) {
             console.log(error);
         }

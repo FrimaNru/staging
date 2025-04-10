@@ -63,7 +63,7 @@ export default function FilterBlock({ sortType, sortSection, setSortType, setSor
                 <CircleCheckBox active={onlyActive} onClick={() => { setOnlyActive(!onlyActive); setOnlyNotActive(false); }} />
             </div>
             <div className={styles.lilColumn}>
-                <p>Только отсутсвующие товары</p>
+                <p>Только отсутствующие товары</p>
                 <CircleCheckBox active={onlyNotActive} onClick={() => { setOnlyNotActive(!onlyNotActive); setOnlyActive(false); }} />
             </div>
         </div>
