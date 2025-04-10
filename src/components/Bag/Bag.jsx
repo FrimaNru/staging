@@ -4,19 +4,19 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure, ModalCloseButton } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import InputMask from "react-input-mask";
 import { formatNumber } from "@/lib/Formatting";
 import WidgetPVZ from "../Common/WidgetPVZ";
 import { Link } from "react-scroll"
 import { useCart } from "@/contexts/CartContext";
 import { formatDate } from "@/lib/Formatting";
 import { useUser } from "@/contexts/UserContext";
+import BagPersonalData from "./items/PersonalData";
 
 export default function Bag() {
 
     const router = useRouter();
     const { startSetCart } = useCart();
-    const { setUser } = useUser();
+    const { setUser, user } = useUser();
     const [prevPath, setPrevPath] = useState(null);
     const [data, setData] = useState([]);
     const [dataUser, setDataUser] = useState({});
@@ -53,9 +53,10 @@ export default function Bag() {
             .then((res) => {
                 if (res.status === 201) return;
                 setUser(res.data.user);
+                setSuccessData(res.data.order);
                 setSuccessModal(true);
                 setOrder(false);
-                setSuccessData(res.data.order);
+                load();
             })
             .catch((e) => { console.log(e); });
     };
@@ -109,12 +110,11 @@ export default function Bag() {
     };
 
     function buy() {
-        if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email) && selectedPVZ?.address && deliveryDate !== '') {
+        if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email) && selectedPVZ?.address && deliveryDate !== '' && dataUser.isVerifiedPhone) {
             setIsLoading(true);
 
-            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + (total >= 3000 ? 0 : deliveryCost), delivery: { street: selectedPVZ?.address, date: deliveryDate, pvzCode: selectedPVZ?.code } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + (total >= 3000 ? 0 : deliveryCost), delivery: { street: `${selectedPVZ?.region}, ${selectedPVZ?.city}, ${selectedPVZ?.address}`, date: deliveryDate, pvzCode: selectedPVZ?.code } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
-                    console.log(res.data);
                     setIsLoading(false);
                     router.push(res.data.formUrl);
                 })
@@ -125,6 +125,7 @@ export default function Bag() {
             if (dataUser.personalData.lastName.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не указали фамилию</div>), duration: 3000 });
             if (!regexMail.test(dataUser.email)) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали почту</div>), duration: 3000 });
             if (!selectedPVZ?.address) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали пункт выдачи заказа</div>), duration: 3000 });
+            if (!user.isVerifiedPhone) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не подтвердили номер телефона</div>), duration: 3000 });
 
         }
     };
@@ -207,33 +208,7 @@ export default function Bag() {
         </div>
         <div id="personalData" />
         {order && <div className={styles.order}>
-            <div className={styles.orderColumn}>
-                <hr className={`${styles.hr} ${styles.hrMobile}`} />
-                <p className={styles.orderTitle}>ЛИЧНЫЕ ДАННЫЕ</p>
-                <hr className={`${styles.hr} ${styles.hrMobile}`} />
-                <div className={styles.orderLine}>
-                    <div className={styles.orderColumnBig}>
-                        <div className={styles.orderColumnLil}>
-                            <p className={styles.orderInputTitle}>Имя</p>
-                            <input className={styles.orderInput} onChange={(e) => setDataUser({ ...dataUser, name: e.target.value })} value={dataUser.name} />
-                        </div>
-                        <div className={styles.orderColumnLil}>
-                            <p className={styles.orderInputTitle}>Фамилия</p>
-                            <input className={styles.orderInput} value={dataUser.personalData?.lastName} onChange={(e) => setDataUser({ ...dataUser, personalData: { ...dataUser.personalData, lastName: e.target.value } })} />
-                        </div>
-                    </div>
-                    <div className={styles.orderColumnBig}>
-                        <div className={styles.orderColumnLil}>
-                            <p className={styles.orderInputTitle}>E-mail</p>
-                            <input className={styles.orderInput} onChange={(e) => setDataUser({ ...dataUser, email: e.target.value })} value={dataUser.email} />
-                        </div>
-                        <div className={styles.orderColumnLil}>
-                            <p className={styles.orderInputTitle}>Телефон</p>
-                            <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={dataUser.phone} onChange={(e) => setDataUser({ ...dataUser, phone: e.target.value })} />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <BagPersonalData setDataUser={setDataUser} dataUser={dataUser} load={load} />
             <hr className={styles.hr} />
             <div className={styles.orderColumn}>
                 <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
