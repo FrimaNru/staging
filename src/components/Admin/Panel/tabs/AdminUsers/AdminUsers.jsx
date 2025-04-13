@@ -2,9 +2,7 @@ import styles from "./styles.module.css";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { API_BASE_URL } from "../../../../../../apiConfig";
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useToast } from '@chakra-ui/react';
-import { formatDateFromTimestamp, formatNumber } from "@/lib/Formatting";
-import Link from "next/link";
+import { useToast } from '@chakra-ui/react';
 import Button from "@/ui/Button/Button";
 import Input from "@/ui/Inputs/Input/Input";
 import { useRouter } from "next/navigation";
@@ -13,7 +11,6 @@ export default function AdminDashboard() {
 
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('');
-    const toast = useToast();
     const router = useRouter();
 
     useEffect(() => {
@@ -27,15 +24,6 @@ export default function AdminDashboard() {
         } catch (error) {
             console.log(error);
         }
-    };
-
-    function deleteUser(id) {
-        axios.post(`${API_BASE_URL}deleteUser`, { id }, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } })
-            .then(() => {
-                load();
-                toast({ position: 'bottom-right', render: () => (<div className="toast">Пользователь успешно удален</div>), duration: 3000 });
-            })
-            .catch((e) => console.log(e));
     };
 
     const filteredProducts = useMemo(() => {
@@ -105,50 +93,5 @@ export default function AdminDashboard() {
                 </div>
             </div>
         </div>
-        {/* <div className={styles.dashboardColumn}>
-            <Accordion allowToggle>
-                <div className={styles.dashboardColumnUsers}>
-                    <div className={styles.dashboardAccordionTableInfo}>
-                        <p className={styles.dashboardAccordionButtonTextLil}>Имя</p>
-                        <p className={styles.dashboardAccordionButtonTextLil}>Телефон</p>
-                        <p className={styles.dashboardAccordionHeaderTextMiddle}>Почта</p>
-                        <div className={styles.dashboardAccordionButtonBlockLil}>Активные заказы</div>
-                    </div>
-                    {users.length > 0 && users.map((x, i) => <AccordionItem border='none' key={i}>
-                        <div className={styles.dashboardAccordionButton}>
-                            
-                            <div className={`${styles.dashboardAccordionButtonBlock} ${styles.dashboarNoBorder}`}>
-                                <AccordionButton p={0} alignItems='center' justifyContent='center' _hover={{ bg: 'none' }}>
-                                    <AccordionIcon />
-                                </AccordionButton>
-                            </div>
-                        </div>
-                        <AccordionPanel p={0}>
-                            <div className={styles.accordionPanel}>
-                                
-                                <hr className={styles.hr} />
-                                
-                                <hr className={styles.hr} />
-                                <div className={styles.accordionPanelColumn}>
-                                    <p className={styles.accordionPanelTitle}>Корзина</p>
-                                    {x.bag.length === 0
-                                        ? <p className={styles.accordionPanelText}>Корзина пуста</p>
-                                        : x.bag.map((y, n) => <ProductItem key={n} id={y} type='bag' />)}
-                                </div>
-                                <hr className={styles.hr} />
-                                <div className={styles.accordionPanelColumn}>
-                                    <p className={styles.accordionPanelTitle}>Избранные</p>
-                                    {x.favourite.length === 0
-                                        ? <p className={styles.accordionPanelText}>Избранных нет</p>
-                                        : x.favourite.map((y, n) => <ProductItem key={n} id={y} type='bag' />)}
-                                </div>
-                                <hr className={styles.hr} />
-                                <button className={styles.accordionPanelButton} onClick={() => deleteUser(x._id)} >Удалить аккаунт</button>
-                            </div>
-                        </AccordionPanel>
-                    </AccordionItem>)}
-                </div>
-            </Accordion>
-        </div> */}
     </div>
 };

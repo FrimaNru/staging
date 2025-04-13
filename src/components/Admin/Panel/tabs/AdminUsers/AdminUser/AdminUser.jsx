@@ -5,6 +5,9 @@ import { API_BASE_URL } from "../../../../../../../apiConfig";
 import { useRouter } from "next/router";
 import UserMainInfo from "./items/UserMainInfo";
 import UserOrders from "./items/UserOrders";
+import UserBag from "./items/UserBag";
+import UserFavourite from "./items/UserFavourite";
+import Button from "@/ui/Button/Button";
 
 export default function AdminUser() {
 
@@ -16,22 +19,38 @@ export default function AdminUser() {
 
     const load = async () => {
         try {
-            const res = await axios.get(`${API_BASE_URL}admin/users/${id}`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });            
+            const res = await axios.get(`${API_BASE_URL}admin/users/${id}`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
             setData(res.data);
         } catch (error) {
             console.log(error);
         }
     };
 
-    if (!data) return <p>Загрузка...</p>
+    if (!data) return <p>Загрузка...</p>;
+
+    const deleteUser = async () => {
+        try {
+            await axios.delete(`${API_BASE_URL}admin/users/${id}`, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
+            router.push('/adminpanel?page=users');
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return <div className={styles.main}>
-        <p className={styles.title}>{data?.name} {data?.personalData.lastName}</p>
+        <div className={styles.subtitleLine}>
+            <p className={styles.title}>{data?.name} {data?.personalData.lastName}</p>
+            <Button
+                variant="delete"
+                size="small"
+                onClick={deleteUser}
+            >Удалить пользователя</Button>
+        </div>
         <div className={styles.grid}>
             <UserMainInfo data={data} />
             <UserOrders data={data} />
-            <div className={styles.card}></div>
-            <div className={styles.card}></div>
+            <UserBag data={data} />
+            <UserFavourite data={data} />
         </div>
     </div>
 };

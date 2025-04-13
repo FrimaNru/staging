@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import styles from "../../styles.module.css";
 import Link from "next/link";
 import { formatNumber } from "@/lib/Formatting";
+import axios from "axios";
+import { API_BASE_URL } from "../../../../../../../../apiConfig";
 
-export default function ProductItem({ id, type }) {
+export default function ProductItem({ id }) {
 
     const [data, setData] = useState({});
 
@@ -19,15 +21,11 @@ export default function ProductItem({ id, type }) {
         }
     };
 
-    return (type === 'img'
-        ? (data._id && <Link href={`https://mi-alegria.shop/product?id=${data._id}`} className="link" target="_blank" >
-            <img src={data.cover} className={styles.productImg} />
-        </Link>)
-        : (data.name && <Link href={`https://mi-alegria.shop/product?id=${data._id}`} target="_blank">
-            <div className={styles.accrdionPanelItem}>
-                <p className={styles.accordionPanelText}><span style={{ fontWeight: 800 }}>{data.name.toUpperCase()}</span></p>
-                <img src={data.cover} className={styles.productImg} />
-                <p className={styles.accordionPanelText}><span style={{ fontWeight: 800 }}>{formatNumber(data.cost)} руб.</span></p>
-            </div>
-        </Link>))
+    return <Link href={`https://mi-alegria.shop/product?id=${data?._id}`} target="_blank">
+        <div className={styles.productItem}>
+            <img src={data?.cover} className={styles.productImg} />
+            <p className={styles.subtitle}>{data?.name?.toUpperCase()}</p>
+            <p className={styles.subtitle}>{formatNumber(data?.cost)} руб.</p>
+        </div>
+    </Link>
 };
