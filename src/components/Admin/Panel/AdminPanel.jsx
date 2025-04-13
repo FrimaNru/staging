@@ -5,12 +5,13 @@ import { useEffect } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { SideMenu } from "./items/SideMenu/SideMenu";
 import AdminBanners from "./tabs/AdminBanners/AdminBanners";
-import AdminDashboard from "./tabs/AdminDashboard/AdminDashboard";
+import AdminDashboard from "./tabs/AdminUsers/AdminUsers";
 import AdminProducts from "./tabs/AdminProducts/AdminProducts";
 import AdminCreateProduct from "./tabs/AdminProducts/AdminCreateProduct/AdminCreateProduct";
 import AdminEditProduct from "./tabs/AdminProducts/AdminEditProduct/AdminEditProduct";
 import AdminOrders from "./tabs/AdminOrders/AdminOrders";
 import AdminEditOrder from "./tabs/AdminOrders/items/AdminEditOrder/AdminEditOrder";
+import AdminUser from "./tabs/AdminUsers/AdminUser/AdminUser";
 
 export default function AdminPanel() {
 
@@ -42,6 +43,8 @@ export default function AdminPanel() {
                 return <AdminEditOrder />
             case 'banners':
                 return <AdminBanners />
+            case 'user':
+                return <AdminUser />
             default:
                 return <AdminDashboard />;
         }

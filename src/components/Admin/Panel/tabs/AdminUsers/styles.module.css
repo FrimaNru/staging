@@ -1,0 +1,159 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+}
+
+.title {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 18px;
+    background: var(--light);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: var(--box-sh-main);
+}
+
+.subtitle {
+    font-size: 18px;
+    line-height: 100%;
+    text-align: left;
+}
+
+.subtitleLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tableHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 40px;
+    background: var(--lightgray);
+    padding: 0 16px;
+}
+
+.tableHeaderItem {
+    width: 18%;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 100%;
+    text-align: left;
+}
+
+.tableContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tableItem {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding: 15px 16px;
+    border-bottom: solid 1px var(--bottomBorder);
+}
+
+.tableItemValue {
+    width: 18%;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 120%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+
+.tableItemId {
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 100%;
+}
+
+.tableItemIcon {
+    cursor: pointer;
+}
+
+.alignRight {
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+.alignTextRight {
+    text-align: right;
+}
+
+.tableItemLine {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.tableItemValueIcon {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.tableNoItems {
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    line-height: 40px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.cardColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.cardTitle {
+    font-size: 16px;
+    line-height: 120%;
+}
+
+.cardValue {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 120%;
+}
