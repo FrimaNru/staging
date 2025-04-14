@@ -2,14 +2,13 @@ import { useEffect, useRef } from 'react';
 
 const WidgetPVZ = ({ onSelectPVZ }) => {
     const widgetRef = useRef(null);
+    const widgetInstance = useRef(null); // Храним экземпляр виджета
 
     useEffect(() => {
-        let widget;
-
         const loadWidget = async () => {
             try {
                 const CdekWidget = await import('@cdek-it/widget');
-                widget = new CdekWidget.default({
+                widgetInstance.current = new CdekWidget.default({
                     element: widgetRef.current,
                     root: 'cdek-map',
                     servicePath: 'https://api.mi-alegria.shop/map_service/service.php',
@@ -28,7 +27,7 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
                         door: true,
                     },
                     tariffs: {
-                        office: [136]
+                        office: [136],
                     },
                     onChoose(type, tariff, address) {
                         onSelectPVZ(address);
@@ -39,14 +38,16 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
             }
         };
 
+        // Загружаем виджет только один раз
         loadWidget();
 
         return () => {
-            if (widget) {
-                widget.destroy();
+            // Уничтожаем виджет при размонтировании компонента
+            if (widgetInstance.current) {
+                widgetInstance.current.destroy();
             }
         };
-    }, [onSelectPVZ]);
+    }, []); // Пустой массив зависимостей
 
     return <div ref={widgetRef} id="cdek-map" className="widget"></div>;
 };

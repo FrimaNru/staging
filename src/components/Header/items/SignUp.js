@@ -29,7 +29,7 @@ export function SignUp({ setStateAuth, onClose }) {
     const [errorUser, setErrorUser] = useState(false);
     const [errorCodeCorrect, setErrorCodeCorrect] = useState(false);
 
-    const [checkBoxes, setCheckBoxes] = useState({ news: false, policy: true });
+    const [checkBoxes, setCheckBoxes] = useState({ news: true, policy: false });
 
     const [policy, setPolicy] = useState(false);
     const [personal, setPersonal] = useState(false);

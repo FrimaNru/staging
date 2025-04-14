@@ -6,14 +6,13 @@ import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure, 
 import { useRouter } from "next/router";
 import { formatNumber } from "@/lib/Formatting";
 import WidgetPVZ from "../Common/WidgetPVZ";
-import { Link } from "react-scroll"
+import { Link } from "react-scroll";
 import { useCart } from "@/contexts/CartContext";
 import { formatDate } from "@/lib/Formatting";
 import { useUser } from "@/contexts/UserContext";
 import BagPersonalData from "./items/PersonalData";
 
 export default function Bag() {
-
     const router = useRouter();
     const { startSetCart } = useCart();
     const { setUser, user } = useUser();
@@ -25,20 +24,21 @@ export default function Bag() {
     const [deliveryDate, setDeliveryDate] = useState('');
     const { isOpen, onClose, onOpen } = useDisclosure();
     const toast = useToast();
-
     const [order, setOrder] = useState(false);
     const [successModal, setSuccessModal] = useState(false);
     const [errorModal, setErrorModal] = useState(false);
     const [successData, setSuccessData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-
     const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
+
+    // Состояние для управления видимостью виджета
+    const [isWidgetVisible, setIsWidgetVisible] = useState(false);
 
     useEffect(() => {
         load();
         if (window.location.href.includes('orderId')) {
             checkOrderStatus();
-        };
+        }
     }, []);
 
     useEffect(() => {
@@ -75,7 +75,7 @@ export default function Bag() {
                 startSetCart(res.data.bag);
                 setData(res.data.bag);
                 setDataUser(res.data);
-                let d = 0
+                let d = 0;
                 if (res.data.bag.length === 0) return setTotal(0);
                 res.data.bag.map(x => {
                     axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
@@ -107,12 +107,11 @@ export default function Bag() {
                 setOrder(false);
             })
             .catch((e) => console.log(e));
-    };
+    }
 
     function buy() {
         if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email) && selectedPVZ?.address && deliveryDate !== '' && dataUser.isVerifiedPhone) {
             setIsLoading(true);
-
             axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + (total >= 3000 ? 0 : deliveryCost), delivery: { street: `${selectedPVZ?.region}, ${selectedPVZ?.city}, ${selectedPVZ?.address}`, date: deliveryDate, pvzCode: selectedPVZ?.code } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then((res) => {
                     setIsLoading(false);
@@ -126,15 +125,13 @@ export default function Bag() {
             if (!regexMail.test(dataUser.email)) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали почту</div>), duration: 3000 });
             if (!selectedPVZ?.address) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали пункт выдачи заказа</div>), duration: 3000 });
             if (!user.isVerifiedPhone) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не подтвердили номер телефона</div>), duration: 3000 });
-
         }
-    };
+    }
 
     const [selectedPVZ, setSelectedPVZ] = useState(null);
 
     const handleSelectPVZ = (pvz) => {
         setSelectedPVZ(pvz);
-
         axios.post(`${API_BASE_URL}calculateDelivery`, { address: pvz.address, postal_code: pvz.postal_code }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 setDeliveryDate(`${res.data.period_min} - ${res.data.period_max} дня`);
@@ -146,11 +143,11 @@ export default function Bag() {
     return <div className={styles.main}>
         <div className={styles.mainRow}>
             <div className={styles.columnProducts}>
-                <div className={styles.rowHeader} >
+                <div className={styles.rowHeader}>
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <p className={styles.rowHeaderTitle}>КОРЗИНА</p>
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
-                    {data.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen} >Очистить корзину</button>}
+                    {data.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
                 </div>
                 {data.length > 0 && Object.entries(itemCounts)
                     .filter(([key, count], index, self) => ([x]) => x === key)
@@ -162,9 +159,8 @@ export default function Bag() {
                                 <hr className={styles.hr} />
                             </div>
                         );
-                    })
-                }
-                {data.length === 0 && <div className={styles.emptyBag} >
+                    })}
+                {data.length === 0 && <div className={styles.emptyBag}>
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
                 </div>}
@@ -181,11 +177,12 @@ export default function Bag() {
                             <div className={styles.totalRow}>
                                 <p className={styles.totalSubtitle}>Доставка</p>
                                 {total < 3000
-                                    ? <>{deliveryCost === 0
-                                        ? <svg xmlns="http://www.w3.org/2000/svg" width="11" height="5" viewBox="0 0 11 5" fill="none">
-                                            <path d="M10.2008 4.53996H0.800781V0.459961H10.2008V4.53996Z" fill="#C49748" />
-                                        </svg>
-                                        : <p className={styles.totalGold}>{formatNumber(deliveryCost)} руб.</p>}
+                                    ? <>
+                                        {deliveryCost === 0
+                                            ? <svg xmlns="http://www.w3.org/2000/svg" width="11" height="5" viewBox="0 0 11 5" fill="none">
+                                                <path d="M10.2008 4.53996H0.800781V0.459961H10.2008V4.53996Z" fill="#C49748" />
+                                            </svg>
+                                            : <p className={styles.totalGold}>{formatNumber(deliveryCost)} руб.</p>}
                                     </>
                                     : <p className={styles.totalGold}>0 руб.</p>}
                             </div>
@@ -193,30 +190,37 @@ export default function Bag() {
                         </div>
                     </div>
                     <hr className={styles.hr} />
-                    <div className={styles.totalRow} >
+                    <div className={styles.totalRow}>
                         <p className={styles.totalSubtitle}>Итого</p>
                         <p className={styles.totalGold}>{formatNumber(total + (total >= 3000 ? 0 : deliveryCost))} руб.</p>
                     </div>
                 </div>
                 {data.length > 0 && !order && <>
-                    <Link to='personalData' smooth={true} offset={-180} >
-                        <button className={styles.totalButton} onClick={() => setOrder(true)} >ОФОРМИТЬ ЗАКАЗ</button>
+                    <Link to='personalData' smooth={true} offset={-180}>
+                        <button className={styles.totalButton} onClick={() => {
+                            setOrder(true);
+                            setIsWidgetVisible(true); // Показать виджет при начале оформления заказа
+                        }}>ОФОРМИТЬ ЗАКАЗ</button>
                     </Link>
-                    <button className={styles.countinueShoppingButton} onClick={handleGoToCatalog} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
+                    <button className={styles.countinueShoppingButton} onClick={handleGoToCatalog}>ПРОДОЛЖИТЬ ПОКУПКИ</button>
                 </>}
             </div>}
         </div>
         <div id="personalData" />
-        {order && <div className={styles.order}>
-            <BagPersonalData setDataUser={setDataUser} dataUser={dataUser} load={load} />
-            <hr className={styles.hr} />
+        <div className={styles.order}>
+            {order && <BagPersonalData setDataUser={setDataUser} dataUser={dataUser} load={load} />}
+            {order && <hr className={styles.hr} />}
             <div className={styles.orderColumn}>
-                <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
-                <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
-                <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
-                <div className={styles.orderInfo}>
+                {order && <>
+                    <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
+                    <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
+                </>}
+                <div style={{ display: isWidgetVisible ? 'block' : 'none' }}>
+                    <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
+                </div>
+                {order && <div className={styles.orderInfo}>
                     <div className={styles.orderInfoColumn}>
-                        <p className={styles.orderInfoColumnTitle}>Пункт самовывовоза находится по адресу:</p>
+                        <p className={styles.orderInfoColumnTitle}>Пункт самовывоза находится по адресу:</p>
                         <p className={styles.orderInfoColumnText}>{selectedPVZ?.address ?? 'Не выбрано'}</p>
                     </div>
                     <div className={styles.orderInfoColumn}>
@@ -227,11 +231,13 @@ export default function Bag() {
                         <p className={styles.orderInfoColumnTitle}>Срок доставки:</p>
                         <p className={styles.orderInfoColumnText}>{deliveryDate !== '' ? deliveryDate : 'Не выбрано'}</p>
                     </div>
-                </div>
+                </div>}
             </div>
-            <hr className={styles.hr} />
-            <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
-        </div>}
+            {order && <>
+                <hr className={styles.hr} />
+                <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
+            </>}
+        </div>
         <Modal onClose={async () => { setSuccessModal(false); await load(); }} isOpen={successModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent p={0} bg='none' boxShadow='none' >
