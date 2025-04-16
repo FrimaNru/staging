@@ -45,8 +45,8 @@ export function Product() {
             .then((res) => {
                 setData(res.data);
                 setColorOfProduct(res.data.color);
-                if (res.data.type === 'ring' || res.data.type === 'bracelets') setSizeOfProduct(16)
-                else if (res.data.type === 'necklace') setSizeOfProduct(28);
+                if (res.data.type === 'ring' || res.data.type === 'bracelets') setSizeOfProduct(res.data.sizes[0])
+                else if (res.data.type === 'necklace') setSizeOfProduct(res.data.sizes[0]);
             })
             .catch((e) => console.log(e));
     };

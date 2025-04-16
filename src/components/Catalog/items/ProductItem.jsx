@@ -15,7 +15,7 @@ export default function ProductItem({ product }) {
                 <div className={styles.productItemCostLine}>
                     <div className={styles.productItemCostEmpty} />
                     <p className={styles.sliderItemCost}>{formatNumber(product.cost)} руб.</p>
-                    <FavouriteButton idProduct={product._id} size={(product.type === 'ring' || product.type === 'bracelets') ? 16 : 28} color={product.color} article={product.article} type='small' />
+                    <FavouriteButton idProduct={product._id} size={(product.type === 'ring' || product.type === 'bracelets') ? product.sizes[0] : product.sizes[0]} color={product.color} article={product.article} type='small' />
                 </div>
             </div>
         </div>
