@@ -8,7 +8,6 @@ import { formatNumber } from "@/lib/Formatting";
 export default function ProductItem({ item }) {
 
     const [data, setData] = useState(null);
-    const [numberOfProduct, setNumberOfProduct] = useState(null);
 
     useEffect(() => { load(); }, []);
 
@@ -28,10 +27,12 @@ export default function ProductItem({ item }) {
             <img src={data.cover} className={styles.productItemCover} />
             <div className={styles.productItemColumn}>
                 <p className={styles.productItemTitle}>{data.name?.toUpperCase()}</p>
-                <p className={styles.productItemText}>Артикул: {item.article}</p>
-                <p className={styles.productItemText}>Цвет: {item.color}</p>
-                {item.size !== 0 && <p className={styles.productItemText}>Размер: {item.size}</p>}
-                <p className={styles.productItemText}>{item.count} шт.</p>
+                <div className={styles.productItemLilColumn}>
+                    <p className={styles.productItemText}>Артикул: {item.article}</p>
+                    <p className={styles.productItemText}>Цвет: {item.color}</p>
+                    {item.size !== 0 && <p className={styles.productItemText}>Размер: {item.size}</p>}
+                    <p className={styles.productItemText}>{item.count} шт.</p>
+                </div>
                 <p className={styles.productItemCost}>{formatNumber(Number(data.cost))} руб.</p>
             </div>
         </div>

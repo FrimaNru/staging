@@ -17,19 +17,16 @@ export default function ProductBlock({ order }) {
     const productsWithCount = Object.values(groupedProducts);
 
     return (
-        <div className={styles.productContent}>
+        <div className={`${styles.card} ${styles.card50}`}>
+            <div className={styles.productsTotalBlock}>
+                <p className={styles.subtitle}>Итого</p>
+                <p className={styles.productsTotalCost}>{formatNumber(order.total)} руб.</p>
+            </div>
             <div className={styles.productsColumn}>
                 {productsWithCount.map((item, index) => (
                     <ProductItem key={index} item={item} />
                 ))}
             </div>
-            <div className={styles.productsTotalBlock}>
-                <p className={styles.productsTotalTitle}>Итого</p>
-                <div className={styles.productsTotalColumn}>
-                    <p className={styles.productsTotalSubtitle}>Товаров на сумму</p>
-                    <p className={styles.productsTotalCost}>{formatNumber(order.total)} руб.</p>
-                </div>
-            </div>
-        </div>
+        </div >
     );
 };

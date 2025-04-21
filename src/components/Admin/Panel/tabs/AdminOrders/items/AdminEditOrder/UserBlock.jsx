@@ -20,26 +20,26 @@ export default function UserBlock({ id }) {
 
     if (!data) return <p>Загрузка...</p>;
 
-    return <div className={styles.userColumn}>
-        <p className={styles.userTitle}>Личные данные</p>
+    return <div className={styles.card}>
+        <p className={styles.userTitle}>Личные данные пользователи</p>
         <div className={styles.contentLine}>
             <div className={`${styles.contentColumn} ${styles.halfWidth}`}>
                 <p className={styles.subtitle}>Имя</p>
-                <div className={styles.boxContent}>{data?.name}</div>
+                <div className={styles.cardValue}>{data?.name}</div>
             </div>
             <div className={`${styles.contentColumn} ${styles.halfWidth}`}>
                 <p className={styles.subtitle}>Телефон</p>
-                <div className={styles.boxContent}>{data?.phone}</div>
+                <div className={styles.cardValue}>{data?.phone}</div>
             </div>
         </div>
         <div className={styles.contentLine}>
             <div className={`${styles.contentColumn} ${styles.halfWidth}`}>
                 <p className={styles.subtitle}>Фамилия</p>
-                <div className={styles.boxContent}>{data?.lastName}</div>
+                <div className={styles.cardValue}>{data?.lastName}</div>
             </div>
             <div className={`${styles.contentColumn} ${styles.halfWidth}`}>
                 <p className={styles.subtitle}>Почта</p>
-                <div className={styles.boxContent}>{data?.email}</div>
+                <div className={styles.cardValue}>{data?.email}</div>
             </div>
         </div>
     </div>

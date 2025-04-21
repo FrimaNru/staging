@@ -41,7 +41,7 @@
     border: solid 1px var(--beige);
 }
 
-.table {
+.grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
@@ -49,12 +49,13 @@
 }
 
 .orderCard {
-    background: var(--beige);
+    background: none;
+    border: solid 1px var(--lightgray);
     border-radius: 20px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 30px;
 }
 
 .orderCardTitle {
@@ -86,33 +87,29 @@
     text-align: left;
 }
 
-.orderCardButtonLineBox {
-    width: 100%;
-    overflow: auto;
-}
-
 .orderCardButtonLine {
     display: flex;
-    flex-direction: row;
-    gap: 5px;
+    flex-wrap: wrap;
+    gap: 10px;
     width: 100%;
 }
 
 .orderCardButton {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 13.1px;
     text-align: center;
-    padding: 5px 10px;
-    border-radius: 60px;
+    padding: 10px;
+    border-radius: 10px;
     border: solid 1px var(--dark);
-    transition: all 0.3s;
+    transition: all 0.5s;
 }
 
-.orderCardButtonSelect {
+.orderCardButtonSelect,
+.orderCardButton:hover {
     background: var(--dark);
     color: var(--beige);
-    transition: all 0.3s;
+    transition: all 0.5s;
 }
 
 .orderCardTitleLine {
@@ -144,7 +141,7 @@
 
 .orderCardCompleteLine {
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
 }
@@ -208,10 +205,11 @@
 
 .noOrders {
     width: 100%;
-    text-align: left;
-    font-size: 20px;
+    text-align: center;
+    font-size: 14px;
     font-weight: 400;
     line-height: 23.4px;
+    line-height: 50px;
 }
 
 .contentColumn {
@@ -219,14 +217,8 @@
     flex-direction: column;
     gap: 10px;
     width: 100%;
-}
-
-.subtitle {
-    font-family: Dela Gothic One;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 21.72px;
-    text-align: left;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
 .boxContent {
@@ -251,8 +243,9 @@
 .contentLine {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 10px;
     width: 100%;
+    align-items: center;
 }
 
 .contentButton {
@@ -311,11 +304,14 @@
 
 .productsTotalBlock {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
     padding: 15px;
-    border: solid 1px var(--dark);
+    border: solid 1px var(--lightgray);
     gap: 20px;
-    width: 230px;
+    width: 100%;
 }
 
 .productsTotalTitle {
@@ -349,7 +345,7 @@
 }
 
 .productsColumn {
-    width: calc(100% - 250px);
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -359,12 +355,11 @@
     display: flex;
     flex-direction: row;
     gap: 40px;
-    align-items: flex-start;
 }
 
 .productItemCover {
-    width: 162px;
-    height: 162px;
+    width: 140px;
+    height: 140px;
     object-fit: cover;
 }
 
@@ -372,21 +367,23 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+    height: auto;
+    justify-content: space-between;
 }
 
 .productItemTitle {
     font-family: Dela Gothic One;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 28.96px;
+    line-height: 140%;
     text-align: left;
 }
 
 .productItemCost {
     font-family: Dela Gothic One;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 28.96px;
+    line-height: 140%;
     text-align: left;
     color: var(--gold);
     margin-top: 15px;
@@ -399,17 +396,23 @@
     text-align: left;
 }
 
+.productItemLilColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .textarea {
     min-width: 100%;
     max-width: 100%;
     min-height: 100px;
     border: solid 1px var(--dark);
-    border-radius: 30px;
-    padding: 10px 20px;
+    border-radius: 10px;
+    padding: 10px;
     outline: none;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 21.83px;
+    line-height: 100%;
     text-align: left;
 }
 
@@ -441,4 +444,135 @@
     font-weight: 400;
     line-height: 21.83px;
     text-align: left;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    background: var(--light);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: var(--box-sh-main);
+}
+
+.subtitle {
+    font-size: 18px;
+    line-height: 100%;
+    text-align: left;
+}
+
+.fullLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.lilColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.lilLine {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.sortButton {
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    gap: 5px;
+    transition: all 0.5s;
+}
+
+.sortButton:hover {
+    background: var(--lightgray);
+    transition: all 0.5s;
+}
+
+.sortButtonSelect {
+    background: var(--lightgray);
+}
+
+.tableHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 40px;
+    background: var(--lightgray);
+    padding: 0 16px;
+}
+
+.tableHeaderItem {
+    width: 20%;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 100%;
+    text-align: left;
+}
+
+.tableContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tableItem {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding: 15px 16px;
+    border-bottom: solid 1px var(--bottomBorder);
+}
+
+.tableItemValue {
+    width: 20%;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.alignTextRight {
+    text-align: right;
+}
+
+.alignRight {
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.lineCard {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 20px;
+}
+
+.card50 {
+    width: 50%;
+}
+
+.cardValue {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 120%;
 }
