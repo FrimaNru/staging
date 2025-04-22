@@ -241,19 +241,19 @@ export default function PersonalData() {
                 <div className={styles.inputColumn}>
                     <p className={styles.inputTitle}>Получать рассылки</p>
                     <div className={styles.lineSex}>
-                        <div className={styles.lineLilSex} onClick={() => setMailing('E-mail')} >
-                            <img src={mailing === 'E-mail' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
+                        <div className={styles.lineLilSex} onClick={() => setMailing('Email')} >
+                            <img src={mailing === 'Email' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
                             <p className={styles.sexText}>E-mail</p>
                         </div>
-                        <div className={styles.lineLilSex} onClick={() => setMailing('Телефон')}>
-                            <img src={mailing === 'Телефон' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
+                        <div className={styles.lineLilSex} onClick={() => setMailing('Phone')}>
+                            <img src={mailing === 'Phone' ? '/goldDotSelect.svg' : '/goldCircle.svg'} className={styles.sexCircle} />
                             <p className={styles.sexText} >Телефон</p>
                         </div>
                     </div>
                     <div className={styles.checkBoxLine}>
                         {checkBoxes.news
                             ? <img src='/checkbox.svg' style={{ cursor: 'pointer' }} onClick={() => { setCheckBoxes({ ...checkBoxes, news: false }); setMailing(''); }} />
-                            : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => { setCheckBoxes({ ...checkBoxes, news: true }); setMailing('E-mail'); }} />}
+                            : <img src='/emptyCheckbox.svg' style={{ cursor: 'pointer' }} onClick={() => { setCheckBoxes({ ...checkBoxes, news: true }); setMailing('Email'); }} />}
                         <p className={styles.checkBoxText}>Я хочу получать <span className={styles.checkBoxSpan} onClick={() => setNews(true)}>сообщения о новостях, акциях и персональные рекомендации</span></p>
                     </div>
                     <DocumentsModal news={news} setNews={setNews} />

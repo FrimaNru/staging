@@ -2,6 +2,7 @@
     border: none;
     background: var(--lightgray);
     outline: none;
+    font-family: 'Tenor Sans', sans-serif;
 }
 
 .input::placeholder {
@@ -9,6 +10,7 @@
     line-height: 20.29px;
     text-align: left;
     color: var(--gray);
+    font-family: 'Tenor Sans', sans-serif;
 }
 
 .medium {
@@ -31,7 +33,7 @@
     line-height: 20.29px;
     text-align: left;
     color: var(--gray);
-    font-family: Tenor Sans;
+    font-family: 'Tenor Sans', sans-serif;
 }
 
 .full {
