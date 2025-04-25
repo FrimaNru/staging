@@ -31,15 +31,15 @@ export default function Bag() {
     const [isLoading, setIsLoading] = useState(false);
     const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
 
-    // Состояние для управления видимостью виджета
     const [isWidgetVisible, setIsWidgetVisible] = useState(false);
 
     useEffect(() => {
         load();
-        if (window.location.href.includes('orderId')) {
+
+        if (typeof window !== 'undefined' && window.location.href.includes('orderId')) {
             checkOrderStatus();
         }
-    }, []);
+    }, [router.pathname]);
 
     useEffect(() => {
         const path = sessionStorage.getItem('prevPath');
@@ -199,7 +199,7 @@ export default function Bag() {
                     <Link to='personalData' smooth={true} offset={-180}>
                         <button className={styles.totalButton} onClick={() => {
                             setOrder(true);
-                            setIsWidgetVisible(true); // Показать виджет при начале оформления заказа
+                            setIsWidgetVisible(true);
                         }}>ОФОРМИТЬ ЗАКАЗ</button>
                     </Link>
                     <button className={styles.countinueShoppingButton} onClick={handleGoToCatalog}>ПРОДОЛЖИТЬ ПОКУПКИ</button>

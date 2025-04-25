@@ -62,8 +62,8 @@ export default function BagPersonalData({ setDataUser, dataUser, load }) {
             </div>
             <div className={styles.orderColumnBig}>
                 <div className={styles.orderColumnLil}>
-                    <p className={styles.orderInputTitle}>E-mail</p>
-                    <input className={styles.orderInput} onChange={(e) => setDataUser({ ...dataUser, email: e.target.value })} value={dataUser.email} />
+                    <p className={styles.orderInputTitle}>E-mail ✔</p>
+                    <input className={styles.orderInput} disabled={true} value={dataUser.email} />
                 </div>
                 <div className={styles.orderColumnLil}>
                     <p className={styles.orderInputTitle}>Телефон {dataUser.isVerifiedPhone && '✔'}</p>
