@@ -67,7 +67,7 @@ export default function BagPersonalData({ setDataUser, dataUser, load }) {
                 </div>
                 <div className={styles.orderColumnLil}>
                     <p className={styles.orderInputTitle}>Телефон {dataUser.isVerifiedPhone && '✔'}</p>
-                    <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={dataUser.phone} onChange={(e) => setDataUser({ ...dataUser, phone: e.target.value })} />
+                    <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={dataUser.phone} onChange={(e) => setDataUser({ ...dataUser, phone: e.target.value })} disabled={dataUser.isVerifiedPhone} />
                 </div>
                 {!dataUser.isVerifiedPhone
                     && <div className={styles.inputColumn}>
