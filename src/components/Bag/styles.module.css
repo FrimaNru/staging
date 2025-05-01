@@ -824,6 +824,7 @@
     gap: 15px;
     align-items: flex-start;
     justify-content: flex-start;
+    width: 100%;
 }
 
 .orderInfoColumnTitle {
@@ -845,6 +846,7 @@
     font-weight: 400;
     line-height: 109.152%;
     text-align: left;
+    width: 100%;
 }
 
 .orderColumn {
