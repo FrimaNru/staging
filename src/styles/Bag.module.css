@@ -288,6 +288,13 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    transition: all 0.5s;
+}
+
+.emptyBagButton:hover {
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
 }
 
 .mainRow {
@@ -301,12 +308,15 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
+    width: 100%;
+    overflow: hidden;
 }
 
 .orderColumn {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
 }
 
 .orderTitle {
@@ -410,6 +420,13 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    transition: all 0.5s;
+}
+
+.orderButtonPay:hover {
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
 }
 
 .orderDeliveryLineAddress {

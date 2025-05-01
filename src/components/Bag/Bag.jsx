@@ -2,7 +2,7 @@ import styles from "@/styles/Bag.module.css";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
-import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure, ModalCloseButton } from "@chakra-ui/react";
+import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { formatNumber } from "@/lib/Formatting";
 import WidgetPVZ from "../Common/WidgetPVZ";
@@ -14,7 +14,7 @@ import BagPersonalData from "./items/PersonalData";
 
 export default function Bag() {
     const router = useRouter();
-    const { startSetCart } = useCart();
+    const { startSetCart, cart } = useCart();
     const { setUser, user } = useUser();
     const [prevPath, setPrevPath] = useState(null);
     const [data, setData] = useState([]);
@@ -103,6 +103,7 @@ export default function Bag() {
                 onClose();
                 load();
                 startSetCart([]);
+                setIsWidgetVisible(false);
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Корзина успешно очищена</div>), duration: 3000 });
                 setOrder(false);
             })
@@ -140,6 +141,8 @@ export default function Bag() {
             .catch((e) => console.log(e));
     };
 
+    if (!cart) return;
+
     return <div className={styles.main}>
         <div className={styles.mainRow}>
             <div className={styles.columnProducts}>
@@ -147,9 +150,9 @@ export default function Bag() {
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <p className={styles.rowHeaderTitle}>КОРЗИНА</p>
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
-                    {data.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
+                    {cart.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
                 </div>
-                {data.length > 0 && Object.entries(itemCounts)
+                {cart.length > 0 && Object.entries(itemCounts)
                     .filter(([key, count], index, self) => ([x]) => x === key)
                     .map(([key, count], i) => {
                         const item = JSON.parse(key);
@@ -160,7 +163,7 @@ export default function Bag() {
                             </div>
                         );
                     })}
-                {data.length === 0 && <div className={styles.emptyBag}>
+                {cart.length === 0 && <div className={styles.emptyBag}>
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
                 </div>}
@@ -195,7 +198,7 @@ export default function Bag() {
                         <p className={styles.totalGold}>{formatNumber(total + (total >= 3000 ? 0 : deliveryCost))} руб.</p>
                     </div>
                 </div>
-                {data.length > 0 && !order && <>
+                {cart.length > 0 && !order && <>
                     <Link to='personalData' smooth={true} offset={-180}>
                         <button className={styles.totalButton} onClick={() => {
                             setOrder(true);
@@ -215,7 +218,7 @@ export default function Bag() {
                     <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
                     <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
                 </>}
-                <div style={{ display: isWidgetVisible ? 'block' : 'none' }}>
+                <div style={{ height: isWidgetVisible ? 'auto' : '0px', width: '100%' }}>
                     <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
                 </div>
                 {order && <div className={styles.orderInfo}>
