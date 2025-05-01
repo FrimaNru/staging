@@ -1,4 +1,4 @@
-import styles from "@/styles/Bag.module.css";
+import styles from "../styles.module.css";
 import axios from "axios";
 import { useState } from "react";
 import InputMask from "react-input-mask";

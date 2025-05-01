@@ -12,14 +12,14 @@ import NoResults from "./items/NoResults";
 import AccordionFilters from "./items/AccordionFilters";
 import Pagination from "./items/Pagination";
 
-const shuffle = (array) => {
-    let shuffled = array.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-};
+// const shuffle = (array) => {
+//     let shuffled = array.slice();
+//     for (let i = shuffled.length - 1; i > 0; i--) {
+//         const j = Math.floor(Math.random() * (i + 1));
+//         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+//     }
+//     return shuffled;
+// };
 
 export default function Catalog() {
     const { products, loading } = useProducts();
@@ -73,9 +73,7 @@ export default function Catalog() {
             d.sort((a, b) => a.cost - b.cost);
         } else if (stateSortItems === 'По убыванию цены') {
             d.sort((a, b) => b.cost - a.cost);
-        } else if (stateSortItems === 'По популярности') {
-            d = shuffle(d);
-        };
+        }
 
         if (stateSales.includes('Популярное')) {
             d = d.filter(x => x.additionally.includes('popular'));

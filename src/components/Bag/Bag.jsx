@@ -1,16 +1,17 @@
-import styles from "@/styles/Bag.module.css";
-import { useEffect, useState, useRef } from "react";
+import styles from "./styles.module.css";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { formatNumber } from "@/lib/Formatting";
-import WidgetPVZ from "../Common/WidgetPVZ";
-import { Link } from "react-scroll";
 import { useCart } from "@/contexts/CartContext";
 import { formatDate } from "@/lib/Formatting";
 import { useUser } from "@/contexts/UserContext";
-import BagPersonalData from "./items/PersonalData";
+import BagPersonalData from "./items/BagPersonalData";
+import BagProducts from "./items/BagProducts";
+import BagInfoColumn from "./items/BagInfoColumn";
+import BagDelivery from "./items/BagDelivery";
 
 export default function Bag() {
     const router = useRouter();
@@ -61,14 +62,6 @@ export default function Bag() {
             .catch((e) => { console.log(e); });
     };
 
-    const handleGoToCatalog = () => {
-        if (prevPath) {
-            router.push(prevPath);
-        } else {
-            router.push('/catalog');
-        }
-    };
-
     const load = async () => {
         await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
@@ -90,12 +83,6 @@ export default function Bag() {
             })
             .catch((e) => console.log(e));
     };
-
-    const itemCounts = data.reduce((acc, item) => {
-        const key = JSON.stringify({ id: item.id, size: item.size, color: item.color, article: item.article });
-        acc[key] = (acc[key] || 0) + 1;
-        return acc;
-    }, {});
 
     function clearBag() {
         axios.post(`${API_BASE_URL}clearBag`, {}, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
@@ -131,16 +118,6 @@ export default function Bag() {
 
     const [selectedPVZ, setSelectedPVZ] = useState(null);
 
-    const handleSelectPVZ = (pvz) => {
-        setSelectedPVZ(pvz);
-        axios.post(`${API_BASE_URL}calculateDelivery`, { address: pvz.address, postal_code: pvz.postal_code }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then((res) => {
-                setDeliveryDate(`${res.data.period_min} - ${res.data.period_max} дня`);
-                setDeliveryCost(res.data.total_sum);
-            })
-            .catch((e) => console.log(e));
-    };
-
     if (!cart) return;
 
     return <div className={styles.main}>
@@ -152,90 +129,38 @@ export default function Bag() {
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     {cart.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
                 </div>
-                {cart.length > 0 && Object.entries(itemCounts)
-                    .filter(([key, count], index, self) => ([x]) => x === key)
-                    .map(([key, count], i) => {
-                        const item = JSON.parse(key);
-                        return (
-                            <div key={i} className={styles.itemColumn}>
-                                <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} setData={setData} />
-                                <hr className={styles.hr} />
-                            </div>
-                        );
-                    })}
+                <BagProducts
+                    setData={setData}
+                    load={load}
+                    total={total}
+                    setTotal={setTotal}
+                />
                 {cart.length === 0 && <div className={styles.emptyBag}>
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
                 </div>}
             </div>
-            {total > 0 && <div className={styles.totalColumn}>
-                <div className={styles.total}>
-                    <p className={styles.totalTitle}>ИТОГО</p>
-                    <div className={styles.totalContent}>
-                        <div className={styles.totalRow}>
-                            <p className={styles.totalSubtitle}>Товаров на сумму</p>
-                            <p className={styles.totalGold}>{formatNumber(total)} руб.</p>
-                        </div>
-                        <div className={styles.totalColumnLil}>
-                            <div className={styles.totalRow}>
-                                <p className={styles.totalSubtitle}>Доставка</p>
-                                {total < 3000
-                                    ? <>
-                                        {deliveryCost === 0
-                                            ? <svg xmlns="http://www.w3.org/2000/svg" width="11" height="5" viewBox="0 0 11 5" fill="none">
-                                                <path d="M10.2008 4.53996H0.800781V0.459961H10.2008V4.53996Z" fill="#C49748" />
-                                            </svg>
-                                            : <p className={styles.totalGold}>{formatNumber(deliveryCost)} руб.</p>}
-                                    </>
-                                    : <p className={styles.totalGold}>0 руб.</p>}
-                            </div>
-                            <p className={styles.totalText}>При заказе от 3000 рублей, доставка бесплатная</p>
-                        </div>
-                    </div>
-                    <hr className={styles.hr} />
-                    <div className={styles.totalRow}>
-                        <p className={styles.totalSubtitle}>Итого</p>
-                        <p className={styles.totalGold}>{formatNumber(total + (total >= 3000 ? 0 : deliveryCost))} руб.</p>
-                    </div>
-                </div>
-                {cart.length > 0 && !order && <>
-                    <Link to='personalData' smooth={true} offset={-180}>
-                        <button className={styles.totalButton} onClick={() => {
-                            setOrder(true);
-                            setIsWidgetVisible(true);
-                        }}>ОФОРМИТЬ ЗАКАЗ</button>
-                    </Link>
-                    <button className={styles.countinueShoppingButton} onClick={handleGoToCatalog}>ПРОДОЛЖИТЬ ПОКУПКИ</button>
-                </>}
-            </div>}
+            <BagInfoColumn
+                total={total}
+                deliveryCost={deliveryCost}
+                order={order}
+                setOrder={setOrder}
+                setIsWidgetVisible={setIsWidgetVisible}
+                prevPath={prevPath}
+            />
         </div>
         <div id="personalData" />
         <div className={styles.order}>
             {order && <BagPersonalData setDataUser={setDataUser} dataUser={dataUser} load={load} />}
             {order && <hr className={styles.hr} />}
-            <div className={styles.orderColumn}>
-                {order && <>
-                    <p className={styles.orderTitle}>ПУНКТ ВЫДАЧИ ЗАКАЗОВ</p>
-                    <p className={styles.orderText}>Стоимость доставки: рассчитывается в корзине автоматически при оформлении заказа. Частичный выкуп невозможен. Заказ хранится в пункте выдачи 14 дней. Вам придет уведомление, когда заказ поступит в ПВЗ.</p>
-                </>}
-                <div style={{ height: isWidgetVisible ? 'auto' : '0px', width: '100%' }}>
-                    <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
-                </div>
-                {order && <div className={styles.orderInfo}>
-                    <div className={styles.orderInfoColumn}>
-                        <p className={styles.orderInfoColumnTitle}>Пункт самовывоза находится по адресу:</p>
-                        <p className={styles.orderInfoColumnText}>{selectedPVZ?.address ?? 'Не выбрано'}</p>
-                    </div>
-                    <div className={styles.orderInfoColumn}>
-                        <p className={styles.orderInfoColumnTitle}>График работы:</p>
-                        <p className={styles.orderInfoColumnText}>{selectedPVZ?.work_time ?? 'Не выбрано'}</p>
-                    </div>
-                    <div className={styles.orderInfoColumn}>
-                        <p className={styles.orderInfoColumnTitle}>Срок доставки:</p>
-                        <p className={styles.orderInfoColumnText}>{deliveryDate !== '' ? deliveryDate : 'Не выбрано'}</p>
-                    </div>
-                </div>}
-            </div>
+            <BagDelivery
+                total={total}
+                setDeliveryDate={setDeliveryDate}
+                setSelectedPVZ={setSelectedPVZ}
+                setDeliveryCost={setDeliveryCost}
+                deliveryDate={deliveryDate}
+                isWidgetVisible={isWidgetVisible}
+            />
             {order && <>
                 <hr className={styles.hr} />
                 <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
@@ -326,93 +251,4 @@ export default function Bag() {
             </ModalContent>
         </Modal>
     </div >
-};
-
-
-function ProductItem({ item, count, load, setData }) {
-
-    const [data, setDataProduct] = useState({});
-    const toast = useToast();
-    const { removeLastFromCart, addToCart } = useCart();
-    const [activeCount, setActiveCount] = useState(0);
-
-    useEffect(() => {
-        loadNow();
-    }, []);
-
-    function loadNow() {
-        axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
-            .then((res) => {
-                setDataProduct(res.data);
-            })
-            .catch((e) => console.log(e));
-    };
-
-    function deleteProduct() {
-        axios.post(`${API_BASE_URL}deleteProductFromBag`, { id: item.id, size: item.size, color: item.color, article: item.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then(() => {
-                setData([]);
-                toast({ position: 'bottom-right', render: () => (<div className="toast">Товар успешно удален</div>), duration: 3000 });
-                load();
-            })
-            .catch((e) => console.log(e));
-    };
-
-    function plusProduct() {
-        axios.post(`${API_BASE_URL}plusProductToBag`, { id: item.id, size: item.size, color: item.color, article: item.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then(() => {
-                addToCart({ id: item.id, size: item.size, color: item.color, article: item.article });
-                load();
-            })
-            .catch((e) => console.log(e));
-    };
-
-    function minusProduct() {
-        axios.post(`${API_BASE_URL}minusProductFromBag`, { id: item.id, size: item.size, color: item.color, article: item.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then(() => {
-                load();
-                removeLastFromCart();
-            })
-            .catch((e) => console.log(e));
-    };
-
-    return <div className={styles.item}>
-        <div className={styles.itemRow}>
-            <img src={data?.cover?.length > 0 && data?.cover} className={styles.itemCover} />
-            <div className={styles.itemTextColumn}>
-                <div className={styles.itemNameLine}>
-                    <div className={styles.itemNameColumn}>
-                        <p className={styles.itemName}>{data?.name?.length > 0 && data?.name}</p>
-                        <p className={styles.itemNameStat}>Артикул: {item.article}</p>
-                        <p className={styles.itemNameStat}>Цвет: {item.color}</p>
-                        {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}
-                    </div>
-                    <img src='/cross.svg' className={styles.itemCrossMobile} onClick={deleteProduct} />
-                </div>
-                <div className={styles.itemCountLineMobile}>
-                    <button className={styles.itemCountSymbolBox} onClick={minusProduct}>
-                        <img src='/minus.svg' />
-                    </button>
-                    <div className={styles.itemCountNumber}>{count}</div>
-                    <button className={styles.itemCountSymbolBox} onClick={plusProduct}>
-                        <img src='/plus.svg' />
-                    </button>
-                </div>
-
-                <p className={styles.itemCost} >{formatNumber(Number(data?.cost))} руб.</p>
-            </div>
-        </div>
-        <div className={styles.itemRowLil}>
-            <div className={styles.itemCountLine}>
-                <button className={styles.itemCountSymbolBox} onClick={minusProduct}>
-                    <img src='/minus.svg' />
-                </button>
-                <div className={styles.itemCountNumber}>{count}</div>
-                <button className={styles.itemCountSymbolBox} onClick={plusProduct}>
-                    <img src='/plus.svg' />
-                </button>
-            </div>
-            <img src='/cross.svg' className={styles.itemCross} onClick={deleteProduct} />
-        </div>
-    </div>
 };
