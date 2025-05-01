@@ -6,7 +6,7 @@ import OrderItem from "./items/OrderItem";
 
 export default function MyOrders() {
 
-    const router = useRouter();    
+    const router = useRouter();
     const { user, isLoadingUser } = useUser();
 
     if (isLoadingUser) return <p>Загрузка...</p>;
@@ -22,7 +22,7 @@ export default function MyOrders() {
                 <hr className={styles.hr} />
             </>
             : <div className={styles.bigColumn}>
-                {user.orders.length > 0 && user.orders.map((item, index) => <OrderItem item={item} key={index} index={index} />)}
+                {user.orders.length > 0 && [...user.orders].reverse().map((item, index) => <OrderItem item={item} key={index} index={index} />)}
             </div>}
     </div>
 };
