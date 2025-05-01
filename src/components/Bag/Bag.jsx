@@ -168,7 +168,7 @@ export default function Bag() {
                 <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
             </>}
         </div>
-        <Modal onClose={async () => { setSuccessModal(false); await load(); }} isOpen={successModal} autoFocus={false} isCentered size='xl' >
+        <Modal onClose={async () => { setSuccessModal(false); }} isOpen={successModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent p={0} bg='none' boxShadow='none' >
                 <ModalBody p={0}>
