@@ -1,0 +1,6 @@
+User-agent: *
+Crawl-delay: 1
+Host: https://mi-alegria.shop
+Disallow: /admin
+Disallow: /adminpanel
+Sitemap: https://mi-alegria.shop/sitemap.xml
