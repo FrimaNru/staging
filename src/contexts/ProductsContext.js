@@ -7,18 +7,40 @@ const ProductsContext = createContext();
 export const ProductsProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [initialLoad, setInitialLoad] = useState(true); 
+    const [initialLoad, setInitialLoad] = useState(true);
+
+    const getCachedProducts = () => {
+        const cachedData = localStorage.getItem('cachedProducts');
+        if (cachedData) {
+            const { data, timestamp } = JSON.parse(cachedData);
+            if (Date.now() - timestamp < 5 * 60 * 1000) {
+                return data;
+            }
+        }
+        return null;
+    };
+
+    const cacheProducts = (data) => {
+        localStorage.setItem('cachedProducts', JSON.stringify({ data, timestamp: Date.now() }));
+    };
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
+                const cachedProducts = getCachedProducts();
+                if (cachedProducts) {
+                    setProducts(cachedProducts);
+                    setLoading(false);
+                }
+
                 const response = await axios.get(`${API_BASE_URL}getProducts`);
-                setProducts(response.data); 
-                setInitialLoad(false); 
+                setProducts(response.data);
+                cacheProducts(response.data);
             } catch (error) {
                 console.error("Ошибка при загрузке товаров:", error);
             } finally {
                 setLoading(false);
+                setInitialLoad(false);
             }
         };
 
@@ -26,6 +48,20 @@ export const ProductsProvider = ({ children }) => {
             fetchProducts();
         }
     }, [initialLoad]);
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}getProducts`);
+                setProducts(response.data);
+                cacheProducts(response.data);
+            } catch (error) {
+                console.error("Ошибка при обновлении кэша товаров:", error);
+            }
+        }, 5 * 60 * 1000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <ProductsContext.Provider value={{ products, loading }}>

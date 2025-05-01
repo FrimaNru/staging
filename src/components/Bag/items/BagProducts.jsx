@@ -5,6 +5,7 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import { useEffect, useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import { formatNumber } from "@/lib/Formatting";
+import { useProducts } from "@/contexts/ProductsContext";
 
 export default function BagProducts({ setData, load, total, setTotal }) {
 
@@ -32,11 +33,12 @@ export default function BagProducts({ setData, load, total, setTotal }) {
 function ProductItem({ item, count, load, setData }) {
 
     const [data, setDataProduct] = useState({});
+    const { products } = useProducts();
     const toast = useToast();
     const { removeLastFromCart, addToCart } = useCart();
 
     useEffect(() => {
-        loadNow();
+        setDataProduct(products.filter(product => product._id === item.id)[0]);
     }, []);
 
     const makePostRequest = async (url, data, headers = {}) => {
@@ -49,16 +51,6 @@ function ProductItem({ item, count, load, setData }) {
         } catch (error) {
             console.error(`Ошибка при запросе к ${url}:`, error.message || error);
             throw error;
-        }
-    };
-
-    const loadNow = async () => {
-        try {
-            const url = `${API_BASE_URL}getOneProduct`;
-            const response = await makePostRequest(url, { id: item.id });
-            setDataProduct(response);
-        } catch (error) {
-            console.error("Ошибка при загрузке данных о продукте:", error.message || error);
         }
     };
 

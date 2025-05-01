@@ -3,7 +3,7 @@ import styles from "../styles.module.css";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 
-export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, deliveryDate, setSelectedPVZ, isWidgetVisible }) {
+export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, deliveryDate, setSelectedPVZ, isWidgetVisible, selectedPVZ }) {
 
     const handleSelectPVZ = async (pvz) => {
         try {

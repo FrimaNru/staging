@@ -154,6 +154,7 @@ export default function Bag() {
             {order && <BagPersonalData setDataUser={setDataUser} dataUser={dataUser} load={load} />}
             {order && <hr className={styles.hr} />}
             <BagDelivery
+                order={order}
                 total={total}
                 setDeliveryDate={setDeliveryDate}
                 setSelectedPVZ={setSelectedPVZ}
