@@ -15,6 +15,7 @@ import BagDelivery from "./items/BagDelivery";
 
 export default function Bag() {
     const router = useRouter();
+    const orderId = router.query;
     const { startSetCart, cart } = useCart();
     const { setUser, user } = useUser();
     const [prevPath, setPrevPath] = useState(null);
@@ -37,10 +38,10 @@ export default function Bag() {
     useEffect(() => {
         load();
 
-        if (typeof window !== 'undefined' && window.location.href.includes('orderId')) {
+        if (orderId) {
             checkOrderStatus();
         }
-    }, [router.pathname]);
+    }, [orderId]);
 
     useEffect(() => {
         const path = sessionStorage.getItem('prevPath');
