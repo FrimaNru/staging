@@ -15,7 +15,7 @@ import BagDelivery from "./items/BagDelivery";
 
 export default function Bag() {
     const router = useRouter();
-    const orderId = router.query;
+    const { orderId } = router.query;
     const { startSetCart, cart } = useCart();
     const { setUser, user } = useUser();
     const [prevPath, setPrevPath] = useState(null);
@@ -37,7 +37,7 @@ export default function Bag() {
 
     useEffect(() => {
         load();
-
+        
         if (orderId) {
             checkOrderStatus();
         }
@@ -51,7 +51,7 @@ export default function Bag() {
     }, []);
 
     const checkOrderStatus = async () => {
-        await axios.post(`${API_BASE_URL}orders/status`, { orderId: window.location.href.split('orderId=')[1].split('&')[0] }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        await axios.post(`${API_BASE_URL}orders/status`, { orderId }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 if (res.status === 201) return;
                 setUser(res.data.user);
