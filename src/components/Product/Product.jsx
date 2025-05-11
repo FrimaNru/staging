@@ -20,7 +20,6 @@ export function Product() {
     const [data, setData] = useState({});
     const router = useRouter();
     const { id } = router.query;
-    const pathname = router.pathname;
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [colorOfProduct, setColorOfProduct] = useState('');
     const [sizeOfProduct, setSizeOfProduct] = useState(0);
@@ -54,9 +53,9 @@ export function Product() {
 
     function buy() {
         if (localStorage.getItem('token')) {
-            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}addProductToBag`, { id, size: sizeOfProduct, color: colorOfProduct, article: data?.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(() => {
-                    addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article });
+                    addToCart({ id, size: sizeOfProduct, color: colorOfProduct, article: data?.article });
                     setIsOpenModal(true);
                 })
                 .catch((e) => console.log(e));
@@ -122,7 +121,7 @@ export function Product() {
             isOpen={isOpen}
             onOpen={onOpen}
             onClose={onClose}
-            data={{ id: pathname.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article }}
+            data={{ id, size: sizeOfProduct, color: colorOfProduct, article: data?.article }}
         />
     </div>
 };
