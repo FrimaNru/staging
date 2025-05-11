@@ -10,6 +10,7 @@ export function SideMenu() {
         { text: 'Пользователи', link: 'users', icon: '/assets/icons/users.svg' },
         { text: 'Заказы', link: 'orders', icon: '/assets/icons/orders.svg' },
         { text: 'Товары', link: 'products', icon: '/assets/icons/basket.svg' },
+        { text: 'Склад', link: 'warehouse', icon: '/assets/icons/warehouse.svg' },
         { text: 'Баннеры', link: 'banners', icon: '/assets/icons/banners.svg' },
         { text: 'Рассылка', link: 'messages', icon: '/assets/icons/messages.svg' }
     ];

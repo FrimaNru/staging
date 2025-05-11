@@ -13,6 +13,7 @@ import AdminOrders from "./tabs/AdminOrders/AdminOrders";
 import AdminEditOrder from "./tabs/AdminOrders/items/AdminEditOrder/AdminEditOrder";
 import AdminUser from "./tabs/AdminUsers/AdminUser/AdminUser";
 import AdminMessages from "./tabs/AdminMessages/AdminMessages";
+import AdminWarehouse from "./tabs/AdminWarehouse/AdminWarehouse";
 
 export default function AdminPanel() {
 
@@ -48,6 +49,8 @@ export default function AdminPanel() {
                 return <AdminUser />
             case 'messages':
                 return <AdminMessages />
+            case 'warehouse':
+                return <AdminWarehouse />
             default:
                 return <AdminDashboard />;
         }
