@@ -6,8 +6,9 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
 import { useUser } from "@/contexts/UserContext";
 import DocumentsModal from "@/components/Common/DocumentsModal";
+import { useCart } from "@/contexts/CartContext";
 
-export function SignUp({ setStateAuth, onClose }) {
+export function SignUp({ setStateAuth, onClose, data }) {
 
     const router = useRouter();
     const { setUser } = useUser();
@@ -19,6 +20,7 @@ export function SignUp({ setStateAuth, onClose }) {
     const [isCodeSend, setIsCodeSend] = useState(false);
     const [time, setTime] = useState(59);
     const [isLoading, setIsLoading] = useState(false);
+    const { addToCart } = useCart();
 
     const [hidePassword, setHidePassword] = useState(true);
 
@@ -69,12 +71,16 @@ export function SignUp({ setStateAuth, onClose }) {
     function signUp(email, password, phone) {
         if (code.length === 6 && password.length > 0 && phone.length > 0 && checkBoxes.policy) {
             setIsLoading(true);
-            axios.post(`${API_BASE_URL}signUp`, { email, code, phone, password, mailing: checkBoxes.policy ? 'E-mail' : '' })
+            axios.post(`${API_BASE_URL}signUp`, { email, code, phone, password, mailing: checkBoxes.policy ? 'E-mail' : '', data })
                 .then((res) => {
                     setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
                     setUser(res.data.data);
                     if (window.location.href.includes('product?id=') || window.location.href.includes('catalog')) {
+                        if (data) {
+                            addToCart(data);
+                        }
+
                         onClose();
                     } else router.push('/cabinet?page=personaldata');
                 })

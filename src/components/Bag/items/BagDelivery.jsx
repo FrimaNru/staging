@@ -2,8 +2,9 @@ import WidgetPVZ from "@/components/Common/WidgetPVZ";
 import styles from "../styles.module.css";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
+import BagInfoColumn from "./BagInfoColumn";
 
-export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, deliveryDate, setSelectedPVZ, isWidgetVisible, selectedPVZ }) {
+export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, deliveryDate, setSelectedPVZ, isWidgetVisible, selectedPVZ, total, deliveryCost, setOrder, setIsWidgetVisible, prevPath }) {
 
     const handleSelectPVZ = async (pvz) => {
         try {
@@ -28,19 +29,30 @@ export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, d
         <div style={{ height: isWidgetVisible ? 'auto' : '0px', width: '100%' }}>
             <WidgetPVZ onSelectPVZ={handleSelectPVZ} />
         </div>
-        {order && <div className={styles.orderInfo}>
-            <div className={styles.orderInfoColumn}>
-                <p className={styles.orderInfoColumnTitle}>Пункт самовывоза находится по адресу:</p>
-                <p className={styles.orderInfoColumnText}>{selectedPVZ?.address ?? 'Не выбрано'}</p>
+        {order && <div className={styles.column}>
+            <div className={styles.orderInfo}>
+                <div className={styles.orderInfoColumn}>
+                    <p className={styles.orderInfoColumnTitle}>Пункт самовывоза находится по адресу:</p>
+                    <p className={styles.orderInfoColumnText}>{selectedPVZ?.address ?? 'Не выбрано'}</p>
+                </div>
+                <div className={styles.orderInfoColumn}>
+                    <p className={styles.orderInfoColumnTitle}>График работы:</p>
+                    <p className={styles.orderInfoColumnText}>{selectedPVZ?.work_time ?? 'Не выбрано'}</p>
+                </div>
+                <div className={styles.orderInfoColumn}>
+                    <p className={styles.orderInfoColumnTitle}>Срок доставки:</p>
+                    <p className={styles.orderInfoColumnText}>{deliveryDate !== '' ? deliveryDate : 'Не выбрано'}</p>
+                </div>
             </div>
-            <div className={styles.orderInfoColumn}>
-                <p className={styles.orderInfoColumnTitle}>График работы:</p>
-                <p className={styles.orderInfoColumnText}>{selectedPVZ?.work_time ?? 'Не выбрано'}</p>
-            </div>
-            <div className={styles.orderInfoColumn}>
-                <p className={styles.orderInfoColumnTitle}>Срок доставки:</p>
-                <p className={styles.orderInfoColumnText}>{deliveryDate !== '' ? deliveryDate : 'Не выбрано'}</p>
-            </div>
+            <BagInfoColumn
+                total={total}
+                deliveryCost={deliveryCost}
+                order={order}
+                setOrder={setOrder}
+                setIsWidgetVisible={setIsWidgetVisible}
+                prevPath={prevPath}
+                fullWidth={true}
+            />
         </div>}
     </div>
 };

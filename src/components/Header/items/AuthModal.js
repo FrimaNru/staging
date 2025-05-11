@@ -2,16 +2,16 @@ import { Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react'
 import { useState } from 'react'
 import { SignIn, SignUp, RefreshPassword } from '@/components';
 
-export function AuthModal({ isOpen, onClose }) {
+export function AuthModal({ isOpen, onClose, data }) {
 
     const [stateAuth, setStateAuth] = useState('signIn');
 
     function selectAuth() {
         switch (stateAuth) {
             case 'signIn':
-                return <SignIn setStateAuth={setStateAuth} onClose={onClose} />
+                return <SignIn setStateAuth={setStateAuth} onClose={onClose} data={data} />
             case 'signUp':
-                return <SignUp setStateAuth={setStateAuth} onClose={onClose} />
+                return <SignUp setStateAuth={setStateAuth} onClose={onClose} data={data} />
             case 'refresh':
                 return <RefreshPassword setStateAuth={setStateAuth} onClose={onClose} />
         }

@@ -4,7 +4,7 @@ import { useCart } from "@/contexts/CartContext";
 import { Link } from "react-scroll";
 import { useRouter } from "next/router";
 
-export default function BagInfoColumn({ total, deliveryCost, order, setOrder, setIsWidgetVisible, prevPath }) {
+export default function BagInfoColumn({ total, deliveryCost, order, setOrder, setIsWidgetVisible, prevPath, fullWidth }) {
 
     const { cart } = useCart();
     const router = useRouter();
@@ -17,7 +17,7 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
         }
     };
 
-    return total > 0 && <div className={styles.totalColumn}>
+    return total > 0 && <div className={`${styles.totalColumn} ${fullWidth ? styles.fullWidth : ''}`}>
         <div className={styles.total}>
             <p className={styles.totalTitle}>ИТОГО</p>
             <div className={styles.totalContent}>
@@ -31,9 +31,7 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
                         {total < 3000
                             ? <>
                                 {deliveryCost === 0
-                                    ? <svg xmlns="http://www.w3.org/2000/svg" width="11" height="5" viewBox="0 0 11 5" fill="none">
-                                        <path d="M10.2008 4.53996H0.800781V0.459961H10.2008V4.53996Z" fill="#C49748" />
-                                    </svg>
+                                    ? <p className={styles.totalGold}>Платная</p>
                                     : <p className={styles.totalGold}>{formatNumber(deliveryCost)} руб.</p>}
                             </>
                             : <p className={styles.totalGold}>0 руб.</p>}
@@ -44,7 +42,7 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
             <hr className={styles.hr} />
             <div className={styles.totalRow}>
                 <p className={styles.totalSubtitle}>Итого</p>
-                <p className={styles.totalGold}>{formatNumber(total + (total >= 3000 ? 0 : deliveryCost))} руб.</p>
+                <p className={styles.totalGold}>{formatNumber(total + (total >= 3000 ? 0 : deliveryCost))} руб. {deliveryCost === 0 ? 'без доставки' : ''}</p>
             </div>
         </div>
         {cart.length > 0 && !order && <>

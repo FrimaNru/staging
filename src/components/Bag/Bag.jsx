@@ -157,11 +157,15 @@ export default function Bag() {
             <BagDelivery
                 order={order}
                 total={total}
+                deliveryCost={deliveryCost}
                 setDeliveryDate={setDeliveryDate}
                 setSelectedPVZ={setSelectedPVZ}
                 setDeliveryCost={setDeliveryCost}
                 deliveryDate={deliveryDate}
                 isWidgetVisible={isWidgetVisible}
+                setOrder={setOrder}
+                setIsWidgetVisible={setIsWidgetVisible}
+                prevPath={prevPath}
             />
             {order && <>
                 <hr className={styles.hr} />

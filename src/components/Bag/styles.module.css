@@ -815,7 +815,7 @@
     align-items: flex-start;
     gap: 80px;
     background: #FDEDBF;
-    width: max-content;
+    width: 100%;
 }
 
 .orderInfoColumn {
@@ -990,6 +990,17 @@
     background: var(--beige);
     color: var(--dark);
     transition: all 0.5s;
+}
+
+.column {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.fullWidth {
+    width: 100%;
 }
 
 @media (max-width: 475px) {

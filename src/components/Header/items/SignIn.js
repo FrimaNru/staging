@@ -5,14 +5,16 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import { useRouter } from "next/router";
 import { useUser } from "@/contexts/UserContext";
 import DocumentsModal from "@/components/Common/DocumentsModal";
+import { useCart } from "@/contexts/CartContext";
 
-export function SignIn({ setStateAuth, onClose }) {
+export function SignIn({ setStateAuth, onClose, data }) {
 
     const { setUser } = useUser();
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const { addToCart } = useCart();
 
     const [hidePassword, setHidePassword] = useState(true);
 
@@ -38,12 +40,15 @@ export function SignIn({ setStateAuth, onClose }) {
         if (email.length > 0 && password.length > 0 && checkBoxes.policy) {
             setIsLoading(true);
             axios
-                .post(`${API_BASE_URL}login`, { email, password, mailing: checkBoxes.policy ? 'E-mail' : '' })
+                .post(`${API_BASE_URL}login`, { email, password, mailing: checkBoxes.policy ? 'E-mail' : '', data })
                 .then((res) => {
                     setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
                     setUser(res.data.data);
                     if (window.location.href.includes('product?id=') || window.location.href.includes('catalog')) {
+                        if (data) {
+                            addToCart(data);
+                        }
                         onClose();
                     } else router.push('/cabinet?page=personaldata');
                 })

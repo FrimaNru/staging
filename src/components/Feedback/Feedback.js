@@ -86,12 +86,12 @@ export function Feedback() {
                         </div>
                     </div>
                 </div>
-                <div className={styles.blockInfo}>Мы ответим вам в течении ______ на указаный E-mail</div>
+                <div className={styles.blockInfo}>Мы ответим вам в течении суток на указанный E-mail</div>
                 <button className={styles.button} onClick={sendFeedback} >ОТПРАВИТЬ</button>
                 <hr className={styles.hr} />
             </>
             : <>
-                <p className={styles.sendText}>Ваше письмо отправлено, Мы ответим вам в течении ______ на указаный E-mail </p>
+                <p className={styles.sendText}>Ваше письмо отправлено, Мы ответим вам в течении суток на указанный E-mail</p>
                 <button className={styles.button} onClick={() => { setIsFormSend(false); setData({ text: '', email: '', code: '' }) }} >ЗАДАТЬ ЕЩЕ ВОПРОС</button>
             </>}
     </div>

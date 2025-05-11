@@ -61,6 +61,7 @@ export function Product() {
                 .catch((e) => console.log(e));
         } else {
             onOpen();
+            if (!isOpen) setIsOpenModal(true);
         }
     };
 
@@ -116,6 +117,11 @@ export function Product() {
                 </ModalBody>
             </ModalContent>
         </Modal>
-        <AuthModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        <AuthModal
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            data={{ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article }}
+        />
     </div>
 };
