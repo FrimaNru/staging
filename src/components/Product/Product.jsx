@@ -19,7 +19,7 @@ export function Product() {
     const { addToCart } = useCart();
     const [data, setData] = useState({});
     const router = useRouter();
-    const { id } = router.query;
+    const [id, setId] = useState(null);
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [colorOfProduct, setColorOfProduct] = useState('');
     const [sizeOfProduct, setSizeOfProduct] = useState(0);
@@ -29,7 +29,9 @@ export function Product() {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     useEffect(() => {
-        if (!id) return;
+        const urlId = new URLSearchParams(window.location.search).get('id');
+        setId(urlId);
+
         load();
         const handleRouteChange = (url) => {
             load();
@@ -38,10 +40,10 @@ export function Product() {
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
         };
-    }, [id]);
+    }, []);
 
     const load = async () => {
-        await axios.post(`${API_BASE_URL}getOneProduct`, { id })
+        await axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
             .then((res) => {
                 setData(res.data);
                 setColorOfProduct(res.data.color);
@@ -53,9 +55,9 @@ export function Product() {
 
     function buy() {
         if (localStorage.getItem('token')) {
-            axios.post(`${API_BASE_URL}addProductToBag`, { id, size: sizeOfProduct, color: colorOfProduct, article: data?.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(() => {
-                    addToCart({ id, size: sizeOfProduct, color: colorOfProduct, article: data?.article });
+                    addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article });
                     setIsOpenModal(true);
                 })
                 .catch((e) => console.log(e));

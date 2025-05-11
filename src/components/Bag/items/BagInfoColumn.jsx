@@ -42,7 +42,7 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
             <hr className={styles.hr} />
             <div className={styles.totalRow}>
                 <p className={styles.totalSubtitle}>Итого</p>
-                <p className={styles.totalGold}>{formatNumber(total + (total >= 3000 ? 0 : deliveryCost))} руб. {deliveryCost === 0 ? 'без доставки' : ''}</p>
+                <p className={styles.totalGold}>{formatNumber(total + (total >= 3000 ? 0 : deliveryCost))} руб. {total < 3000 && (deliveryCost === 0 ? 'без доставки' : '')}</p>
             </div>
         </div>
         {cart.length > 0 && !order && <>
