@@ -18,6 +18,7 @@ export default function Bag() {
     const { orderId } = router.query;
     const { startSetCart, cart } = useCart();
     const { setUser, user } = useUser();
+    const [dataUser, setDataUser] = useState({});
     const [prevPath, setPrevPath] = useState(null);
     const [total, setTotal] = useState(0);
     const [deliveryCost, setDeliveryCost] = useState(0);
@@ -39,7 +40,7 @@ export default function Bag() {
         if (orderId) {
             checkOrderStatus();
         }
-    }, [orderId, cart]);
+    }, [orderId, cart, user]);
 
     useEffect(() => {
         const path = sessionStorage.getItem('prevPath');
@@ -63,6 +64,8 @@ export default function Bag() {
 
     const load = async () => {
         try {
+            if (user) setDataUser(user);
+
             const productRequests = cart.map(product =>
                 axios.post(`${API_BASE_URL}getOneProduct`, { id: product.id })
                     .then(res => Number(res.data.cost))
@@ -121,7 +124,7 @@ export default function Bag() {
 
         setIsLoading(true);
         axios.post(`${API_BASE_URL}createOrder`, {
-            user,
+            dataUser,
             data: cart,
             total: total + (total >= 3000 ? 0 : deliveryCost),
             delivery: {
@@ -178,7 +181,7 @@ export default function Bag() {
         </div>
         <div id="personalData" />
         <div className={styles.order}>
-            {order && <BagPersonalData load={load} />}
+            {order && <BagPersonalData load={load} dataUser={dataUser} setDataUser={setDataUser} />}
             {order && <hr className={styles.hr} />}
             <BagDelivery
                 order={order}

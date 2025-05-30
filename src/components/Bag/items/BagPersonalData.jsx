@@ -6,20 +6,19 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import { useToast } from "@chakra-ui/react";
 import { useUser } from "@/contexts/UserContext";
 
-export default function BagPersonalData({ load }) {
+export default function BagPersonalData({ load, dataUser, setDataUser }) {
 
     const toast = useToast();
-    const { user } = useUser();
     const [phoneCode, setPhoneCode] = useState('');
     const [disabled, setDisabled] = useState(false);
     const [isPhoneCodeSend, setIsPhoneCodeSend] = useState(false);
 
     const sendMessage = async () => {
-        if (user.isVerifiedPhone === true) return toast({ position: 'bottom-right', render: () => (<div className="toast">Этот номер уже подтвержден</div>), duration: 3000 });
+        if (dataUser.isVerifiedPhone === true) return toast({ position: 'bottom-right', render: () => (<div className="toast">Этот номер уже подтвержден</div>), duration: 3000 });
         try {
             setDisabled(true);
 
-            await axios.post(`${API_BASE_URL}verifiedPhone`, { phone: user.phone }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            await axios.post(`${API_BASE_URL}verifiedPhone`, { phone: dataUser.phone }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
 
             setIsPhoneCodeSend(true);
             toast({ position: 'bottom-right', render: () => (<div className="toast">Код успешно отправлен</div>), duration: 3000 });
@@ -55,23 +54,23 @@ export default function BagPersonalData({ load }) {
             <div className={styles.orderColumnBig}>
                 <div className={styles.orderColumnLil}>
                     <p className={styles.orderInputTitle}>Имя</p>
-                    <input className={styles.orderInput} onChange={(e) => setDataUser({ ...user, name: e.target.value })} value={user.name} />
+                    <input className={styles.orderInput} onChange={(e) => setDataUser({ ...dataUser, name: e.target.value })} value={dataUser.name} />
                 </div>
                 <div className={styles.orderColumnLil}>
                     <p className={styles.orderInputTitle}>Фамилия</p>
-                    <input className={styles.orderInput} value={user.personalData?.lastName} onChange={(e) => setDataUser({ ...user, personalData: { ...user.personalData, lastName: e.target.value } })} />
+                    <input className={styles.orderInput} value={dataUser.personalData?.lastName} onChange={(e) => setDataUser({ ...dataUser, personalData: { ...dataUser.personalData, lastName: e.target.value } })} />
                 </div>
             </div>
             <div className={styles.orderColumnBig}>
                 <div className={styles.orderColumnLil}>
                     <p className={styles.orderInputTitle}>E-mail ✔</p>
-                    <input className={styles.orderInput} disabled={true} value={user.email} />
+                    <input className={styles.orderInput} disabled={true} value={dataUser.email} />
                 </div>
                 <div className={styles.orderColumnLil}>
-                    <p className={styles.orderInputTitle}>Телефон {user.isVerifiedPhone && '✔'}</p>
-                    <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={user.phone} onChange={(e) => setDataUser({ ...user, phone: e.target.value })} disabled={user.isVerifiedPhone} />
+                    <p className={styles.orderInputTitle}>Телефон {dataUser.isVerifiedPhone && '✔'}</p>
+                    <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={dataUser.phone} onChange={(e) => setDataUser({ ...dataUser, phone: e.target.value })} disabled={dataUser.isVerifiedPhone} />
                 </div>
-                {!user.isVerifiedPhone
+                {!dataUser.isVerifiedPhone
                     && <div className={styles.inputColumn}>
                         <p className={styles.inputTitle}>Код подтверждения телефона</p>
                         <div className={styles.codeLine}>
