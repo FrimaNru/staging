@@ -3,10 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import InputMask from "react-input-mask";
 import { API_BASE_URL } from "../../../../apiConfig";
-import { useDisclosure, useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { useUser } from "@/contexts/UserContext";
-import Button from "@/ui/Button/Button";
-import { AuthModal } from "@/components/Header/items/AuthModal";
 
 export default function BagPersonalData({ load }) {
 
@@ -15,7 +13,6 @@ export default function BagPersonalData({ load }) {
     const [phoneCode, setPhoneCode] = useState('');
     const [disabled, setDisabled] = useState(false);
     const [isPhoneCodeSend, setIsPhoneCodeSend] = useState(false);
-    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const sendMessage = async () => {
         if (user.isVerifiedPhone === true) return toast({ position: 'bottom-right', render: () => (<div className="toast">Этот номер уже подтвержден</div>), duration: 3000 });
@@ -54,44 +51,38 @@ export default function BagPersonalData({ load }) {
         <hr className={`${styles.hr} ${styles.hrMobile}`} />
         <p className={styles.orderTitle}>ЛИЧНЫЕ ДАННЫЕ</p>
         <hr className={`${styles.hr} ${styles.hrMobile}`} />
-        {!user
-            ? <Button onClick={onOpen}>Войти</Button>
-            : <div className={styles.orderLine}>
-                <div className={styles.orderColumnBig}>
-                    <div className={styles.orderColumnLil}>
-                        <p className={styles.orderInputTitle}>Имя</p>
-                        <input className={styles.orderInput} onChange={(e) => setDataUser({ ...user, name: e.target.value })} value={user.name} />
-                    </div>
-                    <div className={styles.orderColumnLil}>
-                        <p className={styles.orderInputTitle}>Фамилия</p>
-                        <input className={styles.orderInput} value={user.personalData?.lastName} onChange={(e) => setDataUser({ ...user, personalData: { ...user.personalData, lastName: e.target.value } })} />
-                    </div>
+        <div className={styles.orderLine}>
+            <div className={styles.orderColumnBig}>
+                <div className={styles.orderColumnLil}>
+                    <p className={styles.orderInputTitle}>Имя</p>
+                    <input className={styles.orderInput} onChange={(e) => setDataUser({ ...user, name: e.target.value })} value={user.name} />
                 </div>
-                <div className={styles.orderColumnBig}>
-                    <div className={styles.orderColumnLil}>
-                        <p className={styles.orderInputTitle}>E-mail ✔</p>
-                        <input className={styles.orderInput} disabled={true} value={user.email} />
-                    </div>
-                    <div className={styles.orderColumnLil}>
-                        <p className={styles.orderInputTitle}>Телефон {user.isVerifiedPhone && '✔'}</p>
-                        <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={user.phone} onChange={(e) => setDataUser({ ...user, phone: e.target.value })} disabled={user.isVerifiedPhone} />
-                    </div>
-                    {!user.isVerifiedPhone
-                        && <div className={styles.inputColumn}>
-                            <p className={styles.inputTitle}>Код подтверждения телефона</p>
-                            <div className={styles.codeLine}>
-                                <input className={styles.lilInputCode} onChange={(e) => setPhoneCode(e.target.value)} value={phoneCode} />
-                                <button className={`${styles.buttonCode} ${disabled ? styles.buttonDisabled : ''}`} onClick={() => {
-                                    if (isPhoneCodeSend) return mobilePhoneCheck()
-                                    else sendMessage();
-                                }}>{isPhoneCodeSend ? 'ПОДТВЕРДИТЬ' : 'ОТПРАВИТЬ SMS'}</button>
-                            </div>
-                        </div>}
+                <div className={styles.orderColumnLil}>
+                    <p className={styles.orderInputTitle}>Фамилия</p>
+                    <input className={styles.orderInput} value={user.personalData?.lastName} onChange={(e) => setDataUser({ ...user, personalData: { ...user.personalData, lastName: e.target.value } })} />
                 </div>
-            </div>}
-        <AuthModal
-            isOpen={isOpen}
-            onClose={onClose}
-        />
+            </div>
+            <div className={styles.orderColumnBig}>
+                <div className={styles.orderColumnLil}>
+                    <p className={styles.orderInputTitle}>E-mail ✔</p>
+                    <input className={styles.orderInput} disabled={true} value={user.email} />
+                </div>
+                <div className={styles.orderColumnLil}>
+                    <p className={styles.orderInputTitle}>Телефон {user.isVerifiedPhone && '✔'}</p>
+                    <InputMask mask="+7 (999) 999-99-99" className={styles.orderInput} value={user.phone} onChange={(e) => setDataUser({ ...user, phone: e.target.value })} disabled={user.isVerifiedPhone} />
+                </div>
+                {!user.isVerifiedPhone
+                    && <div className={styles.inputColumn}>
+                        <p className={styles.inputTitle}>Код подтверждения телефона</p>
+                        <div className={styles.codeLine}>
+                            <input className={styles.lilInputCode} onChange={(e) => setPhoneCode(e.target.value)} value={phoneCode} />
+                            <button className={`${styles.buttonCode} ${disabled ? styles.buttonDisabled : ''}`} onClick={() => {
+                                if (isPhoneCodeSend) return mobilePhoneCheck()
+                                else sendMessage();
+                            }}>{isPhoneCodeSend ? 'ПОДТВЕРДИТЬ' : 'ОТПРАВИТЬ SMS'}</button>
+                        </div>
+                    </div>}
+            </div>
+        </div>
     </div>
 };

@@ -3,11 +3,16 @@ import styles from "../styles.module.css";
 import { useCart } from "@/contexts/CartContext";
 import { Link } from "react-scroll";
 import { useRouter } from "next/router";
+import { useUser } from "@/contexts/UserContext";
+import { useDisclosure } from "@chakra-ui/react";
+import { AuthModal } from "@/components/Header/items/AuthModal";
 
 export default function BagInfoColumn({ total, deliveryCost, order, setOrder, setIsWidgetVisible, prevPath, fullWidth }) {
 
     const { cart } = useCart();
+    const { user } = useUser();
     const router = useRouter();
+    const { onOpen, onClose, isOpen } = useDisclosure();
 
     const handleGoToCatalog = () => {
         if (prevPath) {
@@ -46,13 +51,18 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
             </div>
         </div>
         {cart.length > 0 && !order && <>
-            <Link to='personalData' smooth={true} offset={-180}>
+            <Link to={user ? 'personalData' : ''} smooth={true} offset={-180}>
                 <button className={styles.totalButton} onClick={() => {
-                    setOrder(true);
-                    setIsWidgetVisible(true);
+                    if (user) {
+                        setOrder(true);
+                        setIsWidgetVisible(true);
+                    } else {
+                        onOpen();
+                    }
                 }}>ОФОРМИТЬ ЗАКАЗ</button>
             </Link>
             <button className={styles.countinueShoppingButton} onClick={handleGoToCatalog}>ПРОДОЛЖИТЬ ПОКУПКИ</button>
         </>}
+        <AuthModal isOpen={isOpen} onClose={onClose} />
     </div>
 };
