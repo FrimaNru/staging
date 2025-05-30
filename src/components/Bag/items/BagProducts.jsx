@@ -59,12 +59,12 @@ function ProductItem({ item, count, load }) {
             removeFromCart(item.id, 'all');
 
             const token = localStorage.getItem('token');
-            if (!token) return;
-
-            const url = `${API_BASE_URL}deleteProductFromBag`;
-            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                Authorization: `Bearer ${token}`
-            });
+            if (token) {
+                const url = `${API_BASE_URL}deleteProductFromBag`;
+                await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                    Authorization: `Bearer ${token}`
+                });
+            }
 
             toast({
                 position: 'bottom-right',
@@ -82,12 +82,13 @@ function ProductItem({ item, count, load }) {
             addToCart({ id: item.id, size: item.size, color: item.color, article: item.article });
 
             const token = localStorage.getItem('token');
-            if (!token) return;
+            if (token) {
 
-            const url = `${API_BASE_URL}plusProductToBag`;
-            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                Authorization: `Bearer ${token}`
-            });
+                const url = `${API_BASE_URL}plusProductToBag`;
+                await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                    Authorization: `Bearer ${token}`
+                });
+            }
 
             load();
         } catch (error) {
@@ -100,13 +101,14 @@ function ProductItem({ item, count, load }) {
             removeFromCart(item.id, 'one');
 
             const token = localStorage.getItem('token');
-            if (!token) return;
-            
-            const url = `${API_BASE_URL}minusProductFromBag`;
-            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                Authorization: `Bearer ${token}`
-            });
+            if (token) {
 
+                const url = `${API_BASE_URL}minusProductFromBag`;
+                await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                    Authorization: `Bearer ${token}`
+                });
+            }
+            
             load();
         } catch (error) {
             console.error("Ошибка при уменьшении количества продукта:", error.message || error);
