@@ -7,7 +7,7 @@ import { useToast } from "@chakra-ui/react";
 import { formatNumber } from "@/lib/Formatting";
 import { useProducts } from "@/contexts/ProductsContext";
 
-export default function BagProducts({ setData, load, total, setTotal }) {
+export default function BagProducts({ load, total, setTotal }) {
 
     const { cart } = useCart();
 
@@ -23,19 +23,19 @@ export default function BagProducts({ setData, load, total, setTotal }) {
             const item = JSON.parse(key);
             return (
                 <div key={i} className={styles.itemColumn}>
-                    <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} setData={setData} />
+                    <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} />
                     <hr className={styles.hr} />
                 </div>
             );
         })
 };
 
-function ProductItem({ item, count, load, setData }) {
+function ProductItem({ item, count, load }) {
 
     const [data, setDataProduct] = useState({});
     const { products } = useProducts();
     const toast = useToast();
-    const { removeLastFromCart, addToCart } = useCart();
+    const { removeFromCart, addToCart } = useCart();
 
     useEffect(() => {
         setDataProduct(products.filter(product => product._id === item.id)[0]);
@@ -56,13 +56,16 @@ function ProductItem({ item, count, load, setData }) {
 
     const deleteProduct = async () => {
         try {
-            const url = `${API_BASE_URL}deleteProductFromBag`;
+            removeFromCart(item.id, 'all');
+
             const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const url = `${API_BASE_URL}deleteProductFromBag`;
             await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
                 Authorization: `Bearer ${token}`
             });
 
-            setData([]);
             toast({
                 position: 'bottom-right',
                 render: () => (<div className="toast">Товар успешно удален</div>),
@@ -76,13 +79,16 @@ function ProductItem({ item, count, load, setData }) {
 
     const plusProduct = async () => {
         try {
-            const url = `${API_BASE_URL}plusProductToBag`;
+            addToCart({ id: item.id, size: item.size, color: item.color, article: item.article });
+
             const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const url = `${API_BASE_URL}plusProductToBag`;
             await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
                 Authorization: `Bearer ${token}`
             });
 
-            addToCart({ id: item.id, size: item.size, color: item.color, article: item.article });
             load();
         } catch (error) {
             console.error("Ошибка при увеличении количества продукта:", error.message || error);
@@ -91,13 +97,16 @@ function ProductItem({ item, count, load, setData }) {
 
     const minusProduct = async () => {
         try {
-            const url = `${API_BASE_URL}minusProductFromBag`;
+            removeFromCart(item.id, 'one');
+
             const token = localStorage.getItem('token');
+            if (!token) return;
+            
+            const url = `${API_BASE_URL}minusProductFromBag`;
             await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
                 Authorization: `Bearer ${token}`
             });
 
-            removeLastFromCart();
             load();
         } catch (error) {
             console.error("Ошибка при уменьшении количества продукта:", error.message || error);

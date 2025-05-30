@@ -19,8 +19,6 @@ export default function Bag() {
     const { startSetCart, cart } = useCart();
     const { setUser, user } = useUser();
     const [prevPath, setPrevPath] = useState(null);
-    const [data, setData] = useState([]);
-    const [dataUser, setDataUser] = useState({});
     const [total, setTotal] = useState(0);
     const [deliveryCost, setDeliveryCost] = useState(0);
     const [deliveryDate, setDeliveryDate] = useState('');
@@ -37,11 +35,11 @@ export default function Bag() {
 
     useEffect(() => {
         load();
-        
+
         if (orderId) {
             checkOrderStatus();
         }
-    }, [orderId]);
+    }, [orderId, cart]);
 
     useEffect(() => {
         const path = sessionStorage.getItem('prevPath');
@@ -64,28 +62,25 @@ export default function Bag() {
     };
 
     const load = async () => {
-        await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then((res) => {
-                startSetCart(res.data.bag);
-                setData(res.data.bag);
-                setDataUser(res.data);
-                let d = 0;
-                if (res.data.bag.length === 0) return setTotal(0);
-                res.data.bag.map(x => {
-                    axios.post(`${API_BASE_URL}getOneProduct`, { id: x.id })
-                        .then((r) => {
-                            d = Number(d) + Number(r.data.cost);
-                            setTotal(d);
-                        })
-                        .catch((e) => {
-                            console.log(e);
-                        });
-                });
-            })
-            .catch((e) => console.log(e));
+        try {
+            const productRequests = cart.map(product =>
+                axios.post(`${API_BASE_URL}getOneProduct`, { id: product.id })
+                    .then(res => Number(res.data.cost))
+                    .catch(error => {
+                        console.error(`Ошибка при получении товара с ID ${product.id}:`, error);
+                        return 0;
+                    })
+            );
+
+            const costs = await Promise.all(productRequests);
+            const summ = costs.reduce((acc, cost) => acc + cost, 0);
+            setTotal(summ);
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+        }
     };
 
-    function clearBag() {
+    const clearBag = async () => {
         axios.post(`${API_BASE_URL}clearBag`, {}, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(() => {
                 onClose();
@@ -99,22 +94,54 @@ export default function Bag() {
     }
 
     function buy() {
-        if (dataUser.name.length > 0 && dataUser.phone.replaceAll('_', '').length === 18 && dataUser.personalData.lastName.length > 0 && regexMail.test(dataUser.email) && selectedPVZ?.address && deliveryDate !== '' && dataUser.isVerifiedPhone) {
-            setIsLoading(true);
-            axios.post(`${API_BASE_URL}createOrder`, { dataUser, data, total: total + (total >= 3000 ? 0 : deliveryCost), delivery: { street: `${selectedPVZ?.region}, ${selectedPVZ?.city}, ${selectedPVZ?.address}`, date: deliveryDate, pvzCode: selectedPVZ?.code } }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-                .then((res) => {
-                    setIsLoading(false);
-                    router.push(res.data.formUrl);
-                })
-                .catch((e) => { console.log(e); setIsLoading(false); });
-        } else {
-            if (dataUser.name.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не указали имя</div>), duration: 3000 });
-            if (dataUser.phone.replaceAll('_', '').length !== 18) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали номер телефона</div>), duration: 3000 });
-            if (dataUser.personalData.lastName.length === 0) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не указали фамилию</div>), duration: 3000 });
-            if (!regexMail.test(dataUser.email)) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы неправильно указали почту</div>), duration: 3000 });
-            if (!selectedPVZ?.address) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не выбрали пункт выдачи заказа</div>), duration: 3000 });
-            if (!user.isVerifiedPhone) return toast({ position: 'bottom-right', render: () => (<div className="toast">Вы не подтвердили номер телефона</div>), duration: 3000 });
+        if (!user) {
+            return toast({
+                position: 'bottom-right',
+                render: () => <div className="toast">Вы не вошли в аккаунт</div>,
+                duration: 3000
+            });
         }
+
+        const validations = [
+            { condition: !user.name, message: "Вы не указали имя" },
+            { condition: user.phone.replaceAll('_', '').length !== 18, message: "Вы неправильно указали номер телефона" },
+            { condition: !user.personalData.lastName, message: "Вы не указали фамилию" },
+            { condition: !regexMail.test(user.email), message: "Вы неправильно указали почту" },
+            { condition: !selectedPVZ?.address, message: "Вы не выбрали пункт выдачи заказа" },
+            { condition: !deliveryDate, message: "Срок доставки не указан" },
+            { condition: !user.isVerifiedPhone, message: "Вы не подтвердили номер телефона" }
+        ];
+
+        const failedValidation = validations.find(v => v.condition);
+        if (failedValidation) return toast({
+            position: 'bottom-right',
+            render: () => <div className="toast">{failedValidation.message}</div>,
+            duration: 3000
+        });
+
+        setIsLoading(true);
+        axios.post(`${API_BASE_URL}createOrder`, {
+            user,
+            data: cart,
+            total: total + (total >= 3000 ? 0 : deliveryCost),
+            delivery: {
+                street: `${selectedPVZ.region}, ${selectedPVZ.city}, ${selectedPVZ.address}`,
+                date: deliveryDate,
+                pvzCode: selectedPVZ.code
+            }
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then((res) => {
+                setIsLoading(false);
+                router.push(res.data.formUrl);
+            })
+            .catch((e) => {
+                console.error(e);
+                setIsLoading(false);
+            });
     }
 
     const [selectedPVZ, setSelectedPVZ] = useState(null);
@@ -131,7 +158,6 @@ export default function Bag() {
                     {cart.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
                 </div>
                 <BagProducts
-                    setData={setData}
                     load={load}
                     total={total}
                     setTotal={setTotal}
@@ -152,7 +178,7 @@ export default function Bag() {
         </div>
         <div id="personalData" />
         <div className={styles.order}>
-            {order && <BagPersonalData setDataUser={setDataUser} dataUser={dataUser} load={load} />}
+            {order && <BagPersonalData load={load} />}
             {order && <hr className={styles.hr} />}
             <BagDelivery
                 order={order}
@@ -206,7 +232,7 @@ export default function Bag() {
                                     </div>
                                     <div className={styles.modalSuccessLine}>
                                         <img src='/phone.svg' className={styles.modalSuccessLineIcon} />
-                                        <p className={styles.modalSuccessText}>{dataUser.phone}</p>
+                                        <p className={styles.modalSuccessText}>{user?.phone}</p>
                                     </div>
                                 </div>
                             </div>

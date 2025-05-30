@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 const WidgetPVZ = ({ onSelectPVZ }) => {
     const widgetRef = useRef(null);
-    const widgetInstance = useRef(null); // Храним экземпляр виджета
+    const widgetInstance = useRef(null); 
 
     useEffect(() => {
         const loadWidget = async () => {
@@ -34,20 +34,18 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
                     },
                 });
             } catch (error) {
-                console.error('Ошибка загрузки виджета:', error);
+               
             }
         };
 
-        // Загружаем виджет только один раз
         loadWidget();
 
         return () => {
-            // Уничтожаем виджет при размонтировании компонента
             if (widgetInstance.current) {
                 widgetInstance.current.destroy();
             }
         };
-    }, []); // Пустой массив зависимостей
+    }, []);
 
     return <div ref={widgetRef} id="cdek-map" className="widget"></div>;
 };

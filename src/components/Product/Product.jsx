@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import styles from "@/styles/Product/Product.module.css";
-import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react';
 import { FavouriteButton } from "../Common/FavouriteButton";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { useRouter } from "next/router";
-import { AuthModal } from "../Header/items/AuthModal";
 import { useCart } from "@/contexts/CartContext";
 import Breadcrumb from "../Common/Breadcrumb";
 import { formatNumber } from "@/lib/Formatting";
@@ -20,7 +19,6 @@ export function Product() {
     const [data, setData] = useState({});
     const router = useRouter();
     const [id, setId] = useState(null);
-    const { isOpen, onClose, onOpen } = useDisclosure();
     const [colorOfProduct, setColorOfProduct] = useState('');
     const [sizeOfProduct, setSizeOfProduct] = useState(0);
 
@@ -53,17 +51,17 @@ export function Product() {
             .catch((e) => console.log(e));
     };
 
-    function buy() {
+    const buy = async () => {
+        addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article });
+        setIsOpenModal(true);
+        
         if (localStorage.getItem('token')) {
-            axios.post(`${API_BASE_URL}addProductToBag`, { id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-                .then(() => {
-                    addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article });
-                    setIsOpenModal(true);
-                })
-                .catch((e) => console.log(e));
-        } else {
-            onOpen();
-            if (!isOpen) setIsOpenModal(true);
+            await axios.post(`${API_BASE_URL}addProductToBag`, {
+                id: window.location.href.split('?id=')[1],
+                size: sizeOfProduct,
+                color: colorOfProduct,
+                article: data?.article
+            }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
         }
     };
 
@@ -119,11 +117,5 @@ export function Product() {
                 </ModalBody>
             </ModalContent>
         </Modal>
-        <AuthModal
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            data={{ id, size: sizeOfProduct, color: colorOfProduct, article: data?.article }}
-        />
     </div>
 };

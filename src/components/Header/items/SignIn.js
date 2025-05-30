@@ -45,7 +45,7 @@ export function SignIn({ setStateAuth, onClose, data }) {
                     setIsLoading(false);
                     localStorage.setItem('token', res.data.token);
                     setUser(res.data.data);
-                    if (window.location.href.includes('product?id=') || window.location.href.includes('catalog')) {
+                    if (window.location.href.includes('product?id=') || window.location.href.includes('catalog') || window.location.href.includes('bag')) {
                         if (data) {
                             addToCart(data);
                         }
