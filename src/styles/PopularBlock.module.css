@@ -18,7 +18,7 @@
 
 .sliderItem {
     width: 230px;
-    height: 340px;
+    height: auto;
 }
 
 .sliderItemContent {
@@ -120,6 +120,8 @@
     .sliderBlockMobile {
         display: block;
         width: 100%;
+        height: auto;
+        margin-bottom: 50px;
     }
 
     .sliderItemContent {

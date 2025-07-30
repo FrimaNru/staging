@@ -12,6 +12,7 @@ import ImageSlider from "./items/ImageSlider";
 import SizeSelector from "./items/SizeSelector";
 import ColorSelector from "./items/ColorSelector";
 import CharasteristicBlock from "./items/CharasteristicBlock";
+import { PRODUCT_TYPES } from "@/constants/items";
 
 export function Product() {
 
@@ -48,13 +49,16 @@ export function Product() {
                 if (res.data.type === 'ring' || res.data.type === 'bracelets') setSizeOfProduct(res.data.sizes[0])
                 else if (res.data.type === 'necklace') setSizeOfProduct(res.data.sizes[0]);
             })
-            .catch((e) => console.log(e));
+            .catch((e) => {
+                console.log(e);
+                router.push('/404');
+            });
     };
 
     const buy = async () => {
         addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article });
         setIsOpenModal(true);
-        
+
         if (localStorage.getItem('token')) {
             await axios.post(`${API_BASE_URL}addProductToBag`, {
                 id: window.location.href.split('?id=')[1],
@@ -73,7 +77,7 @@ export function Product() {
                 <div className={styles.infoColumn}>
                     <div className={styles.infoColumnText}>
                         <div className={styles.infoTitleLine}>
-                            <p className={styles.infoTitle}>{data?.name?.length > 0 && data.name}</p>
+                            <h1 className={styles.infoTitle}>{PRODUCT_TYPES[data.type]} {data?.name?.length > 0 && data.name}</h1>
                             {data?.article?.length > 0 ? <FavouriteButton idProduct={data._id} size={sizeOfProduct} color={colorOfProduct} article={data?.article} /> : <></>}
                         </div>
                         <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>

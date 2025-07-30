@@ -1,4 +1,4 @@
-import styles from "@/styles/Documents.module.css";
+import styles from "./styles.module.css";
 import Link from "next/link";
 import { agreementText } from "@/constants/agreementText";
 import Breadcrumb from "@/components/Common/Breadcrumb";
@@ -20,7 +20,7 @@ export default function Agreement() {
                 </div>
             </div>
             <div className={styles.contentColumn}>
-                <p className={styles.textTitle}>Пользовательское соглашение</p>
+                <h1 className={styles.textTitle}>Пользовательское соглашение</h1>
                 {agreementText.map((item, index) => <div key={index} className={styles.textColumn}>
                     <p className={styles.textTitle}>{index + 1}. {item.title}</p>
                     <div className={styles.textParagraphsColumn}>

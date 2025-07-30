@@ -1,5 +1,4 @@
 export * from "./Footer/Footer";
-export * from "./Delivery/DeliveryPage";
 export * from "./Feedback/Feedback";
 
 export * from "./Header/items/Authorization";

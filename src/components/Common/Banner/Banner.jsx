@@ -1,4 +1,4 @@
-import styles from "@/styles/StartBlock.module.css";
+import styles from "../../StartBlock/styles.module.css";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import Slider from "react-slick";

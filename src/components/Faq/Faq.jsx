@@ -1,4 +1,4 @@
-import styles from "@/styles/Faq.module.css";
+import styles from "./styles.module.css";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react'
 import { useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
@@ -20,7 +20,7 @@ export default function Faq() {
         <div className={styles.mainColumn}>
             <Breadcrumb />
             <div className={styles.titleBlock}>
-                <p className={styles.title}>ЧАСТЫЕ  ВОПРОСЫ</p>
+                <h1 className={styles.title}>ЧАСТЫЕ  ВОПРОСЫ</h1>
                 <hr className={styles.hr} />
             </div>
             <div className={styles.accordionBox} >

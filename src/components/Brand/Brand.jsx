@@ -1,4 +1,4 @@
-import styles from "./Brand.module.css";
+import styles from "./styles.module.css";
 import Breadcrumb from "../Common/Breadcrumb";
 import Banner from "../Common/Banner/Banner";
 
@@ -8,7 +8,7 @@ export function Brand() {
         <div className={styles.mainColumn}>
             <Breadcrumb />
             <div className={styles.contentColumn}>
-                <p className={styles.title} >О БРЕНДЕ</p>
+                <h1 className={styles.title}>О БРЕНДЕ</h1>
                 <hr className={styles.hr} />
                 <div className={styles.contentColumnBig} >
                     <div className={styles.line}>

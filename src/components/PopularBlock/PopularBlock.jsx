@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../../../apiConfig";
 import Link from "next/link";
 import { formatNumber } from "@/lib/Formatting";
 import { FavouriteButton } from "../Common/FavouriteButton";
+import { PRODUCT_TYPES } from "@/constants/items";
 
 function SampleNextArrow(props) {
     const { onClick } = props;
@@ -80,6 +81,7 @@ export default function PopularBlock() {
     const load = async () => {
         await axios.get(`${API_BASE_URL}getPopularProducts`)
             .then((res) => {
+                console.log(res.data)
                 setData(res.data);
             })
             .catch((e) => console.log(e));
@@ -96,7 +98,7 @@ export default function PopularBlock() {
                             <img src={x.cover} className={styles.sliderItemImage} />
                         </Link>
                         <div className={styles.sliderItemColumn}>
-                            <p className={styles.sliderItemTitle}>{x.name}</p>
+                            <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[x.type]} {x.name}</p>
                             <p className={styles.sliderItemText}>Артикул: {x.article}</p>
                         </div>
                         <div className={styles.productItemCostLine}>
@@ -117,7 +119,7 @@ export default function PopularBlock() {
                             <img src={x.cover} className={styles.sliderItemImage} />
                         </Link>
                         <div className={styles.sliderItemColumn}>
-                            <p className={styles.sliderItemTitle}>{x.name}</p>
+                            <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[x.type]} {x.name}</p>
                             <p className={styles.sliderItemText}>Артикул: {x.article}</p>
                         </div>
                         <div className={styles.productItemCostLine}>

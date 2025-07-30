@@ -1,15 +1,18 @@
+import React from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Header from '@/components/Header/Header';
+import { Footer } from '@/components';
+import styles from "@/styles/404.module.css";
 
-import { Footer } from "@/components";
-import DeliveryPage from "@/components/Delivery/DeliveryPage";
-import Header from "@/components/Header/Header";
-import Head from "next/head";
+export default function NotFoundPage() {
+    const router = useRouter();
 
-export default function Delivery() {
     return (
         <>
             <Head>
-                <title>Доставка Ювелирных Изделий – Mi Alegria</title>
-                <meta name="description" content='Узнайте о наших условиях доставки. Mi Alegria предлагает быструю и бесплатную доставку ювелирных изделий по всей России.' />
+                <title>Mi Alegria</title>
+                <meta name="description" content='Добро пожаловать в Mi Alegria! Широкий выбор эксклюзивных ювелирных украшений: кольца, серьги, браслеты и подвески. Бесплатная доставка по России.' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />
                 <link rel="apple-touch-icon" sizes="60x60" href="/faviconsWithBg.ico/apple-icon-60x60.png" />
@@ -30,11 +33,18 @@ export default function Delivery() {
                 <meta name="msapplication-TileColor" content="#EEEEEE" />
                 <meta name="msapplication-TileImage" content="/faviconsNoBg/ms-icon-144x144.png" />
                 <meta name="theme-color" content="#EEEEEE" />
+                <meta name="yandex-verification" content="4dbde89ff58f9bab" />
             </Head>
             <center>
-                <main>
+                <main className="mainPage">
                     <Header />
-                    <DeliveryPage />
+                    <div className={styles.main}>
+                        <div className={styles.column}>
+                            <h1 className={styles.title}>Страница не найдена (404)</h1>
+                            <p className={styles.subtitle}>К сожалению, запрашиваемая страница не существует.</p>
+                        </div>
+                        <button className={styles.infoButton} onClick={() => router.push('/')}>На главную</button>
+                    </div>
                     <Footer />
                 </main>
             </center>

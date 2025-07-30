@@ -1,4 +1,4 @@
-import styles from "@/styles/Catalog.module.css";
+import styles from "../styles.module.css";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 
 export default function SortSection({ stateSortItems, setStateSortItems, sortItems }) {

@@ -1,4 +1,4 @@
-import styles from "@/styles/Catalog.module.css";
+import styles from "../styles.module.css";
 
 export default function FilterSection({ sales, types, stateSales, stateType, setStateSales, setStateType }) {
     return (

@@ -1,4 +1,4 @@
-import styles from "@/styles/Documents.module.css";
+import styles from "./styles.module.css";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Link from "next/link";
 import { policyText } from "@/constants/policyText";
@@ -20,7 +20,7 @@ export default function Policy() {
                 </Link>
             </div>
             <div className={styles.contentColumn}>
-                <p className={styles.textTitle}>Политика конфиденциальности</p>
+                <h1 className={styles.textTitle}>Политика конфиденциальности</h1>
                 {policyText.map((item, index) => <div key={index} className={styles.textColumn}>
                     <p className={styles.textTitle}>{index + 1}. {item.title}</p>
                     <div className={styles.textParagraphsColumn}>

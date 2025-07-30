@@ -1,4 +1,4 @@
-import styles from "@/styles/Catalog.module.css";
+import styles from "../styles.module.css";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from "@chakra-ui/react";
 import FilterSection from "./FilterSection";
 

@@ -3,4 +3,8 @@ Crawl-delay: 1
 Host: https://mi-alegria.shop
 Disallow: /admin
 Disallow: /adminpanel
+Disallow: */bag 
+Disallow: *?text= 
+Disallow: */cabinet 
+Disallow: */feedback 
 Sitemap: https://mi-alegria.shop/sitemap.xml

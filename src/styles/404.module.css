@@ -1,0 +1,74 @@
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.title {
+    font-size: 32px;
+    color: #140702;
+    font-family: 'Dela Gothic One', system-ui;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.infoButton {
+    display: flex;
+    width: 400px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.infoButton:hover {
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
+}
+
+.subtitle {
+    font-size: 20px;
+    line-height: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 475px) {
+    .main {
+        height: 350px;
+        gap: 30px;
+        width: calc(100% - 40px);
+    }
+
+    .title {
+        font-size: 24px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .infoButton {
+        padding: 8.5px 20px;
+        font-size: 14px;
+    }
+}

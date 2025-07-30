@@ -1,5 +1,5 @@
 // Pagination.js (полностью переписанный)
-import styles from "@/styles/Catalog.module.css";
+import styles from "../styles.module.css";
 
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
     const getVisiblePages = () => {

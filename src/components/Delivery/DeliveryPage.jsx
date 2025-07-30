@@ -1,8 +1,8 @@
-import styles from "@/styles/Delivery.module.css";
+import styles from "./styles.module.css";
 import Link from "next/link";
 import Breadcrumb from "../Common/Breadcrumb";
 
-export function DeliveryPage() {
+export default function DeliveryPage() {
     return <div className={styles.main}>
         <Breadcrumb />
         <div className={styles.mainRow}>
@@ -20,12 +20,8 @@ export function DeliveryPage() {
             </div>
             <div className={styles.contentColumn}>
                 <div className={styles.contentFirstColumn}>
-                    <p className={styles.contentFirstColumnTitle} >Способы доставки</p>
-                    <div className={styles.contentFirstColumnLil} >
-                        {/* <div className={styles.contentFirstColumnLine} >
-                                    <img src='/goldCircle.svg' className={styles.contentFirstColumnCircle} />
-                                    <p className={styles.contentFirstColumnText} >Курьерская доставка до двери</p>
-                                </div> */}
+                    <h1 className={styles.contentFirstColumnTitle}>Способы доставки</h1>
+                    <div className={styles.contentFirstColumnLil}>
                         <div className={styles.contentFirstColumnLine}>
                             <img src='/goldCircle.svg' className={styles.contentFirstColumnCircle} />
                             <p className={styles.contentFirstColumnText}>Пункты выдачи СДЭК</p>

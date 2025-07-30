@@ -1,4 +1,4 @@
-import styles from "@/styles/StartBlock.module.css";
+import styles from "./styles.module.css";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -18,6 +18,7 @@ export default function StartBlock() {
     };
 
     return <div className={styles.main}>
+        <h1 className={styles.title}>Интернет-магазин ювелирных украшений Mi Alegria</h1>
         <div className={styles.line}>
             <div className={styles.block} onClick={() => router.push('/catalog?product=ring')}>
                 <img className={styles.blockImage} src={data?.first?.cover} />

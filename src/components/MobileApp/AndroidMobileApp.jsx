@@ -1,10 +1,10 @@
-import styles from "@/styles/MobileApp.module.css";
+import styles from "./styles.module.css";
 
 export default function AndroidMobileApp() {
     return <div className={styles.main}>
         <div className={styles.lilLine}>
             <img src='/Android.svg' className={styles.mainIcon} />
-            <p className={styles.mainTitle}>МОБИЛЬНАЯ ВЕРСИЯ ДЛЯ ANDROID</p>
+            <h1 className={styles.mainTitle}>МОБИЛЬНАЯ ВЕРСИЯ ДЛЯ ANDROID</h1>
         </div>
         <p className={styles.text}>Чтобы вывести ссылку на сайт на рабочий стол, выполните следующие действия в зависимости от браузера:</p>
         <div className={styles.column}>

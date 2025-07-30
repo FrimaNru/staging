@@ -1,4 +1,4 @@
-import styles from "@/styles/Catalog.module.css";
+import styles from "./styles.module.css";
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useProducts } from "@/contexts/ProductsContext";
@@ -12,24 +12,16 @@ import NoResults from "./items/NoResults";
 import AccordionFilters from "./items/AccordionFilters";
 import Pagination from "./items/Pagination";
 
-// const shuffle = (array) => {
-//     let shuffled = array.slice();
-//     for (let i = shuffled.length - 1; i > 0; i--) {
-//         const j = Math.floor(Math.random() * (i + 1));
-//         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-//     }
-//     return shuffled;
-// };
-
 export default function Catalog() {
     const { products, loading } = useProducts();
     const router = useRouter();
-    const { product, text } = router.query;
+    const { product, text, filter } = router.query;
     const [stateSales, setStateSales] = useState([]);
     const [stateType, setStateType] = useState('');
     const [search, setSearch] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
+    const [isNewPage, setIsNewPage] = useState(false);
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
     const types = ['Кольца', 'Серьги', 'Браслеты', 'Колье'];
@@ -39,6 +31,14 @@ export default function Catalog() {
     useEffect(() => {
         setCurrentPage(1);
     }, [stateSortItems, stateType, stateSales, text]);
+
+    useEffect(() => {
+        if (filter === 'new') {
+            setIsNewPage(true);
+        } else {
+            setIsNewPage(false);
+        }
+    }, [filter]); 
 
     useEffect(() => {
         if (text) setSearch(true);
@@ -110,6 +110,7 @@ export default function Catalog() {
             <Banner />
             <div className={styles.mainColumn}>
                 <Breadcrumb />
+                <h1 className={styles.title}>{isNewPage ? 'НОВИНКИ' : 'КАТАЛОГ'}</h1>
                 <div className={styles.row}>
                     <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} />
                     <div className={styles.catalogColumn}>

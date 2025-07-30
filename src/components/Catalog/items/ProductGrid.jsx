@@ -1,4 +1,4 @@
-import styles from "@/styles/Catalog.module.css";
+import styles from "../styles.module.css";
 import ProductItem from "./ProductItem";
 
 export default function ProductGrid({ filteredData }) {

@@ -1,4 +1,4 @@
-import styles from "@/styles/Catalog.module.css";
+import styles from "../styles.module.css";
 import { useRouter } from "next/router";
 
 export default function NoResults({ text }) {

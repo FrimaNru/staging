@@ -1,7 +1,8 @@
-import styles from "@/styles/Catalog.module.css";
+import styles from "../styles.module.css";
 import Link from "next/link";
 import { FavouriteButton } from "@/components";
 import { formatNumber } from "@/lib/Formatting";
+import { PRODUCT_TYPES } from "@/constants/items";
 
 export default function ProductItem({ product }) {
     return (
@@ -10,7 +11,7 @@ export default function ProductItem({ product }) {
                 <Link href={`/product?id=${product._id}`} className={styles.sliderItemLink}>
                     <img src={product.cover} className={styles.sliderItemImage} />
                 </Link>
-                <p className={styles.sliderItemTitle}>{product.name}</p>
+                <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[product.type]} {product.name}</p>
                 <p className={styles.productItemArticle}>Артикул: {product.article}</p>
                 <div className={styles.productItemCostLine}>
                     <div className={styles.productItemCostEmpty} />

@@ -95,7 +95,7 @@
 .mainColumn {
     display: flex;
     flex-direction: column;
-    gap: 45px;
+    gap: 30px;
 }
 
 .accordionButtonArrowMobile {
@@ -103,7 +103,24 @@
 }
 
 .titleBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.hr {
     display: none;
+}
+
+.title {
+    color: #140702;
+    text-align: center;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    text-align: left;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 @media (max-width: 475px) {
@@ -173,19 +190,11 @@
         padding: 0 15px 5px 15px;
     }
 
-    .titleBlock {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
+    .title {
+        font-size: 18px;
     }
 
-    .title {
-        color: #140702;
-        text-align: center;
-        font-family: "Dela Gothic One";
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
+    .hr {
+        display: block;
     }
 }
