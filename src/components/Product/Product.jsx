@@ -14,112 +14,125 @@ import ColorSelector from "./items/ColorSelector";
 import CharasteristicBlock from "./items/CharasteristicBlock";
 import { PRODUCT_TYPES } from "@/constants/items";
 
-export function Product() {
-
+export default function Product({ product }) {
     const { addToCart } = useCart();
-    const [data, setData] = useState({});
     const router = useRouter();
-    const [id, setId] = useState(null);
     const [colorOfProduct, setColorOfProduct] = useState('');
     const [sizeOfProduct, setSizeOfProduct] = useState(0);
-
     const [activeCount, setActiveCount] = useState(0);
-
     const [isOpenModal, setIsOpenModal] = useState(false);
 
+    // Добавляем логику для обработки изменения размера и цвета
     useEffect(() => {
-        const urlId = new URLSearchParams(window.location.search).get('id');
-        setId(urlId);
-
-        load();
-        const handleRouteChange = (url) => {
-            load();
-        };
-        router.events.on('routeChangeComplete', handleRouteChange);
-        return () => {
-            router.events.off('routeChangeComplete', handleRouteChange);
-        };
-    }, []);
-
-    const load = async () => {
-        await axios.post(`${API_BASE_URL}getOneProduct`, { id: window.location.href.split('?id=')[1] })
-            .then((res) => {
-                setData(res.data);
-                setColorOfProduct(res.data.color);
-                if (res.data.type === 'ring' || res.data.type === 'bracelets') setSizeOfProduct(res.data.sizes[0])
-                else if (res.data.type === 'necklace') setSizeOfProduct(res.data.sizes[0]);
-            })
-            .catch((e) => {
-                console.log(e);
-                router.push('/404');
-            });
-    };
+        if (product) {
+            setColorOfProduct(product.color || '');
+            if (product.type === 'ring' || product.type === 'bracelets') {
+                setSizeOfProduct(product.sizes[0]);
+            } else if (product.type === 'necklace') {
+                setSizeOfProduct(product.sizes[0]);
+            }
+        }
+    }, [product]);
 
     const buy = async () => {
-        addToCart({ id: window.location.href.split('?id=')[1], size: sizeOfProduct, color: colorOfProduct, article: data?.article });
+        addToCart({
+            id: product._id,
+            size: sizeOfProduct,
+            color: colorOfProduct,
+            article: product?.article,
+        });
         setIsOpenModal(true);
 
         if (localStorage.getItem('token')) {
             await axios.post(`${API_BASE_URL}addProductToBag`, {
-                id: window.location.href.split('?id=')[1],
+                id: product._id,
                 size: sizeOfProduct,
                 color: colorOfProduct,
-                article: data?.article
+                article: product?.article,
             }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
         }
     };
 
-    return <div className={styles.main}>
-        <div className={styles.mainColumn} >
-            <Breadcrumb />
-            <div className={styles.infoLine}>
-                <ImageSlider data={data} activeCount={activeCount} />
-                <div className={styles.infoColumn}>
-                    <div className={styles.infoColumnText}>
-                        <div className={styles.infoTitleLine}>
-                            <h1 className={styles.infoTitle}>{PRODUCT_TYPES[data.type]} {data?.name?.length > 0 && data.name}</h1>
-                            {data?.article?.length > 0 ? <FavouriteButton idProduct={data._id} size={sizeOfProduct} color={colorOfProduct} article={data?.article} /> : <></>}
+    return (
+        <div className={styles.main}>
+            <div className={styles.mainColumn}>
+                <Breadcrumb />
+                <div className={styles.infoLine}>
+                    <ImageSlider data={product} activeCount={activeCount} />
+                    <div className={styles.infoColumn}>
+                        <div className={styles.infoColumnText}>
+                            <div className={styles.infoTitleLine}>
+                                <h1 className={styles.infoTitle}>{PRODUCT_TYPES[product.type]} {product.name}</h1>
+                                {product.article && <FavouriteButton idProduct={product._id} size={sizeOfProduct} color={colorOfProduct} article={product.article} />}
+                            </div>
+                            <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
+                            <SizeSelector data={product} activeCount={activeCount} sizeOfProduct={sizeOfProduct} setSizeOfProduct={setSizeOfProduct} />
+                            <ColorSelector data={product} colorOfProduct={colorOfProduct} setColorOfProduct={setColorOfProduct} setActiveCount={setActiveCount} />
+                            {product.articles && <p className={styles.articles}>Артикул: {product.article}</p>}
                         </div>
-                        <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши  украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
-                        <SizeSelector data={data} activeCount={activeCount} sizeOfProduct={sizeOfProduct} setSizeOfProduct={setSizeOfProduct} />
-                        <ColorSelector data={data} colorOfProduct={colorOfProduct} setColorOfProduct={setColorOfProduct} setActiveCount={setActiveCount} />
-                        {data?.articles?.length > 0 && <p className={styles.articles}>Артикул: {data?.article}</p>}
-                    </div>
-                    <div className={styles.infoButtonColumn}>
-                        <p className={styles.infoCost} >{formatNumber(Number(data.cost))} руб.</p>
-                        <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
+                        <div className={styles.infoButtonColumn}>
+                            <p className={styles.infoCost}>{formatNumber(Number(product.cost))} руб.</p>
+                            <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <CharasteristicBlock />
+            <Modal isOpen={isOpenModal} size='xl' onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
+                <ModalOverlay />
+                <ModalContent bg='none' boxShadow='none'>
+                    <ModalBody p={0}>
+                        <div className={styles.modal}>
+                            <div className={styles.modalHeader}>
+                                <div className={styles.modalHeaderLine}>
+                                    <p className={styles.modalHeaderTitle}>ДОБАВЛЕНО В КОРЗИНУ</p>
+                                    <p className={styles.modalHeaderTitleMobile}>В КОРЗИНЕ</p>
+                                    <img src='/cross.svg' className={styles.modalHeaderCross} onClick={() => setIsOpenModal(false)} />
+                                    <img src='/crossMobile.svg' className={styles.modalHeaderCrossMobile} onClick={() => setIsOpenModal(false)} />
+                                </div>
+                                <hr className={styles.modalHeaderHr} />
+                            </div>
+                            <div className={styles.modalBody}>
+                                <div className={styles.modalBodyColumn}>
+                                    <img src={product.cover} className={styles.modalBodyImg} />
+                                    <p className={styles.modalBodyTitle}>{product.name}</p>
+                                </div>
+                                <div className={styles.modalBodyColumnButtons}>
+                                    <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)}>ПРОДОЛЖИТЬ ПОКУПКИ</button>
+                                    <button className={styles.modalBodyButtonBag} onClick={() => router.push('/bag')}>ОФОРМИТЬ ЗАКАЗ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
         </div>
-        <CharasteristicBlock />
-        <Modal isOpen={isOpenModal} size='xl' onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
-            <ModalOverlay />
-            <ModalContent bg='none' boxShadow='none'>
-                <ModalBody p={0}>
-                    <div className={styles.modal}>
-                        <div className={styles.modalHeader}>
-                            <div className={styles.modalHeaderLine}>
-                                <p className={styles.modalHeaderTitle}>ДОБАВЛЕНО В КОРЗИНУ</p>
-                                <p className={styles.modalHeaderTitleMobile}>В КОРЗИНЕ</p>
-                                <img src='/cross.svg' className={styles.modalHeaderCross} onClick={() => setIsOpenModal(false)} />
-                                <img src='/crossMobile.svg' className={styles.modalHeaderCrossMobile} onClick={() => setIsOpenModal(false)} />
-                            </div>
-                            <hr className={styles.modalHeaderHr} />
-                        </div>
-                        <div className={styles.modalBody}>
-                            <div className={styles.modalBodyColumn}>
-                                <img src={data?.cover?.length > 0 && data.cover} className={styles.modalBodyImg} />
-                                <p className={styles.modalBodyTitle}>{data?.name?.length > 0 && data.name}</p>
-                            </div>
-                            <div className={styles.modalBodyColumnButtons}>
-                                <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)} >ПРОДОЛЖИТЬ ПОКУПКИ</button>
-                                <button className={styles.modalBodyButtonBag} onClick={() => router.push('/bag')}>ОФОРМИТЬ ЗАКАЗ</button>
-                            </div>
-                        </div>
-                    </div>
-                </ModalBody>
-            </ModalContent>
-        </Modal>
-    </div>
-};
+    );
+}
+
+// Серверная функция для получения данных
+export async function getServerSideProps({ query, res }) {
+    const { id } = query;
+
+    if (!id) {
+        return { notFound: true };
+    }
+
+    try {
+        const response = await axios.post(`${API_BASE_URL}getOneProduct`, { id });
+        const product = response.data;
+
+        if (!product || !product._id) {
+            return { notFound: true };
+        }
+
+        return {
+            props: {
+                product,
+            },
+        };
+    } catch (error) {
+        console.error('Ошибка при загрузке продукта:', error.message);
+        return { notFound: true };
+    }
+}
