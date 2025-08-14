@@ -12,7 +12,7 @@ export function Brand() {
                 <hr className={styles.hr} />
                 <div className={styles.contentColumnBig} >
                     <div className={styles.line}>
-                        <p className={styles.text}>Mi Alegria - это естественное и гармоничное соединение многовековых культурных традиций и современного прочтения в мире украшений. </p>
+                        <p className={styles.text} data-noindex="true">Mi Alegria - это естественное и гармоничное соединение многовековых культурных традиций и современного прочтения в мире украшений. </p>
                         <img src='/assets/images/aboutBrandSmall1.webp' className={styles.imgLine} />
                     </div>
                     <div className={styles.line} >
@@ -20,7 +20,7 @@ export function Brand() {
                         <p className={`${styles.text} ${styles.textRight}`}>Наш бренд предлагает  премиальную бижутерию для тех, кто ценит качество и хочет смело, но со вкусом подчеркнуть свою индивидуальность. </p>
                     </div>
                     <div className={styles.columnMobile}>
-                        <p className={styles.text} >Mi Alegria - это естественное и гармоничное соединение многовековых культурных традиций и современного прочтения в мире украшений.</p>
+                        <p className={styles.text} data-noindex="true">Mi Alegria - это естественное и гармоничное соединение многовековых культурных традиций и современного прочтения в мире украшений.</p>
                         <div className={styles.lineMobile}>
                             <img src='/assets/images/aboutBrandSmall1.webp' className={styles.imgLine} />
                             <img src='/assets/images/aboutBrandSmall2.webp' className={styles.imgLine} />

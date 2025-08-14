@@ -65,10 +65,10 @@ export default function Product({ product }) {
                                 <h1 className={styles.infoTitle}>{PRODUCT_TYPES[product.type]} {product.name}</h1>
                                 {product.article && <FavouriteButton idProduct={product._id} size={sizeOfProduct} color={colorOfProduct} article={product.article} />}
                             </div>
-                            <p className={styles.description}>Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
+                            <p className={styles.description} data-noindex="true">Mi Alegria - это гармоничное соединение многовековых культурных традиций и современного прочтения. Наши украшения созданы для тех, кто хочет смело и со вкусом подчеркнуть свою индивидуальность.</p>
                             <SizeSelector data={product} activeCount={activeCount} sizeOfProduct={sizeOfProduct} setSizeOfProduct={setSizeOfProduct} />
                             <ColorSelector data={product} colorOfProduct={colorOfProduct} setColorOfProduct={setColorOfProduct} setActiveCount={setActiveCount} />
-                            {product.articles && <p className={styles.articles}>Артикул: {product.article}</p>}
+                            {product.articles && <p className={styles.articles} data-noindex="true">Артикул: {product.article}</p>}
                         </div>
                         <div className={styles.infoButtonColumn}>
                             <p className={styles.infoCost}>{formatNumber(Number(product.cost))} руб.</p>

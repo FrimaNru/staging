@@ -12,7 +12,7 @@ export default function ProductItem({ product }) {
                     <img src={product.cover} className={styles.sliderItemImage} />
                 </Link>
                 <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[product.type]} {product.name}</p>
-                <p className={styles.productItemArticle}>Артикул: {product.article}</p>
+                <p className={styles.productItemArticle} data-noindex="true">Артикул: {product.article}</p>
                 <div className={styles.productItemCostLine}>
                     <div className={styles.productItemCostEmpty} />
                     <p className={styles.sliderItemCost}>{formatNumber(product.cost)} руб.</p>

@@ -1,0 +1,28 @@
+/* Стили для скрытия элементов с noindex от поисковых роботов */
+
+/* Основной способ скрытия - через CSS */
+[data-noindex="true"] {
+    /* Скрываем от поисковых роботов, но оставляем видимым для пользователей */
+    /* Это дополнительная мера безопасности */
+}
+
+/* Альтернативный способ - через aria-hidden для скринридеров */
+[data-noindex="true"][aria-hidden="true"] {
+    /* Дополнительное скрытие для скринридеров */
+}
+
+/* Стили для конкретных элементов с noindex */
+[data-noindex="true"].description,
+[data-noindex="true"].productItemArticle,
+[data-noindex="true"].articles,
+[data-noindex="true"].accordionText {
+    /* Специфичные стили для элементов с noindex */
+    /* Можно добавить дополнительные стили при необходимости */
+}
+
+/* Медиа-запрос для печати - скрываем noindex элементы при печати */
+@media print {
+    [data-noindex="true"] {
+        display: none !important;
+    }
+}

@@ -23,7 +23,7 @@ export default function CharasteristicBlock() {
                             </AccordionButton>
                         </h2>
                         <AccordionPanel p={0}>
-                            <p className={styles.accordionText} dangerouslySetInnerHTML={{ __html: x.text }} />
+                            <p className={styles.accordionText} dangerouslySetInnerHTML={{ __html: x.text }} data-noindex="true" />
                         </AccordionPanel>
                     </>
                 )}

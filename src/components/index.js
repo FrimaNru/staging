@@ -9,5 +9,6 @@ export * from "./Header/items/RefreshPassword";
 
 export * from "./Common/FavouriteButton";
 export * from "./Common/WidgetPVZ";
+export * from "./Common/NoIndexWrapper";
 
 export * from "./Admin/Panel/items/DownloadExcel";

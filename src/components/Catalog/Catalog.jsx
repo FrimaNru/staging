@@ -12,14 +12,14 @@ import NoResults from "./items/NoResults";
 import AccordionFilters from "./items/AccordionFilters";
 import Pagination from "./items/Pagination";
 
-export default function Catalog() {
+export default function Catalog({ initialPage = 1 }) {
     const { products, loading } = useProducts();
     const router = useRouter();
-    const { product, text, filter } = router.query;
+    const { product, text, filter, PAGEN_1 } = router.query;
     const [stateSales, setStateSales] = useState([]);
     const [stateType, setStateType] = useState('');
     const [search, setSearch] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(initialPage);
     const itemsPerPage = 15;
     const [isNewPage, setIsNewPage] = useState(false);
 
@@ -28,8 +28,32 @@ export default function Catalog() {
     const sortItems = ['По популярности', 'По возрастанию цены', 'По убыванию цены'];
     const [stateSortItems, setStateSortItems] = useState('По популярности');
 
+    // Синхронизируем текущую страницу с URL параметром PAGEN_1
+    useEffect(() => {
+        if (PAGEN_1) {
+            const page = parseInt(PAGEN_1);
+            if (page > 0) {
+                setCurrentPage(page);
+            }
+        } else if (router.pathname.includes('/catalog/') && router.query.page) {
+            const page = parseInt(router.query.page);
+            if (page > 0) {
+                setCurrentPage(page);
+            }
+        }
+    }, [PAGEN_1, router.query.page, router.pathname]);
+
+    // Сбрасываем страницу при изменении фильтров
     useEffect(() => {
         setCurrentPage(1);
+        // Обновляем URL, убирая параметр пагинации
+        const newQuery = { ...router.query };
+        delete newQuery.PAGEN_1;
+        delete newQuery.page;
+        router.replace({
+            pathname: router.pathname,
+            query: newQuery
+        }, undefined, { shallow: true });
     }, [stateSortItems, stateType, stateSales, text]);
 
     useEffect(() => {
@@ -90,20 +114,37 @@ export default function Catalog() {
         return d;
     }, [products, stateSortItems, stateType, stateSales, text]);
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [stateSortItems, stateType, stateSales, text]);
+    // Обработчик изменения страницы
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        
+        // Обновляем URL с параметром PAGEN_1
+        const newQuery = { ...router.query };
+        if (page === 1) {
+            delete newQuery.PAGEN_1;
+            delete newQuery.page;
+        } else {
+            newQuery.PAGEN_1 = page.toString();
+        }
+        
+        // Если мы на динамической странице каталога, перенаправляем на основную с параметром
+        if (router.pathname.includes('/catalog/') && router.query.page) {
+            router.replace({
+                pathname: '/catalog',
+                query: newQuery
+            }, undefined, { shallow: true });
+        } else {
+            router.replace({
+                pathname: router.pathname,
+                query: newQuery
+            }, undefined, { shallow: true });
+        }
+    };
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-    const handlePageChange = (pageNumber) => {
-        if (pageNumber < 1 || pageNumber > totalPages) return;
-        setCurrentPage(pageNumber);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
 
     return (
         <div className={styles.main}>
