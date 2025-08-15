@@ -22,26 +22,24 @@ export default function Pagination({ currentPage, totalPages }) {
         return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
     };
 
-    // Функция для плавной прокрутки к breadcrumbs
     const scrollToBreadcrumbs = () => {
         setTimeout(() => {
             const breadcrumbsElement = document.querySelector('[data-breadcrumbs]');
             if (breadcrumbsElement) {
                 const rect = breadcrumbsElement.getBoundingClientRect();
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const targetPosition = scrollTop + rect.top - 200; // Увеличиваем отступ до 200px сверху
+                const targetPosition = scrollTop + rect.top - 200;
                 
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth'
                 });
             } else {
-                // Если breadcrumbs не найден, прокручиваем к началу контента каталога
                 const catalogContent = document.querySelector('[data-catalog-content]');
                 if (catalogContent) {
                     const rect = catalogContent.getBoundingClientRect();
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    const targetPosition = scrollTop + rect.top - 200; // Увеличиваем отступ до 200px сверху
+                    const targetPosition = scrollTop + rect.top - 200;
                     
                     window.scrollTo({
                         top: targetPosition,
@@ -49,7 +47,7 @@ export default function Pagination({ currentPage, totalPages }) {
                     });
                 }
             }
-        }, 100); // Небольшая задержка для завершения роутинга
+        }, 100);
     };
     
     const getPageUrl = (page) => {
@@ -71,7 +69,6 @@ export default function Pagination({ currentPage, totalPages }) {
         }
     };
 
-    // Обработчик клика для первой страницы
     const handleFirstPageClick = (e) => {
         e.preventDefault();
         
@@ -89,7 +86,6 @@ export default function Pagination({ currentPage, totalPages }) {
         });
     };
 
-    // Обработчик для кнопки "Предыдущая" при переходе на первую страницу
     const handlePrevPageClick = (e) => {
         e.preventDefault();
         
@@ -111,7 +107,6 @@ export default function Pagination({ currentPage, totalPages }) {
         }
     };
 
-    // Обработчик для перехода на другие страницы
     const handlePageClick = (page) => {
         if (page === currentPage) return;
         
