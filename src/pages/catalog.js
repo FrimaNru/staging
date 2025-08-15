@@ -6,7 +6,7 @@ import Head from "next/head";
 import { getCanonicalUrl } from "@/lib/seo";
 
 export default function Delivery() {
-    // Формируем canonical URL для первой страницы каталога
+        
     const canonicalUrl = getCanonicalUrl('/catalog');
 
     return (
@@ -15,8 +15,8 @@ export default function Delivery() {
                 <title>Каталог Ювелирных Изделий – Mi Alegria</title>
                 <meta name="description" content='Откройте для себя наш каталог ювелирных изделий: золотые и серебряные кольца, серьги, браслеты и подвески. Найдите идеальное украшение на любой случай!' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                
-                {/* Canonical URL для первой страницы каталога */}
+                    
+                    
                 <link rel="canonical" href={canonicalUrl} />
                 
                 <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />

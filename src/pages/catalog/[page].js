@@ -10,7 +10,7 @@ export default function CatalogPage() {
     const { page } = router.query;
     const currentPage = parseInt(page) || 1;
 
-    // Формируем canonical URL - всегда указывает на первую страницу каталога
+    
     const canonicalUrl = getCanonicalUrl('/catalog');
 
     return (
@@ -20,7 +20,7 @@ export default function CatalogPage() {
                 <meta name="description" content='Откройте для себя наш каталог ювелирных изделий: золотые и серебряные кольца, серьги, браслеты и подвески. Найдите идеальное украшение на любой случай!' />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 
-                {/* Canonical URL - всегда указывает на первую страницу каталога */}
+                    
                 <link rel="canonical" href={canonicalUrl} />
                 
                 <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />
@@ -54,10 +54,9 @@ export default function CatalogPage() {
     );
 }
 
-// Генерируем статические пути для пагинации
+
 export async function getStaticPaths() {
-    // Получаем общее количество страниц (можно вычислить на основе количества продуктов)
-    // Для примера создаем 10 страниц пагинации
+    
     const paths = [];
     
     for (let i = 2; i <= 10; i++) {
@@ -68,7 +67,7 @@ export async function getStaticPaths() {
     
     return {
         paths,
-        fallback: 'blocking' // Позволяет генерировать новые страницы на лету
+        fallback: 'blocking' 
     };
 }
 
@@ -77,6 +76,6 @@ export async function getStaticProps({ params }) {
         props: {
             page: params.page
         },
-        revalidate: 60 // Перегенерируем страницы каждую минуту
+        revalidate: 60 
     };
 }
