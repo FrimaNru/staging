@@ -22,7 +22,6 @@ export default function Product({ product }) {
     const [activeCount, setActiveCount] = useState(0);
     const [isOpenModal, setIsOpenModal] = useState(false);
 
-    // Добавляем логику для обработки изменения размера и цвета
     useEffect(() => {
         if (product) {
             setColorOfProduct(product.color || '');
@@ -110,7 +109,6 @@ export default function Product({ product }) {
     );
 }
 
-// Серверная функция для получения данных
 export async function getServerSideProps({ query, res }) {
     const { id } = query;
 
