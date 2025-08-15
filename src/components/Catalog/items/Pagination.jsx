@@ -22,10 +22,39 @@ export default function Pagination({ currentPage, totalPages }) {
         return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
     };
 
+    // Функция для плавной прокрутки к breadcrumbs
+    const scrollToBreadcrumbs = () => {
+        setTimeout(() => {
+            const breadcrumbsElement = document.querySelector('[data-breadcrumbs]');
+            if (breadcrumbsElement) {
+                const rect = breadcrumbsElement.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const targetPosition = scrollTop + rect.top - 200; // Увеличиваем отступ до 200px сверху
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            } else {
+                // Если breadcrumbs не найден, прокручиваем к началу контента каталога
+                const catalogContent = document.querySelector('[data-catalog-content]');
+                if (catalogContent) {
+                    const rect = catalogContent.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const targetPosition = scrollTop + rect.top - 200; // Увеличиваем отступ до 200px сверху
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        }, 100); // Небольшая задержка для завершения роутинга
+    };
     
     const getPageUrl = (page) => {
         if (page === 1) {
-           
+            
             const newQuery = { ...router.query };
             delete newQuery.PAGEN_1;
             delete newQuery.page;
@@ -42,26 +71,25 @@ export default function Pagination({ currentPage, totalPages }) {
         }
     };
 
-    
+    // Обработчик клика для первой страницы
     const handleFirstPageClick = (e) => {
         e.preventDefault();
         
-       
         if (currentPage === 1) return;
-        
         
         const newQuery = { ...router.query };
         delete newQuery.PAGEN_1;
         delete newQuery.page;
         
-        
         router.push({
             pathname: '/catalog',
             query: newQuery
+        }).then(() => {
+            scrollToBreadcrumbs();
         });
     };
 
-    
+    // Обработчик для кнопки "Предыдущая" при переходе на первую страницу
     const handlePrevPageClick = (e) => {
         e.preventDefault();
         
@@ -74,11 +102,23 @@ export default function Pagination({ currentPage, totalPages }) {
             router.push({
                 pathname: '/catalog',
                 query: newQuery
+            }).then(() => {
+                scrollToBreadcrumbs();
             });
         } else {
             
             window.location.href = getPageUrl(currentPage - 1);
         }
+    };
+
+    // Обработчик для перехода на другие страницы
+    const handlePageClick = (page) => {
+        if (page === currentPage) return;
+        
+        const url = getPageUrl(page);
+        router.push(url).then(() => {
+            scrollToBreadcrumbs();
+        });
     };
 
     const visiblePages = getVisiblePages();
@@ -101,15 +141,16 @@ export default function Pagination({ currentPage, totalPages }) {
                     </button>
                 ) : (
                     
-                    <Link href={getPageUrl(currentPage - 1)}>
-                        <button className={styles.paginationButton}>
-                            <img
-                                src='/assets/icons/lilArrow.svg'
-                                className={styles.paginationButtonIconLeft}
-                                alt="Предыдущая страница"
-                            />
-                        </button>
-                    </Link>
+                    <button 
+                        onClick={() => handlePageClick(currentPage - 1)}
+                        className={styles.paginationButton}
+                    >
+                        <img
+                            src='/assets/icons/lilArrow.svg'
+                            className={styles.paginationButtonIconLeft}
+                            alt="Предыдущая страница"
+                        />
+                    </button>
                 )
             ) : (
                 <button
@@ -140,13 +181,13 @@ export default function Pagination({ currentPage, totalPages }) {
                             </button>
                         ) : (
                             
-                            <Link key={page} href={getPageUrl(page)}>
-                                <button
-                                    className={`${styles.paginationButton} ${currentPage === page ? styles.paginationButtonActive : ''}`}
-                                >
-                                    {page}
-                                </button>
-                            </Link>
+                            <button
+                                key={page}
+                                onClick={() => handlePageClick(page)}
+                                className={`${styles.paginationButton} ${currentPage === page ? styles.paginationButtonActive : ''}`}
+                            >
+                                {page}
+                            </button>
                         )
                     )
                 ))}
@@ -154,15 +195,16 @@ export default function Pagination({ currentPage, totalPages }) {
 
                 
             {currentPage < totalPages ? (
-                <Link href={getPageUrl(currentPage + 1)}>
-                    <button className={styles.paginationButton}>
-                        <img
-                            src='/assets/icons/lilArrow.svg'
-                            className={styles.paginationButtonIcon}
-                            alt="Следующая страница"
-                        />
-                    </button>
-                </Link>
+                <button 
+                    onClick={() => handlePageClick(currentPage + 1)}
+                    className={styles.paginationButton}
+                >
+                    <img
+                        src='/assets/icons/lilArrow.svg'
+                        className={styles.paginationButtonIcon}
+                        alt="Следующая страница"
+                    />
+                </button>
             ) : (
                 <button
                     disabled

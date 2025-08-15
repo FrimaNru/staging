@@ -23,7 +23,6 @@ export default function Catalog({ initialPage = 1 }) {
     const itemsPerPage = 15;
     const [isNewPage, setIsNewPage] = useState(false);
     
-    // Используем ref для отслеживания изменений фильтров
     const prevFilters = useRef({ stateSortItems: '', stateType: '', stateSales: [], text: '' });
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
@@ -31,17 +30,43 @@ export default function Catalog({ initialPage = 1 }) {
     const sortItems = ['По популярности', 'По возрастанию цены', 'По убыванию цены'];
     const [stateSortItems, setStateSortItems] = useState('По популярности');
 
-    // Синхронизируем текущую страницу с URL параметром PAGEN_1
     useEffect(() => {
         if (PAGEN_1) {
             const page = parseInt(PAGEN_1);
             if (page > 0) {
                 setCurrentPage(page);
+                
+                setTimeout(() => {
+                    const breadcrumbsElement = document.querySelector('[data-breadcrumbs]');
+                    if (breadcrumbsElement) {
+                        const rect = breadcrumbsElement.getBoundingClientRect();
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        const targetPosition = scrollTop + rect.top - 200;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
             }
         } else if (router.pathname.includes('/catalog/') && router.query.page) {
             const page = parseInt(router.query.page);
             if (page > 0) {
                 setCurrentPage(page);
+                setTimeout(() => {
+                    const breadcrumbsElement = document.querySelector('[data-breadcrumbs]');
+                    if (breadcrumbsElement) {
+                        const rect = breadcrumbsElement.getBoundingClientRect();
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        const targetPosition = scrollTop + rect.top - 200;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
             }
         } else {
             setCurrentPage(1);
@@ -162,7 +187,7 @@ export default function Catalog({ initialPage = 1 }) {
     return (
         <div className={styles.main}>
             <Banner />
-            <div className={styles.mainColumn}>
+            <div className={styles.mainColumn} data-catalog-content>
                 <Breadcrumb />
                 <h1 className={styles.title}>{isNewPage ? 'НОВИНКИ' : 'КАТАЛОГ'}</h1>
                 <div className={styles.row}>

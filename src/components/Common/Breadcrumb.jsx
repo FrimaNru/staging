@@ -55,7 +55,7 @@ export default function Breadcrumb() {
     }, [router.pathname, id]);
 
     return (
-        <div className={styles.breadcrumbLine}>
+        <div className={styles.breadcrumbLine} data-breadcrumbs>
             {breadcrumbsArray.map((x, i) => (
                 <Link href={x.link} key={i}>
                     <div className={styles.breadcrumbItem}>
