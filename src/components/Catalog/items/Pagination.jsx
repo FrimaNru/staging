@@ -2,9 +2,8 @@
 import styles from "../styles.module.css";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { getPaginationUrl } from "@/lib/seo";
 
-export default function Pagination({ currentPage, totalPages, onPageChange }) {
+export default function Pagination({ currentPage, totalPages }) {
     const router = useRouter();
     
     const getVisiblePages = () => {
@@ -23,9 +22,63 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
     };
 
-    // Генерируем URL для страницы используя SEO конфигурацию
+    // Генерируем URL для страницы
     const getPageUrl = (page) => {
-        return getPaginationUrl(page, '/catalog', router.query);
+        if (page === 1) {
+            // Для первой страницы убираем параметр пагинации
+            const newQuery = { ...router.query };
+            delete newQuery.PAGEN_1;
+            delete newQuery.page;
+            
+            const queryString = new URLSearchParams(newQuery).toString();
+            return queryString ? `/catalog?${queryString}` : '/catalog';
+        } else {
+            // Для остальных страниц добавляем параметр PAGEN_1
+            const newQuery = { ...router.query };
+            newQuery.PAGEN_1 = page.toString();
+            
+            const queryString = new URLSearchParams(newQuery).toString();
+            return `/catalog?${queryString}`;
+        }
+    };
+
+    // Обработчик клика для первой страницы
+    const handleFirstPageClick = (e) => {
+        e.preventDefault();
+        
+        // Если мы уже на первой странице, ничего не делаем
+        if (currentPage === 1) return;
+        
+        // Убираем параметр пагинации из URL
+        const newQuery = { ...router.query };
+        delete newQuery.PAGEN_1;
+        delete newQuery.page;
+        
+        // Переходим на первую страницу
+        router.push({
+            pathname: '/catalog',
+            query: newQuery
+        });
+    };
+
+    // Обработчик для кнопки "Предыдущая" при переходе на первую страницу
+    const handlePrevPageClick = (e) => {
+        e.preventDefault();
+        
+        if (currentPage === 2) {
+            // Если переходим с 2-й на 1-ю страницу
+            const newQuery = { ...router.query };
+            delete newQuery.PAGEN_1;
+            delete newQuery.page;
+            
+            router.push({
+                pathname: '/catalog',
+                query: newQuery
+            });
+        } else {
+            // Для остальных случаев используем обычную ссылку
+            window.location.href = getPageUrl(currentPage - 1);
+        }
     };
 
     const visiblePages = getVisiblePages();
@@ -34,15 +87,30 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         <div className={styles.pagination}>
             {/* Кнопка "Предыдущая" */}
             {currentPage > 1 ? (
-                <Link href={getPageUrl(currentPage - 1)}>
-                    <button className={styles.paginationButton}>
+                currentPage === 2 ? (
+                    // Если мы на 2-й странице, используем специальный обработчик для перехода на 1-ю
+                    <button 
+                        onClick={handlePrevPageClick}
+                        className={styles.paginationButton}
+                    >
                         <img
                             src='/assets/icons/lilArrow.svg'
                             className={styles.paginationButtonIconLeft}
                             alt="Предыдущая страница"
                         />
                     </button>
-                </Link>
+                ) : (
+                    // Для остальных страниц используем обычную ссылку
+                    <Link href={getPageUrl(currentPage - 1)}>
+                        <button className={styles.paginationButton}>
+                            <img
+                                src='/assets/icons/lilArrow.svg'
+                                className={styles.paginationButtonIconLeft}
+                                alt="Предыдущая страница"
+                            />
+                        </button>
+                    </Link>
+                )
             ) : (
                 <button
                     disabled
@@ -61,13 +129,25 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
                     page === '...' ? (
                         <span key={`dots-${index}`} className={styles.paginationDots}>...</span>
                     ) : (
-                        <Link key={page} href={getPageUrl(page)}>
+                        page === 1 ? (
+                            // Для первой страницы используем специальный обработчик
                             <button
+                                key={page}
+                                onClick={handleFirstPageClick}
                                 className={`${styles.paginationButton} ${currentPage === page ? styles.paginationButtonActive : ''}`}
                             >
                                 {page}
                             </button>
-                        </Link>
+                        ) : (
+                            // Для остальных страниц используем обычные ссылки
+                            <Link key={page} href={getPageUrl(page)}>
+                                <button
+                                    className={`${styles.paginationButton} ${currentPage === page ? styles.paginationButtonActive : ''}`}
+                                >
+                                    {page}
+                                </button>
+                            </Link>
+                        )
                     )
                 ))}
             </div>

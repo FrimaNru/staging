@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/router";
 import { useProducts } from "@/contexts/ProductsContext";
 import Banner from "../Common/Banner/Banner";
@@ -22,6 +22,9 @@ export default function Catalog({ initialPage = 1 }) {
     const [currentPage, setCurrentPage] = useState(initialPage);
     const itemsPerPage = 15;
     const [isNewPage, setIsNewPage] = useState(false);
+    
+    // Используем ref для отслеживания изменений фильтров
+    const prevFilters = useRef({ stateSortItems: '', stateType: '', stateSales: [], text: '' });
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
     const types = ['Кольца', 'Серьги', 'Браслеты', 'Колье'];
@@ -40,21 +43,34 @@ export default function Catalog({ initialPage = 1 }) {
             if (page > 0) {
                 setCurrentPage(page);
             }
+        } else {
+            setCurrentPage(1);
         }
     }, [PAGEN_1, router.query.page, router.pathname]);
 
-    // Сбрасываем страницу при изменении фильтров
     useEffect(() => {
-        setCurrentPage(1);
-        // Обновляем URL, убирая параметр пагинации
-        const newQuery = { ...router.query };
-        delete newQuery.PAGEN_1;
-        delete newQuery.page;
-        router.replace({
-            pathname: router.pathname,
-            query: newQuery
-        }, undefined, { shallow: true });
-    }, [stateSortItems, stateType, stateSales, text]);
+        const currentFilters = { stateSortItems, stateType, stateSales, text };
+        const prevFiltersValue = prevFilters.current;
+        
+        const filtersChanged = 
+            prevFiltersValue.stateSortItems !== stateSortItems ||
+            prevFiltersValue.stateType !== stateType ||
+            JSON.stringify(prevFiltersValue.stateSales) !== JSON.stringify(stateSales) ||
+            prevFiltersValue.text !== text;
+        
+        if (filtersChanged) {
+            setCurrentPage(1);
+            const newQuery = { ...router.query };
+            delete newQuery.PAGEN_1;
+            delete newQuery.page;
+            router.replace({
+                pathname: router.pathname,
+                query: newQuery
+            }, undefined, { shallow: true });
+            
+            prevFilters.current = currentFilters;
+        }
+    }, [stateSortItems, stateType, stateSales, text, router]);
 
     useEffect(() => {
         if (filter === 'new') {
@@ -114,11 +130,9 @@ export default function Catalog({ initialPage = 1 }) {
         return d;
     }, [products, stateSortItems, stateType, stateSales, text]);
 
-    // Обработчик изменения страницы
     const handlePageChange = (page) => {
         setCurrentPage(page);
         
-        // Обновляем URL с параметром PAGEN_1
         const newQuery = { ...router.query };
         if (page === 1) {
             delete newQuery.PAGEN_1;
@@ -127,7 +141,6 @@ export default function Catalog({ initialPage = 1 }) {
             newQuery.PAGEN_1 = page.toString();
         }
         
-        // Если мы на динамической странице каталога, перенаправляем на основную с параметром
         if (router.pathname.includes('/catalog/') && router.query.page) {
             router.replace({
                 pathname: '/catalog',
@@ -165,7 +178,6 @@ export default function Catalog({ initialPage = 1 }) {
                                 <Pagination
                                     currentPage={currentPage}
                                     totalPages={totalPages}
-                                    onPageChange={handlePageChange}
                                 />
                             )}
                         </div>
