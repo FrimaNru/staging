@@ -1,0 +1,173 @@
+.main {
+    width: 85%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    margin: 215px 0 100px 0;
+}
+
+.contactsHeader {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contactsHeaderTitle {
+    font-size: 24px;
+    font-family: 'Dela Gothic One', system-ui;
+    text-align: left;
+}
+
+.contactsContentColumnText {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: max-content;
+}
+
+.contactsContentColumnText h2 {
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+    text-align: left;
+    opacity: 0.5;
+}
+
+.contactsContentColumnText p {
+    font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    width: 300px;
+    text-align: left;
+}
+
+.contactsContentColumn {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    height: max-content;
+    padding-top: 20px;
+}
+
+.contactsContent {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: space-between;
+    border-top: solid 1px rgba(0, 0, 0, 0.1);
+}
+
+.contactsContentColumnBig {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 50%;
+}
+
+.visitBlock {
+    width: 100%;
+    height: 60px;
+    background: #FDEDBF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-family: 'Dela Gothic One', system-ui;
+    line-height: 100%;
+}
+
+.contactsMedia {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+}
+
+.contactsMediaLink {
+    width: 100%;
+    border-radius: 0;
+    background: #FDEDBF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.contactsMediaLink img {
+    width: 30px;
+    height: 30px;
+}
+
+.contactsMediaBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contactsMediaBlock p {
+    font-size: 16px;
+    font-family: 'Dela Gothic One', system-ui;
+    line-height: 100%;
+}
+
+.map {
+    width: 50%;
+    height: 400px;
+}
+
+@media (max-width: 475px) {
+    .main {
+        width: calc(100% - 32px);
+        max-width: 100%;
+        gap: 20px;
+        margin: 78px 0 50px 0;
+    }
+
+    .contactsHeaderTitle {
+        font-size: 20px;
+    }
+
+    .contactsContent {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .contactsContentColumnBig {
+        gap: 20px;
+        width: 100%;
+    }
+
+    .contactsContentColumn {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        padding-top: 10px;
+    }
+
+    .map {
+        width: 100%;
+        height: 300px;
+    }
+
+    .contactsContentColumnText h2 {
+        font-size: 12px;
+    }
+
+    .contactsContentColumnText p {
+        font-size: 16px;
+    }
+
+    .contactsMedia {
+        gap: 5px;
+    }
+
+    .contactsMediaBlock {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+}

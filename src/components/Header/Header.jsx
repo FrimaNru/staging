@@ -10,8 +10,7 @@ import { formatNumber } from "@/lib/Formatting";
 import { useCart } from "@/contexts/CartContext";
 import { useFavourite } from "@/contexts/FavouriteContext";
 import { useUser } from "@/contexts/UserContext";
-
-const links = [{ text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }, { text: 'Доставка', link: '/delivery' }, { text: 'О бренде', link: '/brand' }, { text: 'Частые вопросы', link: '/faq' }];
+import { HEADER_LINKS } from "@/constants/items";
 
 export default function Header() {
 
@@ -133,7 +132,7 @@ export default function Header() {
         <div className={styles.secondLine}>
             <hr className={styles.hr} />
             <div className={styles.linkLine} >
-                {links.map((x, i) => <Link key={i} href={x.link} style={{ width: 'max-content' }} >
+                {HEADER_LINKS.map((x, i) => <Link key={i} href={x.link} style={{ width: 'max-content' }} >
                     <p className={`${styles.linkItem} ${(!stateNew ? (router.pathname === x.link && styles.linkItemSelect) : (x.text === 'Новинки' && styles.linkItemSelect))}`} >{x.text}</p>
                 </Link>)}
             </div>
@@ -155,7 +154,7 @@ function DrawerBlock({ isOpenDrawer, setIsOpenDrawer, pathname }) {
                 {!state
                     ? <>
                         <hr className={styles.drawerHr} />
-                        {links.map((x, i) => x.text !== 'Каталог'
+                        {HEADER_LINKS.map((x, i) => x.text !== 'Каталог'
                             ? <Link key={i} href={x.link} style={{ width: '100%' }}>
                                 <div className={`${styles.drawerItem} ${pathname === x.link && styles.drawerItemSelect}`}>{x.text}</div>
                             </Link>

@@ -49,7 +49,7 @@ export function Footer() {
 
 const links = [
     { title: 'КЛИЕНТАМ', links: [{ text: 'О бренде', link: '/brand' }, { text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }] },
-    { title: 'Информация', links: [{ text: 'Частые вопросы', link: '/faq' }, { text: 'Доставка', link: '/delivery' }] },
+    { title: 'Информация', links: [{ text: 'Частые вопросы', link: '/faq' }, { text: 'Доставка', link: '/delivery' }, { text: 'Контакты', link: '/kontakty' }] },
     { title: 'Соц сети', links: [{ text: 'Telegram', link: 'https://t.me/miAlegriaru' }, { text: 'WhatsApp', link: 'https://wa.me/79165850585' }, { text: 'ВКонтакте', link: 'https://vk.com/mialegriashop' }] },
     { title: 'Документация', links: [{ text: 'Политика конфиденциальности', link: '/documents/policy' }, { text: 'Пользовательское соглашение', link: '/documents/agreement' }, { text: 'Обратная связь', link: '/feedback' }] },
     { title: 'МОБИЛЬНАЯ ВЕРСИЯ', links: [{ text: 'IOS', link: '/mobileApp/ios' }, { text: 'Android', link: '/mobileApp/android' }] },
@@ -57,7 +57,7 @@ const links = [
 
 const linksMobile = [
     { title: 'КЛИЕНТАМ', links: [{ text: 'О бренде', link: '/brand' }, { text: 'Новинки', link: '/catalog?filter=new' }, { text: 'Каталог', link: '/catalog' }] },
-    { title: 'Информация', links: [{ text: 'Частые вопросы', link: '/faq' }, { text: 'Доставка', link: '/delivery' }] },
+    { title: 'Информация', links: [{ text: 'Частые вопросы', link: '/faq' }, { text: 'Доставка', link: '/delivery' }, { text: 'Контакты', link: '/kontakty' }] },
     { title: 'Документация', links: [{ text: 'Политика конфиденциальности', link: '/documents/policy' }, { text: 'Пользовательское соглашение', link: '/documents/agreement' }, { text: 'Обратная связь', link: '/feedback' }] },
     { title: 'Соц сети', links: [{ text: 'Telegram', link: 'https://t.me/miAlegriaru' }, { text: 'WhatsApp', link: 'https://wa.me/79165850585' }, { text: 'ВКонтакте', link: 'https://vk.com/mialegriashop' }] },
     { title: 'МОБИЛЬНАЯ ВЕРСИЯ', links: [{ text: 'IOS', link: '/mobileApp/ios' }, { text: 'Android', link: '/mobileApp/android' }] },

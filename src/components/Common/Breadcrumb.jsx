@@ -51,6 +51,10 @@ export default function Breadcrumb() {
                 array.push({ text: 'Пользовательское соглашение', link: '/documents/policy' });
                 setBreadcrumbsArray(array);
                 break;
+            case '/kontakty':
+                array.push({ text: 'Контакты', link: '/kontakty' });
+                setBreadcrumbsArray(array);
+                break;
         }
     }, [router.pathname, id]);
 
