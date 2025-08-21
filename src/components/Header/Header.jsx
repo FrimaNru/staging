@@ -1,5 +1,6 @@
 import styles from "@/styles/Header.module.css";
 import Link from "next/link";
+import { buildProductSlug } from "@/lib/seo";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AuthModal, Authorization } from "@/components";
@@ -97,7 +98,7 @@ export default function Header() {
                     <>
                         {products.filter(item => item.name.toLowerCase().includes(search.toLowerCase())).map((x, i) => {
                             return (
-                                <Link key={i} href={`/product?id=${x._id}`}>
+                                <Link key={i} href={`/product/${buildProductSlug(x)}`}>
                                     <div className={styles.inputPanelLine}>
                                         <img
                                             src={x.cover}
@@ -146,7 +147,7 @@ export default function Header() {
 function DrawerBlock({ isOpenDrawer, setIsOpenDrawer, pathname }) {
 
     const [state, setState] = useState(false);
-    const typeCatalog = [{ text: 'Все изделия', link: 'catalog' }, { text: 'Кольца', link: 'catalog?product=ring' }, { text: 'Серьги', link: 'catalog?product=earrings' }, { text: 'Браслеты', link: 'catalog?product=bracelets' }, { text: 'Колье', link: 'catalog?product=necklace' }];
+    const typeCatalog = [{ text: 'Все изделия', link: 'catalog' }, { text: 'Кольца', link: 'catalog/kolcza' }, { text: 'Серьги', link: 'catalog/sergi' }, { text: 'Браслеты', link: 'catalog/braslety' }, { text: 'Колье', link: 'catalog/kole' }];
 
     return <Drawer isOpen={isOpenDrawer} placement='right' autoFocus={false} onClose={() => setIsOpenDrawer(false)} size='full' >
         <DrawerContent bg='white' h='calc(100% - 63px)' mt='63px' w='100%'>
@@ -196,7 +197,7 @@ function SearchDrawerBlock({ isSearchOpen, setIsSearchOpen, products }) {
                         </div>
                     </Link>
                     <>
-                        {products.map((x, i) => x.name.includes(search) && <Link key={i} href={`/product?id=${x._id}`} onClick={() => setIsSearchOpen(false)} >
+                        {products.map((x, i) => x.name.includes(search) && <Link key={i} href={`/product/${buildProductSlug(x)}`} onClick={() => setIsSearchOpen(false)} >
                             <div className={styles.inputPanelLine} >
                                 <img src={x.cover} className={styles.inputPanelCover} />
                                 <p className={styles.inputPanelName}>{x.name}</p>

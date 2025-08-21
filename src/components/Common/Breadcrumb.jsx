@@ -5,6 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../../apiConfig";
 import { capitalizeFirstLetter } from "@/lib/Formatting";
+import { mapSlugToProductType, buildProductSlug } from "@/lib/seo";
 
 export default function Breadcrumb() {
     const router = useRouter();
@@ -15,10 +16,31 @@ export default function Breadcrumb() {
     useEffect(() => {
         let array = [{ text: 'Главная', link: '/' }];
 
-        switch (router.pathname) {
+        const asPath = router.asPath.split('?')[0] || router.pathname;
+        switch (asPath) {
             case '/catalog':
-                array.push({ text: 'Каталог', link: router.pathname });
+                array.push({ text: 'Каталог', link: '/catalog' });
                 setBreadcrumbsArray(array);
+                break;
+            default:
+                // Каталог по слугу: /catalog/<slug>
+                if (asPath.startsWith('/catalog/')) {
+                    const slug = asPath.replace('/catalog/', '');
+                    const type = mapSlugToProductType(slug);
+                    array.push({ text: 'Каталог', link: '/catalog' });
+                    if (type) {
+                        const typeText = type === 'ring' ? 'Кольца' : type === 'necklace' ? 'Колье' : type === 'earrings' ? 'Серьги' : type === 'bracelets' ? 'Браслеты' : '';
+                        if (typeText) array.push({ text: typeText, link: `/catalog/${slug}` });
+                    }
+                    setBreadcrumbsArray(array);
+                    break;
+                }
+                // Товар по слугу: /product/<slug>
+                if (asPath.startsWith('/product/')) {
+                    array.push({ text: 'Каталог', link: '/catalog' });
+                    setBreadcrumbsArray(array);
+                    break;
+                }
                 break;
             case '/product':
                 array.push({ text: 'Каталог', link: '/catalog' });
@@ -26,7 +48,7 @@ export default function Breadcrumb() {
 
                 axios.post(`${API_BASE_URL}getOneProduct`, { id })
                     .then((res) => {
-                        array.push({ text: res.data?.name, link: `/product?id=${res.data?._id}` });
+                        array.push({ text: res.data?.name, link: `/product/${buildProductSlug(res.data)}` });
                         setBreadcrumbsArray([...array]);
                     })
                     .catch((e) => console.log(e));
@@ -56,7 +78,7 @@ export default function Breadcrumb() {
                 setBreadcrumbsArray(array);
                 break;
         }
-    }, [router.pathname, id]);
+    }, [router.asPath, id]);
 
     return (
         <div className={styles.breadcrumbLine} data-breadcrumbs>

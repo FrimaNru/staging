@@ -1,28 +1,52 @@
 import { Footer } from "@/components";
-import Catalog from "@/components/Catalog/Catalog";
-import Header from "@/components/Header/Header";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { getCanonicalUrl } from "@/lib/seo";
+import PopularBlock from "@/components/PopularBlock/PopularBlock";
+import Header from "@/components/Header/Header";
+import { PRODUCT_TYPES } from "@/constants/items";
+import Product from "@/components/Product/Product";
+import { useProducts } from "@/contexts/ProductsContext";
+import { useMemo } from "react";
+import { buildProductSlug } from "@/lib/seo";
 
-export default function CatalogPage() {
+export default function ProductPageBySlug() {
     const router = useRouter();
-    const { page } = router.query;
-    const currentPage = parseInt(page) || 1;
+    const { slug } = router.query;
+    const { products, loading } = useProducts();
 
-    
-    const canonicalUrl = getCanonicalUrl('/catalog');
+    const product = useMemo(() => {
+        if (!slug || !Array.isArray(products)) return null;
+        return products.find((p) => buildProductSlug(p) === slug) || null;
+    }, [slug, products]);
+
+    if (loading || !router.isReady) {
+        return (
+            <div style={{ textAlign: 'center', marginTop: '50px' }}>
+                <h1>Загрузка...</h1>
+            </div>
+        );
+    }
+
+    if (!product) {
+        return (
+            <div style={{ textAlign: 'center', marginTop: '50px' }}>
+                <h1>Товар не найден</h1>
+            </div>
+        );
+    }
 
     return (
         <>
             <Head>
-                <title>Каталог Ювелирных Изделий – Mi Alegria</title>
-                <meta name="description" content='Откройте для себя наш каталог ювелирных изделий: золотые и серебряные кольца, серьги, браслеты и подвески. Найдите идеальное украшение на любой случай!' />
+                <title>
+                    {(PRODUCT_TYPES[product.type] || 'Украшение')} {product.name} – цена, купить в Mi Alegria
+                </title>
+                <meta
+                    name="description"
+                    content={`Каталог премиальной бижутерии Mi Alegria. ${(PRODUCT_TYPES[product.type] || 'Украшение')} ${product.name} – цена, купить в Mi Alegria. ✔ Высокое качество, эксклюзивный дизайн ✔ Бесплатная доставка и гарантия на все ювелирные изделия.`}
+                />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                
-                    
-                <link rel="canonical" href={canonicalUrl} />
-                
+
                 <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />
                 <link rel="apple-touch-icon" sizes="60x60" href="/faviconsWithBg.ico/apple-icon-60x60.png" />
                 <link rel="apple-touch-icon" sizes="72x72" href="/faviconsWithBg.ico/apple-icon-72x72.png" />
@@ -43,10 +67,12 @@ export default function CatalogPage() {
                 <meta name="msapplication-TileImage" content="/faviconsNoBg/ms-icon-144x144.png" />
                 <meta name="theme-color" content="#EEEEEE" />
             </Head>
+
             <center>
                 <main>
                     <Header />
-                    <Catalog initialPage={currentPage} />
+                    <Product product={product} />
+                    <PopularBlock />
                     <Footer />
                 </main>
             </center>
@@ -55,27 +81,3 @@ export default function CatalogPage() {
 }
 
 
-export async function getStaticPaths() {
-    
-    const paths = [];
-    
-    for (let i = 2; i <= 10; i++) {
-        paths.push({
-            params: { page: i.toString() }
-        });
-    }
-    
-    return {
-        paths,
-        fallback: 'blocking' 
-    };
-}
-
-export async function getStaticProps({ params }) {
-    return {
-        props: {
-            page: params.page
-        },
-        revalidate: 60 
-    };
-}

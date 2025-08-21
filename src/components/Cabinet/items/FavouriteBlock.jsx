@@ -90,12 +90,12 @@ export default function FavouriteBlock() {
                 {data.map((x, i) => <div key={i} className={styles.column} >
                     <div className={styles.item}>
                         <div className={styles.itemRow}>
-                            <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
+                            <Link href={`/product/${(x?.type === 'ring' ? 'kolcza' : x?.type === 'necklace' ? 'kole' : x?.type === 'earrings' ? 'sergi' : 'braslety') + '-' + (x?.name || '').toLowerCase().replace(/\s+/g,'-')}`} style={{ width: 'max-content' }}>
                                 <img src={x?.cover} className={styles.itemImg} />
                             </Link>
                             <div className={styles.itemColumn}>
                                 <div className={styles.itemLilColumn}>
-                                    <Link href={`/product?id=${x?._id}`} style={{ width: 'max-content' }}>
+                                    <Link href={`/product/${(x?.type === 'ring' ? 'kolcza' : x?.type === 'necklace' ? 'kole' : x?.type === 'earrings' ? 'sergi' : 'braslety') + '-' + (x?.name || '').toLowerCase().replace(/\s+/g,'-')}`} style={{ width: 'max-content' }}>
                                         <p className={styles.itemName}>{x?.name}</p>
                                     </Link>
                                     <div className={styles.itemLilTextColumn}>

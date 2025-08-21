@@ -11,6 +11,7 @@ import ProductGrid from "./items/ProductGrid";
 import NoResults from "./items/NoResults";
 import AccordionFilters from "./items/AccordionFilters";
 import Pagination from "./items/Pagination";
+import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
 
 export default function Catalog({ initialPage = 1 }) {
     const { products, loading } = useProducts();
@@ -88,14 +89,53 @@ export default function Catalog({ initialPage = 1 }) {
             const newQuery = { ...router.query };
             delete newQuery.PAGEN_1;
             delete newQuery.page;
-            router.replace({
-                pathname: router.pathname,
-                query: newQuery
-            }, undefined, { shallow: true });
+            delete newQuery.slug;
+            delete newQuery.product;
+            const currentPathOnly = (router.asPath || '').split('?')[0] || '/catalog';
+            router.replace({ pathname: currentPathOnly, query: newQuery }, undefined, { shallow: true });
             
             prevFilters.current = currentFilters;
         }
     }, [stateSortItems, stateType, stateSales, text, router]);
+
+    // Отказ от query-параметров для типа: используем только путь /catalog/<slug>
+
+    // Обновляем URL при изменении фильтра типа изделия
+    useEffect(() => {
+        const typeMap = { 'Кольца': 'ring', 'Серьги': 'earrings', 'Браслеты': 'bracelets', 'Колье': 'necklace' };
+        const currentPath = router.asPath;
+        const slugInPath = /\/catalog\/\w+/.test(currentPath);
+
+        const cleanupQuery = (query) => {
+            const newQuery = { ...query };
+            delete newQuery.PAGEN_1;
+            delete newQuery.page;
+            delete newQuery.slug;
+            delete newQuery.product;
+            return newQuery;
+        };
+
+        const newQuery = cleanupQuery(router.query);
+
+        if (!stateType) {
+            // сброс типа -> /catalog
+            // только если в пути нет слуга раздела, иначе оставляем как есть
+            if (!slugInPath && !currentPath.startsWith('/catalog?') && currentPath !== '/catalog') {
+                router.replace({ pathname: '/catalog', query: newQuery }, undefined, { shallow: true });
+            }
+            return;
+        }
+
+        const typeCode = typeMap[stateType];
+        if (!typeCode) return;
+        const slug = mapProductTypeToSlug(typeCode);
+        const targetPath = `/catalog/${slug}`;
+
+        // только если путь реально меняется
+        if (!currentPath.startsWith(targetPath)) {
+            router.replace({ pathname: targetPath, query: newQuery }, undefined, { shallow: true });
+        }
+    }, [stateType, router]);
 
     useEffect(() => {
         if (filter === 'new') {
@@ -108,15 +148,28 @@ export default function Catalog({ initialPage = 1 }) {
     useEffect(() => {
         if (text) setSearch(true);
         if (window.location.href.includes('new')) setStateSales(old => [...old, 'Новинки']);
-        switch (product) {
-            case 'ring':
-                return setStateType('Кольца');
-            case 'necklace':
-                return setStateType('Колье');
-            case 'earrings':
-                return setStateType('Серьги');
-            case 'bracelets':
-                return setStateType('Браслеты');
+        // поддержка ЧПУ: /catalog/[slug] и /catalog?product=
+        const pathMatch = router.asPath.match(/\/catalog\/(\w+)/);
+        const slugFromPath = pathMatch ? pathMatch[1] : undefined;
+        const slug = slugFromPath || product;
+        if (slug) {
+            const normalizedType = mapSlugToProductType(slug);
+            switch (normalizedType) {
+                case 'ring':
+                    setStateType('Кольца');
+                    break;
+                case 'necklace':
+                    setStateType('Колье');
+                    break;
+                case 'earrings':
+                    setStateType('Серьги');
+                    break;
+                case 'bracelets':
+                    setStateType('Браслеты');
+                    break;
+                default:
+                    break;
+            }
         }
         const handleRouteChange = (url) => {
             if (window.location.href.includes('new')) {
@@ -129,7 +182,7 @@ export default function Catalog({ initialPage = 1 }) {
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
         };
-    }, [router, text]);
+    }, [router, text, product]);
 
     const filteredData = useMemo(() => {
         let d = [...products];
@@ -165,6 +218,8 @@ export default function Catalog({ initialPage = 1 }) {
         } else {
             newQuery.PAGEN_1 = page.toString();
         }
+        delete newQuery.slug;
+        delete newQuery.product;
         
         if (router.pathname.includes('/catalog/') && router.query.page) {
             router.replace({

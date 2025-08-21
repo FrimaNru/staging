@@ -94,7 +94,7 @@ export default function Product({ product }) {
                             <div className={styles.modalBody}>
                                 <div className={styles.modalBodyColumn}>
                                     <img src={product.cover} className={styles.modalBodyImg} />
-                                    <p className={styles.modalBodyTitle}>{product.name}</p>
+                                    <p className={styles.modalBodyTitle}>{PRODUCT_TYPES[product.type]} {product.name}</p>
                                 </div>
                                 <div className={styles.modalBodyColumnButtons}>
                                     <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)}>ПРОДОЛЖИТЬ ПОКУПКИ</button>

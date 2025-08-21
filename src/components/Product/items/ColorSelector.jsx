@@ -2,6 +2,7 @@ import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import styles from "@/styles/Product/Product.module.css";
 import { useRouter } from "next/navigation";
+import { buildProductSlug } from "@/lib/seo";
 
 export default function ColorSelector({ data, colorOfProduct, setColorOfProduct, setActiveCount }) {
 
@@ -26,7 +27,7 @@ export default function ColorSelector({ data, colorOfProduct, setColorOfProduct,
         </MenuButton>
         <MenuList p={0} border='none' boxShadow='none' mt='-35px' pos='relative' zIndex={0} >
             {data?.family?.length > 0 && [data.color, data.family[0]].map((x, i) => x !== colorOfProduct && <MenuItem p={0} key={i} _hover={{ bg: 'white' }}>
-                <div className={styles.menuItem} style={{ width }} onClick={() => router.push(`/product?id=${x._id}`)}>{x?.color}</div>
+                <div className={styles.menuItem} style={{ width }} onClick={() => router.push(`/product/${buildProductSlug(x)}`)}>{x?.color}</div>
             </MenuItem>)}
         </MenuList>
     </Menu>

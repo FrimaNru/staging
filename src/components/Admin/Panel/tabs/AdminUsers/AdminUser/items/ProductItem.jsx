@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "../../styles.module.css";
 import Link from "next/link";
 import { formatNumber } from "@/lib/Formatting";
+import { buildProductSlug } from "@/lib/seo";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../../apiConfig";
 
@@ -21,7 +22,7 @@ export default function ProductItem({ id }) {
         }
     };
 
-    return <Link href={`https://mi-alegria.shop/product?id=${data?._id}`} target="_blank">
+    return <Link href={`https://mi-alegria.shop/product/${buildProductSlug(data)}`} target="_blank">
         <div className={styles.productItem}>
             <img src={data?.cover} className={styles.productImg} />
             <p className={styles.subtitle}>{data?.name?.toUpperCase()}</p>

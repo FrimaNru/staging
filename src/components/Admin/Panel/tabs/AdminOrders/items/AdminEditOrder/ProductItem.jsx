@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../../../../../../../../apiConfig";
 import Link from "next/link";
 import { formatNumber } from "@/lib/Formatting";
+import { buildProductSlug } from "@/lib/seo";
 
 export default function ProductItem({ item }) {
 
@@ -22,7 +23,7 @@ export default function ProductItem({ item }) {
 
     if (!data) return <p>Загрузка...</p>;
 
-    return <Link href={`/product?id=${data._id}`} target="_blank">
+    return <Link href={`/product/${buildProductSlug(data)}`} target="_blank">
         <div className={styles.productItem}>
             <img src={data.cover} className={styles.productItemCover} />
             <div className={styles.productItemColumn}>

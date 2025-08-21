@@ -3,12 +3,14 @@ import Link from "next/link";
 import { FavouriteButton } from "@/components";
 import { formatNumber } from "@/lib/Formatting";
 import { PRODUCT_TYPES } from "@/constants/items";
+import { buildProductSlug } from "@/lib/seo";
 
 export default function ProductItem({ product }) {
+    const slug = buildProductSlug(product);
     return (
         <div className={styles.sliderItem}>
             <div className={styles.sliderItemContent}>
-                <Link href={`/product?id=${product._id}`} className={styles.sliderItemLink}>
+                <Link href={`/product/${slug}`} className={styles.sliderItemLink}>
                     <img src={product.cover} className={styles.sliderItemImage} />
                 </Link>
                 <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[product.type]} {product.name}</p>

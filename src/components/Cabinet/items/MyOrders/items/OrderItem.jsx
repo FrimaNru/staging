@@ -6,6 +6,7 @@ import { formatDate, formatNumber } from "@/lib/Formatting";
 import { useRouter } from "next/router";
 import { useUser } from "@/contexts/UserContext";
 import { selectOrderStatus } from "@/constants/constants.text";
+import { buildProductSlug } from "@/lib/seo";
 
 export default function OrderItem({ item, index }) {
 
@@ -113,7 +114,7 @@ function ProductItemOrder({ item, count }) {
             .catch((e) => console.log(e));
     };
 
-    return <div className={styles.item} onClick={() => router.push(`/product?id=${data._id}`)} >
+    return <div className={styles.item} onClick={() => router.push(`/product/${buildProductSlug(data)}`)} >
         <div className={styles.itemRow}>
             <img src={data?.cover} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>

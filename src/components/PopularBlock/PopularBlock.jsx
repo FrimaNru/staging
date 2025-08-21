@@ -7,6 +7,7 @@ import Link from "next/link";
 import { formatNumber } from "@/lib/Formatting";
 import { FavouriteButton } from "../Common/FavouriteButton";
 import { PRODUCT_TYPES } from "@/constants/items";
+import { buildProductSlug } from "@/lib/seo";
 
 function SampleNextArrow(props) {
     const { onClick } = props;
@@ -92,43 +93,49 @@ export default function PopularBlock() {
 
         <div className={styles.sliderBlock}>
             {data.length > 1 && <Slider {...settings}>
-                {data.map((x, i) => <div className={styles.sliderItem} key={i}>
-                    <div className={styles.sliderItemContent}>
-                        <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
-                            <img src={x.cover} className={styles.sliderItemImage} />
-                        </Link>
-                        <div className={styles.sliderItemColumn}>
-                            <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[x.type]} {x.name}</p>
-                            <p className={styles.sliderItemText}>Артикул: {x.article}</p>
-                        </div>
-                        <div className={styles.productItemCostLine}>
-                            <div className={styles.productItemCostEmpty} />
-                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
-                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
+                {data.map((x, i) => {
+                    const slug = buildProductSlug(x);
+                    return <div className={styles.sliderItem} key={i}>
+                        <div className={styles.sliderItemContent}>
+                            <Link style={{ width: 'max-content' }} href={`/product/${slug}`}>
+                                <img src={x.cover} className={styles.sliderItemImage} />
+                            </Link>
+                            <div className={styles.sliderItemColumn}>
+                                <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[x.type]} {x.name}</p>
+                                <p className={styles.sliderItemText}>Артикул: {x.article}</p>
+                            </div>
+                            <div className={styles.productItemCostLine}>
+                                <div className={styles.productItemCostEmpty} />
+                                <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                                <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
+                            </div>
                         </div>
                     </div>
-                </div>)}
+                })}
             </Slider>}
         </div >
 
         <div className={styles.sliderBlockMobile}>
             {data.length > 1 && <Slider {...settingsMobile}>
-                {data.map((x, i) => <div className={styles.sliderItem} key={i}>
-                    <div className={styles.sliderItemContent}>
-                        <Link style={{ width: 'max-content' }} href={`/product?id=${x._id}`}>
-                            <img src={x.cover} className={styles.sliderItemImage} />
-                        </Link>
-                        <div className={styles.sliderItemColumn}>
-                            <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[x.type]} {x.name}</p>
-                            <p className={styles.sliderItemText}>Артикул: {x.article}</p>
-                        </div>
-                        <div className={styles.productItemCostLine}>
-                            <div className={styles.productItemCostEmpty} />
-                            <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
-                            <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
+                {data.map((x, i) => {
+                    const slug = buildProductSlug(x);
+                    return <div className={styles.sliderItem} key={i}>
+                        <div className={styles.sliderItemContent}>
+                            <Link style={{ width: 'max-content' }} href={`/product/${slug}`}>
+                                <img src={x.cover} className={styles.sliderItemImage} />
+                            </Link>
+                            <div className={styles.sliderItemColumn}>
+                                <p className={styles.sliderItemTitle}>{PRODUCT_TYPES[x.type]} {x.name}</p>
+                                <p className={styles.sliderItemText}>Артикул: {x.article}</p>
+                            </div>
+                            <div className={styles.productItemCostLine}>
+                                <div className={styles.productItemCostEmpty} />
+                                <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                                <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
+                            </div>
                         </div>
                     </div>
-                </div>)}
+                })}
             </Slider>}
         </div>
     </div >

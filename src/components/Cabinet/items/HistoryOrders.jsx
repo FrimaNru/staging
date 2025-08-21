@@ -6,6 +6,7 @@ import styles from "@/styles/HistoryOrders.module.css";
 import Link from "next/link";
 import { formatNumber } from "@/lib/Formatting";
 import { formatDate } from "@/lib/Formatting";
+import { buildProductSlug } from "@/lib/seo";
 
 export default function HistoryOrders() {
 
@@ -140,7 +141,7 @@ function ProductItemHistory({ item }) {
             .catch((e) => console.log(e));
     };
 
-    return <Link href={`/product?id=${data?._id}`}><img src={data?.cover?.length > 0 && data?.cover[activeCount]} className={styles.itemCover} /></Link>
+    return <Link href={`/product/${buildProductSlug(data)}`}><img src={data?.cover?.length > 0 && data?.cover[activeCount]} className={styles.itemCover} /></Link>
 };
 
 function ProductItemOrderHistory({ item, count }) {
@@ -165,7 +166,7 @@ function ProductItemOrderHistory({ item, count }) {
 
     if (!data) return;
 
-    return <div className={styles.itemHistory} onClick={() => router.push(`/product?id=${data._id}`)} >
+    return <div className={styles.itemHistory} onClick={() => router.push(`/product/${buildProductSlug(data)}`)} >
         <div className={styles.itemRowHistory}>
             <img src={data?.cover?.length > 0 && data.cover[activeCount]} className={styles.itemCoverHistory} />
             <div className={styles.itemTextColumnHistory}>

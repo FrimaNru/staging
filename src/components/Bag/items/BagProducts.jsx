@@ -3,9 +3,11 @@ import styles from "../styles.module.css";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useEffect, useState } from "react";
-import { useToast } from "@chakra-ui/react";
+import { useDisclosure, useToast } from "@chakra-ui/react";
 import { formatNumber } from "@/lib/Formatting";
 import { useProducts } from "@/contexts/ProductsContext";
+import { PRODUCT_TYPES } from "@/constants/items";
+import { AuthModal } from "@/components/Header/items/AuthModal";
 
 export default function BagProducts({ load, total, setTotal }) {
 
@@ -36,6 +38,7 @@ function ProductItem({ item, count, load }) {
     const { products } = useProducts();
     const toast = useToast();
     const { removeFromCart, addToCart } = useCart();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     useEffect(() => {
         setDataProduct(products.filter(product => product._id === item.id)[0]);
@@ -55,16 +58,18 @@ function ProductItem({ item, count, load }) {
     };
 
     const deleteProduct = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            onOpen();
+            return;
+        }
         try {
             removeFromCart(item.id, 'all');
 
-            const token = localStorage.getItem('token');
-            if (token) {
-                const url = `${API_BASE_URL}deleteProductFromBag`;
-                await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                    Authorization: `Bearer ${token}`
-                });
-            }
+            const url = `${API_BASE_URL}deleteProductFromBag`;
+            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                Authorization: `Bearer ${token}`
+            });
 
             toast({
                 position: 'bottom-right',
@@ -78,17 +83,18 @@ function ProductItem({ item, count, load }) {
     };
 
     const plusProduct = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            onOpen();
+            return;
+        }
         try {
             addToCart({ id: item.id, size: item.size, color: item.color, article: item.article });
 
-            const token = localStorage.getItem('token');
-            if (token) {
-
-                const url = `${API_BASE_URL}plusProductToBag`;
-                await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                    Authorization: `Bearer ${token}`
-                });
-            }
+            const url = `${API_BASE_URL}plusProductToBag`;
+            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                Authorization: `Bearer ${token}`
+            });
 
             load();
         } catch (error) {
@@ -97,18 +103,19 @@ function ProductItem({ item, count, load }) {
     };
 
     const minusProduct = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            onOpen();
+            return;
+        }
         try {
             removeFromCart(item.id, 'one');
 
-            const token = localStorage.getItem('token');
-            if (token) {
+            const url = `${API_BASE_URL}minusProductFromBag`;
+            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                Authorization: `Bearer ${token}`
+            });
 
-                const url = `${API_BASE_URL}minusProductFromBag`;
-                await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                    Authorization: `Bearer ${token}`
-                });
-            }
-            
             load();
         } catch (error) {
             console.error("Ошибка при уменьшении количества продукта:", error.message || error);
@@ -121,7 +128,7 @@ function ProductItem({ item, count, load }) {
             <div className={styles.itemTextColumn}>
                 <div className={styles.itemNameLine}>
                     <div className={styles.itemNameColumn}>
-                        <p className={styles.itemName}>{data?.name?.length > 0 && data?.name}</p>
+                        <p className={styles.itemName}>{data.type && PRODUCT_TYPES[data.type]} {data?.name?.length > 0 && data?.name}</p>
                         <p className={styles.itemNameStat}>Артикул: {item.article}</p>
                         <p className={styles.itemNameStat}>Цвет: {item.color}</p>
                         {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}
@@ -153,5 +160,6 @@ function ProductItem({ item, count, load }) {
             </div>
             <img src='/cross.svg' className={styles.itemCross} onClick={deleteProduct} />
         </div>
+        <AuthModal isOpen={isOpen} onClose={onClose} />
     </div>
 };
