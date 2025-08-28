@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "../styles.module.css";
+import styles from "@/styles/Admin/Products/Products.module.css";
 import { useRouter } from "next/router";
 import { useDisclosure } from "@chakra-ui/react";
 import CustomMenu from "@/components/Common/Menu/Menu";
