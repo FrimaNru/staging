@@ -5,14 +5,7 @@ const nextConfig = {
   
   // Настройки для SEO и пагинации
   async redirects() {
-    return [
-      // Редирект со старых URL пагинации на новые
-      {
-        source: '/catalog/:page',
-        destination: '/catalog?PAGEN_1=:page',
-        permanent: true,
-      },
-    ];
+    return [];
   },
   
   // Настройки для генерации статических страниц

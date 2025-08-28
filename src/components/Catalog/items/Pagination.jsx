@@ -51,21 +51,21 @@ export default function Pagination({ currentPage, totalPages }) {
     };
     
     const getPageUrl = (page) => {
+        const currentPath = router.asPath.split('?')[0]; // Получаем текущий путь без query
+        
         if (page === 1) {
-            
             const newQuery = { ...router.query };
             delete newQuery.PAGEN_1;
             delete newQuery.page;
             
             const queryString = new URLSearchParams(newQuery).toString();
-            return queryString ? `/catalog?${queryString}` : '/catalog';
+            return queryString ? `${currentPath}?${queryString}` : currentPath;
         } else {
-            
             const newQuery = { ...router.query };
             newQuery.PAGEN_1 = page.toString();
             
             const queryString = new URLSearchParams(newQuery).toString();
-            return `/catalog?${queryString}`;
+            return `${currentPath}?${queryString}`;
         }
     };
 
@@ -78,8 +78,10 @@ export default function Pagination({ currentPage, totalPages }) {
         delete newQuery.PAGEN_1;
         delete newQuery.page;
         
+        const currentPath = router.asPath.split('?')[0];
+        
         router.push({
-            pathname: '/catalog',
+            pathname: currentPath,
             query: newQuery
         }).then(() => {
             scrollToBreadcrumbs();
@@ -90,19 +92,19 @@ export default function Pagination({ currentPage, totalPages }) {
         e.preventDefault();
         
         if (currentPage === 2) {
-            
             const newQuery = { ...router.query };
             delete newQuery.PAGEN_1;
             delete newQuery.page;
             
+            const currentPath = router.asPath.split('?')[0];
+            
             router.push({
-                pathname: '/catalog',
+                pathname: currentPath,
                 query: newQuery
             }).then(() => {
                 scrollToBreadcrumbs();
             });
         } else {
-            
             window.location.href = getPageUrl(currentPage - 1);
         }
     };

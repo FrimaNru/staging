@@ -51,7 +51,7 @@ export default function Catalog({ initialPage = 1 }) {
                     }
                 }, 100);
             }
-        } else if (router.pathname.includes('/catalog/') && router.query.page) {
+        } else if (router.asPath.includes('/catalog/') && router.query.page) {
             const page = parseInt(router.query.page);
             if (page > 0) {
                 setCurrentPage(page);
@@ -72,7 +72,7 @@ export default function Catalog({ initialPage = 1 }) {
         } else {
             setCurrentPage(1);
         }
-    }, [PAGEN_1, router.query.page, router.pathname]);
+    }, [PAGEN_1, router.query.page, router.asPath]);
 
     useEffect(() => {
         const currentFilters = { stateSortItems, stateType, stateSales, text };
@@ -193,6 +193,11 @@ export default function Catalog({ initialPage = 1 }) {
             d.sort((a, b) => b.cost - a.cost);
         }
 
+        // Фильтр для новинок (работает на всех страницах каталога)
+        if (stateSales.includes('Новинки')) {
+            d = d.filter(x => x.additionally.includes('new'));
+        }
+
         if (stateSales.includes('Популярное')) {
             d = d.filter(x => x.additionally.includes('popular'));
         };
@@ -221,17 +226,12 @@ export default function Catalog({ initialPage = 1 }) {
         delete newQuery.slug;
         delete newQuery.product;
         
-        if (router.pathname.includes('/catalog/') && router.query.page) {
-            router.replace({
-                pathname: '/catalog',
-                query: newQuery
-            }, undefined, { shallow: true });
-        } else {
-            router.replace({
-                pathname: router.pathname,
-                query: newQuery
-            }, undefined, { shallow: true });
-        }
+        // Use the actual current path (e.g., '/catalog/kolcza') rather than the route pattern '/catalog/[slug]'
+        const currentPathOnly = (router.asPath || '').split('?')[0] || '/catalog';
+        router.replace({
+            pathname: currentPathOnly,
+            query: newQuery
+        }, undefined, { shallow: true });
     };
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -244,13 +244,23 @@ export default function Catalog({ initialPage = 1 }) {
             <Banner />
             <div className={styles.mainColumn} data-catalog-content>
                 <Breadcrumb />
-                <h1 className={styles.title}>{isNewPage ? 'НОВИНКИ' : 'КАТАЛОГ'}</h1>
+                <h1 className={styles.title}>
+                    {isNewPage ? 'НОВИНКИ' : 
+                     stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
+                </h1>
                 <div className={styles.row}>
                     <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} />
                     <div className={styles.catalogColumn}>
                         <SortSection stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} sortItems={sortItems} />
                         <div className={styles.columnOrders}>
                             {search && filteredData.length === 0 && <NoResults text={text} />}
+                            {stateSales.includes('Новинки') && stateType && filteredData.length === 0 && (
+                                <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+                                    <p style={{ fontSize: '18px', color: '#666' }}>
+                                        К сожалению, в разделе "{stateType}" пока нет новинок
+                                    </p>
+                                </div>
+                            )}
                             <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
                             <ProductGrid filteredData={currentItems} />
 

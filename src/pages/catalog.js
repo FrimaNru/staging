@@ -12,8 +12,8 @@ export default function Delivery() {
     return (
         <>
             <Head>
-                <title>Каталог Ювелирных Изделий – Mi Alegria</title>
-                <meta name="description" content='Откройте для себя наш каталог ювелирных изделий: золотые и серебряные кольца, серьги, браслеты и подвески. Найдите идеальное украшение на любой случай!' />
+                <title>Элитная бижутерия класса люкс – купить в Москве в интернет-магазине Mi Alegria</title>
+                <meta name="description" content="Купить брендовую бижутерию в Москве – цены в интернет-магазине Mi Alegria ✔ Доставка и гарантия на все ювелирные изделия ✔Элитная бижутерия класса люкс для создания неповторимого образа" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                     
                     

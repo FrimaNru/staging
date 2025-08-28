@@ -1,8 +1,10 @@
-import styles from "@/styles/Admin/Products/Products.module.css";
+import { useEffect, useState } from "react";
+import styles from "../styles.module.css";
+import { useRouter } from "next/router";
+import { useDisclosure } from "@chakra-ui/react";
 import CustomMenu from "@/components/Common/Menu/Menu";
 import Input from "@/ui/Inputs/Input/Input";
 import Button from "@/ui/Button/Button";
-import { useRouter } from "next/navigation";
 import CircleCheckBox from "@/ui/CircleCheckbox/CircleCheckbox";
 
 const sortTypes = ['Все виды', 'Кольца', 'Серьги', 'Браслеты', 'Колье'];

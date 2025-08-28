@@ -5,7 +5,7 @@ import { API_BASE_URL } from "../../../../../../apiConfig";
 import { useToast } from '@chakra-ui/react';
 import Button from "@/ui/Button/Button";
 import Input from "@/ui/Inputs/Input/Input";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function AdminDashboard() {
 

@@ -1,8 +1,8 @@
 import Input from "@/ui/Inputs/Input/Input";
 import styles from "../styles.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/ui/Button/Button";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { Modal, ModalContent, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../apiConfig";

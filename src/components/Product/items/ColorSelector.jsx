@@ -1,7 +1,7 @@
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import styles from "@/styles/Product/Product.module.css";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { buildProductSlug } from "@/lib/seo";
 
 export default function ColorSelector({ data, colorOfProduct, setColorOfProduct, setActiveCount }) {
