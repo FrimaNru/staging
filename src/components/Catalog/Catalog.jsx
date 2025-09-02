@@ -11,7 +11,8 @@ import ProductGrid from "./items/ProductGrid";
 import NoResults from "./items/NoResults";
 import AccordionFilters from "./items/AccordionFilters";
 import Pagination from "./items/Pagination";
-import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
+import SubcategoryCards from "./items/SubcategoryCards";
+import { mapSlugToProductType, mapProductTypeToSlug, buildProductSlug } from "@/lib/seo";
 
 export default function Catalog({ initialPage = 1 }) {
     const { products, loading } = useProducts();
@@ -210,6 +211,167 @@ export default function Catalog({ initialPage = 1 }) {
 
         if (stateType in typeMap) { d = d.filter(x => x.type === typeMap[stateType]); };
 
+        // Фильтр для подкатегорий серег
+        if (router.asPath.includes('/sergi/dlinnye')) {
+            const longEarringsSlugs = [
+                'sergi-zhanna-zolotaya',
+                'sergi-zhanna-serebryanaya',
+                'sergi-beatris-zolotaya',
+                'sergi-beatris-serebryanaya',
+                'sergi-blanka-zolotaya',
+                'sergi-blanka-serebryanaya',
+                'sergi-veronika-zolotaya',
+                'sergi-veronika-serebryanaya',
+                'sergi-marisa-zolotaya',
+                'sergi-marisa-serebryanaya',
+                'sergi-eliana-zolotaya',
+                'sergi-eliana-serebryanaya',
+                'sergi-gloriya-zolotaya',
+                'sergi-gloriya-serebryanaya',
+                'sergi-laura-zolotaya',
+                'sergi-laura-serebryanaya'
+            ];
+            d = d.filter(product => {
+                const productSlug = buildProductSlug(product);
+                return longEarringsSlugs.includes(productSlug);
+            });
+        } else if (router.asPath.includes('/sergi/krupnye')) {
+            const largeEarringsSlugs = [
+                'sergi-roza-zolotaya',
+                'sergi-roza-serebryanaya',
+                'sergi-karmen-zolotaya',
+                'sergi-karmen-serebryanaya',
+                'sergi-izabel-zolotaya',
+                'sergi-izabel-serebryanaya',
+                'sergi-ester-zolotaya',
+                'sergi-ester-serebryanaya'
+            ];
+            d = d.filter(product => {
+                const productSlug = buildProductSlug(product);
+                return largeEarringsSlugs.includes(productSlug);
+            });
+        } else if (router.asPath.includes('/sergi/pod-zoloto')) {
+            const goldEarringsSlugs = [
+                'sergi-roza-zolotaya',
+                'sergi-zhanna-zolotaya',
+                'sergi-karmen-zolotaya',
+                'sergi-izabel-zolotaya',
+                'sergi-ester-zolotaya',
+                'sergi-marta-zolotaya',
+                'sergi-anna-zolotaya',
+                'sergi-sofiya-zolotaya',
+                'sergi-beatris-zolotaya',
+                'sergi-blanka-zolotaya',
+                'sergi-francheska-zolotaya',
+                'sergi-alegra-zolotaya',
+                'sergi-lidiana-zolotaya',
+                'sergi-ramona-zolotaya',
+                'sergi-veronika-zolotaya',
+                'sergi-karmita-zolotaya',
+                'sergi-marisa-zolotaya',
+                'sergi-eliana-zolotaya',
+                'sergi-gloriya-zolotaya',
+                'sergi-laura-zolotaya',
+                'sergi-viktori-zolotaya'
+            ];
+            d = d.filter(product => {
+                const productSlug = buildProductSlug(product);
+                return goldEarringsSlugs.includes(productSlug);
+            });
+        } else if (router.asPath.includes('/sergi/pod-serebro')) {
+            const silverEarringsSlugs = [
+                'sergi-roza-serebryanaya',
+                'sergi-zhanna-serebryanaya',
+                'sergi-karmen-serebryanaya',
+                'sergi-izabel-serebryanaya',
+                'sergi-ester-serebryanaya',
+                'sergi-marta-serebryanaya',
+                'sergi-anna-serebryanaya',
+                'sergi-beatris-serebryanaya',
+                'sergi-blanka-serebryanaya',
+                'sergi-francheska-serebryanaya',
+                'sergi-alegra-serebryanaya',
+                'sergi-lidiana-serebryanaya',
+                'sergi-ramona-serebryanaya',
+                'sergi-veronika-serebryanaya',
+                'sergi-karmita-serebryanaya',
+                'sergi-marisa-serebryanaya',
+                'sergi-eliana-serebryanaya',
+                'sergi-gloriya-serebryanaya',
+                'sergi-laura-serebryanaya',
+                'sergi-viktori-serebryanaya'
+            ];
+            d = d.filter(product => {
+                const productSlug = buildProductSlug(product);
+                return silverEarringsSlugs.includes(productSlug);
+            });
+        }
+        
+        // Фильтр для подкатегорий колец
+        if (router.asPath.includes('/kolcza/krupnye')) {
+            const largeRingsIds = [
+                '67b0bc9acf861107a9eb6c42',
+                '67b0bc9acf861107a9eb6c44',
+                '67b0bc9acf861107a9eb6c49',
+                '67b0bc9acf861107a9eb6c4b',
+                '67b0bc9bcf861107a9eb6c65',
+                '67b0bc9bcf861107a9eb6c67',
+                '67b0bc9bcf861107a9eb6c6c',
+                '67b0bc9bcf861107a9eb6c6e',
+                '67b0bc9bcf861107a9eb6c73',
+                '67b0bc9bcf861107a9eb6c75',
+                '67b0bc9ccf861107a9eb6c7a',
+                '67b0bc9ccf861107a9eb6c7c',
+                '67b0bc9ccf861107a9eb6c8f',
+                '67b0bc9ccf861107a9eb6c91',
+                '67b0bc9dcf861107a9eb6c96',
+                '67b0bc9dcf861107a9eb6c98',
+                '67b0bc9dcf861107a9eb6c9d',
+                '67b0bc9dcf861107a9eb6c9f',
+                '67b0bc9dcf861107a9eb6ca4',
+                '67b0bc9dcf861107a9eb6ca6'
+            ];
+            d = d.filter(product => largeRingsIds.includes(product._id));
+        } else if (router.asPath.includes('/kolcza/pod-zoloto')) {
+            const goldRingsIds = [
+                '67b0bc9acf861107a9eb6c42',
+                '67b0bc9acf861107a9eb6c49',
+                '67b0bc9acf861107a9eb6c50',
+                '67b0bc9acf861107a9eb6c57',
+                '67b0bc9bcf861107a9eb6c5e',
+                '67b0bc9bcf861107a9eb6c65',
+                '67b0bc9bcf861107a9eb6c6c',
+                '67b0bc9bcf861107a9eb6c73',
+                '67b0bc9ccf861107a9eb6c7a',
+                '67b0bc9ccf861107a9eb6c81',
+                '67b0bc9ccf861107a9eb6c88',
+                '67b0bc9ccf861107a9eb6c8f',
+                '67b0bc9dcf861107a9eb6c96',
+                '67b0bc9dcf861107a9eb6c9d',
+                '67b0bc9dcf861107a9eb6ca4'
+            ];
+            d = d.filter(product => goldRingsIds.includes(product._id));
+        } else if (router.asPath.includes('/kolcza/pod-serebro')) {
+            const silverRingsIds = [
+                '67b0bc9acf861107a9eb6c44',
+                '67b0bc9acf861107a9eb6c4b',
+                '67b0bc9acf861107a9eb6c52',
+                '67b0bc9acf861107a9eb6c59',
+                '67b0bc9bcf861107a9eb6c60',
+                '67b0bc9bcf861107a9eb6c67',
+                '67b0bc9bcf861107a9eb6c6e',
+                '67b0bc9bcf861107a9eb6c75',
+                '67b0bc9ccf861107a9eb6c7c',
+                '67b0bc9ccf861107a9eb6c83',
+                '67b0bc9ccf861107a9eb6c8a',
+                '67b0bc9ccf861107a9eb6c91',
+                '67b0bc9dcf861107a9eb6c98',
+                '67b0bc9dcf861107a9eb6c9f',
+                '67b0bc9dcf861107a9eb6ca6'
+            ];
+            d = d.filter(product => silverRingsIds.includes(product._id));
+        }
+
         return d;
     }, [products, stateSortItems, stateType, stateSales, text]);
 
@@ -246,11 +408,19 @@ export default function Catalog({ initialPage = 1 }) {
                 <Breadcrumb />
                 <h1 className={styles.title}>
                     {isNewPage ? 'НОВИНКИ' : 
+                     router.asPath.includes('/dlinnye') ? 'ДЛИННЫЕ СЕРЬГИ' :
+                     router.asPath.includes('/krupnye') && router.asPath.includes('/sergi') ? 'КРУПНЫЕ СЕРЬГИ' :
+                     router.asPath.includes('/pod-zoloto') && router.asPath.includes('/sergi') ? 'СЕРЬГИ ПОД ЗОЛОТО' :
+                     router.asPath.includes('/pod-serebro') && router.asPath.includes('/sergi') ? 'СЕРЬГИ ПОД СЕРЕБРО' :
+                     router.asPath.includes('/kolcza/krupnye') ? 'КРУПНЫЕ КОЛЬЦА' :
+                     router.asPath.includes('/kolcza/pod-zoloto') ? 'КОЛЬЦА ПОД ЗОЛОТО' :
+                     router.asPath.includes('/kolcza/pod-serebro') ? 'КОЛЬЦА ПОД СЕРЕБРО' :
                      stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
                 </h1>
                 <div className={styles.row}>
                     <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} />
                     <div className={styles.catalogColumn}>
+                        <SubcategoryCards productType={stateType} />
                         <SortSection stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} sortItems={sortItems} />
                         <div className={styles.columnOrders}>
                             {search && filteredData.length === 0 && <NoResults text={text} />}

@@ -25,13 +25,40 @@ export default function Breadcrumb() {
             default:
                 // Каталог по слугу: /catalog/<slug>
                 if (asPath.startsWith('/catalog/')) {
-                    const slug = asPath.replace('/catalog/', '');
-                    const type = mapSlugToProductType(slug);
                     array.push({ text: 'Каталог', link: '/catalog' });
-                    if (type) {
-                        const typeText = type === 'ring' ? 'Кольца' : type === 'necklace' ? 'Колье' : type === 'earrings' ? 'Серьги' : type === 'bracelets' ? 'Браслеты' : '';
-                        if (typeText) array.push({ text: typeText, link: `/catalog/${slug}` });
+                    
+                    // Проверяем на подкатегории серег
+                    if (asPath.includes('/sergi/dlinnye')) {
+                        array.push({ text: 'Серьги', link: '/catalog/sergi' });
+                        array.push({ text: 'Длинные', link: asPath });
+                    } else if (asPath.includes('/sergi/krupnye')) {
+                        array.push({ text: 'Серьги', link: '/catalog/sergi' });
+                        array.push({ text: 'Крупные', link: asPath });
+                    } else if (asPath.includes('/sergi/pod-zoloto')) {
+                        array.push({ text: 'Серьги', link: '/catalog/sergi' });
+                        array.push({ text: 'Под золото', link: asPath });
+                    } else if (asPath.includes('/sergi/pod-serebro')) {
+                        array.push({ text: 'Серьги', link: '/catalog/sergi' });
+                        array.push({ text: 'Под серебро', link: asPath });
+                    } else if (asPath.includes('/kolcza/krupnye')) {
+                        array.push({ text: 'Кольца', link: '/catalog/kolcza' });
+                        array.push({ text: 'Крупные', link: asPath });
+                    } else if (asPath.includes('/kolcza/pod-zoloto')) {
+                        array.push({ text: 'Кольца', link: '/catalog/kolcza' });
+                        array.push({ text: 'Под золото', link: asPath });
+                    } else if (asPath.includes('/kolcza/pod-serebro')) {
+                        array.push({ text: 'Кольца', link: '/catalog/kolcza' });
+                        array.push({ text: 'Под серебро', link: asPath });
+                    } else {
+                        // Обычная категория
+                        const slug = asPath.replace('/catalog/', '');
+                        const type = mapSlugToProductType(slug);
+                        if (type) {
+                            const typeText = type === 'ring' ? 'Кольца' : type === 'necklace' ? 'Колье' : type === 'earrings' ? 'Серьги' : type === 'bracelets' ? 'Браслеты' : '';
+                            if (typeText) array.push({ text: typeText, link: `/catalog/${slug}` });
+                        }
                     }
+                    
                     setBreadcrumbsArray(array);
                     break;
                 }
