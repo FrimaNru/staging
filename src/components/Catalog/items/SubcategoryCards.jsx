@@ -11,25 +11,25 @@ export default function SubcategoryCards({ productType }) {
         {
             title: 'Длинные',
             url: '/catalog/sergi/dlinnye',
-            image: '/assets/images/sergi.webp',
+            image: '/assets/images/dlinnie.webp',
             description: 'Висячие серьги для особых случаев'
         },
         {
             title: 'Крупные',
             url: '/catalog/sergi/krupnye',
-            image: '/assets/images/sergi.webp',
+            image: '/assets/images/big.webp',
             description: 'Объемные серьги для яркого образа'
         },
         {
             title: 'Под золото',
             url: '/catalog/sergi/pod-zoloto',
-            image: '/assets/images/sergi.webp',
+            image: '/assets/images/gold.webp',
             description: 'Золотистые серьги для элегантности'
         },
         {
             title: 'Под серебро',
             url: '/catalog/sergi/pod-serebro',
-            image: '/assets/images/sergi.webp',
+            image: '/assets/images/silver.webp',
             description: 'Серебристые серьги для стиля'
         }
     ];
@@ -38,19 +38,19 @@ export default function SubcategoryCards({ productType }) {
         {
             title: 'Крупные',
             url: '/catalog/kolcza/krupnye',
-            image: '/assets/images/rings.webp',
+            image: '/assets/images/bigRing.webp',
             description: 'Большие кольца для яркого образа'
         },
         {
             title: 'Под золото',
             url: '/catalog/kolcza/pod-zoloto',
-            image: '/assets/images/rings.webp',
+            image: '/assets/images/goldRing.webp',
             description: 'Золотистые кольца для элегантности'
         },
         {
             title: 'Под серебро',
             url: '/catalog/kolcza/pod-serebro',
-            image: '/assets/images/rings.webp',
+            image: '/assets/images/silverRing.webp',
             description: 'Серебристые кольца для стиля'
         }
     ];

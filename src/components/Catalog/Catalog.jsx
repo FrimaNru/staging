@@ -26,6 +26,17 @@ export default function Catalog({ initialPage = 1 }) {
     const [isNewPage, setIsNewPage] = useState(false);
     
     const prevFilters = useRef({ stateSortItems: '', stateType: '', stateSales: [], text: '' });
+    
+    // Определяем, является ли страница подкатегорией
+    const isSubcategoryPage = useMemo(() => {
+        return router.asPath.includes('/sergi/dlinnye') ||
+               router.asPath.includes('/sergi/krupnye') ||
+               router.asPath.includes('/sergi/pod-zoloto') ||
+               router.asPath.includes('/sergi/pod-serebro') ||
+               router.asPath.includes('/kolcza/krupnye') ||
+               router.asPath.includes('/kolcza/pod-zoloto') ||
+               router.asPath.includes('/kolcza/pod-serebro');
+    }, [router.asPath]);
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
     const types = ['Кольца', 'Серьги', 'Браслеты', 'Колье'];
@@ -402,7 +413,7 @@ export default function Catalog({ initialPage = 1 }) {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
     return (
-        <div className={styles.main}>
+        <div className={`${styles.main} ${isSubcategoryPage ? styles.subcategoryPage : ''}`}>
             <Banner />
             <div className={styles.mainColumn} data-catalog-content>
                 <Breadcrumb />
