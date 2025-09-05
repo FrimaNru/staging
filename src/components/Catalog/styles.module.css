@@ -60,6 +60,20 @@
     gap: 100px;
 }
 
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 250px;
+}
+
+.rightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: calc(100% - 250px);
+}
+
 .filter {
     display: flex;
     flex-direction: column;
@@ -113,7 +127,9 @@
 
 .subcategoryCards {
     margin-top: 0px;
-    
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .subcategoryGrid {
@@ -121,19 +137,25 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-bottom: 0px;
+    width: 100%;
+    max-width: 800px;
 }
 
 /* Мобильная версия - 2x2 */
 @media (max-width: 768px) {
     .subcategoryCards {
+        width: 100%;
         margin-left: 20px;
         margin-right: 20px;
         margin-bottom: 30px;
+        justify-content: center;
     }
     
     .subcategoryGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
+        width: 100%;
+        max-width: none;
     }
 }
 
@@ -606,6 +628,16 @@
     .row {
         width: 100%;
         flex-direction: column;
+        gap: 20px;
+    }
+
+    .leftColumn {
+        width: 100%;
+        gap: 20px;
+    }
+
+    .rightColumn {
+        width: 100%;
         gap: 20px;
     }
 

@@ -55,7 +55,7 @@ export default function Breadcrumb() {
                         const type = mapSlugToProductType(slug);
                         if (type) {
                             const typeText = type === 'ring' ? 'Кольца' : type === 'necklace' ? 'Колье' : type === 'earrings' ? 'Серьги' : type === 'bracelets' ? 'Браслеты' : '';
-                            if (typeText) array.push({ text: typeText, link: `/catalog/${slug}` });
+                            if (typeText) array.push({ text: typeText, link: asPath });
                         }
                     }
                     

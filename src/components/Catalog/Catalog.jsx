@@ -417,20 +417,22 @@ export default function Catalog({ initialPage = 1 }) {
             <Banner />
             <div className={styles.mainColumn} data-catalog-content>
                 <Breadcrumb />
-                <h1 className={styles.title}>
-                    {isNewPage ? 'НОВИНКИ' : 
-                     router.asPath.includes('/dlinnye') ? 'ДЛИННЫЕ СЕРЬГИ' :
-                     router.asPath.includes('/krupnye') && router.asPath.includes('/sergi') ? 'КРУПНЫЕ СЕРЬГИ' :
-                     router.asPath.includes('/pod-zoloto') && router.asPath.includes('/sergi') ? 'СЕРЬГИ ПОД ЗОЛОТО' :
-                     router.asPath.includes('/pod-serebro') && router.asPath.includes('/sergi') ? 'СЕРЬГИ ПОД СЕРЕБРО' :
-                     router.asPath.includes('/kolcza/krupnye') ? 'КРУПНЫЕ КОЛЬЦА' :
-                     router.asPath.includes('/kolcza/pod-zoloto') ? 'КОЛЬЦА ПОД ЗОЛОТО' :
-                     router.asPath.includes('/kolcza/pod-serebro') ? 'КОЛЬЦА ПОД СЕРЕБРО' :
-                     stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
-                </h1>
                 <div className={styles.row}>
-                    <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} />
-                    <div className={styles.catalogColumn}>
+                    <div className={styles.leftColumn}>
+                        <h1 className={styles.title}>
+                            {isNewPage ? 'НОВИНКИ' : 
+                             router.asPath.includes('/dlinnye') ? 'ДЛИННЫЕ СЕРЬГИ' :
+                             router.asPath.includes('/krupnye') && router.asPath.includes('/sergi') ? 'КРУПНЫЕ СЕРЬГИ' :
+                             router.asPath.includes('/pod-zoloto') && router.asPath.includes('/sergi') ? 'СЕРЬГИ ПОД ЗОЛОТО' :
+                             router.asPath.includes('/pod-serebro') && router.asPath.includes('/sergi') ? 'СЕРЬГИ ПОД СЕРЕБРО' :
+                             router.asPath.includes('/kolcza/krupnye') ? 'КРУПНЫЕ КОЛЬЦА' :
+                             router.asPath.includes('/kolcza/pod-zoloto') ? 'КОЛЬЦА ПОД ЗОЛОТО' :
+                             router.asPath.includes('/kolcza/pod-serebro') ? 'КОЛЬЦА ПОД СЕРЕБРО' :
+                             stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
+                        </h1>
+                        <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} />
+                    </div>
+                    <div className={styles.rightColumn}>
                         <SubcategoryCards productType={stateType} />
                         <SortSection stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} sortItems={sortItems} />
                         <div className={styles.columnOrders}>
