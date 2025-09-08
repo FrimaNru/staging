@@ -23,6 +23,20 @@ const additionally = {
     'sales': 'Добавить в "Скидки"'
 };
 
+const subcategories = {
+    'earrings': {
+        'dlinnye': 'Длинные',
+        'krupnye': 'Крупные',
+        'pod-zoloto': 'Под золото',
+        'pod-serebro': 'Под серебро'
+    },
+    'ring': {
+        'krupnye': 'Крупные',
+        'pod-zoloto': 'Под золото',
+        'pod-serebro': 'Под серебро'
+    }
+};
+
 export default function AdminCreateProduct() {
 
     const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +50,8 @@ export default function AdminCreateProduct() {
         additionally: [],
         weight: '',
         sizes: [],
-        type: ''
+        type: '',
+        subcategory: ''
     });
 
     const toast = useToast();
@@ -119,13 +134,33 @@ export default function AdminCreateProduct() {
                     {Object.entries(types).map(([key, value], i) => (
                         <button
                             key={i}
-                            onClick={() => setData({ ...data, type: key })}
+                            onClick={() => setData({ ...data, type: key, subcategory: '' })}
                             className={`${styles.createTypeItem} ${key === data.type ? styles.createTypeItemSelect : ''}`}>
                             {value}
                         </button>
                     ))}
                 </div>
             </div>
+            {(data.type === 'earrings' || data.type === 'ring') && (
+                <div className={styles.createLilColumn}>
+                    <p className={styles.subtitle}>Подкатегория</p>
+                    <div className={styles.createLilLine}>
+                        <button
+                            onClick={() => setData({ ...data, subcategory: '' })}
+                            className={`${styles.createTypeItem} ${data.subcategory === '' ? styles.createTypeItemSelect : ''}`}>
+                            Без подкатегории
+                        </button>
+                        {Object.entries(subcategories[data.type] || {}).map(([key, value], i) => (
+                            <button
+                                key={i}
+                                onClick={() => setData({ ...data, subcategory: key })}
+                                className={`${styles.createTypeItem} ${key === data.subcategory ? styles.createTypeItemSelect : ''}`}>
+                                {value}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
             <SizeLine data={data} setData={setData} />
             <ColorsLine data={data} setData={setData} />
             <div className={styles.createLilColumn}>
