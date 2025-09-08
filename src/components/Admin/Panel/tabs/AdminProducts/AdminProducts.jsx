@@ -110,17 +110,20 @@ export default function AdminProducts() {
         setCurrentPage(pageNumber);
     };
 
+
     return <div className={styles.main}>
         <p className={styles.title}>Товары</p>
         <FilterBlock sortType={sortType} setSortSection={setSortSection} setSortType={setSortType} sortSection={sortSection} search={search} setSearch={setSearch} onlyActive={onlyActive} setOnlyActive={setOnlyActive} productsView={productsView} setProductsView={setProductsView} onlyNotActive={onlyNotActive} setOnlyNotActive={setOnlyNotActive} />
         <div className={styles.card}>
             <div className={styles.fullLineBig}>
                 <p className={styles.subtitle}>Товары</p>
+            <div className={styles.buttonGroup}>
                 <Button
                     size="small"
                     variant="success"
                     onClick={() => router.push('/adminpanel?page=createProduct')}
                 >Создать товар</Button>
+            </div>
             </div>
             {productsView === 'lines'
                 ? <div className={styles.table}>

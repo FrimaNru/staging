@@ -26,17 +26,8 @@ const additionally = {
 };
 
 const subcategories = {
-    'earrings': {
-        'dlinnye': 'Длинные',
-        'krupnye': 'Крупные',
-        'pod-zoloto': 'Под золото',
-        'pod-serebro': 'Под серебро'
-    },
-    'ring': {
-        'krupnye': 'Крупные',
-        'pod-zoloto': 'Под золото',
-        'pod-serebro': 'Под серебро'
-    }
+    'Серьги': ['Длинные', 'Крупные', 'Под золото', 'Под серебро'],
+    'Кольца': ['Крупные', 'Под золото', 'Под серебро']
 };
 
 export default function AdminEditProduct() {
@@ -54,21 +45,48 @@ export default function AdminEditProduct() {
         weight: '',
         sizes: [],
         type: '',
-        subcategory: '',
+        subcategories: [],
         family: []
     });
 
     const toast = useToast();
     const router = useRouter();
 
+    const handleSubcategoryToggle = (subcategory) => {
+        setData(prev => {
+            const currentSubcategories = prev.subcategories || [];
+            return {
+                ...prev,
+                subcategories: currentSubcategories.includes(subcategory)
+                    ? currentSubcategories.filter(s => s !== subcategory)
+                    : [...currentSubcategories, subcategory]
+            };
+        });
+    };
+
     useEffect(() => { load(); }, []);
 
     const load = async () => {
         await axios.post(`${API_BASE_URL}getOneProduct`, { id: router.query.id })
             .then((res) => {
-                setData(res.data);
-                setFamily(res.data.family[0]._id);
-                console.log(res.data)
+                const productData = res.data;
+                // Обрабатываем подкатегории - если это старый формат (строка), конвертируем в массив
+                if (productData.subcategory && !Array.isArray(productData.subcategories)) {
+                    productData.subcategories = productData.subcategory ? [productData.subcategory] : [];
+                    delete productData.subcategory;
+                }
+                // Убеждаемся, что subcategories всегда массив и очищаем пустые строки
+                if (!Array.isArray(productData.subcategories)) {
+                    productData.subcategories = [];
+                }
+                // Удаляем пустые строки и невалидные элементы из массива подкатегорий
+                productData.subcategories = productData.subcategories.filter(sub => 
+                    sub && 
+                    typeof sub === 'string' && 
+                    sub.trim() !== ''
+                );
+                    setData(productData);
+                    setFamily(productData.family[0]._id);
             })
             .catch((e) => console.log(e));
     };
@@ -92,7 +110,7 @@ export default function AdminEditProduct() {
                 }
             });
 
-            formData.append('data', JSON.stringify(data));
+        formData.append('data', JSON.stringify(data));
 
             try {
                 await axios.post(`${API_BASE_URL}editProduct`, formData, { headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` } });
@@ -167,7 +185,7 @@ export default function AdminEditProduct() {
                     {Object.entries(types).map(([key, value], i) => (
                         <button
                             key={i}
-                            onClick={() => setData({ ...data, type: key, subcategory: '' })}
+                            onClick={() => setData({ ...data, type: key, subcategories: [] })}
                             className={`${styles.createTypeItem} ${key === data.type ? styles.createTypeItemSelect : ''}`}>
                             {value}
                         </button>
@@ -176,19 +194,14 @@ export default function AdminEditProduct() {
             </div>
             {(data.type === 'earrings' || data.type === 'ring') && (
                 <div className={styles.createLilColumn}>
-                    <p className={styles.subtitle}>Подкатегория</p>
+                <p className={styles.subtitle}>Подкатегории (можно выбрать несколько)</p>
                     <div className={styles.createLilLine}>
-                        <button
-                            onClick={() => setData({ ...data, subcategory: '' })}
-                            className={`${styles.createTypeItem} ${data.subcategory === '' ? styles.createTypeItemSelect : ''}`}>
-                            Без подкатегории
-                        </button>
-                        {Object.entries(subcategories[data.type] || {}).map(([key, value], i) => (
+                        {subcategories[data.type === 'earrings' ? 'Серьги' : 'Кольца']?.map((subcategory, i) => (
                             <button
                                 key={i}
-                                onClick={() => setData({ ...data, subcategory: key })}
-                                className={`${styles.createTypeItem} ${key === data.subcategory ? styles.createTypeItemSelect : ''}`}>
-                                {value}
+                                onClick={() => handleSubcategoryToggle(subcategory)}
+                                className={`${styles.createTypeItem} ${data.subcategories && Array.isArray(data.subcategories) && data.subcategories.includes(subcategory) ? styles.createTypeItemSelect : ''}`}>
+                                {subcategory}
                             </button>
                         ))}
                     </div>

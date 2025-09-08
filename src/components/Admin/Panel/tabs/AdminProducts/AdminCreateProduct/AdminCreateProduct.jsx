@@ -24,17 +24,8 @@ const additionally = {
 };
 
 const subcategories = {
-    'earrings': {
-        'dlinnye': 'Длинные',
-        'krupnye': 'Крупные',
-        'pod-zoloto': 'Под золото',
-        'pod-serebro': 'Под серебро'
-    },
-    'ring': {
-        'krupnye': 'Крупные',
-        'pod-zoloto': 'Под золото',
-        'pod-serebro': 'Под серебро'
-    }
+    'Серьги': ['Длинные', 'Крупные', 'Под золото', 'Под серебро'],
+    'Кольца': ['Крупные', 'Под золото', 'Под серебро']
 };
 
 export default function AdminCreateProduct() {
@@ -51,11 +42,23 @@ export default function AdminCreateProduct() {
         weight: '',
         sizes: [],
         type: '',
-        subcategory: ''
+        subcategories: []
     });
 
     const toast = useToast();
     const router = useRouter();
+
+    const handleSubcategoryToggle = (subcategory) => {
+        setData(prev => {
+            const currentSubcategories = prev.subcategories || [];
+            return {
+                ...prev,
+                subcategories: currentSubcategories.includes(subcategory)
+                    ? currentSubcategories.filter(s => s !== subcategory)
+                    : [...currentSubcategories, subcategory]
+            };
+        });
+    };
 
     const addProduct = async () => {
         if (data.article !== '' && data?.name !== '' && data?.cost !== 0 && data?.type !== '' && data.color !== '' && data.weight !== '' && data.cover && data.images.length !== 0) {
@@ -69,7 +72,7 @@ export default function AdminCreateProduct() {
                 formData.append(`images[${fileIndex}]`, file);
             });
 
-            formData.append('data', JSON.stringify(data));
+        formData.append('data', JSON.stringify(data));
 
             for (let pair of formData.entries()) {
                 console.log(pair[0], pair[1]);
@@ -134,7 +137,7 @@ export default function AdminCreateProduct() {
                     {Object.entries(types).map(([key, value], i) => (
                         <button
                             key={i}
-                            onClick={() => setData({ ...data, type: key, subcategory: '' })}
+                            onClick={() => setData({ ...data, type: key, subcategories: [] })}
                             className={`${styles.createTypeItem} ${key === data.type ? styles.createTypeItemSelect : ''}`}>
                             {value}
                         </button>
@@ -143,19 +146,14 @@ export default function AdminCreateProduct() {
             </div>
             {(data.type === 'earrings' || data.type === 'ring') && (
                 <div className={styles.createLilColumn}>
-                    <p className={styles.subtitle}>Подкатегория</p>
+                    <p className={styles.subtitle}>Подкатегории (можно выбрать несколько)</p>
                     <div className={styles.createLilLine}>
-                        <button
-                            onClick={() => setData({ ...data, subcategory: '' })}
-                            className={`${styles.createTypeItem} ${data.subcategory === '' ? styles.createTypeItemSelect : ''}`}>
-                            Без подкатегории
-                        </button>
-                        {Object.entries(subcategories[data.type] || {}).map(([key, value], i) => (
+                        {subcategories[data.type === 'earrings' ? 'Серьги' : 'Кольца']?.map((subcategory, i) => (
                             <button
                                 key={i}
-                                onClick={() => setData({ ...data, subcategory: key })}
-                                className={`${styles.createTypeItem} ${key === data.subcategory ? styles.createTypeItemSelect : ''}`}>
-                                {value}
+                                onClick={() => handleSubcategoryToggle(subcategory)}
+                                className={`${styles.createTypeItem} ${data.subcategories && Array.isArray(data.subcategories) && data.subcategories.includes(subcategory) ? styles.createTypeItemSelect : ''}`}>
+                                {subcategory}
                             </button>
                         ))}
                     </div>
