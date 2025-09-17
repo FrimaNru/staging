@@ -110,7 +110,7 @@ export default function Breadcrumb() {
     return (
         <div className={styles.breadcrumbLine} data-breadcrumbs>
             {breadcrumbsArray.map((x, i) => (
-                <Link href={x.link} key={i}>
+                <Link href={x.link} key={i} style={{ width: 'max-content' }}>
                     <div className={styles.breadcrumbItem}>
                         <p className={styles.breadcrumbItemText}>{capitalizeFirstLetter(x.text)}</p>
                         {breadcrumbsArray.length - 1 !== i && (

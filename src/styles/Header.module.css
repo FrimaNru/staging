@@ -763,10 +763,18 @@
 
     .breadcrumbLine {
         margin-left: 20px;
+        width: 100%;
+        max-width: 330px;
+        gap: 10px;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .breadcrumbItemText {
-        font-size: 16px;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .searchBlockDrawerHeader {
@@ -969,5 +977,17 @@
     .checkBoxText {
         font-size: 14px;
         line-height: 16px;
+    }
+
+    .breadcrumbItem {
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .breadcrumbItemIcon {
+        width: auto;
+        height: 10px;
+        margin-top: 0px;
     }
 }

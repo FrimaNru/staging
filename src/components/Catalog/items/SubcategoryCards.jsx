@@ -1,9 +1,14 @@
 import styles from "../styles.module.css";
 import Link from "next/link";
 
-export default function SubcategoryCards({ productType }) {
-    // Show subcategory cards for earrings and rings
+export default function SubcategoryCards({ productType, isSubcategoryPage = false }) {
+    // Show subcategory cards for earrings and rings only on main category pages
     if (productType !== 'Серьги' && productType !== 'Кольца') {
+        return null;
+    }
+    
+    // Don't show subcategory cards on subcategory pages
+    if (isSubcategoryPage) {
         return null;
     }
 

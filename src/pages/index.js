@@ -3,6 +3,8 @@ import { Footer } from "@/components";
 import Banner from "@/components/Common/Banner/Banner";
 import Header from "@/components/Header/Header";
 import PopularBlock from "@/components/PopularBlock/PopularBlock";
+import HomeIntro from "@/components/Home/HomeIntro";
+import HomeDetails from "@/components/Home/HomeDetails";
 import StartBlock from "@/components/StartBlock/StartBlock";
 import Head from "next/head";
 
@@ -10,8 +12,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Mi Alegria</title>
-        <meta name="description" content='Добро пожаловать в Mi Alegria! Широкий выбор эксклюзивных ювелирных украшений: кольца, серьги, браслеты и подвески. Бесплатная доставка по России.' />
+        <title>Элитная бижутерия класса люкс – купить в Москве в интернет-магазине Mi Alegria</title>
+        <meta name="description" content='Купить брендовую бижутерию в Москве – цены в интернет-магазине Mi Alegria ✔ Доставка и гарантия на все ювелирные изделия ✔Элитная бижутерия класса люкс для создания неповторимого образа' />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />
         <link rel="apple-touch-icon" sizes="60x60" href="/faviconsWithBg.ico/apple-icon-60x60.png" />
@@ -39,7 +41,9 @@ export default function Home() {
           <Header />
           <Banner />
           <StartBlock />
+          <HomeIntro />
           <PopularBlock />
+          <HomeDetails />
           <Footer />
         </main>
       </center>

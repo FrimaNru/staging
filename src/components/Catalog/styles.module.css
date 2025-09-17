@@ -124,6 +124,17 @@
     width: calc(100% - 250px);
 }
 
+.seoText {
+    width: 100%;
+    max-width: 850px;
+    color: #140702;
+}
+
+.seoText p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
 
 .subcategoryCards {
     margin-top: 0px;
@@ -144,13 +155,11 @@
 /* Мобильная версия - 2x2 */
 @media (max-width: 768px) {
     .subcategoryCards {
-        width: 100%;
-        margin-left: 20px;
-        margin-right: 20px;
-        margin-bottom: 30px;
+        width: calc(100% - 40px);
         justify-content: center;
+        margin-left: 20px;
     }
-    
+
     .subcategoryGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
@@ -203,7 +212,7 @@
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
-    
+
 }
 
 .subcategoryImage {
@@ -384,6 +393,7 @@
     align-items: center;
     justify-content: center;
     min-width: 864px;
+    max-width: 100%;
 }
 
 .orderHr {
@@ -690,7 +700,7 @@
         border-bottom: solid 0.5px #140702;
         padding: 0 0 20px 0;
     }
-    
+
     /* Стили для подкатегорий на мобильных устройствах */
     .subcategoryPage .sliderItem {
         width: 100%;
@@ -698,19 +708,19 @@
         border-bottom: solid 0.5px #140702;
         padding: 0 0 20px 0;
     }
-    
+
     .subcategoryPage .sliderItemContent {
         gap: 10px;
     }
-    
+
     .subcategoryPage .sliderItemTitle {
         font-size: 16px;
     }
-    
+
     .subcategoryPage .sliderItemCost {
         font-size: 16px;
     }
-    
+
     .subcategoryPage .sliderItemLink {
         width: 100%;
     }
@@ -803,5 +813,13 @@
     .title {
         font-size: 18px;
         margin-left: 20px;
+    }
+
+    .seoText {
+        max-width: 95%;
+    }
+
+    .seoText p {
+        font-size: 12px;
     }
 }

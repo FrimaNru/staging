@@ -12,7 +12,8 @@ import NoResults from "./items/NoResults";
 import AccordionFilters from "./items/AccordionFilters";
 import Pagination from "./items/Pagination";
 import SubcategoryCards from "./items/SubcategoryCards";
-import { mapSlugToProductType, mapProductTypeToSlug, buildProductSlug } from "@/lib/seo";
+import SubcategorySeoText from "./items/SubcategorySeoText";
+import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
 
 export default function Catalog({ initialPage = 1 }) {
     const { products, loading } = useProducts();
@@ -24,8 +25,15 @@ export default function Catalog({ initialPage = 1 }) {
     const [currentPage, setCurrentPage] = useState(initialPage);
     const itemsPerPage = 15;
     const [isNewPage, setIsNewPage] = useState(false);
+    const [isUserInteraction, setIsUserInteraction] = useState(false);
     
     const prevFilters = useRef({ stateSortItems: '', stateType: '', stateSales: [], text: '' });
+
+    // Обертка для setStateType, которая устанавливает флаг пользовательского взаимодействия
+    const handleStateTypeChange = (newType) => {
+        setIsUserInteraction(true);
+        setStateType(newType);
+    };
     
     // Определяем, является ли страница подкатегорией
     const isSubcategoryPage = useMemo(() => {
@@ -42,6 +50,38 @@ export default function Catalog({ initialPage = 1 }) {
     const types = ['Кольца', 'Серьги', 'Браслеты', 'Колье'];
     const sortItems = ['По популярности', 'По возрастанию цены', 'По убыванию цены'];
     const [stateSortItems, setStateSortItems] = useState('По популярности');
+
+    // Маппинг URL-путей к названиям подкатегорий
+    const subcategoryMapping = {
+        '/sergi/dlinnye': 'Длинные',
+        '/sergi/krupnye': 'Крупные',
+        '/sergi/pod-zoloto': 'Под золото',
+        '/sergi/pod-serebro': 'Под серебро',
+        '/kolcza/krupnye': 'Крупные',
+        '/kolcza/pod-zoloto': 'Под золото',
+        '/kolcza/pod-serebro': 'Под серебро'
+    };
+
+    // Функция для получения текущей подкатегории на основе URL
+    const getCurrentSubcategory = () => {
+        const currentPath = router.asPath.split('?')[0]; // Убираем query параметры
+        for (const [path, subcategory] of Object.entries(subcategoryMapping)) {
+            if (currentPath.includes(path)) {
+                return subcategory;
+            }
+        }
+        return null;
+    };
+
+    // Функция для получения типа изделия из текущего пути
+    const getCurrentTypeFromPath = (path) => {
+        const pathMatch = path.match(/\/catalog\/(\w+)/);
+        const slugFromPath = pathMatch ? pathMatch[1] : undefined;
+        if (slugFromPath) {
+            return mapSlugToProductType(slugFromPath);
+        }
+        return null;
+    };
 
     useEffect(() => {
         if (PAGEN_1) {
@@ -143,11 +183,24 @@ export default function Catalog({ initialPage = 1 }) {
         const slug = mapProductTypeToSlug(typeCode);
         const targetPath = `/catalog/${slug}`;
 
-        // только если путь реально меняется
-        if (!currentPath.startsWith(targetPath)) {
+        // Проверяем, нужно ли перейти на общую страницу категории
+        // Если мы на подкатегории и выбираем тот же тип изделия через фильтр, переходим на общую страницу
+        const isOnSubcategory = isSubcategoryPage;
+        const currentTypeFromPath = getCurrentTypeFromPath(currentPath);
+        const shouldNavigateToMainCategory = isOnSubcategory && currentTypeFromPath === typeCode && isUserInteraction;
+
+        // Переходим на целевую страницу, если:
+        // 1. Текущий путь не начинается с целевого пути, ИЛИ
+        // 2. Мы на подкатегории и выбираем тот же тип изделия через фильтр (переходим на общую страницу)
+        if (!currentPath.startsWith(targetPath) || shouldNavigateToMainCategory) {
             router.replace({ pathname: targetPath, query: newQuery }, undefined, { shallow: true });
         }
-    }, [stateType, router]);
+        
+        // Сбрасываем флаг пользовательского взаимодействия после навигации
+        if (isUserInteraction) {
+            setIsUserInteraction(false);
+        }
+    }, [stateType, router, isSubcategoryPage, isUserInteraction]);
 
     useEffect(() => {
         if (filter === 'new') {
@@ -222,190 +275,19 @@ export default function Catalog({ initialPage = 1 }) {
 
         if (stateType in typeMap) { d = d.filter(x => x.type === typeMap[stateType]); };
 
-        // Фильтр для подкатегорий серег
-        if (router.asPath.includes('/sergi/dlinnye')) {
-            const longEarringsSlugs = [
-                'sergi-zhanna-zolotaya',
-                'sergi-zhanna-serebryanaya',
-                'sergi-beatris-zolotaya',
-                'sergi-beatris-serebryanaya',
-                'sergi-blanka-zolotaya',
-                'sergi-blanka-serebryanaya',
-                'sergi-veronika-zolotaya',
-                'sergi-veronika-serebryanaya',
-                'sergi-marisa-zolotaya',
-                'sergi-marisa-serebryanaya',
-                'sergi-eliana-zolotaya',
-                'sergi-eliana-serebryanaya',
-                'sergi-gloriya-zolotaya',
-                'sergi-gloriya-serebryanaya',
-                'sergi-laura-zolotaya',
-                'sergi-laura-serebryanaya'
-            ];
+        // Фильтр для подкатегорий на основе поля subcategories
+        const currentSubcategory = getCurrentSubcategory();
+        if (currentSubcategory) {
             d = d.filter(product => {
-                const productSlug = buildProductSlug(product);
-                return longEarringsSlugs.includes(productSlug);
+                // Проверяем, что у товара есть подкатегории и текущая подкатегория входит в них
+                return product.subcategories && 
+                       Array.isArray(product.subcategories) && 
+                       product.subcategories.includes(currentSubcategory);
             });
-        } else if (router.asPath.includes('/sergi/krupnye')) {
-            const largeEarringsSlugs = [
-                'sergi-roza-zolotaya',
-                'sergi-roza-serebryanaya',
-                'sergi-karmen-zolotaya',
-                'sergi-karmen-serebryanaya',
-                'sergi-izabel-zolotaya',
-                'sergi-izabel-serebryanaya',
-                'sergi-ester-zolotaya',
-                'sergi-ester-serebryanaya'
-            ];
-            d = d.filter(product => {
-                const productSlug = buildProductSlug(product);
-                return largeEarringsSlugs.includes(productSlug);
-            });
-        } else if (router.asPath.includes('/sergi/pod-zoloto')) {
-            const goldEarringsSlugs = [
-                'sergi-roza-zolotaya',
-                'sergi-zhanna-zolotaya',
-                'sergi-karmen-zolotaya',
-                'sergi-izabel-zolotaya',
-                'sergi-ester-zolotaya',
-                'sergi-marta-zolotaya',
-                'sergi-anna-zolotaya',
-                'sergi-sofiya-zolotaya',
-                'sergi-beatris-zolotaya',
-                'sergi-blanka-zolotaya',
-                'sergi-francheska-zolotaya',
-                'sergi-alegra-zolotaya',
-                'sergi-lidiana-zolotaya',
-                'sergi-ramona-zolotaya',
-                'sergi-veronika-zolotaya',
-                'sergi-karmita-zolotaya',
-                'sergi-marisa-zolotaya',
-                'sergi-eliana-zolotaya',
-                'sergi-gloriya-zolotaya',
-                'sergi-laura-zolotaya',
-                'sergi-viktori-zolotaya'
-            ];
-            d = d.filter(product => {
-                const productSlug = buildProductSlug(product);
-                return goldEarringsSlugs.includes(productSlug);
-            });
-        } else if (router.asPath.includes('/sergi/pod-serebro')) {
-            const silverEarringsSlugs = [
-                'sergi-roza-serebryanaya',
-                'sergi-zhanna-serebryanaya',
-                'sergi-karmen-serebryanaya',
-                'sergi-izabel-serebryanaya',
-                'sergi-ester-serebryanaya',
-                'sergi-marta-serebryanaya',
-                'sergi-anna-serebryanaya',
-                'sergi-beatris-serebryanaya',
-                'sergi-blanka-serebryanaya',
-                'sergi-francheska-serebryanaya',
-                'sergi-alegra-serebryanaya',
-                'sergi-lidiana-serebryanaya',
-                'sergi-ramona-serebryanaya',
-                'sergi-veronika-serebryanaya',
-                'sergi-karmita-serebryanaya',
-                'sergi-marisa-serebryanaya',
-                'sergi-eliana-serebryanaya',
-                'sergi-gloriya-serebryanaya',
-                'sergi-laura-serebryanaya',
-                'sergi-viktori-serebryanaya'
-            ];
-            d = d.filter(product => {
-                const productSlug = buildProductSlug(product);
-                return silverEarringsSlugs.includes(productSlug);
-            });
-        }
-        
-        // Фильтр для подкатегорий колец
-        if (router.asPath.includes('/kolcza/krupnye')) {
-            const largeRingsIds = [
-                '67b0bc9acf861107a9eb6c42',
-                '67b0bc9acf861107a9eb6c44',
-                '67b0bc9acf861107a9eb6c49',
-                '67b0bc9acf861107a9eb6c4b',
-                '67b0bc9bcf861107a9eb6c65',
-                '67b0bc9bcf861107a9eb6c67',
-                '67b0bc9bcf861107a9eb6c6c',
-                '67b0bc9bcf861107a9eb6c6e',
-                '67b0bc9bcf861107a9eb6c73',
-                '67b0bc9bcf861107a9eb6c75',
-                '67b0bc9ccf861107a9eb6c7a',
-                '67b0bc9ccf861107a9eb6c7c',
-                '67b0bc9ccf861107a9eb6c8f',
-                '67b0bc9ccf861107a9eb6c91',
-                '67b0bc9dcf861107a9eb6c96',
-                '67b0bc9dcf861107a9eb6c98',
-                '67b0bc9dcf861107a9eb6c9d',
-                '67b0bc9dcf861107a9eb6c9f',
-                '67b0bc9dcf861107a9eb6ca4',
-                '67b0bc9dcf861107a9eb6ca6'
-            ];
-            d = d.filter(product => largeRingsIds.includes(product._id));
-        } else if (router.asPath.includes('/kolcza/pod-zoloto')) {
-            const goldRingsIds = [
-                '67b0bc9acf861107a9eb6c42',
-                '67b0bc9acf861107a9eb6c49',
-                '67b0bc9acf861107a9eb6c50',
-                '67b0bc9acf861107a9eb6c57',
-                '67b0bc9bcf861107a9eb6c5e',
-                '67b0bc9bcf861107a9eb6c65',
-                '67b0bc9bcf861107a9eb6c6c',
-                '67b0bc9bcf861107a9eb6c73',
-                '67b0bc9ccf861107a9eb6c7a',
-                '67b0bc9ccf861107a9eb6c81',
-                '67b0bc9ccf861107a9eb6c88',
-                '67b0bc9ccf861107a9eb6c8f',
-                '67b0bc9dcf861107a9eb6c96',
-                '67b0bc9dcf861107a9eb6c9d',
-                '67b0bc9dcf861107a9eb6ca4'
-            ];
-            d = d.filter(product => goldRingsIds.includes(product._id));
-        } else if (router.asPath.includes('/kolcza/pod-serebro')) {
-            const silverRingsIds = [
-                '67b0bc9acf861107a9eb6c44',
-                '67b0bc9acf861107a9eb6c4b',
-                '67b0bc9acf861107a9eb6c52',
-                '67b0bc9acf861107a9eb6c59',
-                '67b0bc9bcf861107a9eb6c60',
-                '67b0bc9bcf861107a9eb6c67',
-                '67b0bc9bcf861107a9eb6c6e',
-                '67b0bc9bcf861107a9eb6c75',
-                '67b0bc9ccf861107a9eb6c7c',
-                '67b0bc9ccf861107a9eb6c83',
-                '67b0bc9ccf861107a9eb6c8a',
-                '67b0bc9ccf861107a9eb6c91',
-                '67b0bc9dcf861107a9eb6c98',
-                '67b0bc9dcf861107a9eb6c9f',
-                '67b0bc9dcf861107a9eb6ca6'
-            ];
-            d = d.filter(product => silverRingsIds.includes(product._id));
         }
 
         return d;
-    }, [products, stateSortItems, stateType, stateSales, text]);
-
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-        
-        const newQuery = { ...router.query };
-        if (page === 1) {
-            delete newQuery.PAGEN_1;
-            delete newQuery.page;
-        } else {
-            newQuery.PAGEN_1 = page.toString();
-        }
-        delete newQuery.slug;
-        delete newQuery.product;
-        
-        // Use the actual current path (e.g., '/catalog/kolcza') rather than the route pattern '/catalog/[slug]'
-        const currentPathOnly = (router.asPath || '').split('?')[0] || '/catalog';
-        router.replace({
-            pathname: currentPathOnly,
-            query: newQuery
-        }, undefined, { shallow: true });
-    };
+    }, [products, stateSortItems, stateType, stateSales, text, router.asPath]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -430,10 +312,10 @@ export default function Catalog({ initialPage = 1 }) {
                              router.asPath.includes('/kolcza/pod-serebro') ? 'КОЛЬЦА ПОД СЕРЕБРО' :
                              stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
                         </h1>
-                        <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} />
+                        <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} />
                     </div>
                     <div className={styles.rightColumn}>
-                        <SubcategoryCards productType={stateType} />
+                        <SubcategoryCards productType={stateType} isSubcategoryPage={isSubcategoryPage} />
                         <SortSection stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} sortItems={sortItems} />
                         <div className={styles.columnOrders}>
                             {search && filteredData.length === 0 && <NoResults text={text} />}
@@ -444,8 +326,9 @@ export default function Catalog({ initialPage = 1 }) {
                                     </p>
                                 </div>
                             )}
-                            <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
+                            <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
                             <ProductGrid filteredData={currentItems} />
+                            <SubcategorySeoText currentPage={currentPage} />
 
                             {filteredData.length > itemsPerPage && (
                                 <Pagination

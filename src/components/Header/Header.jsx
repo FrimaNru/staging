@@ -147,7 +147,7 @@ export default function Header() {
 function DrawerBlock({ isOpenDrawer, setIsOpenDrawer, pathname }) {
 
     const [state, setState] = useState(false);
-    const typeCatalog = [{ text: 'Все изделия', link: 'catalog' }, { text: 'Кольца', link: 'catalog/kolcza' }, { text: 'Серьги', link: 'catalog/sergi' }, { text: 'Браслеты', link: 'catalog/braslety' }, { text: 'Колье', link: 'catalog/kole' }];
+    const typeCatalog = [{ text: 'Все изделия', link: '/catalog' }, { text: 'Кольца', link: '/catalog/kolcza' }, { text: 'Серьги', link: '/catalog/sergi' }, { text: 'Браслеты', link: '/catalog/braslety' }, { text: 'Колье', link: '/catalog/kole' }];
 
     return <Drawer isOpen={isOpenDrawer} placement='right' autoFocus={false} onClose={() => setIsOpenDrawer(false)} size='full' >
         <DrawerContent bg='white' h='calc(100% - 63px)' mt='63px' w='100%'>
@@ -156,7 +156,12 @@ function DrawerBlock({ isOpenDrawer, setIsOpenDrawer, pathname }) {
                     ? <>
                         <hr className={styles.drawerHr} />
                         {HEADER_LINKS.map((x, i) => x.text !== 'Каталог'
-                            ? <Link key={i} href={x.link} style={{ width: '100%' }}>
+                            ? <Link
+                                key={i}
+                                href={x.link}
+                                style={{ width: '100%' }}
+                                onClick={() => setIsOpenDrawer(false)}
+                            >
                                 <div className={`${styles.drawerItem} ${pathname === x.link && styles.drawerItemSelect}`}>{x.text}</div>
                             </Link>
                             : <div key={i} className={styles.drawerItem} onClick={() => setState(true)}>{x.text}</div>)}
@@ -167,7 +172,12 @@ function DrawerBlock({ isOpenDrawer, setIsOpenDrawer, pathname }) {
                             <p className={styles.drawerCatalogHeaderText}>Каталог</p>
                         </div>
                         <div className={styles.drawerCatalogColumn}>
-                            {typeCatalog.map((x, i) => <Link key={i} href={x.link} style={{ width: 'max-content' }}>
+                            {typeCatalog.map((x, i) => <Link
+                                key={i}
+                                href={x.link}
+                                style={{ width: 'max-content' }}
+                                onClick={() => setIsOpenDrawer(false)}
+                            >
                                 <p className={styles.drawerCatalogColumnText}>{x.text}</p>
                             </Link>)}
                         </div>

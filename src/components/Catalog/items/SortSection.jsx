@@ -7,7 +7,7 @@ export default function SortSection({ stateSortItems, setStateSortItems, sortIte
             <p className={styles.lineSortText}>Сортировать</p>
             <Menu>
                 <MenuButton pos='relative' zIndex={1}>
-                    <div className={styles.menuButton} zIndex={5} pos='relative'>
+                    <div className={styles.menuButton} style={{ zIndex: 5, position: 'relative' }}>
                         <p className={styles.menuButtonText}>{stateSortItems}</p>
                         <svg style={{ marginTop: '3px' }} width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0.496094 0.5L5.49609 5.5L10.4961 0.5" stroke="#140702" strokeLinecap="round" />
