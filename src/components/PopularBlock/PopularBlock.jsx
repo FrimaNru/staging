@@ -8,6 +8,8 @@ import { formatNumber } from "@/lib/Formatting";
 import { FavouriteButton } from "../Common/FavouriteButton";
 import { PRODUCT_TYPES } from "@/constants/items";
 import { buildProductSlug } from "@/lib/seo";
+import { useCart } from "@/contexts/CartContext";
+import { Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react';
 
 function SampleNextArrow(props) {
     const { onClick } = props;
@@ -54,6 +56,8 @@ function SamplePrevArrowMobile(props) {
 export default function PopularBlock() {
 
     const [data, setData] = useState([]);
+    const { addToCart } = useCart();
+    const [isOpenModal, setIsOpenModal] = useState(false);
 
     var settings = {
         dots: false,
@@ -87,6 +91,16 @@ export default function PopularBlock() {
             .catch((e) => console.log(e));
     }
 
+    const buy = async (product) => {
+        addToCart({
+            id: product._id,
+            size: product.type === 'ring' || product.type === 'bracelets' ? product.sizes[0] : product.sizes[0],
+            color: product.color,
+            article: product?.article,
+        });
+        setIsOpenModal(true);
+    };
+
     return <div className={styles.main}>
         <p className={styles.title}>Популярное</p>
 
@@ -108,6 +122,7 @@ export default function PopularBlock() {
                                 <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
                                 <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
                             </div>
+                            <button className={styles.buyButton} onClick={() => buy(x)}>КУПИТЬ</button>
                         </div>
                     </div>
                 })}
@@ -132,10 +147,31 @@ export default function PopularBlock() {
                                 <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
                                 <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
                             </div>
+                            <button className={styles.buyButton} onClick={() => buy(x)}>КУПИТЬ</button>
                         </div>
                     </div>
                 })}
             </Slider>}
         </div>
+        
+        <Modal isOpen={isOpenModal} size='xl' onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
+            <ModalOverlay />
+            <ModalContent bg='none' boxShadow='none'>
+                <ModalBody p={0}>
+                    <div className={styles.modalContent}>
+                        <div className={styles.modalText}>
+                            <h2>Товар добавлен в корзину!</h2>
+                            <p>Вы можете продолжить покупки или перейти в корзину для оформления заказа.</p>
+                        </div>
+                        <div className={styles.modalButtons}>
+                            <button className={styles.modalButton} onClick={() => setIsOpenModal(false)}>Продолжить покупки</button>
+                            <Link href="/bag">
+                                <button className={styles.modalButton} onClick={() => setIsOpenModal(false)}>Перейти в корзину</button>
+                            </Link>
+                        </div>
+                    </div>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
     </div >
 }

@@ -11,7 +11,7 @@ export default function CharasteristicBlock() {
                         <h2>
                             <AccordionButton _hover={{}} p={0} >
                                 <div className={styles.accordionButton}>
-                                    <div dangerouslySetInnerHTML={{ __html: x.title }} className={styles.accordionButtonTitle} />
+                                    <div dangerouslySetInnerHTML={{ __html: x.title }} className={styles.accordionButtonTitle} data-noindex="true" />
                                     {isExpanded ? <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M21 11.5L11 1.5L1 11.5" stroke="#140702" strokeLinecap="round" />
                                     </svg>

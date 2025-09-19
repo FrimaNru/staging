@@ -13,6 +13,7 @@ import AccordionFilters from "./items/AccordionFilters";
 import Pagination from "./items/Pagination";
 import SubcategoryCards from "./items/SubcategoryCards";
 import SubcategorySeoText from "./items/SubcategorySeoText";
+import CategoryCards from "./items/CategoryCards";
 import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
 
 export default function Catalog({ initialPage = 1 }) {
@@ -44,6 +45,11 @@ export default function Catalog({ initialPage = 1 }) {
                router.asPath.includes('/kolcza/krupnye') ||
                router.asPath.includes('/kolcza/pod-zoloto') ||
                router.asPath.includes('/kolcza/pod-serebro');
+    }, [router.asPath]);
+
+    // Определяем, является ли страница общей страницей каталога
+    const isMainCatalogPage = useMemo(() => {
+        return router.asPath === '/catalog' || router.asPath === '/catalog/';
     }, [router.asPath]);
 
     const sales = ['Новинки', 'Популярное', 'Скидки'];
@@ -315,6 +321,7 @@ export default function Catalog({ initialPage = 1 }) {
                         <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} />
                     </div>
                     <div className={styles.rightColumn}>
+                        {isMainCatalogPage && <CategoryCards />}
                         <SubcategoryCards productType={stateType} isSubcategoryPage={isSubcategoryPage} />
                         <SortSection stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} sortItems={sortItems} />
                         <div className={styles.columnOrders}>

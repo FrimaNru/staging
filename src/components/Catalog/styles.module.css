@@ -331,7 +331,9 @@
 
 .sliderItem {
     width: 240px;
-    height: auto;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
 }
 
 .sliderItem:hover {
@@ -343,6 +345,8 @@
     flex-direction: column;
     gap: 15px;
     align-items: center;
+    height: 100%;
+    justify-content: space-between;
 }
 
 .sliderItemColumn {
@@ -530,6 +534,178 @@
     width: 25px;
 }
 
+.buyButton {
+    display: flex;
+    width: 85%;
+    padding: 12px 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+    transition: all 0.5s;
+    border: none;
+    margin-top: auto;
+    margin-bottom: -10px;
+}
+
+.buyButton:hover {
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
+}
+
+.modalContent {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.modalText h2 {
+    color: #140702;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.modalText p {
+    color: #140702;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.modalButtons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.modalButton {
+    padding: 12px 24px;
+    border-radius: 104px;
+    background: #140702;
+    color: #FDEDBF;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.5s;
+    border: none;
+    text-decoration: none;
+}
+
+.modalButton:hover {
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
+}
+
+
+.categoryCards {
+    width: calc(100% + 170px);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 0px 0 0 0;
+}
+
+.categoryCardsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+}
+
+.categoryCard {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    font-size: 20px;
+    color: #140702;
+    font-family: 'Dela Gothic One', system-ui;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.categoryCardText {
+    font-family: "Dela Gothic One";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    position: absolute;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+.categoryCardTextLight {
+    color: #FDEDBF;
+}
+
+.categoryCardTextDark {
+    color: #140702;
+}
+
+.categoryCardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s;
+}
+
+.categoryCard:hover .categoryCardImage {
+    cursor: pointer;
+    filter: brightness(40%);
+    transition: all 0.3s;
+}
+
+.categoryCard:hover .categoryCardTextLight {
+    color: #FDEDBF;
+    transition: all 0.3s;
+}
+
+.categoryCard:hover .categoryCardTextDark {
+    color: #FDEDBF;
+    transition: all 0.3s;
+}
+
+@media (max-width: 475px) {
+    .categoryCards {
+        width: 100%;
+        gap: 10px;
+        margin: 0px 0 0 0;
+        padding: 0 20px;
+    }
+
+    .categoryCardsGrid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .categoryCard {
+        height: 120px;
+    }
+
+    .categoryCardText {
+        font-size: 12px;
+    }
+}
+
 .productItemArticle {
     font-size: 14px;
     font-weight: 400;
@@ -696,17 +872,21 @@
 
     .sliderItem {
         width: 100%;
-        height: auto;
+        height: 400px;
         border-bottom: solid 0.5px #140702;
         padding: 0 0 20px 0;
+        display: flex;
+        flex-direction: column;
     }
 
     /* Стили для подкатегорий на мобильных устройствах */
     .subcategoryPage .sliderItem {
         width: 100%;
-        height: auto;
+        height: 400px;
         border-bottom: solid 0.5px #140702;
         padding: 0 0 20px 0;
+        display: flex;
+        flex-direction: column;
     }
 
     .subcategoryPage .sliderItemContent {
@@ -723,6 +903,12 @@
 
     .subcategoryPage .sliderItemLink {
         width: 100%;
+    }
+
+    .buyButton {
+        font-size: 14px;
+        padding: 10px 14px;
+        width: 90%;
     }
 
     .sliderItemLink {
