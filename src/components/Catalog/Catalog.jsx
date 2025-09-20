@@ -15,6 +15,7 @@ import SubcategoryCards from "./items/SubcategoryCards";
 import SubcategorySeoText from "./items/SubcategorySeoText";
 import CategoryCards from "./items/CategoryCards";
 import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
+import { PRODUCT_TYPES } from "@/constants/items";
 
 export default function Catalog({ initialPage = 1 }) {
     const { products, loading } = useProducts();
@@ -274,7 +275,12 @@ export default function Catalog({ initialPage = 1 }) {
         };
 
         if (text && text.length > 0) {
-            d = d.filter(x => x.name.includes(text));
+            const normalizedQuery = String(text).toLowerCase().trim();
+            d = d.filter(x => {
+                const combined = `${(PRODUCT_TYPES[x?.type] || '').toLowerCase()} ${(x?.name || '').toLowerCase()}`.trim();
+                const article = (x?.article || '').toLowerCase();
+                return combined.includes(normalizedQuery) || article.includes(normalizedQuery);
+            });
         };
 
         const typeMap = { 'Кольца': 'ring', 'Серьги': 'earrings', 'Браслеты': 'bracelets', 'Колье': 'necklace' };

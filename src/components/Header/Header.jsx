@@ -9,6 +9,8 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { formatNumber } from "@/lib/Formatting";
 import { useCart } from "@/contexts/CartContext";
+import { useProducts } from "@/contexts/ProductsContext";
+import { PRODUCT_TYPES } from "@/constants/items";
 import { useFavourite } from "@/contexts/FavouriteContext";
 import { useUser } from "@/contexts/UserContext";
 import { HEADER_LINKS } from "@/constants/items";
@@ -17,6 +19,7 @@ export default function Header() {
 
     const router = useRouter();
     const { startSetCart, cart } = useCart();
+    const { products: contextProducts } = useProducts();
     const { startSetFavourite, favourite } = useFavourite();
     const { setUser, clearUser } = useUser();
     const [products, setProducts] = useState([]);
@@ -68,9 +71,14 @@ export default function Header() {
     };
 
     function getAllProducts() {
+        // если контекст уже содержит товары, используем их
+        if (Array.isArray(contextProducts) && contextProducts.length > 0) {
+            setProducts(contextProducts);
+            return;
+        }
         axios.get(`${API_BASE_URL}getProducts`)
             .then((res) => {
-                setProducts(res.data);
+                setProducts(res.data || []);
             })
             .catch((e) => console.log(e));
     };
@@ -96,7 +104,12 @@ export default function Header() {
                         </div>
                     </Link>
                     <>
-                        {products.filter(item => item.name.toLowerCase().includes(search.toLowerCase())).map((x, i) => {
+                        {(Array.isArray(products) ? products : []).filter(item => {
+                            const q = (search || '').toLowerCase().trim();
+                            const combined = `${(PRODUCT_TYPES[item?.type] || '').toLowerCase()} ${(item?.name || '').toLowerCase()}`.trim();
+                            const article = (item?.article || '').toLowerCase();
+                            return combined.includes(q) || article.includes(q);
+                        }).map((x, i) => {
                             return (
                                 <Link key={i} href={`/product/${buildProductSlug(x)}`}>
                                     <div className={styles.inputPanelLine}>
@@ -207,11 +220,16 @@ function SearchDrawerBlock({ isSearchOpen, setIsSearchOpen, products }) {
                         </div>
                     </Link>
                     <>
-                        {products.map((x, i) => x.name.includes(search) && <Link key={i} href={`/product/${buildProductSlug(x)}`} onClick={() => setIsSearchOpen(false)} >
+                        {products.map((x, i) => {
+                            const q = (search || '').toLowerCase().trim();
+                            const combined = `${(PRODUCT_TYPES[x?.type] || '').toLowerCase()} ${(x?.name || '').toLowerCase()}`.trim();
+                            const article = (x?.article || '').toLowerCase();
+                            return (combined.includes(q) || article.includes(q));
+                        }).map((cond, i) => cond && <Link key={i} href={`/product/${buildProductSlug(products[i])}`} onClick={() => setIsSearchOpen(false)} >
                             <div className={styles.inputPanelLine} >
-                                <img src={x.cover} className={styles.inputPanelCover} />
-                                <p className={styles.inputPanelName}>{x.name}</p>
-                                <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
+                                <img src={products[i].cover} className={styles.inputPanelCover} />
+                                <p className={styles.inputPanelName}>{products[i].name}</p>
+                                <p className={styles.inputPanelCost}>{formatNumber(products[i].cost)} руб.</p>
                             </div>
                         </Link>)}
                     </>
