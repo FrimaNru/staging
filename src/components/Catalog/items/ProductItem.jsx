@@ -6,9 +6,11 @@ import { PRODUCT_TYPES } from "@/constants/items";
 import { buildProductSlug } from "@/lib/seo";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
-import { Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react';
+import { ProductModal } from "@/components/Product/Product";
+import { useRouter } from "next/router";
 
 export default function ProductItem({ product }) {
+    const router = useRouter();
     const slug = buildProductSlug(product);
     const { addToCart } = useCart();
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -38,25 +40,7 @@ export default function ProductItem({ product }) {
                 </div>
                 <button className={styles.buyButton} onClick={buy}>КУПИТЬ</button>
             </div>
-            <Modal isOpen={isOpenModal} size='xl' onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
-                <ModalOverlay />
-                <ModalContent bg='none' boxShadow='none'>
-                    <ModalBody p={0}>
-                        <div className={styles.modalContent}>
-                            <div className={styles.modalText}>
-                                <h2>Товар добавлен в корзину!</h2>
-                                <p>Вы можете продолжить покупки или перейти в корзину для оформления заказа.</p>
-                            </div>
-                            <div className={styles.modalButtons}>
-                                <button className={styles.modalButton} onClick={() => setIsOpenModal(false)}>Продолжить покупки</button>
-                                <Link href="/bag">
-                                    <button className={styles.modalButton} onClick={() => setIsOpenModal(false)}>Перейти в корзину</button>
-                                </Link>
-                            </div>
-                        </div>
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
+            <ProductModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} product={product} router={router} />
         </div>
     );
 }

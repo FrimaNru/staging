@@ -77,35 +77,41 @@ export default function Product({ product }) {
                 </div>
             </div>
             <CharasteristicBlock />
-            <Modal isOpen={isOpenModal} size='xl' onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
-                <ModalOverlay />
-                <ModalContent bg='none' boxShadow='none'>
-                    <ModalBody p={0}>
-                        <div className={styles.modal}>
-                            <div className={styles.modalHeader}>
-                                <div className={styles.modalHeaderLine}>
-                                    <p className={styles.modalHeaderTitle}>ДОБАВЛЕНО В КОРЗИНУ</p>
-                                    <p className={styles.modalHeaderTitleMobile}>В КОРЗИНЕ</p>
-                                    <img src='/cross.svg' className={styles.modalHeaderCross} onClick={() => setIsOpenModal(false)} />
-                                    <img src='/crossMobile.svg' className={styles.modalHeaderCrossMobile} onClick={() => setIsOpenModal(false)} />
-                                </div>
-                                <hr className={styles.modalHeaderHr} />
+            <ProductModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} product={product} router={router} />
+        </div>
+    );
+}
+
+export const ProductModal = ({ isOpenModal, setIsOpenModal, product, router }) => {
+    return (
+        <Modal isOpen={isOpenModal} size='xl' onClose={() => setIsOpenModal(false)} isCentered autoFocus={false}>
+            <ModalOverlay />
+            <ModalContent bg='none' boxShadow='none'>
+                <ModalBody p={0}>
+                    <div className={styles.modal}>
+                        <div className={styles.modalHeader}>
+                            <div className={styles.modalHeaderLine}>
+                                <p className={styles.modalHeaderTitle}>ДОБАВЛЕНО В КОРЗИНУ</p>
+                                <p className={styles.modalHeaderTitleMobile}>В КОРЗИНЕ</p>
+                                <img src='/cross.svg' className={styles.modalHeaderCross} onClick={() => setIsOpenModal(false)} />
+                                <img src='/crossMobile.svg' className={styles.modalHeaderCrossMobile} onClick={() => setIsOpenModal(false)} />
                             </div>
-                            <div className={styles.modalBody}>
-                                <div className={styles.modalBodyColumn}>
-                                    <img src={product.cover} className={styles.modalBodyImg} />
-                                    <p className={styles.modalBodyTitle}>{PRODUCT_TYPES[product.type]} {product.name}</p>
-                                </div>
-                                <div className={styles.modalBodyColumnButtons}>
-                                    <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)}>ПРОДОЛЖИТЬ ПОКУПКИ</button>
-                                    <button className={styles.modalBodyButtonBag} onClick={() => router.push('/bag')}>ОФОРМИТЬ ЗАКАЗ</button>
-                                </div>
+                            <hr className={styles.modalHeaderHr} />
+                        </div>
+                        <div className={styles.modalBody}>
+                            <div className={styles.modalBodyColumn}>
+                                <img src={product.cover} className={styles.modalBodyImg} />
+                                <p className={styles.modalBodyTitle}>{PRODUCT_TYPES[product.type]} {product.name}</p>
+                            </div>
+                            <div className={styles.modalBodyColumnButtons}>
+                                <button className={styles.modalBodyButtonComplete} onClick={() => setIsOpenModal(false)}>ПРОДОЛЖИТЬ ПОКУПКИ</button>
+                                <button className={styles.modalBodyButtonBag} onClick={() => router.push('/bag')}>ОФОРМИТЬ ЗАКАЗ</button>
                             </div>
                         </div>
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
-        </div>
+                    </div>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
     );
 }
 
