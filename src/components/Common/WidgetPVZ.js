@@ -14,10 +14,10 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
                     servicePath: 'https://api.mi-alegria.shop/map_service/service.php',
                     apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf',
                     goods: [{ weight: 0.5, height: 10, width: 10, length: 10 }],
+                    defaultLocation: 'Москва',
                     map: {
                         provider: 'yandex',
                         yandex: {
-                            apiKey: process.env.NEXT_PUBLIC_YANDEX_MAP_KEY,
                             center: [55.7558, 37.6173],
                             zoom: 10,
                         },
