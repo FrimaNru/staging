@@ -192,6 +192,7 @@ export default function Bag() {
                 setDeliveryCost={setDeliveryCost}
                 deliveryDate={deliveryDate}
                 isWidgetVisible={isWidgetVisible}
+                selectedPVZ={selectedPVZ}
                 setOrder={setOrder}
                 setIsWidgetVisible={setIsWidgetVisible}
                 prevPath={prevPath}

@@ -6,15 +6,30 @@ import BagInfoColumn from "./BagInfoColumn";
 
 export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, deliveryDate, setSelectedPVZ, isWidgetVisible, selectedPVZ, total, deliveryCost, setOrder, setIsWidgetVisible, prevPath }) {
 
-    const handleSelectPVZ = async (pvz) => {
+    const normalizePvz = (pvz) => {
+        // Виджет СДЭК возвращает разные наборы полей в зависимости от версии/типа
+        if (!pvz || typeof pvz !== 'object') return null;
+        return {
+            address: pvz.address || pvz.location || pvz.address_full || '',
+            work_time: pvz.work_time || pvz.workTime || pvz.schedule || '',
+            postal_code: pvz.postal_code || pvz.postIndex || pvz.postcode || '',
+            city: pvz.city || pvz.cityName || pvz.city_name || '',
+            region: pvz.region || pvz.regionName || pvz.region_name || '',
+            code: pvz.code || pvz.id || pvz.pvz_code || '',
+        };
+    };
+
+    const handleSelectPVZ = async (pvzRaw) => {
         try {
+            const pvz = normalizePvz(pvzRaw);
             setSelectedPVZ(pvz);
             const response = await axios.post(
                 `${API_BASE_URL}calculateDelivery`,
                 { address: pvz.address, postal_code: pvz.postal_code },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, timeout: 5000 }
             );
-            setDeliveryDate(`${response.data.period_min} - ${response.data.period_max + 1} дня`);
+            // Показываем как возвращает API (без +1), и склонение оставляем как есть
+            setDeliveryDate(`${response.data.period_min} - ${response.data.period_max} дня`);
             setDeliveryCost(response.data.total_sum);
         } catch (error) {
             console.error("Ошибка при расчете доставки:", error.message || error);
