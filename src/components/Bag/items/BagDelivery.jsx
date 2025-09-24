@@ -19,17 +19,30 @@ export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, d
         };
     };
 
+    const formatDays = (min, max) => {
+        const word = (n) => {
+            const mod10 = n % 10;
+            const mod100 = n % 100;
+            if (mod10 === 1 && mod100 !== 11) return 'день';
+            if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'дня';
+            return 'дней';
+        };
+        if (!max || min === max) return `${min} ${word(min)}`;
+        return `${min} - ${max} ${word(max)}`;
+    };
+
     const handleSelectPVZ = async (pvzRaw) => {
         try {
             const pvz = normalizePvz(pvzRaw);
             setSelectedPVZ(pvz);
             const response = await axios.post(
                 `${API_BASE_URL}calculateDelivery`,
-                { address: pvz.address, postal_code: pvz.postal_code },
+                { address: pvz.address, postal_code: pvz.postal_code, city: pvz.city, region: pvz.region, code: pvz.code },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, timeout: 5000 }
             );
-            // Показываем как возвращает API (без +1), и склонение оставляем как есть
-            setDeliveryDate(`${response.data.period_min} - ${response.data.period_max} дня`);
+            const min = Number(response?.data?.period_min) || 0;
+            const max = Number(response?.data?.period_max) || min;
+            setDeliveryDate(formatDays(min, max));
             setDeliveryCost(response.data.total_sum);
         } catch (error) {
             console.error("Ошибка при расчете доставки:", error.message || error);
