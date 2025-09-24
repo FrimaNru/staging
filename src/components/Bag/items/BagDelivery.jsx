@@ -40,8 +40,9 @@ export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, d
                 { address: pvz.address, postal_code: pvz.postal_code, city: pvz.city, region: pvz.region, code: pvz.code },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, timeout: 5000 }
             );
-            // Всегда показываем фиксированный срок
-            setDeliveryDate('3-4 дня');
+            const min = Number(response?.data?.period_min) || 0;
+            const max = Number(response?.data?.period_max) || min;
+            setDeliveryDate(formatDays(min, max));
             setDeliveryCost(response.data.total_sum);
         } catch (error) {
             console.error("Ошибка при расчете доставки:", error.message || error);
