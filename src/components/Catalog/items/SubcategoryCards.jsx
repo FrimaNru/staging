@@ -2,8 +2,8 @@ import styles from "../styles.module.css";
 import Link from "next/link";
 
 export default function SubcategoryCards({ productType, isSubcategoryPage = false }) {
-    // Show subcategory cards for earrings and rings only on main category pages
-    if (productType !== 'Серьги' && productType !== 'Кольца') {
+    // Show subcategory cards for earrings, rings, and bracelets only on main category pages
+    if (productType !== 'Серьги' && productType !== 'Кольца' && productType !== 'Браслеты') {
         return null;
     }
     
@@ -60,7 +60,25 @@ export default function SubcategoryCards({ productType, isSubcategoryPage = fals
         }
     ];
 
-    const subcategories = productType === 'Серьги' ? earringsSubcategories : ringsSubcategories;
+    const braceletsSubcategories = [
+        {
+            title: 'Под золото',
+            url: '/catalog/braslety/pod-zoloto',
+            image: '/assets/images/gold.webp', // Временно используем изображение серег
+            description: 'Золотистые браслеты для элегантности'
+        },
+        {
+            title: 'Под серебро',
+            url: '/catalog/braslety/pod-serebro',
+            image: '/assets/images/silver.webp', // Временно используем изображение серег
+            description: 'Серебристые браслеты для стиля'
+        }
+    ];
+
+    const subcategories = 
+        productType === 'Серьги' ? earringsSubcategories : 
+        productType === 'Кольца' ? ringsSubcategories :
+        braceletsSubcategories;
 
     return (
         <div className={styles.subcategoryCards}>

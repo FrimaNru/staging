@@ -45,7 +45,9 @@ export default function Catalog({ initialPage = 1 }) {
                router.asPath.includes('/sergi/pod-serebro') ||
                router.asPath.includes('/kolcza/krupnye') ||
                router.asPath.includes('/kolcza/pod-zoloto') ||
-               router.asPath.includes('/kolcza/pod-serebro');
+               router.asPath.includes('/kolcza/pod-serebro') ||
+               router.asPath.includes('/braslety/pod-zoloto') ||
+               router.asPath.includes('/braslety/pod-serebro');
     }, [router.asPath]);
 
     // Определяем, является ли страница общей страницей каталога
@@ -66,7 +68,9 @@ export default function Catalog({ initialPage = 1 }) {
         '/sergi/pod-serebro': 'Под серебро',
         '/kolcza/krupnye': 'Крупные',
         '/kolcza/pod-zoloto': 'Под золото',
-        '/kolcza/pod-serebro': 'Под серебро'
+        '/kolcza/pod-serebro': 'Под серебро',
+        '/braslety/pod-zoloto': 'Под золото',
+        '/braslety/pod-serebro': 'Под серебро'
     };
 
     // Функция для получения текущей подкатегории на основе URL
@@ -322,6 +326,8 @@ export default function Catalog({ initialPage = 1 }) {
                              router.asPath.includes('/kolcza/krupnye') ? 'КРУПНЫЕ КОЛЬЦА' :
                              router.asPath.includes('/kolcza/pod-zoloto') ? 'КОЛЬЦА ПОД ЗОЛОТО' :
                              router.asPath.includes('/kolcza/pod-serebro') ? 'КОЛЬЦА ПОД СЕРЕБРО' :
+                             router.asPath.includes('/braslety/pod-zoloto') ? 'БРАСЛЕТЫ ПОД ЗОЛОТО' :
+                             router.asPath.includes('/braslety/pod-serebro') ? 'БРАСЛЕТЫ ПОД СЕРЕБРО' :
                              stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
                         </h1>
                         <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} />
