@@ -111,6 +111,7 @@ export default function AdminProducts() {
     };
 
 
+
     return <div className={styles.main}>
         <p className={styles.title}>Товары</p>
         <FilterBlock sortType={sortType} setSortSection={setSortSection} setSortType={setSortType} sortSection={sortSection} search={search} setSearch={setSearch} onlyActive={onlyActive} setOnlyActive={setOnlyActive} productsView={productsView} setProductsView={setProductsView} onlyNotActive={onlyNotActive} setOnlyNotActive={setOnlyNotActive} />

@@ -3,14 +3,14 @@ import Catalog from "@/components/Catalog/Catalog";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
 
-export default function PodZolotoBraslety() {
+export default function ZhestkieBraslety() {
     return (
         <>
             <Head>
-                <title>Браслеты под золото – купить в Mi Alegria, цена</title>
-                <meta name="description" content="Купить браслет под золото - бижутерия премиум-класса в интернет-магазине Mi Alegria ✔ Эксклюзивный дизайн для вашего неповторимого образа ✔ Купить женский браслет на руку под золото можно на нашем сайте" />
-                <meta name="keywords" content="браслеты под золото, золотые браслеты, браслеты, бижутерия, Mi Alegria" />
-                <link rel="canonical" href="https://mi-alegria.shop/catalog/braslety/pod-zoloto" />
+                <title>Жесткие браслеты – цена, купить элитную бижутерию в Mi Alegria</title>
+                <meta name="description" content="Интернет-магазин Mi Alegria в Москве предлагает приобрести жесткие женские браслеты и другую бижутерию премиум-класса✔ Украшения высокого качества с эксклюзивным дизайном ✔ Выбрать и купить жесткий браслет на руку с доставкой можно на нашем сайте" />
+                <meta name="keywords" content="жесткие браслеты, браслеты, бижутерия, Mi Alegria" />
+                <link rel="canonical" href="https://mi-alegria.shop/catalog/braslety/zhestkie" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />
                 <link rel="apple-touch-icon" sizes="60x60" href="/faviconsWithBg.ico/apple-icon-60x60.png" />

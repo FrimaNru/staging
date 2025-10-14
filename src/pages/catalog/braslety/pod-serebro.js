@@ -7,8 +7,8 @@ export default function PodSerebroBraslety() {
     return (
         <>
             <Head>
-                <title>Браслеты под серебро – купить дизайнерскую бижутерию в Mi Alegria</title>
-                <meta name="description" content="Купить браслет под серебро - элитная бижутерия в Москве в интернет-магазине Mi Alegria ✔ Уникальный дизайн для неповторимого образа ✔ Заказать браслеты под серебро и другие украшения можно на нашем сайте" />
+                <title>Браслеты под серебро – купить по выгодной цене в Mi Alegria</title>
+                <meta name="description" content="Купить браслет под серебро в интернет-магазине Mi Alegria - элитная бижутерия в Москве с доставкой в любой регион✔ Дизайн, вдохновленный культурой разных стран ✔ Заказать женский браслет под серебро и другие украшения можно на нашем сайте" />
                 <meta name="keywords" content="браслеты под серебро, серебряные браслеты, браслеты, бижутерия, Mi Alegria" />
                 <link rel="canonical" href="https://mi-alegria.shop/catalog/braslety/pod-serebro" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,4 +40,3 @@ export default function PodSerebroBraslety() {
         </>
     );
 }
-

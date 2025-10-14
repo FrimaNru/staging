@@ -54,18 +54,11 @@ export default function Pagination({ currentPage, totalPages }) {
         const currentPath = router.asPath.split('?')[0]; // Получаем текущий путь без query
         
         if (page === 1) {
-            const newQuery = { ...router.query };
-            delete newQuery.PAGEN_1;
-            delete newQuery.page;
-            
-            const queryString = new URLSearchParams(newQuery).toString();
-            return queryString ? `${currentPath}?${queryString}` : currentPath;
+            // Для первой страницы просто возвращаем текущий путь без параметров
+            return currentPath;
         } else {
-            const newQuery = { ...router.query };
-            newQuery.PAGEN_1 = page.toString();
-            
-            const queryString = new URLSearchParams(newQuery).toString();
-            return `${currentPath}?${queryString}`;
+            // Для остальных страниц добавляем параметр PAGEN_1
+            return `${currentPath}?PAGEN_1=${page}`;
         }
     };
 
@@ -74,16 +67,8 @@ export default function Pagination({ currentPage, totalPages }) {
         
         if (currentPage === 1) return;
         
-        const newQuery = { ...router.query };
-        delete newQuery.PAGEN_1;
-        delete newQuery.page;
-        
         const currentPath = router.asPath.split('?')[0];
-        
-        router.push({
-            pathname: currentPath,
-            query: newQuery
-        }).then(() => {
+        router.push(currentPath).then(() => {
             scrollToBreadcrumbs();
         });
     };
@@ -92,16 +77,8 @@ export default function Pagination({ currentPage, totalPages }) {
         e.preventDefault();
         
         if (currentPage === 2) {
-            const newQuery = { ...router.query };
-            delete newQuery.PAGEN_1;
-            delete newQuery.page;
-            
             const currentPath = router.asPath.split('?')[0];
-            
-            router.push({
-                pathname: currentPath,
-                query: newQuery
-            }).then(() => {
+            router.push(currentPath).then(() => {
                 scrollToBreadcrumbs();
             });
         } else {

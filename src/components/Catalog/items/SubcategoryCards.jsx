@@ -62,15 +62,27 @@ export default function SubcategoryCards({ productType, isSubcategoryPage = fals
 
     const braceletsSubcategories = [
         {
+            title: 'Широкие',
+            url: '/catalog/braslety/shirokie',
+            image: '/assets/images/braslshir.webp',
+            description: 'Широкие браслеты для яркого образа'
+        },
+        {
+            title: 'Жесткие',
+            url: '/catalog/braslety/zhestkie',
+            image: '/assets/images/braslzhest.webp',
+            description: 'Жесткие браслеты премиум-класса'
+        },
+        {
             title: 'Под золото',
             url: '/catalog/braslety/pod-zoloto',
-            image: '/assets/images/gold.webp', // Временно используем изображение серег
+            image: '/assets/images/braslzoloto.webp',
             description: 'Золотистые браслеты для элегантности'
         },
         {
             title: 'Под серебро',
             url: '/catalog/braslety/pod-serebro',
-            image: '/assets/images/silver.webp', // Временно используем изображение серег
+            image: '/assets/images/braslserebro.webp',
             description: 'Серебристые браслеты для стиля'
         }
     ];

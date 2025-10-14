@@ -49,6 +49,18 @@ export default function Breadcrumb() {
                     } else if (asPath.includes('/kolcza/pod-serebro')) {
                         array.push({ text: 'Кольца', link: '/catalog/kolcza' });
                         array.push({ text: 'Под серебро', link: asPath });
+                    } else if (asPath.includes('/braslety/shirokie')) {
+                        array.push({ text: 'Браслеты', link: '/catalog/braslety' });
+                        array.push({ text: 'Широкие', link: asPath });
+                    } else if (asPath.includes('/braslety/zhestkie')) {
+                        array.push({ text: 'Браслеты', link: '/catalog/braslety' });
+                        array.push({ text: 'Жесткие', link: asPath });
+                    } else if (asPath.includes('/braslety/pod-zoloto')) {
+                        array.push({ text: 'Браслеты', link: '/catalog/braslety' });
+                        array.push({ text: 'Под золото', link: asPath });
+                    } else if (asPath.includes('/braslety/pod-serebro')) {
+                        array.push({ text: 'Браслеты', link: '/catalog/braslety' });
+                        array.push({ text: 'Под серебро', link: asPath });
                     } else {
                         // Обычная категория
                         const slug = asPath.replace('/catalog/', '');
