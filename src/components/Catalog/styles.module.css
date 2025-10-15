@@ -134,11 +134,26 @@
     width: 100%;
     max-width: 850px;
     color: #140702;
+    border: 1px solid #140702;
+    border-radius: 12px;
+    padding: 16px 18px;
+    background: #FFFFFF;
+    text-align: left;
+    margin-top: 30px;
 }
 
 .seoText p {
     font-size: 18px;
     line-height: 1.6;
+    text-align: left;
+}
+
+.seoText h2 {
+    font-size: 20px;
+    font-family: 'Dela Gothic One', system-ui;
+    text-align: left;
+    margin: 20px 0 10px 0;
+    color: #140702;
 }
 
 
@@ -1009,9 +1024,16 @@
 
     .seoText {
         max-width: 95%;
+        margin-top: 20px;
+        padding: 12px 14px;
     }
 
     .seoText p {
         font-size: 12px;
+    }
+
+    .seoText h2 {
+        font-size: 16px;
+        margin: 15px 0 8px 0;
     }
 }

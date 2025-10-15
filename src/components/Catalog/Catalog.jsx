@@ -353,7 +353,6 @@ export default function Catalog({ initialPage = 1 }) {
                             )}
                             <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
                             <ProductGrid filteredData={currentItems} />
-                            <SubcategorySeoText currentPage={currentPage} />
 
                             {filteredData.length > itemsPerPage && (
                                 <Pagination
@@ -361,6 +360,8 @@ export default function Catalog({ initialPage = 1 }) {
                                     totalPages={totalPages}
                                 />
                             )}
+                            
+                            <SubcategorySeoText currentPage={currentPage} />
                         </div>
                     </div>
                 </div>

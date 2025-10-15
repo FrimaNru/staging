@@ -66,10 +66,15 @@
 
 .prevArrow {
     position: absolute;
-    margin-top: 0px;
+    top: 50%;
+    left: -50px;
     z-index: 10;
-    height: 300px;
-    padding-top: 104px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
 }
 
 .prevArrow:hover,
@@ -79,11 +84,15 @@
 
 .nextArrow {
     position: absolute;
-    margin-top: -340px;
+    top: 50%;
+    right: -50px;
     z-index: 10;
-    right: 0%;
-    height: 300px;
-    padding-top: 104px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
 }
 
 .sliderBlockMobile {
@@ -237,17 +246,27 @@
 
     .nextArrow {
         position: absolute;
-        margin-top: -340px;
+        top: 50%;
+        right: 20px;
         z-index: 10;
-        right: 40px;
-        height: 250px;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
     }
 
     .prevArrow {
         position: absolute;
-        margin-top: 0px;
+        top: 50%;
+        left: 20px;
         z-index: 10;
-        left: 40px;
-        height: 250px;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
     }
 }
