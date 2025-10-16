@@ -1,5 +1,49 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
+export default function VKCallback() {
+    const router = useRouter();
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        try {
+            const url = new URL(window.location.href);
+            const searchParams = url.searchParams;
+            const hashParams = new URLSearchParams(url.hash.replace(/^#/, ''));
+
+            const token = searchParams.get('token') || hashParams.get('token');
+            const error = searchParams.get('error') || hashParams.get('error');
+
+            if (error) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                router.replace('/?auth_error=vk');
+                return;
+            }
+
+            if (token) {
+                localStorage.setItem('token', token);
+                router.replace('/');
+                return;
+            }
+
+            // If backend uses code flow and no token is present, just bounce home
+            router.replace('/?auth_pending=vk');
+        } catch (e) {
+            router.replace('/?auth_error=vk');
+        }
+    }, [router]);
+
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <p>Завершаем вход через ВКонтакте…</p>
+        </div>
+    );
+}
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import { API_BASE_URL } from '../../../../apiConfig';
 import { useUser } from '../../../contexts/UserContext';

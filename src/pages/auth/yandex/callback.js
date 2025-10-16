@@ -1,3 +1,50 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+
+export default function YandexCallback() {
+    const router = useRouter();
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        try {
+            const url = new URL(window.location.href);
+            const searchParams = url.searchParams;
+
+            // Token may arrive as "token" or inside hash for some providers
+            const tokenFromQuery = searchParams.get('token');
+            const tokenFromHash = new URLSearchParams(url.hash.replace(/^#/, '')).get('token');
+            const token = tokenFromQuery || tokenFromHash;
+
+            const error = searchParams.get('error') || new URLSearchParams(url.hash.replace(/^#/, '')).get('error');
+
+            if (error) {
+                // Clean up any old auth data on error
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                // Redirect to home with error flag
+                router.replace('/?auth_error=yandex');
+                return;
+            }
+
+            if (token) {
+                localStorage.setItem('token', token);
+                // Let UserProvider load the user after redirect
+                router.replace('/');
+            }
+        } catch (e) {
+            // On any parsing error, fail gracefully
+            router.replace('/?auth_error=yandex');
+        }
+    }, [router]);
+
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <p>Завершаем вход через Яндекс…</p>
+        </div>
+    );
+}
+
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
