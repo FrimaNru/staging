@@ -13,9 +13,17 @@ export default function YandexCallback() {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
             const error = urlParams.get('error');
+            const error_description = urlParams.get('error_description');
+
+            console.log('Yandex Callback URL params:', {
+                code,
+                error,
+                error_description,
+                fullUrl: window.location.href
+            });
 
             if (error) {
-                console.error('Yandex Auth error:', error);
+                console.error('Yandex Auth error:', error, error_description);
                 router.push('/');
                 return;
             }

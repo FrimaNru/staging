@@ -12,10 +12,20 @@ export default function VKCallback() {
         const handleVKCallback = async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
+            const access_token = urlParams.get('access_token');
             const error = urlParams.get('error');
+            const error_description = urlParams.get('error_description');
+
+            console.log('VK Callback URL params:', {
+                code,
+                access_token,
+                error,
+                error_description,
+                fullUrl: window.location.href
+            });
 
             if (error) {
-                console.error('VK Auth error:', error);
+                console.error('VK Auth error:', error, error_description);
                 router.push('/');
                 return;
             }
@@ -39,7 +49,28 @@ export default function VKCallback() {
                     console.error('VK callback error:', error);
                     router.push('/');
                 }
+            } else if (access_token) {
+                // Если VK вернул access_token напрямую
+                try {
+                    console.log('VK returned access_token directly:', access_token);
+                    const response = await axios.get(`${API_BASE_URL}auth/vk/callback?access_token=${access_token}`);
+                    console.log('VK callback response with access_token:', response.data);
+                    
+                    if (response.data.token) {
+                        localStorage.setItem('token', response.data.token);
+                        setUser(response.data.data);
+                        console.log('User set in context:', response.data.data);
+                        router.push('/cabinet?page=personaldata');
+                    } else {
+                        console.error('No token received from VK callback with access_token');
+                        router.push('/');
+                    }
+                } catch (error) {
+                    console.error('VK callback error with access_token:', error);
+                    router.push('/');
+                }
             } else {
+                console.error('No code or access_token received from VK');
                 router.push('/');
             }
         };
