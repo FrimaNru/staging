@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { API_BASE_URL } from '../../../apiConfig';
+import { API_BASE_URL } from '../../../../apiConfig';
 
 export default function YandexAuth() {
     const router = useRouter();
