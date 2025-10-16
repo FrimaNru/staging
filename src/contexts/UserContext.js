@@ -41,9 +41,12 @@ export const UserProvider = ({ children }) => {
             setUser(res.data);
             saveToLocalStorage(res.data);
         } catch (error) {
-            console.error(error);
-            clearLocalStorage();
-            setUser(null);
+            console.error("Error loading user:", error);
+            // Если ошибка 401, токен недействителен
+            if (error.response?.status === 401) {
+                clearLocalStorage();
+                setUser(null);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -54,6 +57,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     const refreshUser = async () => {
+        setIsLoading(true);
         await load();
     };
 

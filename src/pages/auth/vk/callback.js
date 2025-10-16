@@ -5,7 +5,7 @@ import { setToken } from "../../../lib/auth";
 
 export default function VKCallback() {
     const router = useRouter();
-    const { setUser } = useUser();
+    const { setUser, refreshUser } = useUser();
 
     useEffect(() => {
         const handleVKCallback = async () => {
@@ -13,11 +13,13 @@ export default function VKCallback() {
             const token = urlParams.get("token");
             const userParam = urlParams.get("user");
             const error = urlParams.get("error");
+            const code = urlParams.get("code");
 
             console.log("VK Callback URL params:", {
                 token: token ? "present" : "missing",
                 user: userParam ? "present" : "missing",
                 error,
+                code: code ? "present" : "missing",
                 fullUrl: window.location.href,
             });
 
@@ -44,11 +46,21 @@ export default function VKCallback() {
                     console.error("Error parsing user data:", error);
                     router.push("/?auth_error=parse_error");
                 }
+            } else if (code) {
+                // Если есть code, но нет токена - значит бэкенд обработал OAuth и установил cookie
+                console.log(
+                    "Code present but no token in URL, checking for cookie..."
+                );
+
+                // Небольшая задержка для того чтобы cookie успел установиться, затем обновляем пользователя
+                setTimeout(async () => {
+                    await refreshUser();
+                    router.push("/cabinet?page=personaldata");
+                }, 100);
             } else {
-                // Если токен в cookie, просто редиректим
-                // Бэкенд уже установил cookie, UserContext автоматически загрузит пользователя
-                console.log("No token in URL, checking for cookie...");
-                router.push("/cabinet?page=personaldata");
+                // Если нет ни токена, ни кода - ошибка
+                console.error("No token, user data, or code received from VK");
+                router.push("/?auth_error=no_data");
             }
         };
 
