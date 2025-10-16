@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import { API_BASE_URL } from '../../../../apiConfig';
-import { useUser } from '../../../contexts/UserContext';
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { API_BASE_URL } from "../../../../apiConfig";
+import { useUser } from "../../../contexts/UserContext";
 
 export default function VKCallback() {
     const router = useRouter();
@@ -11,67 +11,130 @@ export default function VKCallback() {
     useEffect(() => {
         const handleVKCallback = async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            const access_token = urlParams.get('access_token');
-            const error = urlParams.get('error');
-            const error_description = urlParams.get('error_description');
+            const code = urlParams.get("code");
+            const access_token = urlParams.get("access_token");
+            const error = urlParams.get("error");
+            const error_description = urlParams.get("error_description");
 
-            console.log('VK Callback URL params:', {
+            console.log("VK Callback URL params:", {
                 code,
                 access_token,
                 error,
                 error_description,
-                fullUrl: window.location.href
+                fullUrl: window.location.href,
             });
 
             if (error) {
-                console.error('VK Auth error:', error, error_description);
-                router.push('/');
+                console.error("VK Auth error:", error, error_description);
+                router.push("/");
                 return;
             }
 
             if (code) {
                 try {
-                    console.log('Sending VK callback request with code:', code);
-                    const response = await axios.get(`${API_BASE_URL}auth/vk/callback?code=${code}`);
-                    console.log('VK callback response:', response.data);
-                    
+                    console.log("Sending VK callback request with code:", code);
+                    const response = await axios.get(
+                        `${API_BASE_URL}auth/vk/callback?code=${code}`,
+                        { withCredentials: true }
+                    );
+                    console.log("VK callback response:", response.data);
+
                     if (response.data.token) {
-                        localStorage.setItem('token', response.data.token);
+                        localStorage.setItem("token", response.data.token);
                         setUser(response.data.data);
-                        console.log('User set in context:', response.data.data);
-                        router.push('/cabinet?page=personaldata');
+                        console.log("User set in context:", response.data.data);
+                        router.push("/cabinet?page=personaldata");
                     } else {
-                        console.error('No token received from VK callback');
-                        router.push('/');
+                        // Фолбэк через cookie-сессию
+                        try {
+                            const me = await axios.get(
+                                `${API_BASE_URL}getUser`,
+                                { withCredentials: true }
+                            );
+                            if (me?.data) {
+                                setUser(me.data);
+                                console.log(
+                                    "User set from cookie session (VK):",
+                                    me.data
+                                );
+                                router.push("/cabinet?page=personaldata");
+                            } else {
+                                console.error(
+                                    "No token or cookie session user received after VK callback"
+                                );
+                                router.push("/");
+                            }
+                        } catch (e) {
+                            console.error(
+                                "Failed to load user via cookie session after VK callback",
+                                e
+                            );
+                            router.push("/");
+                        }
                     }
                 } catch (error) {
-                    console.error('VK callback error:', error);
-                    router.push('/');
+                    console.error("VK callback error:", error);
+                    router.push("/");
                 }
             } else if (access_token) {
                 // Если VK вернул access_token напрямую
                 try {
-                    console.log('VK returned access_token directly:', access_token);
-                    const response = await axios.get(`${API_BASE_URL}auth/vk/callback?access_token=${access_token}`);
-                    console.log('VK callback response with access_token:', response.data);
-                    
+                    console.log(
+                        "VK returned access_token directly:",
+                        access_token
+                    );
+                    const response = await axios.get(
+                        `${API_BASE_URL}auth/vk/callback?access_token=${access_token}`,
+                        { withCredentials: true }
+                    );
+                    console.log(
+                        "VK callback response with access_token:",
+                        response.data
+                    );
+
                     if (response.data.token) {
-                        localStorage.setItem('token', response.data.token);
+                        localStorage.setItem("token", response.data.token);
                         setUser(response.data.data);
-                        console.log('User set in context:', response.data.data);
-                        router.push('/cabinet?page=personaldata');
+                        console.log("User set in context:", response.data.data);
+                        router.push("/cabinet?page=personaldata");
                     } else {
-                        console.error('No token received from VK callback with access_token');
-                        router.push('/');
+                        // Фолбэк через cookie-сессию
+                        try {
+                            const me = await axios.get(
+                                `${API_BASE_URL}getUser`,
+                                { withCredentials: true }
+                            );
+                            if (me?.data) {
+                                setUser(me.data);
+                                console.log(
+                                    "User set from cookie session (VK access_token):",
+                                    me.data
+                                );
+                                router.push("/cabinet?page=personaldata");
+                            } else {
+                                console.error(
+                                    "No token or cookie session user received after VK access_token callback"
+                                );
+                                router.push("/");
+                            }
+                        } catch (e) {
+                            console.error(
+                                "Failed to load user via cookie session after VK access_token callback",
+                                e
+                            );
+                            router.push("/");
+                        }
                     }
                 } catch (error) {
-                    console.error('VK callback error with access_token:', error);
-                    router.push('/');
+                    console.error(
+                        "VK callback error with access_token:",
+                        error
+                    );
+                    router.push("/");
                 }
             } else {
-                console.error('No code or access_token received from VK');
-                router.push('/');
+                console.error("No code or access_token received from VK");
+                router.push("/");
             }
         };
 
@@ -79,13 +142,15 @@ export default function VKCallback() {
     }, [router]);
 
     return (
-        <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'center', 
-            height: '100vh',
-            fontFamily: 'Arial, sans-serif'
-        }}>
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh",
+                fontFamily: "Arial, sans-serif",
+            }}
+        >
             <p>Обработка авторизации через ВКонтакте...</p>
         </div>
     );

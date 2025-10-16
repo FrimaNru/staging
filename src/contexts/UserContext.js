@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { API_BASE_URL } from '../../apiConfig';
+import axios from "axios";
+import { createContext, useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "../../apiConfig";
 
 const UserContext = createContext();
 
@@ -9,30 +9,42 @@ export const UserProvider = ({ children }) => {
     const [isLoadingUser, setIsLoading] = useState(true);
 
     const saveToLocalStorage = (data) => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('user', JSON.stringify(data));
+        if (typeof window !== "undefined") {
+            localStorage.setItem("user", JSON.stringify(data));
         }
     };
 
     const clearLocalStorage = () => {
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
         }
     };
 
     const load = async () => {
-        if (typeof window === 'undefined') {
+        if (typeof window === "undefined") {
             setIsLoading(false);
             return;
         }
 
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (!token) {
-            clearLocalStorage();
-            setUser(null);
-            setIsLoading(false);
-            return;
+            // Пытаемся авторизоваться через серверную cookie-сессию
+            try {
+                const res = await axios.get(`${API_BASE_URL}getUser`, {
+                    withCredentials: true,
+                });
+                setUser(res.data);
+                saveToLocalStorage(res.data);
+                setIsLoading(false);
+                return;
+            } catch (e) {
+                // Нет cookie-сессии — очищаем локальное состояние
+                clearLocalStorage();
+                setUser(null);
+                setIsLoading(false);
+                return;
+            }
         }
 
         try {
@@ -64,7 +76,9 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, setUser, clearUser, refreshUser, isLoadingUser }}>
+        <UserContext.Provider
+            value={{ user, setUser, clearUser, refreshUser, isLoadingUser }}
+        >
             {children}
         </UserContext.Provider>
     );
