@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { API_BASE_URL } from '../../../../apiConfig';
+import { useUser } from '../../../contexts/UserContext';
 
 export default function VKCallback() {
     const router = useRouter();
+    const { setUser } = useUser();
 
     useEffect(() => {
         const handleVKCallback = async () => {
@@ -20,13 +22,17 @@ export default function VKCallback() {
 
             if (code) {
                 try {
+                    console.log('Sending VK callback request with code:', code);
                     const response = await axios.get(`${API_BASE_URL}auth/vk/callback?code=${code}`);
+                    console.log('VK callback response:', response.data);
                     
                     if (response.data.token) {
                         localStorage.setItem('token', response.data.token);
+                        setUser(response.data.data);
+                        console.log('User set in context:', response.data.data);
                         router.push('/cabinet?page=personaldata');
                     } else {
-                        console.error('No token received');
+                        console.error('No token received from VK callback');
                         router.push('/');
                     }
                 } catch (error) {
