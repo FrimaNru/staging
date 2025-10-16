@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useUser } from "@/contexts/UserContext";
 import DocumentsModal from "@/components/Common/DocumentsModal";
 import { useCart } from "@/contexts/CartContext";
+import { SocialAuth } from "./SocialAuth";
 
 export function SignIn({ setStateAuth, onClose, data }) {
 
@@ -106,6 +107,7 @@ export function SignIn({ setStateAuth, onClose, data }) {
                 </div>
             </div>
         </div>
+        <SocialAuth onClose={onClose} data={data} />
         <div className={styles.lilColumnSignUp}>
             <p className={styles.inputTitle}>Еще нет аккаунта?</p>
             <button className={styles.mainButton} onClick={() => setStateAuth('signUp')}>ЗАРЕГИСТРИРОВАТЬСЯ</button>

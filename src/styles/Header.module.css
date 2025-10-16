@@ -120,8 +120,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 20px;
     padding: 38px 0 55px 0;
+    margin: 0 auto;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .inputTitle {
@@ -362,13 +367,17 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative;
 }
 
 .inputIcon {
     position: absolute;
-    right: 0;
-    margin-right: 40px;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 2;
+    width: 20px;
+    height: 20px;
 }
 
 .inputIcon:hover {
@@ -880,8 +889,9 @@
     }
 
     .inputIcon {
-        margin-right: 45px;
-        width: 27px;
+        right: 10px;
+        width: 18px;
+        height: 18px;
     }
 
     .lilColumn {
@@ -989,5 +999,58 @@
         width: auto;
         height: 10px;
         margin-top: 0px;
+    }
+}
+
+/* Стили для социальной авторизации */
+.socialAuthContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.socialAuthButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    align-items: center;
+}
+
+.socialButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 500px;
+    padding: 15px 20px;
+    border-radius: 104px;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+    transition: all 0.5s;
+    border: none;
+}
+
+.socialIcon {
+    width: 20px;
+    height: 20px;
+}
+
+@media (max-width: 475px) {
+    .socialButton {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    .socialIcon {
+        width: 18px;
+        height: 18px;
     }
 }
