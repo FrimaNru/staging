@@ -13,13 +13,10 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import DocumentsModal from "@/components/Common/DocumentsModal";
-import { useUser } from "@/contexts/UserContext";
-import { getToken } from "@/lib/auth";
 
 export default function PersonalData() {
     const toast = useToast();
     const router = useRouter();
-    const { user, setUser } = useUser();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [data, setData] = useState(null);
     const [name, setName] = useState("");
@@ -56,7 +53,9 @@ export default function PersonalData() {
     const load = async () => {
         await axios
             .get(`${API_BASE_URL}getUser`, {
-                headers: { Authorization: `Bearer ${getToken()}` },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
             })
             .then((res) => {
                 const userData = {
@@ -132,7 +131,13 @@ export default function PersonalData() {
                         dateBirthday,
                         mailing,
                     },
-                    { headers: { Authorization: `Bearer ${getToken()}` } }
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "token"
+                            )}`,
+                        },
+                    }
                 )
                 .then(() => {
                     onClose();
@@ -172,7 +177,13 @@ export default function PersonalData() {
                             password,
                             mailing,
                         },
-                        { headers: { Authorization: `Bearer ${getToken()}` } }
+                        {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem(
+                                    "token"
+                                )}`,
+                            },
+                        }
                     )
                     .then(() => {
                         onClose();
@@ -209,7 +220,13 @@ export default function PersonalData() {
             await axios.post(
                 `${API_BASE_URL}verifiedPhone`,
                 { phone },
-                { headers: { Authorization: `Bearer ${getToken()}` } }
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                }
             );
 
             setIsPhoneCodeSend(true);
@@ -234,7 +251,13 @@ export default function PersonalData() {
             await axios.post(
                 `${API_BASE_URL}verifiedPhoneCode`,
                 { code: phoneCode },
-                { headers: { Authorization: `Bearer ${getToken()}` } }
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                }
             );
 
             load();
@@ -267,7 +290,13 @@ export default function PersonalData() {
             .post(
                 `${API_BASE_URL}verifiedEmail`,
                 { email },
-                { headers: { Authorization: `Bearer ${getToken()}` } }
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                }
             )
             .then(() => setIsEmailCodeSend(true))
             .catch((e) => console.log(e));
@@ -278,7 +307,13 @@ export default function PersonalData() {
             .post(
                 `${API_BASE_URL}verifiedEmailCode`,
                 { code: emailCode },
-                { headers: { Authorization: `Bearer ${getToken()}` } }
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                }
             )
             .then(() => {
                 toast({

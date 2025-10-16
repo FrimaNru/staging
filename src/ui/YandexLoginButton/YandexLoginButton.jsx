@@ -1,14 +1,11 @@
-import { API_BASE_URL } from "../../../apiConfig";
-
 export default function YandexLoginButton() {
-    const handleYandexAuth = () => {
-        // Редирект на сервер для Yandex авторизации
-        window.location.href = `${API_BASE_URL}auth/yandex`;
-    };
+    const clientId = '77ef00edff0146c0ac96f62fa9dba952';
+    const redirectUri = encodeURIComponent('https://mi-alegria.shop/auth/yandex/callback');
+    const authUrl = `https://oauth.yandex.ru/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`;
 
     return (
-        <button onClick={handleYandexAuth} className="yandex-login-button">
+        <a href={authUrl} className="yandex-login-button">
             Войти через Яндекс
-        </button>
+        </a>
     );
 }

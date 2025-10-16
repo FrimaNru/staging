@@ -1,73 +1,64 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
+import { API_BASE_URL } from "../../../../apiConfig";
 import { useUser } from "../../../contexts/UserContext";
-import { setToken } from "../../../lib/auth";
 
 export default function YandexCallback() {
     const router = useRouter();
-    const { setUser, refreshUser } = useUser();
+    const { setUser } = useUser();
 
     useEffect(() => {
         const handleYandexCallback = async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get("token");
-            const userParam = urlParams.get("user");
-            const error = urlParams.get("error");
             const code = urlParams.get("code");
+            const error = urlParams.get("error");
+            const error_description = urlParams.get("error_description");
 
             console.log("Yandex Callback URL params:", {
-                token: token ? "present" : "missing",
-                user: userParam ? "present" : "missing",
+                code,
                 error,
-                code: code ? "present" : "missing",
+                error_description,
                 fullUrl: window.location.href,
             });
 
             if (error) {
-                console.error("Yandex Auth error:", error);
-                router.push("/?auth_error=" + encodeURIComponent(error));
+                console.error("Yandex Auth error:", error, error_description);
+                router.push("/");
                 return;
             }
 
-            if (token && userParam) {
+            if (code) {
                 try {
-                    // Сохраняем токен
-                    setToken(token);
+                    console.log(
+                        "Sending Yandex callback request with code:",
+                        code
+                    );
+                    const response = await axios.get(
+                        `${API_BASE_URL}auth/yandex/callback?code=${code}`
+                    );
+                    console.log("Yandex callback response:", response.data);
 
-                    // Парсим данные пользователя
-                    const userData = JSON.parse(decodeURIComponent(userParam));
-                    setUser(userData);
-
-                    console.log("Yandex Auth successful, user set:", userData);
-
-                    // Редиректим в кабинет
-                    router.push("/cabinet?page=personaldata");
+                    if (response.data.token) {
+                        localStorage.setItem("token", response.data.token);
+                        setUser(response.data.data);
+                        console.log("User set in context:", response.data.data);
+                        router.push("/cabinet?page=personaldata");
+                    } else {
+                        console.error("No token received from Yandex callback");
+                        router.push("/");
+                    }
                 } catch (error) {
-                    console.error("Error parsing user data:", error);
-                    router.push("/?auth_error=parse_error");
+                    console.error("Yandex callback error:", error);
+                    router.push("/");
                 }
-            } else if (code) {
-                // Если есть code, но нет токена - значит бэкенд обработал OAuth и установил cookie
-                console.log(
-                    "Code present but no token in URL, checking for cookie..."
-                );
-
-                // Небольшая задержка для того чтобы cookie успел установиться, затем обновляем пользователя
-                setTimeout(async () => {
-                    await refreshUser();
-                    router.push("/cabinet?page=personaldata");
-                }, 100);
             } else {
-                // Если нет ни токена, ни кода - ошибка
-                console.error(
-                    "No token, user data, or code received from Yandex"
-                );
-                router.push("/?auth_error=no_data");
+                router.push("/");
             }
         };
 
         handleYandexCallback();
-    }, [router, setUser]);
+    }, [router]);
 
     return (
         <div

@@ -1,7 +1,6 @@
-import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
-import { API_BASE_URL } from "../../apiConfig";
-import { getToken, setToken, clearToken } from "../lib/auth";
+import axios from 'axios';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { API_BASE_URL } from '../../apiConfig';
 
 const UserContext = createContext();
 
@@ -10,23 +9,25 @@ export const UserProvider = ({ children }) => {
     const [isLoadingUser, setIsLoading] = useState(true);
 
     const saveToLocalStorage = (data) => {
-        if (typeof window !== "undefined") {
-            localStorage.setItem("user", JSON.stringify(data));
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('user', JSON.stringify(data));
         }
     };
 
     const clearLocalStorage = () => {
-        clearToken();
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+        }
     };
 
     const load = async () => {
-        if (typeof window === "undefined") {
+        if (typeof window === 'undefined') {
             setIsLoading(false);
             return;
         }
 
-        const token = getToken();
-
+        const token = localStorage.getItem('token');
         if (!token) {
             clearLocalStorage();
             setUser(null);
@@ -41,12 +42,9 @@ export const UserProvider = ({ children }) => {
             setUser(res.data);
             saveToLocalStorage(res.data);
         } catch (error) {
-            console.error("Error loading user:", error);
-            // Если ошибка 401, токен недействителен
-            if (error.response?.status === 401) {
-                clearLocalStorage();
-                setUser(null);
-            }
+            console.error(error);
+            clearLocalStorage();
+            setUser(null);
         } finally {
             setIsLoading(false);
         }
@@ -57,7 +55,6 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     const refreshUser = async () => {
-        setIsLoading(true);
         await load();
     };
 
@@ -67,9 +64,7 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider
-            value={{ user, setUser, clearUser, refreshUser, isLoadingUser }}
-        >
+        <UserContext.Provider value={{ user, setUser, clearUser, refreshUser, isLoadingUser }}>
             {children}
         </UserContext.Provider>
     );
