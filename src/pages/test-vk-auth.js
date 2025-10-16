@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { API_BASE_URL } from '../apiConfig';
+import { API_BASE_URL } from '../../apiConfig';
 
 export default function TestVKAuth() {
     const [logs, setLogs] = useState([]);
