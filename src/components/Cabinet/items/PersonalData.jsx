@@ -6,11 +6,14 @@ import { API_BASE_URL } from "../../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import DocumentsModal from "@/components/Common/DocumentsModal";
+import { useUser } from "@/contexts/UserContext";
+import { getToken } from "@/lib/auth";
 
 export default function PersonalData() {
 
     const toast = useToast();
     const router = useRouter();
+    const { user, setUser } = useUser();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [data, setData] = useState(null);
     const [name, setName] = useState('');
@@ -40,12 +43,13 @@ export default function PersonalData() {
     const [checkBoxes, setCheckBoxes] = useState({ news: false });
     const [news, setNews] = useState(false);
 
+
     useEffect(() => {
         load();
     }, []);
 
     const load = async () => {
-        await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${getToken()}` } })
             .then((res) => {
                 const userData = {
                     phone: res.data.phone,
@@ -107,7 +111,7 @@ export default function PersonalData() {
 
     function saveData() {
         if (password === '') {
-            axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, mailing }, { headers: { Authorization: `Bearer ${getToken()}` } })
                 .then(() => {
                     onClose();
                     const userData = { phone, email, name, lastName, sex, dateBirthday, mailing };
@@ -117,7 +121,7 @@ export default function PersonalData() {
                 .catch((e) => console.log(e));
         } else {
             if (password === repeatPassword) {
-                axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, password, mailing }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                axios.post(`${API_BASE_URL}saveData`, { email, name, lastName, sex, phone, dateBirthday, password, mailing }, { headers: { Authorization: `Bearer ${getToken()}` } })
                     .then(() => {
                         onClose();
                         const userData = { phone, email, name, lastName, sex, dateBirthday, mailing };
@@ -135,7 +139,7 @@ export default function PersonalData() {
         try {
             setDisabled(true);
 
-            await axios.post(`${API_BASE_URL}verifiedPhone`, { phone }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            await axios.post(`${API_BASE_URL}verifiedPhone`, { phone }, { headers: { Authorization: `Bearer ${getToken()}` } })
 
             setIsPhoneCodeSend(true);
             toast({ position: 'bottom-right', render: () => (<div className="toast">Код успешно отправлен</div>), duration: 3000 });
@@ -150,7 +154,7 @@ export default function PersonalData() {
         try {
             setDisabled(true);
 
-            await axios.post(`${API_BASE_URL}verifiedPhoneCode`, { code: phoneCode }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+            await axios.post(`${API_BASE_URL}verifiedPhoneCode`, { code: phoneCode }, { headers: { Authorization: `Bearer ${getToken()}` } });
 
             load();
             toast({ position: 'bottom-right', render: () => (<div className="toast">Телефон успешно подтвержден</div>), duration: 3000 });
@@ -165,13 +169,13 @@ export default function PersonalData() {
 
     const sendEmailCode = async () => {
         if (initialData.email === email && initialData.isVerified === true) return toast({ position: 'bottom-right', render: () => (<div className="toast">Эта почта уже подтвержден</div>), duration: 3000 });
-        await axios.post(`${API_BASE_URL}verifiedEmail`, { email }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        await axios.post(`${API_BASE_URL}verifiedEmail`, { email }, { headers: { Authorization: `Bearer ${getToken()}` } })
             .then(() => setIsEmailCodeSend(true))
             .catch((e) => console.log(e));
     };
 
     const emailCheck = async () => {
-        await axios.post(`${API_BASE_URL}verifiedEmailCode`, { code: emailCode }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        await axios.post(`${API_BASE_URL}verifiedEmailCode`, { code: emailCode }, { headers: { Authorization: `Bearer ${getToken()}` } })
             .then(() => {
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Почта успешно подтверждена</div>), duration: 3000 });
                 setIsEmailCodeSend(false);

@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { API_BASE_URL } from '../../apiConfig';
+import axios from "axios";
+import { createContext, useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "../../apiConfig";
+import { getToken, setToken, clearToken } from "../lib/auth";
 
 const UserContext = createContext();
 
@@ -9,25 +10,23 @@ export const UserProvider = ({ children }) => {
     const [isLoadingUser, setIsLoading] = useState(true);
 
     const saveToLocalStorage = (data) => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('user', JSON.stringify(data));
+        if (typeof window !== "undefined") {
+            localStorage.setItem("user", JSON.stringify(data));
         }
     };
 
     const clearLocalStorage = () => {
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-        }
+        clearToken();
     };
 
     const load = async () => {
-        if (typeof window === 'undefined') {
+        if (typeof window === "undefined") {
             setIsLoading(false);
             return;
         }
 
-        const token = localStorage.getItem('token');
+        const token = getToken();
+
         if (!token) {
             clearLocalStorage();
             setUser(null);
@@ -64,7 +63,9 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, setUser, clearUser, refreshUser, isLoadingUser }}>
+        <UserContext.Provider
+            value={{ user, setUser, clearUser, refreshUser, isLoadingUser }}
+        >
             {children}
         </UserContext.Provider>
     );
