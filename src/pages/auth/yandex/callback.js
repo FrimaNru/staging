@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
@@ -7,8 +7,11 @@ import { useUser } from "../../../contexts/UserContext";
 export default function YandexCallback() {
     const router = useRouter();
     const { setUser } = useUser();
+    const handledRef = useRef(false);
 
     useEffect(() => {
+        if (handledRef.current) return;
+        handledRef.current = true;
         const handleYandexCallback = async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get("code");
@@ -83,7 +86,7 @@ export default function YandexCallback() {
         };
 
         handleYandexCallback();
-    }, [router]);
+    }, [router, setUser]);
 
     return (
         <div
