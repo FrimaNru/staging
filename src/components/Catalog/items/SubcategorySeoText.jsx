@@ -20,7 +20,8 @@ export default function SubcategorySeoText({ currentPage = 1 }) {
     const isOnSubcategory = isRingsGold || isRingsSilver || isEarringsGold || isEarringsSilver || 
                            isBraceletsGold || isBraceletsSilver ||
                            path.includes('/sergi/dlinnye') || path.includes('/sergi/krupnye') ||
-                           path.includes('/kolcza/krupnye');
+                           path.includes('/kolcza/krupnye') ||
+                           path.includes('/braslety/shirokie') || path.includes('/braslety/zhestkie');
     
     // Categories (only if NOT on subcategory)
     const isEarrings = !isOnSubcategory && (path === '/catalog/sergi' || path.startsWith('/catalog/sergi'));
