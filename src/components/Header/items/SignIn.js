@@ -107,7 +107,7 @@ export function SignIn({ setStateAuth, onClose, data }) {
                 </div>
             </div>
         </div>
-        <SocialAuth onClose={onClose} data={data} />
+        {/* <SocialAuth onClose={onClose} data={data} /> */}
         <div className={styles.lilColumnSignUp}>
             <p className={styles.inputTitle}>Еще нет аккаунта?</p>
             <button className={styles.mainButton} onClick={() => setStateAuth('signUp')}>ЗАРЕГИСТРИРОВАТЬСЯ</button>
