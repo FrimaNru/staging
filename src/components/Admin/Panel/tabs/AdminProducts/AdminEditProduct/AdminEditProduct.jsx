@@ -194,11 +194,11 @@ export default function AdminEditProduct() {
                     ))}
                 </div>
             </div>
-            {(data.type === 'earrings' || data.type === 'ring' || data.type === 'bracelets') && (
+            {(data.type === 'earrings' || data.type === 'ring' || data.type === 'bracelets' || data.type === 'necklace') && (
                 <div className={styles.createLilColumn}>
                 <p className={styles.subtitle}>Подкатегории (можно выбрать несколько)</p>
                     <div className={styles.createLilLine}>
-                        {subcategories[data.type === 'earrings' ? 'Серьги' : data.type === 'ring' ? 'Кольца' : 'Браслеты']?.map((subcategory, i) => (
+                        {subcategories[data.type === 'earrings' ? 'Серьги' : data.type === 'ring' ? 'Кольца' : data.type === 'bracelets' ? 'Браслеты' : 'Колье']?.map((subcategory, i) => (
                             <button
                                 key={i}
                                 onClick={() => handleSubcategoryToggle(subcategory)}

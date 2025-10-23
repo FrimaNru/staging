@@ -233,7 +233,11 @@
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
 
+.subcategoryImageText.multiline {
+    line-height: 1.2;
+    font-size: 14px;
 }
 
 .subcategoryImage {

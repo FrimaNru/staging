@@ -15,16 +15,10 @@ export default function SubcategorySeoText({ currentPage = 1 }) {
     const isEarringsSilver = path.includes('/sergi/pod-serebro');
     const isBraceletsGold = path.includes('/braslety/pod-zoloto');
     const isBraceletsSilver = path.includes('/braslety/pod-serebro');
-    const isNecklacesGold = path.includes('/kole/pod-zoloto');
-    const isNecklacesSilver = path.includes('/kole/pod-serebro');
-    const isNecklacesMulti = path.includes('/kole/mnogoslojnye');
-    const isNecklacesLarge = path.includes('/kole/krupnye');
-    const isNecklacesLong = path.includes('/kole/dlinnye');
     
     // Check if we're on a subcategory page
     const isOnSubcategory = isRingsGold || isRingsSilver || isEarringsGold || isEarringsSilver || 
                            isBraceletsGold || isBraceletsSilver ||
-                           isNecklacesGold || isNecklacesSilver || isNecklacesMulti || isNecklacesLarge || isNecklacesLong ||
                            path.includes('/sergi/dlinnye') || path.includes('/sergi/krupnye') ||
                            path.includes('/kolcza/krupnye') ||
                            path.includes('/braslety/shirokie') || path.includes('/braslety/zhestkie');
@@ -88,36 +82,6 @@ export default function SubcategorySeoText({ currentPage = 1 }) {
                     Купить аксессуары бренда Mi Alegria можно онлайн — доставим ваш заказ по всей России.
                 </p>
             </>
-        );
-    } else if (isNecklacesGold) {
-        text = (
-            <p>
-                Колье под золото — это элегантные украшения, которые добавят вашему образу роскоши и изысканности. В коллекции Mi Alegria представлены дизайнерские колье с золотистым покрытием, изготовленные из качественного гипоаллергенного сплава. Такие украшения прекрасно сочетаются с любой одеждой и подходят для различных случаев — от повседневной носки до особых мероприятий. Золотистое покрытие придает колье благородный блеск и делает их особенно привлекательными.
-            </p>
-        );
-    } else if (isNecklacesSilver) {
-        text = (
-            <p>
-                Колье под серебро — это универсальные украшения, которые подходят для любого стиля и случая. В коллекции Mi Alegria вы найдете изящные колье с серебристым покрытием, которые добавят вашему образу элегантности и утонченности. Серебристые колье прекрасно сочетаются с любой одеждой и являются отличным выбором для создания стильного образа.
-            </p>
-        );
-    } else if (isNecklacesMulti) {
-        text = (
-            <p>
-                Многослойные колье из цепочек — это трендовые украшения, которые создают эффектный многоярусный образ. В коллекции Mi Alegria представлены стильные колье, состоящие из нескольких цепочек разной длины, которые создают красивый каскадный эффект. Такие украшения идеально подходят для создания модного образа и привлекают внимание своей оригинальностью.
-            </p>
-        );
-    } else if (isNecklacesLarge) {
-        text = (
-            <p>
-                Крупные колье на шею — это эффектные украшения, которые станут главным акцентом вашего образа. В коллекции Mi Alegria представлены объемные колье с выразительным дизайном, которые привлекают внимание и делают образ более ярким и запоминающимся. Такие украшения идеально подходят для особых случаев и создания стильного образа.
-            </p>
-        );
-    } else if (isNecklacesLong) {
-        text = (
-            <p>
-                Длинные колье на шею — это элегантные украшения, которые создают вертикальные линии и визуально удлиняют силуэт. В коллекции Mi Alegria представлены стильные длинные колье, которые прекрасно сочетаются с различными нарядами и подходят для создания как повседневного, так и вечернего образа. Длинные колье добавляют образу утонченности и элегантности.
-            </p>
         );
     } else if (isEarrings) {
         text = (

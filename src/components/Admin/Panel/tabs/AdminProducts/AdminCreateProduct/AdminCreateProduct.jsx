@@ -26,7 +26,8 @@ const additionally = {
 const subcategories = {
     'Серьги': ['Длинные', 'Крупные', 'Под золото', 'Под серебро'],
     'Кольца': ['Крупные', 'Под золото', 'Под серебро'],
-    'Браслеты': ['Широкие', 'Жесткие', 'Под золото', 'Под серебро']
+    'Браслеты': ['Широкие', 'Жесткие', 'Под золото', 'Под серебро'],
+    'Колье': ['Многослойные', 'Крупные', 'Длинные', 'Под золото', 'Под серебро']
 };
 
 export default function AdminCreateProduct() {
@@ -145,11 +146,11 @@ export default function AdminCreateProduct() {
                     ))}
                 </div>
             </div>
-            {(data.type === 'earrings' || data.type === 'ring' || data.type === 'bracelets') && (
+            {(data.type === 'earrings' || data.type === 'ring' || data.type === 'bracelets' || data.type === 'necklace') && (
                 <div className={styles.createLilColumn}>
                     <p className={styles.subtitle}>Подкатегории (можно выбрать несколько)</p>
                     <div className={styles.createLilLine}>
-                        {subcategories[data.type === 'earrings' ? 'Серьги' : data.type === 'ring' ? 'Кольца' : 'Браслеты']?.map((subcategory, i) => (
+                        {subcategories[data.type === 'earrings' ? 'Серьги' : data.type === 'ring' ? 'Кольца' : data.type === 'bracelets' ? 'Браслеты' : 'Колье']?.map((subcategory, i) => (
                             <button
                                 key={i}
                                 onClick={() => handleSubcategoryToggle(subcategory)}

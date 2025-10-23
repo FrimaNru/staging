@@ -61,13 +61,35 @@ export default function Breadcrumb() {
                     } else if (asPath.includes('/braslety/pod-serebro')) {
                         array.push({ text: 'Браслеты', link: '/catalog/braslety' });
                         array.push({ text: 'Под серебро', link: asPath });
+                    } else if (asPath.includes('/kole/mnogoslojnye')) {
+                        array.push({ text: 'Колье', link: '/catalog/kole' });
+                        array.push({ text: 'Многослойные', link: asPath });
+                    } else if (asPath.includes('/kole/krupnye')) {
+                        array.push({ text: 'Колье', link: '/catalog/kole' });
+                        array.push({ text: 'Крупные', link: asPath });
+                    } else if (asPath.includes('/kole/dlinnye')) {
+                        array.push({ text: 'Колье', link: '/catalog/kole' });
+                        array.push({ text: 'Длинные', link: asPath });
+                    } else if (asPath.includes('/kole/pod-zoloto')) {
+                        array.push({ text: 'Колье', link: '/catalog/kole' });
+                        array.push({ text: 'Под золото', link: asPath });
+                    } else if (asPath.includes('/kole/pod-serebro')) {
+                        array.push({ text: 'Колье', link: '/catalog/kole' });
+                        array.push({ text: 'Под серебро', link: asPath });
                     } else {
                         // Обычная категория
                         const slug = asPath.replace('/catalog/', '');
                         const type = mapSlugToProductType(slug);
                         if (type) {
                             const typeText = type === 'ring' ? 'Кольца' : type === 'necklace' ? 'Колье' : type === 'earrings' ? 'Серьги' : type === 'bracelets' ? 'Браслеты' : '';
-                            if (typeText) array.push({ text: typeText, link: asPath });
+                            if (typeText) {
+                               
+                                const categoryLink = type === 'ring' ? '/catalog/kolcza' : 
+                                                   type === 'necklace' ? '/catalog/kole' : 
+                                                   type === 'earrings' ? '/catalog/sergi' : 
+                                                   type === 'bracelets' ? '/catalog/braslety' : asPath;
+                                array.push({ text: typeText, link: categoryLink });
+                            }
                         }
                     }
                     

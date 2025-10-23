@@ -91,31 +91,31 @@ export default function SubcategoryCards({ productType, isSubcategoryPage = fals
         {
             title: 'Многослойные',
             url: '/catalog/kole/mnogoslojnye',
-            image: '/assets/images/kole-mnogoslojnye.webp',
+            image: '/assets/images/mnogokole.webp',
             description: 'Многослойные колье из цепочек'
         },
         {
             title: 'Крупные',
             url: '/catalog/kole/krupnye',
-            image: '/assets/images/kole-krupnye.webp',
+            image: '/assets/images/krupkole.webp',
             description: 'Большие колье на шею'
         },
         {
             title: 'Длинные',
             url: '/catalog/kole/dlinnye',
-            image: '/assets/images/kole-dlinnye.webp',
+            image: '/assets/images/longkole.webp',
             description: 'Длинные колье на шею'
         },
         {
             title: 'Под золото',
             url: '/catalog/kole/pod-zoloto',
-            image: '/assets/images/kole-pod-zoloto.webp',
+            image: '/assets/images/goldkole.webp',
             description: 'Колье под золото'
         },
         {
             title: 'Под серебро',
             url: '/catalog/kole/pod-serebro',
-            image: '/assets/images/kole-pod-serebro.webp',
+            image: '/assets/images/silverkole.webp',
             description: 'Колье под серебро'
         }
     ];
@@ -153,7 +153,9 @@ export default function SubcategoryCards({ productType, isSubcategoryPage = fals
                                 <span>Изображение</span>
                             </div>
                             <div className={styles.subcategoryImageOverlay}>
-                                <span className={styles.subcategoryImageText}>{subcategory.title}</span>
+                                <span className={`${styles.subcategoryImageText} ${subcategory.title === 'Многослойные' ? styles.multiline : ''}`}>
+                                    {subcategory.title === 'Многослойные' ? 'Многослойные' : subcategory.title}
+                                </span>
                             </div>
                         </div>
                         <div className={styles.subcategoryContent}>
