@@ -2,8 +2,8 @@ import styles from "../styles.module.css";
 import Link from "next/link";
 
 export default function SubcategoryCards({ productType, isSubcategoryPage = false }) {
-    // Show subcategory cards for earrings, rings, and bracelets only on main category pages
-    if (productType !== 'Серьги' && productType !== 'Кольца' && productType !== 'Браслеты') {
+    // Show subcategory cards for earrings, rings, bracelets, and necklaces only on main category pages
+    if (productType !== 'Серьги' && productType !== 'Кольца' && productType !== 'Браслеты' && productType !== 'Колье') {
         return null;
     }
     
@@ -87,10 +87,44 @@ export default function SubcategoryCards({ productType, isSubcategoryPage = fals
         }
     ];
 
+    const necklacesSubcategories = [
+        {
+            title: 'Многослойные',
+            url: '/catalog/kole/mnogoslojnye',
+            image: '/assets/images/kole-mnogoslojnye.webp',
+            description: 'Многослойные колье из цепочек'
+        },
+        {
+            title: 'Крупные',
+            url: '/catalog/kole/krupnye',
+            image: '/assets/images/kole-krupnye.webp',
+            description: 'Большие колье на шею'
+        },
+        {
+            title: 'Длинные',
+            url: '/catalog/kole/dlinnye',
+            image: '/assets/images/kole-dlinnye.webp',
+            description: 'Длинные колье на шею'
+        },
+        {
+            title: 'Под золото',
+            url: '/catalog/kole/pod-zoloto',
+            image: '/assets/images/kole-pod-zoloto.webp',
+            description: 'Колье под золото'
+        },
+        {
+            title: 'Под серебро',
+            url: '/catalog/kole/pod-serebro',
+            image: '/assets/images/kole-pod-serebro.webp',
+            description: 'Колье под серебро'
+        }
+    ];
+
     const subcategories = 
         productType === 'Серьги' ? earringsSubcategories : 
         productType === 'Кольца' ? ringsSubcategories :
-        braceletsSubcategories;
+        productType === 'Браслеты' ? braceletsSubcategories :
+        necklacesSubcategories;
 
     return (
         <div className={styles.subcategoryCards}>
