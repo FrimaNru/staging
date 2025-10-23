@@ -21,7 +21,10 @@ export default function SubcategorySeoText({ currentPage = 1 }) {
                            isBraceletsGold || isBraceletsSilver ||
                            path.includes('/sergi/dlinnye') || path.includes('/sergi/krupnye') ||
                            path.includes('/kolcza/krupnye') ||
-                           path.includes('/braslety/shirokie') || path.includes('/braslety/zhestkie');
+                           path.includes('/braslety/shirokie') || path.includes('/braslety/zhestkie') ||
+                           path.includes('/kole/mnogoslojnye') || path.includes('/kole/krupnye') ||
+                           path.includes('/kole/dlinnye') || path.includes('/kole/pod-zoloto') ||
+                           path.includes('/kole/pod-serebro');
     
     // Categories (only if NOT on subcategory)
     const isEarrings = !isOnSubcategory && (path === '/catalog/sergi' || path.startsWith('/catalog/sergi'));
