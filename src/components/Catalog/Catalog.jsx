@@ -366,6 +366,7 @@ export default function Catalog({ initialPage = 1 }) {
                                     </p>
                                 </div>
                             )}
+                            
                             <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
                             <ProductGrid filteredData={currentItems} />
 

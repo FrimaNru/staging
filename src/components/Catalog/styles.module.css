@@ -227,7 +227,7 @@
 
 .subcategoryImageText {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 13px;
     font-family: 'Dela Gothic One', system-ui;
     color: var(--light);
     text-align: center;
@@ -237,7 +237,7 @@
 
 .subcategoryImageText.multiline {
     line-height: 1.2;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .subcategoryImage {
@@ -845,6 +845,7 @@
     .leftColumn {
         width: 100%;
         gap: 20px;
+        min-height: auto;
     }
 
     .rightColumn {
