@@ -333,10 +333,15 @@ export default function Catalog({ initialPage = 1 }) {
                     <div className={styles.leftColumn}>
                         <h1 className={styles.title}>
                             {isNewPage ? 'НОВИНКИ' : 
-                             router.asPath.includes('/dlinnye') ? 'ДЛИННЫЕ СЕРЬГИ' :
-                             router.asPath.includes('/krupnye') && router.asPath.includes('/sergi') ? 'КРУПНЫЕ СЕРЬГИ' :
-                             router.asPath.includes('/pod-zoloto') && router.asPath.includes('/sergi') ? 'СЕРЬГИ ПОД ЗОЛОТО' :
-                             router.asPath.includes('/pod-serebro') && router.asPath.includes('/sergi') ? 'СЕРЬГИ ПОД СЕРЕБРО' :
+                             router.asPath.includes('/kole/mnogoslojnye') ? 'МНОГОСЛОЙНЫЕ КОЛЬЕ' :
+                             router.asPath.includes('/kole/krupnye') ? 'КРУПНЫЕ КОЛЬЕ' :
+                             router.asPath.includes('/kole/dlinnye') ? 'ДЛИННЫЕ КОЛЬЕ' :
+                             router.asPath.includes('/kole/pod-zoloto') ? 'КОЛЬЕ ПОД ЗОЛОТО' :
+                             router.asPath.includes('/kole/pod-serebro') ? 'КОЛЬЕ ПОД СЕРЕБРО' :
+                             router.asPath.includes('/sergi/dlinnye') ? 'ДЛИННЫЕ СЕРЬГИ' :
+                             router.asPath.includes('/sergi/krupnye') ? 'КРУПНЫЕ СЕРЬГИ' :
+                             router.asPath.includes('/sergi/pod-zoloto') ? 'СЕРЬГИ ПОД ЗОЛОТО' :
+                             router.asPath.includes('/sergi/pod-serebro') ? 'СЕРЬГИ ПОД СЕРЕБРО' :
                              router.asPath.includes('/kolcza/krupnye') ? 'КРУПНЫЕ КОЛЬЦА' :
                              router.asPath.includes('/kolcza/pod-zoloto') ? 'КОЛЬЦА ПОД ЗОЛОТО' :
                              router.asPath.includes('/kolcza/pod-serebro') ? 'КОЛЬЦА ПОД СЕРЕБРО' :
@@ -344,11 +349,6 @@ export default function Catalog({ initialPage = 1 }) {
                              router.asPath.includes('/braslety/zhestkie') ? 'ЖЕСТКИЕ БРАСЛЕТЫ' :
                              router.asPath.includes('/braslety/pod-zoloto') ? 'БРАСЛЕТЫ ПОД ЗОЛОТО' :
                              router.asPath.includes('/braslety/pod-serebro') ? 'БРАСЛЕТЫ ПОД СЕРЕБРО' :
-                             router.asPath.includes('/kole/mnogoslojnye') ? 'МНОГОСЛОЙНЫЕ КОЛЬЕ' :
-                             router.asPath.includes('/kole/krupnye') ? 'КРУПНЫЕ КОЛЬЕ' :
-                             router.asPath.includes('/kole/dlinnye') ? 'ДЛИННЫЕ КОЛЬЕ' :
-                             router.asPath.includes('/kole/pod-zoloto') ? 'КОЛЬЕ ПОД ЗОЛОТО' :
-                             router.asPath.includes('/kole/pod-serebro') ? 'КОЛЬЕ ПОД СЕРЕБРО' :
                              stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
                         </h1>
                         <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} />
