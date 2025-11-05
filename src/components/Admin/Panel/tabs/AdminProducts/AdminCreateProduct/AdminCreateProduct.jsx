@@ -44,7 +44,8 @@ export default function AdminCreateProduct() {
         weight: '',
         sizes: [],
         type: '',
-        subcategories: []
+        subcategories: [],
+        description: ''
     });
 
     const toast = useToast();
@@ -169,6 +170,16 @@ export default function AdminCreateProduct() {
                     placeholder="Введите вес товара"
                     onChange={(e) => setData({ ...data, weight: e.target.value })}
                     value={data?.weight || ""}
+                />
+            </div>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Описание товара</p>
+                <textarea
+                    className={styles.textarea}
+                    placeholder="Введите описание товара (необязательно)"
+                    onChange={(e) => setData({ ...data, description: e.target.value })}
+                    value={data?.description || ""}
+                    rows={5}
                 />
             </div>
             <div className={styles.createLilColumn}>

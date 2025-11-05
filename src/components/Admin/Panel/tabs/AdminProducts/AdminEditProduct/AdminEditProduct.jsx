@@ -48,7 +48,8 @@ export default function AdminEditProduct() {
         sizes: [],
         type: '',
         subcategories: [],
-        family: []
+        family: [],
+        description: ''
     });
 
     const toast = useToast();
@@ -87,6 +88,10 @@ export default function AdminEditProduct() {
                     typeof sub === 'string' && 
                     sub.trim() !== ''
                 );
+                // Убеждаемся, что description всегда строка
+                if (!productData.description) {
+                    productData.description = '';
+                }
                     setData(productData);
                     setFamily(productData.family[0]._id);
             })
@@ -217,6 +222,16 @@ export default function AdminEditProduct() {
                     placeholder="Введите вес товара"
                     onChange={(e) => setData({ ...data, weight: e.target.value })}
                     value={data?.weight || ""}
+                />
+            </div>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Описание товара</p>
+                <textarea
+                    className={styles.textarea}
+                    placeholder="Введите описание товара (необязательно)"
+                    onChange={(e) => setData({ ...data, description: e.target.value })}
+                    value={data?.description || ""}
+                    rows={5}
                 />
             </div>
             <div className={styles.createLilColumn}>
