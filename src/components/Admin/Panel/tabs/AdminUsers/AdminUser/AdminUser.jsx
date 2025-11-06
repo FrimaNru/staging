@@ -39,7 +39,7 @@ export default function AdminUser() {
 
     return <div className={styles.main}>
         <div className={styles.subtitleLine}>
-            <p className={styles.title}>{data?.name} {data?.personalData.lastName}</p>
+            <p className={styles.title}>{data?.name} {data?.personalData?.lastName}</p>
             <Button
                 variant="delete"
                 size="small"

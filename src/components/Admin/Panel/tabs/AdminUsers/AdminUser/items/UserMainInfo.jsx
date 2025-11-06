@@ -10,11 +10,11 @@ export default function UserMainInfo({ data }) {
         </div>
         <div className={styles.cardColumn}>
             <p className={styles.cardTitle}>Фамилия</p>
-            <p className={styles.cardValue}>{data.personalData.lastName}</p>
+            <p className={styles.cardValue}>{data.personalData?.lastName}</p>
         </div>
         <div className={styles.cardColumn}>
             <p className={styles.cardTitle}>Номер телефона</p>
-            <p className={styles.cardValue}>{data.phone} {data.isVerifiedPhone && '✔'}</p>
+            <p className={styles.cardValue}>{data.phone} {data?.isVerifiedPhone && '✔'}</p>
         </div>
         <div className={styles.cardColumn}>
             <p className={styles.cardTitle}>Почта</p>
@@ -26,11 +26,11 @@ export default function UserMainInfo({ data }) {
         </div>
         <div className={styles.cardColumn}>
             <p className={styles.cardTitle}>Пол</p>
-            <p className={styles.cardValue}>{data.personalData.sex}</p>
+            <p className={styles.cardValue}>{data.personalData?.sex}</p>
         </div>
         <div className={styles.cardColumn}>
             <p className={styles.cardTitle}>Дата рождения</p>
-            <p className={styles.cardValue}>{data.personalData.dateBirthday}</p>
+            <p className={styles.cardValue}>{data.personalData?.dateBirthday}</p>
         </div>
         <div className={styles.cardColumn}>
             <p className={styles.cardTitle}>Дата регистрации</p>
