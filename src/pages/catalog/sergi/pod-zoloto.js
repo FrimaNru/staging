@@ -2,11 +2,10 @@ import { Footer } from "@/components";
 import Catalog from "@/components/Catalog/Catalog";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { getCanonicalUrl } from "@/lib/seo";
+import { getFilteredProducts } from "@/lib/catalogServerUtils";
 
-export default function GoldEarringsPage() {
-    const router = useRouter();
+export default function GoldEarringsPage({ products }) {
     const canonicalUrl = getCanonicalUrl('/catalog/sergi/pod-zoloto');
 
     return (
@@ -37,10 +36,26 @@ export default function GoldEarringsPage() {
             <center>
                 <main>
                     <Header />
-                    <Catalog initialPage={1} />
+                    <Catalog initialPage={1} initialProducts={products} />
                     <Footer />
                 </main>
             </center>
         </>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const { text, filter } = query;
+    const products = await getFilteredProducts({
+        subcategoryPath: '/sergi/pod-zoloto',
+        productType: 'earrings',
+        text,
+        filter
+    });
+
+    return {
+        props: {
+            products
+        }
+    };
 }

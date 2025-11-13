@@ -2,12 +2,10 @@ import { Footer } from "@/components";
 import Catalog from "@/components/Catalog/Catalog";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { getCanonicalUrl, mapSlugToProductType } from "@/lib/seo";
+import { getFilteredProducts } from "@/lib/catalogServerUtils";
 
-export default function CatalogBySlug() {
-    const router = useRouter();
-    const { slug } = router.query;
+export default function CatalogBySlug({ products, slug }) {
 
     const canonicalUrl = getCanonicalUrl(`/catalog/${slug || ''}`);
     const pageFromSlug = Number.isFinite(Number(slug)) ? parseInt(slug) : undefined;
@@ -77,12 +75,37 @@ export default function CatalogBySlug() {
             <center>
                 <main>
                     <Header />
-                    <Catalog initialPage={pageFromSlug || 1} />
+                    <Catalog initialPage={pageFromSlug || 1} initialProducts={products} />
                     <Footer />
                 </main>
             </center>
         </>
     );
+}
+
+export async function getServerSideProps({ params, query }) {
+    const { slug } = params;
+    const { text, filter } = query;
+
+    // Определяем тип продукта из slug
+    const productType = mapSlugToProductType(slug);
+    
+    // Определяем путь подкатегории
+    const path = `/catalog/${slug}`;
+    
+    const products = await getFilteredProducts({
+        subcategoryPath: path,
+        productType: productType && ['ring', 'earrings', 'bracelets', 'necklace'].includes(productType) ? productType : null,
+        text,
+        filter
+    });
+
+    return {
+        props: {
+            products,
+            slug: slug || null,
+        },
+    };
 }
 
 

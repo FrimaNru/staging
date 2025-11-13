@@ -118,29 +118,3 @@ export const ProductModal = ({ isOpenModal, setIsOpenModal, product, router }) =
         </Modal>
     );
 }
-
-export async function getServerSideProps({ query, res }) {
-    const { id } = query;
-
-    if (!id) {
-        return { notFound: true };
-    }
-
-    try {
-        const response = await axios.post(`${API_BASE_URL}getOneProduct`, { id });
-        const product = response.data;
-
-        if (!product || !product._id) {
-            return { notFound: true };
-        }
-
-        return {
-            props: {
-                product,
-            },
-        };
-    } catch (error) {
-        console.error('Ошибка при загрузке продукта:', error.message);
-        return { notFound: true };
-    }
-}

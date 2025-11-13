@@ -1,32 +1,14 @@
 import { Footer } from "@/components";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import PopularBlock from "@/components/PopularBlock/PopularBlock";
 import Header from "@/components/Header/Header";
 import { PRODUCT_TYPES } from "@/constants/items";
 import Product from "@/components/Product/Product";
-import { useProducts } from "@/contexts/ProductsContext";
-import { useMemo } from "react";
+import axios from "axios";
+import { API_BASE_URL } from "../../../apiConfig";
 import { buildProductSlug } from "@/lib/seo";
 
-export default function ProductPageBySlug() {
-    const router = useRouter();
-    const { slug } = router.query;
-    const { products, loading } = useProducts();
-
-    const product = useMemo(() => {
-        if (!slug || !Array.isArray(products)) return null;
-        return products.find((p) => buildProductSlug(p) === slug) || null;
-    }, [slug, products]);
-
-    if (loading || !router.isReady) {
-        return (
-            <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                <h1>Загрузка...</h1>
-            </div>
-        );
-    }
-
+export default function ProductPageBySlug({ product }) {
     if (!product) {
         return (
             <div style={{ textAlign: 'center', marginTop: '50px' }}>
@@ -78,6 +60,40 @@ export default function ProductPageBySlug() {
             </center>
         </>
     );
+}
+
+export async function getServerSideProps({ params, res }) {
+    const { slug } = params;
+
+    if (!slug) {
+        return { notFound: true };
+    }
+
+    try {
+        // Загружаем все продукты для поиска по slug
+        const response = await axios.get(`${API_BASE_URL}getProducts`);
+        const products = response.data;
+
+        if (!Array.isArray(products)) {
+            return { notFound: true };
+        }
+
+        // Ищем продукт по slug
+        const product = products.find((p) => buildProductSlug(p) === slug);
+
+        if (!product || !product._id) {
+            return { notFound: true };
+        }
+
+        return {
+            props: {
+                product,
+            },
+        };
+    } catch (error) {
+        console.error('Ошибка при загрузке продукта:', error.message);
+        return { notFound: true };
+    }
 }
 
 

@@ -2,8 +2,9 @@ import { Footer } from "@/components";
 import Catalog from "@/components/Catalog/Catalog";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
+import { getFilteredProducts } from "@/lib/catalogServerUtils";
 
-export default function KrupnyeKole() {
+export default function KrupnyeKole({ products }) {
     return (
         <>
             <Head>
@@ -33,10 +34,26 @@ export default function KrupnyeKole() {
             <center>
                 <main>
                     <Header />
-                    <Catalog initialPage={1} />
+                    <Catalog initialPage={1} initialProducts={products} />
                     <Footer />
                 </main>
             </center>
         </>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const { text, filter } = query;
+    const products = await getFilteredProducts({
+        subcategoryPath: '/kole/krupnye',
+        productType: 'necklace',
+        text,
+        filter
+    });
+
+    return {
+        props: {
+            products
+        }
+    };
 }

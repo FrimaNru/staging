@@ -1,12 +1,11 @@
-
 import { Footer } from "@/components";
 import Catalog from "@/components/Catalog/Catalog";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
 import { getCanonicalUrl } from "@/lib/seo";
+import { getFilteredProducts } from "@/lib/catalogServerUtils";
 
-export default function Delivery() {
-        
+export default function CatalogPage({ products }) {
     const canonicalUrl = getCanonicalUrl('/catalog');
 
     return (
@@ -42,10 +41,27 @@ export default function Delivery() {
             <center>
                 <main>
                     <Header />
-                    <Catalog />
+                    <Catalog initialProducts={products} />
                     <Footer />
                 </main>
             </center>
         </>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const { text, filter } = query;
+    
+    const products = await getFilteredProducts({
+        subcategoryPath: null,
+        productType: null,
+        text,
+        filter
+    });
+
+    return {
+        props: {
+            products,
+        },
+    };
 }

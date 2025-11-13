@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-ssr": "node scripts/check-ssr.js"
   },
   "dependencies": {
     "@cdek-it/widget": "^3.10.4",

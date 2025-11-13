@@ -17,8 +17,10 @@ import CategoryCards from "./items/CategoryCards";
 import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
 import { PRODUCT_TYPES } from "@/constants/items";
 
-export default function Catalog({ initialPage = 1 }) {
-    const { products, loading } = useProducts();
+export default function Catalog({ initialPage = 1, initialProducts }) {
+    const { products: contextProducts, loading } = useProducts();
+    // Используем начальные продукты с сервера, если они есть, иначе используем из контекста
+    const products = initialProducts || contextProducts;
     const router = useRouter();
     const { product, text, filter, PAGEN_1 } = router.query;
     const [stateSales, setStateSales] = useState([]);
