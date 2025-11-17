@@ -17,7 +17,7 @@ import CategoryCards from "./items/CategoryCards";
 import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
 import { PRODUCT_TYPES } from "@/constants/items";
 
-export default function Catalog({ initialPage = 1, initialProducts }) {
+export default function Catalog({ initialPage = 1, initialProducts, h1Title }) {
     const { products: contextProducts, loading } = useProducts();
     // Используем начальные продукты с сервера, если они есть, иначе используем из контекста
     const products = initialProducts || contextProducts;
@@ -334,7 +334,8 @@ export default function Catalog({ initialPage = 1, initialProducts }) {
                 <div className={styles.row}>
                     <div className={styles.leftColumn}>
                         <h1 className={styles.title}>
-                            {isNewPage ? 'НОВИНКИ' : 
+                            {h1Title ? h1Title :
+                             isNewPage ? 'НОВИНКИ' : 
                              router.asPath.includes('/kole/mnogoslojnye') ? 'МНОГОСЛОЙНЫЕ КОЛЬЕ' :
                              router.asPath.includes('/kole/krupnye') ? 'КРУПНЫЕ КОЛЬЕ' :
                              router.asPath.includes('/kole/dlinnye') ? 'ДЛИННЫЕ КОЛЬЕ' :

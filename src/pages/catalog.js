@@ -11,8 +11,8 @@ export default function CatalogPage({ products }) {
     return (
         <>
             <Head>
-                <title>Элитная бижутерия класса люкс – купить в Москве в интернет-магазине Mi Alegria</title>
-                <meta name="description" content="Купить брендовую бижутерию в Москве – цены в интернет-магазине Mi Alegria ✔ Доставка и гарантия на все ювелирные изделия ✔Элитная бижутерия класса люкс для создания неповторимого образа" />
+                <title>Каталог элитной бижутерии Mi Alegria – заказать украшения в Москве</title>
+                <meta name="description" content="Интернет-магазин Mi Alegria – Каталог украшений ✔ Кольца, серьги, браслеты и колье премиум-класса ✔ Высокое качество, эксклюзивный дизайн ✔ Бесплатная доставка и гарантия на все ювелирные изделия." />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                     
                     
@@ -50,6 +50,24 @@ export default function CatalogPage({ products }) {
 }
 
 export async function getServerSideProps({ query }) {
+    // Редиректы со старых адресов категорий на новые (301)
+    const productRedirects = {
+        'ring': '/catalog/kolcza',
+        'necklace': '/catalog/kole',
+        'earrings': '/catalog/sergi',
+        'bracelets': '/catalog/braslety'
+    };
+
+    // Проверяем наличие старого параметра product и выполняем редирект
+    if (query.product && productRedirects[query.product]) {
+        return {
+            redirect: {
+                destination: productRedirects[query.product],
+                permanent: true, // 301 редирект
+            },
+        };
+    }
+
     const { text, filter } = query;
     
     const products = await getFilteredProducts({

@@ -5,7 +5,7 @@ export default function Contacts() {
     return <div className={styles.main}>
         <div className={styles.contactsHeader}>
             <Breadcrumb />
-            <p className={styles.contactsHeaderTitle}>Контакты</p>
+            <h1 className={styles.contactsHeaderTitle}>Контакты</h1>
         </div>
         <div className={styles.contactsContent}>
             <div className={styles.contactsContentColumnBig}>

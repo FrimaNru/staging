@@ -2,12 +2,11 @@ import { Footer } from "@/components";
 import Catalog from "@/components/Catalog/Catalog";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
-import { getCanonicalUrl, mapSlugToProductType } from "@/lib/seo";
+import { mapSlugToProductType } from "@/lib/seo";
 import { getFilteredProducts } from "@/lib/catalogServerUtils";
 
-export default function CatalogBySlug({ products, slug }) {
+export default function CatalogBySlug({ products, slug, h1Title }) {
 
-    const canonicalUrl = getCanonicalUrl(`/catalog/${slug || ''}`);
     const pageFromSlug = Number.isFinite(Number(slug)) ? parseInt(slug) : undefined;
 
     // Определяем тип изделия по слугу для SEO
@@ -53,7 +52,6 @@ export default function CatalogBySlug({ products, slug }) {
                 <title>{seoData.title}</title>
                 <meta name="description" content={seoData.description} />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="canonical" href={canonicalUrl} />
                 <link rel="apple-touch-icon" sizes="57x57" href="/faviconsWithBg.ico/apple-icon-57x57.png" />
                 <link rel="apple-touch-icon" sizes="60x60" href="/faviconsWithBg.ico/apple-icon-60x60.png" />
                 <link rel="apple-touch-icon" sizes="72x72" href="/faviconsWithBg.ico/apple-icon-72x72.png" />
@@ -75,7 +73,7 @@ export default function CatalogBySlug({ products, slug }) {
             <center>
                 <main>
                     <Header />
-                    <Catalog initialPage={pageFromSlug || 1} initialProducts={products} />
+                    <Catalog initialPage={pageFromSlug || 1} initialProducts={products} h1Title={h1Title} />
                     <Footer />
                 </main>
             </center>
@@ -93,6 +91,19 @@ export async function getServerSideProps({ params, query }) {
     // Определяем путь подкатегории
     const path = `/catalog/${slug}`;
     
+    // Генерируем H1 заголовок на сервере для правильной индексации
+    const getH1Title = (slug) => {
+        const h1Map = {
+            'kolcza': 'КОЛЬЦА',
+            'sergi': 'СЕРЬГИ',
+            'braslety': 'БРАСЛЕТЫ',
+            'kole': 'КОЛЬЕ'
+        };
+        return h1Map[slug] || null;
+    };
+    
+    const h1Title = getH1Title(slug);
+    
     const products = await getFilteredProducts({
         subcategoryPath: path,
         productType: productType && ['ring', 'earrings', 'bracelets', 'necklace'].includes(productType) ? productType : null,
@@ -104,6 +115,7 @@ export async function getServerSideProps({ params, query }) {
         props: {
             products,
             slug: slug || null,
+            h1Title: h1Title || null,
         },
     };
 }

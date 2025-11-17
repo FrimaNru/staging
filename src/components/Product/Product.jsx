@@ -15,10 +15,19 @@ import CharasteristicBlock from "./items/CharasteristicBlock";
 import { PRODUCT_TYPES } from "@/constants/items";
 
 export default function Product({ product }) {
+    // Гарантируем, что product всегда определен для серверного рендеринга
+    if (!product) {
+        return null;
+    }
+
     const { addToCart } = useCart();
     const router = useRouter();
-    const [colorOfProduct, setColorOfProduct] = useState('');
-    const [sizeOfProduct, setSizeOfProduct] = useState(0);
+    const [colorOfProduct, setColorOfProduct] = useState(product?.color || '');
+    const [sizeOfProduct, setSizeOfProduct] = useState(
+        product?.sizes && (product.type === 'ring' || product.type === 'bracelets' || product.type === 'necklace') 
+            ? product.sizes[0] 
+            : 0
+    );
     const [activeCount, setActiveCount] = useState(0);
     const [isOpenModal, setIsOpenModal] = useState(false);
 
@@ -26,9 +35,9 @@ export default function Product({ product }) {
         if (product) {
             setColorOfProduct(product.color || '');
             if (product.type === 'ring' || product.type === 'bracelets') {
-                setSizeOfProduct(product.sizes[0]);
+                setSizeOfProduct(product.sizes?.[0] || 0);
             } else if (product.type === 'necklace') {
-                setSizeOfProduct(product.sizes[0]);
+                setSizeOfProduct(product.sizes?.[0] || 0);
             }
         }
     }, [product]);

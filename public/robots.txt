@@ -7,4 +7,6 @@ Disallow: */bag
 Disallow: *?text= 
 Disallow: */cabinet 
 Disallow: */feedback 
+Disallow: /auth/ #закрытие от индексации страниц с метками отслеживания
+Disallow: /*?filter= #закрытие от индексации страниц фильтров
 Sitemap: https://mi-alegria.shop/sitemap.xml
