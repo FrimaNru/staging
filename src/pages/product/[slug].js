@@ -21,11 +21,11 @@ export default function ProductPageBySlug({ product }) {
         <>
             <Head>
                 <title>
-                    {(PRODUCT_TYPES[product.type] || 'Украшение')} {product.name} – цена, купить в Mi Alegria
+                    {`${PRODUCT_TYPES[product.type] || 'Украшение'} ${product.name} – цена, купить в Mi Alegria`}
                 </title>
                 <meta
                     name="description"
-                    content={`Каталог премиальной бижутерии Mi Alegria. ${(PRODUCT_TYPES[product.type] || 'Украшение')} ${product.name} – цена, купить в Mi Alegria. ✔ Высокое качество, эксклюзивный дизайн ✔ Бесплатная доставка и гарантия на все ювелирные изделия.`}
+                    content={`Каталог премиальной бижутерии Mi Alegria. ${PRODUCT_TYPES[product.type] || 'Украшение'} ${product.name} – цена, купить в Mi Alegria. ✔ Высокое качество, эксклюзивный дизайн ✔ Бесплатная доставка и гарантия на все ювелирные изделия.`}
                 />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
 

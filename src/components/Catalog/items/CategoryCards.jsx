@@ -1,17 +1,16 @@
 import styles from "../styles.module.css";
+import Link from "next/link";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../../../apiConfig";
 
-export default function CategoryCards() {
-    const router = useRouter();
-    const [data, setData] = useState({});
-    const [isMounted, setIsMounted] = useState(false);
+export default function CategoryCards({ initialData }) {
+    const [data, setData] = useState(initialData || {});
 
-    useEffect(() => { 
-        setIsMounted(true);
-        load(); 
+    useEffect(() => {
+        if (!initialData) {
+            load();
+        }
     }, []);
 
     const load = async () => {
@@ -22,38 +21,33 @@ export default function CategoryCards() {
             .catch((e) => console.log(e));
     };
 
-    // Не рендерим компонент до монтирования на клиенте
-    if (!isMounted) {
-        return null;
-    }
-
     return (
         <div className={styles.categoryCards}>
             <div className={styles.categoryCardsGrid}>
-                <div className={styles.categoryCard} onClick={() => router.push('/catalog/kolcza')}>
-                    <img className={styles.categoryCardImage} src={data?.first?.cover} />
+                <Link href="/catalog/kolcza" className={styles.categoryCard}>
+                    <img className={styles.categoryCardImage} src={data?.first?.cover} alt={data?.first?.title || 'Кольца'} />
                     <p className={`${styles.categoryCardText} ${data?.first?.textColor === 'white' ? styles.categoryCardTextLight : styles.categoryCardTextDark}`}>
-                        {data?.first?.title}
+                        {data?.first?.title || 'Кольца'}
                     </p>
-                </div>
-                <div className={styles.categoryCard} onClick={() => router.push('/catalog/kole')}>
-                    <img className={styles.categoryCardImage} src={data?.second?.cover} />
+                </Link>
+                <Link href="/catalog/kole" className={styles.categoryCard}>
+                    <img className={styles.categoryCardImage} src={data?.second?.cover} alt={data?.second?.title || 'Колье'} />
                     <p className={`${styles.categoryCardText} ${data?.second?.textColor === 'white' ? styles.categoryCardTextLight : styles.categoryCardTextDark}`}>
-                        {data?.second?.title}
+                        {data?.second?.title || 'Колье'}
                     </p>
-                </div>
-                <div className={styles.categoryCard} onClick={() => router.push('/catalog/sergi')}>
-                    <img className={styles.categoryCardImage} src={data?.third?.cover} />
+                </Link>
+                <Link href="/catalog/sergi" className={styles.categoryCard}>
+                    <img className={styles.categoryCardImage} src={data?.third?.cover} alt={data?.third?.title || 'Серьги'} />
                     <p className={`${styles.categoryCardText} ${data?.third?.textColor === 'white' ? styles.categoryCardTextLight : styles.categoryCardTextDark}`}>
-                        {data?.third?.title}
+                        {data?.third?.title || 'Серьги'}
                     </p>
-                </div>
-                <div className={styles.categoryCard} onClick={() => router.push('/catalog/braslety')}>
-                    <img className={styles.categoryCardImage} src={data?.fourth?.cover} />
+                </Link>
+                <Link href="/catalog/braslety" className={styles.categoryCard}>
+                    <img className={styles.categoryCardImage} src={data?.fourth?.cover} alt={data?.fourth?.title || 'Браслеты'} />
                     <p className={`${styles.categoryCardText} ${data?.fourth?.textColor === 'white' ? styles.categoryCardTextLight : styles.categoryCardTextDark}`}>
-                        {data?.fourth?.title}
+                        {data?.fourth?.title || 'Браслеты'}
                     </p>
-                </div>
+                </Link>
             </div>
         </div>
     );

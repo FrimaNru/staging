@@ -4,8 +4,10 @@ import Header from "@/components/Header/Header";
 import Head from "next/head";
 import { getCanonicalUrl } from "@/lib/seo";
 import { getFilteredProducts } from "@/lib/catalogServerUtils";
+import axios from "axios";
+import { API_BASE_URL } from "../../apiConfig";
 
-export default function CatalogPage({ products }) {
+export default function CatalogPage({ products, categoryCardsData }) {
     const canonicalUrl = getCanonicalUrl('/catalog');
 
     return (
@@ -41,7 +43,7 @@ export default function CatalogPage({ products }) {
             <center>
                 <main>
                     <Header />
-                    <Catalog initialProducts={products} />
+                    <Catalog initialProducts={products} categoryCardsData={categoryCardsData} />
                     <Footer />
                 </main>
             </center>
@@ -77,9 +79,19 @@ export async function getServerSideProps({ query }) {
         filter
     });
 
+    // Загружаем данные для CategoryCards на сервере
+    let categoryCardsData = {};
+    try {
+        const response = await axios.get(`${API_BASE_URL}mainPage/start`);
+        categoryCardsData = response.data || {};
+    } catch (error) {
+        console.error('Ошибка при загрузке данных категорий:', error.message);
+    }
+
     return {
         props: {
             products,
+            categoryCardsData,
         },
     };
 }

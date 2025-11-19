@@ -17,7 +17,7 @@ import CategoryCards from "./items/CategoryCards";
 import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
 import { PRODUCT_TYPES } from "@/constants/items";
 
-export default function Catalog({ initialPage = 1, initialProducts, h1Title }) {
+export default function Catalog({ initialPage = 1, initialProducts, h1Title, categoryCardsData }) {
     const { products: contextProducts, loading } = useProducts();
     // Используем начальные продукты с сервера, если они есть, иначе используем из контекста
     const products = initialProducts || contextProducts;
@@ -357,7 +357,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title }) {
                         <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} />
                     </div>
                     <div className={styles.rightColumn}>
-                        {isMainCatalogPage && <CategoryCards />}
+                        {isMainCatalogPage && <CategoryCards initialData={categoryCardsData} />}
                         <SubcategoryCards productType={stateType} isSubcategoryPage={isSubcategoryPage} />
                         <SortSection stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} sortItems={sortItems} />
                         <div className={styles.columnOrders}>

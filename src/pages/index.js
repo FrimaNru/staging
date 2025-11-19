@@ -7,8 +7,10 @@ import HomeIntro from "@/components/Home/HomeIntro";
 import HomeDetails from "@/components/Home/HomeDetails";
 import StartBlock from "@/components/StartBlock/StartBlock";
 import Head from "next/head";
+import axios from "axios";
+import { API_BASE_URL } from "../../apiConfig";
 
-export default function Home() {
+export default function Home({ startBlockData }) {
   return (
     <>
       <Head>
@@ -40,13 +42,31 @@ export default function Home() {
         <main className="mainPage">
           <Header />
           <Banner />
-          <StartBlock />
+          <StartBlock initialData={startBlockData} />
           <HomeIntro />
           <PopularBlock />
           <HomeDetails />
           <Footer />
         </main>
       </center>
-    </>
+    </> 
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const response = await axios.get(`${API_BASE_URL}mainPage/start`);
+    return {
+      props: {
+        startBlockData: response.data || {},
+      },
+    };
+  } catch (error) {
+    console.error('Ошибка при загрузке данных главной страницы:', error.message);
+    return {
+      props: {
+        startBlockData: {},
+      },
+    };
+  }
 }
