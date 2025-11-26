@@ -203,7 +203,8 @@ export default function AdminCreateProduct() {
             <Button
                 disabled={isLoading}
                 onClick={addProduct}
-            >Создать товар</Button>
+                className={isLoading ? styles.loading : ''}
+            >{isLoading ? 'Создание...' : 'Создать товар'}</Button>
         </div>
     </div>
 };

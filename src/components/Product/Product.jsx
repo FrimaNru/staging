@@ -70,7 +70,7 @@ export default function Product({ product }) {
                     <div className={styles.infoColumn}>
                         <div className={styles.infoColumnText}>
                             <div className={styles.infoTitleLine}>
-                                <h1 className={styles.infoTitle}>{`${PRODUCT_TYPES[product.type]} ${product.name}`}</h1>
+                                <h1 className={styles.infoTitle}>{[PRODUCT_TYPES[product.type] || '', product.name || ''].filter(Boolean).join(' ')}</h1>
                                 {product.article && <FavouriteButton idProduct={product._id} size={sizeOfProduct} color={colorOfProduct} article={product.article} />}
                             </div>
                             {(product.description && product.description.trim()) ? (

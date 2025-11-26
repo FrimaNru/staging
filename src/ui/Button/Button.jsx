@@ -9,6 +9,7 @@ export default function Button({
     onClick,
     bold = 'regular',
     disabled = false,
+    className = '',
     ...props
 }) {
     const classNames = [
@@ -17,7 +18,8 @@ export default function Button({
         styles[size],
         styles[bold],
         fullWidth ? styles.fullWidth : '',
-        disabled ? styles.disabled : ''
+        disabled ? styles.disabled : '',
+        className
     ]
         .filter(Boolean)
         .join(' ');
