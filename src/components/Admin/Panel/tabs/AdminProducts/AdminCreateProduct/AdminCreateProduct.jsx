@@ -24,10 +24,10 @@ const additionally = {
 };
 
 const subcategories = {
-    'Серьги': ['Длинные', 'Крупные', 'Под золото', 'Под серебро'],
-    'Кольца': ['Крупные', 'Под золото', 'Под серебро'],
-    'Браслеты': ['Широкие', 'Жесткие', 'Под золото', 'Под серебро'],
-    'Колье': ['Многослойные', 'Крупные', 'Длинные', 'Под золото', 'Под серебро']
+    'Серьги': ['Длинные', 'Крупные', 'Под золото', 'Под серебро', 'Бижутерия под золото', 'Бижутерия под серебро'],
+    'Кольца': ['Крупные', 'Под золото', 'Под серебро', 'Бижутерия под золото', 'Бижутерия под серебро'],
+    'Браслеты': ['Широкие', 'Жесткие', 'Под золото', 'Под серебро', 'Бижутерия под золото', 'Бижутерия под серебро'],
+    'Колье': ['Многослойные', 'Крупные', 'Длинные', 'Под золото', 'Под серебро', 'Бижутерия под золото', 'Бижутерия под серебро']
 };
 
 export default function AdminCreateProduct() {
@@ -149,17 +149,39 @@ export default function AdminCreateProduct() {
             </div>
             {(data.type === 'earrings' || data.type === 'ring' || data.type === 'bracelets' || data.type === 'necklace') && (
                 <div className={styles.createLilColumn}>
-                    <p className={styles.subtitle}>Подкатегории (можно выбрать несколько)</p>
-                    <div className={styles.createLilLine}>
-                        {subcategories[data.type === 'earrings' ? 'Серьги' : data.type === 'ring' ? 'Кольца' : data.type === 'bracelets' ? 'Браслеты' : 'Колье']?.map((subcategory, i) => (
-                            <button
-                                key={i}
-                                onClick={() => handleSubcategoryToggle(subcategory)}
-                                className={`${styles.createTypeItem} ${data.subcategories && Array.isArray(data.subcategories) && data.subcategories.includes(subcategory) ? styles.createTypeItemSelect : ''}`}>
-                                {subcategory}
-                            </button>
-                        ))}
-                    </div>
+                <p className={styles.subtitle}>Подкатегории (можно выбрать несколько)</p>
+                    {(() => {
+                        const allSubcategories = subcategories[data.type === 'earrings' ? 'Серьги' : data.type === 'ring' ? 'Кольца' : data.type === 'bracelets' ? 'Браслеты' : 'Колье'] || [];
+                        const regularSubcategories = allSubcategories.filter(s => !s.includes('Бижутерия под'));
+                        const newSubcategories = allSubcategories.filter(s => s.includes('Бижутерия под'));
+                        
+                        return (
+                            <>
+                                <div className={styles.createLilLine}>
+                                    {regularSubcategories.map((subcategory, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => handleSubcategoryToggle(subcategory)}
+                                            className={`${styles.createTypeItem} ${data.subcategories && Array.isArray(data.subcategories) && data.subcategories.includes(subcategory) ? styles.createTypeItemSelect : ''}`}>
+                                            {subcategory}
+                                        </button>
+                                    ))}
+                                </div>
+                                {newSubcategories.length > 0 && (
+                                    <div className={styles.createLilLine} style={{ marginTop: '10px' }}>
+                                        {newSubcategories.map((subcategory, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => handleSubcategoryToggle(subcategory)}
+                                                className={`${styles.createTypeItem} ${data.subcategories && Array.isArray(data.subcategories) && data.subcategories.includes(subcategory) ? styles.createTypeItemSelect : ''}`}>
+                                                {subcategory}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        );
+                    })()}
                 </div>
             )}
             <SizeLine data={data} setData={setData} />

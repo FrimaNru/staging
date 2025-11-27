@@ -14,7 +14,7 @@ import Pagination from "./items/Pagination";
 import SubcategoryCards from "./items/SubcategoryCards";
 import SubcategorySeoText from "./items/SubcategorySeoText";
 import CategoryCards from "./items/CategoryCards";
-import { mapSlugToProductType, mapProductTypeToSlug } from "@/lib/seo";
+import { mapSlugToProductType, mapProductTypeToSlug, buildProductSlug } from "@/lib/seo";
 import { PRODUCT_TYPES } from "@/constants/items";
 
 export default function Catalog({ initialPage = 1, initialProducts, h1Title, categoryCardsData }) {
@@ -25,13 +25,14 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
     const { product, text, filter, PAGEN_1 } = router.query;
     const [stateSales, setStateSales] = useState([]);
     const [stateType, setStateType] = useState('');
+    const [stateColor, setStateColor] = useState('');
     const [search, setSearch] = useState(false);
     const [currentPage, setCurrentPage] = useState(initialPage);
     const itemsPerPage = 15;
     const [isNewPage, setIsNewPage] = useState(false);
     const [isUserInteraction, setIsUserInteraction] = useState(false);
     
-    const prevFilters = useRef({ stateSortItems: '', stateType: '', stateSales: [], text: '' });
+    const prevFilters = useRef({ stateSortItems: '', stateType: '', stateSales: [], text: '', stateColor: '' });
 
     // Обертка для setStateType, которая устанавливает флаг пользовательского взаимодействия
     const handleStateTypeChange = (newType) => {
@@ -56,7 +57,9 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
                router.asPath.includes('/kole/krupnye') ||
                router.asPath.includes('/kole/dlinnye') ||
                router.asPath.includes('/kole/pod-zoloto') ||
-               router.asPath.includes('/kole/pod-serebro');
+               router.asPath.includes('/kole/pod-serebro') ||
+               router.asPath.includes('/bizhuteriya-pod-zoloto') ||
+               router.asPath.includes('/bizhuteriya-pod-serebro');
     }, [router.asPath]);
 
     // Определяем, является ли страница общей страницей каталога
@@ -307,6 +310,19 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
 
         if (stateType in typeMap) { d = d.filter(x => x.type === typeMap[stateType]); };
 
+        // Фильтр по цвету
+        if (stateColor === 'Под золото') {
+            d = d.filter(product => {
+                const slug = buildProductSlug(product);
+                return slug.includes('-zolotaya') || slug.includes('-zoloto');
+            });
+        } else if (stateColor === 'Под серебро') {
+            d = d.filter(product => {
+                const slug = buildProductSlug(product);
+                return slug.includes('-serebryanaya') || slug.includes('-serebro');
+            });
+        }
+
         // Фильтр для подкатегорий на основе поля subcategories
         const currentSubcategory = getCurrentSubcategory();
         if (currentSubcategory) {
@@ -319,7 +335,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
         }
 
         return d;
-    }, [products, stateSortItems, stateType, stateSales, text, router.asPath]);
+    }, [products, stateSortItems, stateType, stateSales, stateColor, text, router.asPath]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -336,6 +352,8 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
                         <h1 className={styles.title}>
                             {h1Title ? h1Title :
                              isNewPage ? 'НОВИНКИ' : 
+                             router.asPath.includes('/bizhuteriya-pod-zoloto') ? 'БИЖУТЕРИЯ ПОД ЗОЛОТО' :
+                             router.asPath.includes('/bizhuteriya-pod-serebro') ? 'БИЖУТЕРИЯ ПОД СЕРЕБРО' :
                              router.asPath.includes('/kole/mnogoslojnye') ? 'МНОГОСЛОЙНЫЕ КОЛЬЕ' :
                              router.asPath.includes('/kole/krupnye') ? 'КРУПНЫЕ КОЛЬЕ' :
                              router.asPath.includes('/kole/dlinnye') ? 'ДЛИННЫЕ КОЛЬЕ' :
@@ -354,7 +372,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
                              router.asPath.includes('/braslety/pod-serebro') ? 'БРАСЛЕТЫ ПОД СЕРЕБРО' :
                              stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
                         </h1>
-                        <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} />
+                        <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} stateColor={stateColor} setStateColor={setStateColor} />
                     </div>
                     <div className={styles.rightColumn}>
                         {isMainCatalogPage && <CategoryCards initialData={categoryCardsData} />}
@@ -370,7 +388,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
                                 </div>
                             )}
                             
-                            <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
+                            <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} stateColor={stateColor} setStateColor={setStateColor} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
                             <ProductGrid filteredData={currentItems} />
 
                             {filteredData.length > itemsPerPage && (

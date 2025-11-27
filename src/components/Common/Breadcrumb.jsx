@@ -76,6 +76,10 @@ export default function Breadcrumb() {
                     } else if (asPath.includes('/kole/pod-serebro')) {
                         array.push({ text: 'Колье', link: '/catalog/kole' });
                         array.push({ text: 'Под серебро', link: asPath });
+                    } else if (asPath.includes('/bizhuteriya-pod-zoloto')) {
+                        array.push({ text: 'Бижутерия под золото', link: asPath });
+                    } else if (asPath.includes('/bizhuteriya-pod-serebro')) {
+                        array.push({ text: 'Бижутерия под серебро', link: asPath });
                     } else {
                         // Обычная категория
                         const slug = asPath.replace('/catalog/', '');

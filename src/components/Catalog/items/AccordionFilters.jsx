@@ -2,7 +2,7 @@ import styles from "../styles.module.css";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from "@chakra-ui/react";
 import FilterSection from "./FilterSection";
 
-export default function AccordionFilters({ sales, types, stateSales, stateType, setStateSales, setStateType, sortItems, stateSortItems, setStateSortItems }) {
+export default function AccordionFilters({ sales, types, stateSales, stateType, setStateSales, setStateType, stateColor, setStateColor, sortItems, stateSortItems, setStateSortItems }) {
     return (
         <Accordion w='100%' allowToggle className={styles.accordion}>
             <AccordionItem border='none'>
@@ -22,7 +22,7 @@ export default function AccordionFilters({ sales, types, stateSales, stateType, 
                         </AccordionButton>
                         <AccordionPanel p={0}>
                             <div className={styles.accordionPanel}>
-                                <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} />
+                                <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={setStateType} stateColor={stateColor} setStateColor={setStateColor} />
                                 <div className={styles.lilColumn}>
                                     <p className={styles.filterTitle}>СОРТИРОВКА</p>
                                     {sortItems.map((x, i) => (

@@ -1,6 +1,8 @@
 import styles from "../styles.module.css";
 
-export default function FilterSection({ sales, types, stateSales, stateType, setStateSales, setStateType }) {
+export default function FilterSection({ sales, types, stateSales, stateType, setStateSales, setStateType, stateColor, setStateColor }) {
+    const colors = ['Под золото', 'Под серебро'];
+    
     return (
         <div className={styles.filter}>
             <div className={styles.lilColumn}>
@@ -19,6 +21,15 @@ export default function FilterSection({ sales, types, stateSales, stateType, set
                         else setStateType('');
                     }}>
                         {stateType === x ? <img src='/goldDotSelect.svg' /> : <img src='/goldDot.svg' />}
+                        <p className={styles.filterText}>{x}</p>
+                    </div>
+                ))}
+                {colors.map((x, i) => (
+                    <div key={`color-${i}`} className={styles.filterLine} onClick={() => {
+                        if (stateColor !== x) setStateColor(x);
+                        else setStateColor('');
+                    }}>
+                        {stateColor === x ? <img src='/goldDotSelect.svg' /> : <img src='/goldDot.svg' />}
                         <p className={styles.filterText}>{x}</p>
                     </div>
                 ))}

@@ -48,6 +48,14 @@ export default function CategoryCards({ initialData }) {
                         {data?.fourth?.title || 'Браслеты'}
                     </p>
                 </Link>
+                <Link href="/catalog/bizhuteriya-pod-zoloto" className={styles.categoryCard}>
+                    <img className={styles.categoryCardImage} src="https://mialegria.storage.yandexcloud.net/1742404970040-eaa970a6-e157-498c-aa50-37cc07138a4b-IMG_1543.webp" alt="Бижутерия под золото" />
+                    <p className={`${styles.categoryCardText} ${styles.categoryCardTextDark}`}>Бижутерия под золото</p>
+                </Link>
+                <Link href="/catalog/bizhuteriya-pod-serebro" className={styles.categoryCard}>
+                    <img className={styles.categoryCardImage} src="https://mialegria.storage.yandexcloud.net/1742403430451-e60c61a1-1169-4e10-8d9c-ded52cf84696-IMG_1859.webp" alt="Бижутерия под серебро" />
+                    <p className={`${styles.categoryCardText} ${styles.categoryCardTextDark}`}>Бижутерия под серебро</p>
+                </Link>
             </div>
         </div>
     );
