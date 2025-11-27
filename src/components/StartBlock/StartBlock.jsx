@@ -20,7 +20,7 @@ export default function StartBlock({ initialData }) {
     };
 
     return <div className={styles.main}>
-        <h1 className={styles.title}>Интернет-магазин ювелирных украшений Mi Alegria</h1>
+        <h1 className={styles.title}>Интернет-магазин украшений Mi Alegria</h1>
         <div className={styles.line}>
             <Link href="/catalog/kolcza" className={styles.block}>
                 <img className={styles.blockImage} src={data?.first?.cover} alt={data?.first?.title || 'Кольца'} />

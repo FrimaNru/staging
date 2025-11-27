@@ -285,7 +285,8 @@ export default function AdminEditProduct() {
             <Button
                 disabled={isLoading}
                 onClick={editProduct}
-            >Обновить товар</Button>
+                className={isLoading ? styles.loading : ''}
+            >{isLoading ? 'Обновление...' : 'Обновить товар'}</Button>
         </div>
     </div>
 };
