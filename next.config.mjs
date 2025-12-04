@@ -57,11 +57,6 @@ const nextConfig = {
             },
         ];
     },
-
-    // Настройки для генерации статических страниц
-    async generateStaticParams() {
-        return [];
-    },
 };
 
 export default nextConfig;

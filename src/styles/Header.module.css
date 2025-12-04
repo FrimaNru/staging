@@ -499,6 +499,20 @@
     border: solid 1px #140702;
     max-height: 375px;
     overflow: scroll;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.inputPanelOpen {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.inputPanel::-webkit-scrollbar {
+    display: none;
 }
 
 .inputPanelHeader {
@@ -554,6 +568,39 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+.searchLoading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.searchLoadingText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.searchNoResults {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.searchNoResultsText {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    opacity: 0.6;
 }
 
 .loading {
