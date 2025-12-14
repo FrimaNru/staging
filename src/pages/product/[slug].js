@@ -77,11 +77,15 @@ export async function getServerSideProps({ params, res }) {
         }
 
         // Ищем продукт по slug
-        const product = products.find((p) => buildProductSlug(p) === slug);
+        const productFromList = products.find((p) => buildProductSlug(p) === slug);
 
-        if (!product || !product._id) {
+        if (!productFromList || !productFromList._id) {
             return { notFound: true };
         }
+
+        // Загружаем полные данные товара, чтобы получить saleCost
+        const fullProductResponse = await axios.post(`${API_BASE_URL}getOneProduct`, { id: productFromList._id });
+        const product = fullProductResponse.data;
 
         return {
             props: {

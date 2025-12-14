@@ -122,7 +122,7 @@ export default function PopularBlock() {
                             </div>
                             <div className={styles.productItemCostLine}>
                                 <div className={styles.productItemCostEmpty} />
-                                <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                                <p className={styles.sliderItemCost}>{formatNumber(x.saleCost && x.saleCost > 0 ? x.saleCost : x.cost)} руб.</p>
                                 <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
                             </div>
                             <button className={styles.buyButton} onClick={() => buy(x)}>КУПИТЬ</button>
@@ -147,7 +147,7 @@ export default function PopularBlock() {
                             </div>
                             <div className={styles.productItemCostLine}>
                                 <div className={styles.productItemCostEmpty} />
-                                <p className={styles.sliderItemCost}>{formatNumber(x.cost)} руб.</p>
+                                <p className={styles.sliderItemCost}>{formatNumber(x.saleCost && x.saleCost > 0 ? x.saleCost : x.cost)} руб.</p>
                                 <FavouriteButton idProduct={x._id} size={(x.type === 'ring' || x.type === 'bracelets') ? 16 : 28} color={x.color} article={x.article} type='small' />
                             </div>
                             <button className={styles.buyButton} onClick={() => buy(x)}>КУПИТЬ</button>

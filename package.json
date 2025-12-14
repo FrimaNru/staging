@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "check-ssr": "node scripts/check-ssr.js",
-    "add-categories": "node scripts/add-categories-to-products.js"
+    "add-categories": "node scripts/add-categories-to-products.js",
+    "add-sale-cost": "node scripts/add-sale-cost-to-all-products.js"
   },
   "dependencies": {
     "@cdek-it/widget": "^3.10.4",

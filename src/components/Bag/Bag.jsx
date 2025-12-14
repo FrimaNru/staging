@@ -68,7 +68,7 @@ export default function Bag() {
 
             const productRequests = cart.map(product =>
                 axios.post(`${API_BASE_URL}getOneProduct`, { id: product.id })
-                    .then(res => Number(res.data.cost))
+                    .then(res => Number(res.data.saleCost || res.data.cost))
                     .catch(error => {
                         console.error(`Ошибка при получении товара с ID ${product.id}:`, error);
                         return 0;

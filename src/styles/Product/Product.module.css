@@ -95,16 +95,63 @@
     gap: 15px;
 }
 
+.infoCostWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 0;
+}
+
+.infoCostLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+
 .infoCost {
-    color: #C39748;
-    text-align: center;
-    font-family: 'Dela Gothic One', system-ui;
+    color: #140702;
     text-align: left;
-    padding: 0 30px;
-    font-size: 24px;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 28px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    margin: 0;
+}
+
+.infoCostOld {
+    color: #999;
+    text-align: left;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: line-through;
+    margin: 0;
+}
+
+.infoCostSaleBadge {
+    background: #E63946;
+    color: #FFFFFF;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    padding: 6px 14px;
+    border-radius: 20px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Стили для обычной цены без скидки */
+.infoButtonColumn > .infoCost {
+    color: #C39748;
+    text-align: left;
+    padding: 0 30px;
+    font-size: 24px;
 }
 
 .infoButton {
@@ -703,9 +750,30 @@
         gap: 10px;
     }
 
+    .infoCostWrapper {
+        gap: 3px;
+    }
+
+    .infoCostLine {
+        gap: 8px;
+    }
+
     .infoCost {
+        font-size: 22px;
+    }
+
+    .infoCostOld {
+        font-size: 14px;
+    }
+
+    .infoCostSaleBadge {
+        font-size: 14px;
+        padding: 4px 10px;
+    }
+
+    .infoButtonColumn > .infoCost {
         padding: 0 14px;
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .infoButton {

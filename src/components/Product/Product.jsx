@@ -83,7 +83,17 @@ export default function Product({ product }) {
                             {product.articles && <p className={styles.articles} data-noindex="true">Артикул: {product.article}</p>}
                         </div>
                         <div className={styles.infoButtonColumn}>
-                            <p className={styles.infoCost}>{formatNumber(Number(product.cost))} руб.</p>
+                            {product.saleCost && Number(product.saleCost) > 0 && Number(product.saleCost) < Number(product.cost) ? (
+                                <div className={styles.infoCostWrapper}>
+                                    <div className={styles.infoCostLine}>
+                                        <p className={styles.infoCost}>{formatNumber(Number(product.saleCost))} руб.</p>
+                                        <div className={styles.infoCostSaleBadge}>-20%</div>
+                                    </div>
+                                    <p className={styles.infoCostOld}>{formatNumber(Number(product.cost))} руб.</p>
+                                </div>
+                            ) : (
+                                <p className={styles.infoCost}>{formatNumber(Number(product.cost))} руб.</p>
+                            )}
                             <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
                         </div>
                     </div>

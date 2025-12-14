@@ -36,6 +36,7 @@ export default function AdminCreateProduct() {
     const [data, setData] = useState({
         name: '',
         cost: 0,
+        saleCost: 0,
         cover: null,
         images: [],
         color: null,
@@ -132,6 +133,15 @@ export default function AdminCreateProduct() {
                     placeholder="Введите стоимость товара"
                     onChange={(e) => setData({ ...data, cost: e.target.value })}
                     value={data?.cost || ""}
+                />
+            </div>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Скидочная стоимость</p>
+                <Input
+                    type="number"
+                    placeholder="Введите скидочную стоимость товара"
+                    onChange={(e) => setData({ ...data, saleCost: e.target.value })}
+                    value={data?.saleCost || ""}
                 />
             </div>
             <div className={styles.createLilColumn}>
