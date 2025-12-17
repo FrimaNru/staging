@@ -58,15 +58,7 @@ const nextConfig = {
         ];
     },
 
-    // Проксирование сервисов виджета СДЭК через same-origin, чтобы не ловить CORS в браузере
-    async rewrites() {
-        return [
-            {
-                source: '/map_service/service.php',
-                destination: 'https://api.mi-alegria.shop/map_service/service.php',
-            },
-        ];
-    },
+    // rewrites больше не нужны: используем API-роут /api/map_service/service (same-origin proxy)
 };
 
 export default nextConfig;

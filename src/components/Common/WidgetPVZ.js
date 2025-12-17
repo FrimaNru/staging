@@ -11,9 +11,9 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
                 widgetInstance.current = new CdekWidget.default({
                     element: widgetRef.current,
                     root: 'cdek-map',
-                    // Важно: используем относительный путь, чтобы избежать CORS в браузере.
-                    // Проксирование на API настроено через rewrites в next.config.mjs
-                    servicePath: '/map_service/service.php',
+                    // На проде запросы к api.mi-alegria.shop из браузера ловят CORS,
+                    // поэтому ходим в same-origin API-роут, который проксирует запрос сервер-сервер.
+                    servicePath: '/api/map_service/service',
                     apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf',
                     goods: [{ weight: 0.5, height: 10, width: 10, length: 10 }],
                     // Важно: передаем координаты, а не строку, чтобы виджет не делал geocodeString("Москва")
