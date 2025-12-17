@@ -13,7 +13,7 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
                     root: 'cdek-map',
                     // На проде запросы к api.mi-alegria.shop из браузера ловят CORS,
                     // поэтому ходим в same-origin API-роут, который проксирует запрос сервер-сервер.
-                    servicePath: '/api/map_service/service',
+                    servicePath: '/api/map_service/service.php',
                     apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf',
                     goods: [{ weight: 0.5, height: 10, width: 10, length: 10 }],
                     // Важно: передаем координаты, а не строку, чтобы виджет не делал geocodeString("Москва")
