@@ -15,6 +15,8 @@ import { useFavourite } from "@/contexts/FavouriteContext";
 import { useUser } from "@/contexts/UserContext";
 import { HEADER_LINKS } from "@/constants/items";
 import { useSearch } from "@/hooks/useSearch";
+import { Modal, ModalOverlay, ModalContent, ModalBody, useToast } from "@chakra-ui/react";
+import InputMask from "react-input-mask";
 
 export default function Header() {
 
@@ -33,6 +35,13 @@ export default function Header() {
     const { searchResults, isLoading: isSearchLoading, searchQuery, setSearchQuery } = useSearch(products, 300, 10);
     const searchBlockRef = useRef(null);
     const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
+    const toast = useToast();
+
+    // Заказать звонок
+    const [isCallModalOpen, setIsCallModalOpen] = useState(false);
+    const [callName, setCallName] = useState("");
+    const [callPhone, setCallPhone] = useState("");
+    const [isCallSubmitting, setIsCallSubmitting] = useState(false);
 
     useEffect(() => {
         load();
@@ -114,6 +123,36 @@ export default function Header() {
             .catch((e) => console.log(e));
     };
 
+    const submitCallRequest = async () => {
+        const trimmedName = callName.trim();
+        const digits = (callPhone || "").replace(/\D/g, "");
+
+        if (!trimmedName) {
+            return toast({ position: "bottom-right", render: () => (<div className="toast">Введите имя</div>), duration: 3000 });
+        }
+        // Для РФ маски +7 (999) 999-99-99 ожидаем 11 цифр
+        if (digits.length !== 11) {
+            return toast({ position: "bottom-right", render: () => (<div className="toast">Введите корректный номер телефона</div>), duration: 3000 });
+        }
+
+        try {
+            setIsCallSubmitting(true);
+
+            // TODO: подключить API эндпоинт для заявок на звонок на бэке (например: POST /callRequest)
+            // await axios.post(`${API_BASE_URL}callRequest`, { name: trimmedName, phone: callPhone });
+
+            toast({ position: "bottom-right", render: () => (<div className="toast">Заявка отправлена</div>), duration: 3000 });
+            setIsCallModalOpen(false);
+            setCallName("");
+            setCallPhone("");
+        } catch (e) {
+            console.log(e);
+            toast({ position: "bottom-right", render: () => (<div className="toast">Ошибка отправки заявки</div>), duration: 3000 });
+        } finally {
+            setIsCallSubmitting(false);
+        }
+    };
+
     return <div className={styles.main}>
         <div className={styles.firstLine}>
             <div className={styles.mobileIconsLine}>
@@ -121,89 +160,105 @@ export default function Header() {
                 <img src='/searchIconMobile.svg' className={styles.icon} onClick={() => setIsSearchOpen(true)} />
                 <div className={styles.emptyIcon} />
             </div>
-            <Link href='/' style={{ width: 'max-content' }} >
-                <img src='/logo.svg' className={styles.logo} />
-            </Link>
-            <div className={styles.searchBlock} ref={searchBlockRef}>
-                <img src='/searchIcon.svg' className={styles.searchBlockIcon} />
-                <input 
-                    className={styles.searchBlockInput} 
-                    placeholder="Поиск по каталогу" 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onFocus={() => {
-                        if (searchQuery.length > 0) {
-                            setIsSearchPanelOpen(true);
-                        }
-                    }}
-                />
-                {isSearchPanelOpen && (
-                    <div className={`${styles.inputPanel} ${isSearchPanelOpen ? styles.inputPanelOpen : ''}`}>
-                        {isSearchLoading && searchQuery.length > 0 && (
-                            <div className={styles.searchLoading}>
-                                <p className={styles.searchLoadingText}>Поиск...</p>
-                            </div>
-                        )}
-                        {!isSearchLoading && searchQuery.length > 0 && (
-                            <>
-                                <Link 
-                                    href={`/catalog?text=${searchQuery}`} 
-                                    onClick={() => {
-                                        setSearchQuery('');
-                                        setIsSearchPanelOpen(false);
-                                    }}
-                                >
-                                    <div className={styles.inputPanelHeader}>
-                                        <img src='/searchIcon.svg' className={styles.searchBlockIcon} />
-                                        <p className={styles.inputPanelText}>Искать "{searchQuery}"</p>
-                                    </div>
-                                </Link>
-                                {searchResults.length > 0 ? (
-                                    searchResults.map((x, i) => (
-                                        <Link 
-                                            key={x._id || i} 
-                                            href={`/product/${buildProductSlug(x)}`}
-                                            onClick={() => {
-                                                setSearchQuery('');
-                                                setIsSearchPanelOpen(false);
-                                            }}
-                                        >
-                                            <div className={styles.inputPanelLine}>
-                                                <img
-                                                    src={x.cover}
-                                                    className={styles.inputPanelCover}
-                                                    alt={x.name}
-                                                />
-                                                <p className={styles.inputPanelName}>{x.name}</p>
-                                                <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
-                                            </div>
-                                        </Link>
-                                    ))
-                                ) : searchQuery.length > 0 && !isSearchLoading && (
-                                    <div className={styles.searchNoResults}>
-                                        <p className={styles.searchNoResultsText}>Ничего не найдено</p>
-                                    </div>
-                                )}
-                            </>
-                        )}
-                    </div>
-                )}
+            <div className={styles.leftGroup}>
+                <div className={styles.logoColumn}>
+                    <Link href='/' style={{ width: 'max-content' }} >
+                        <img src='/logo.svg' className={styles.logo} />
+                    </Link>
+                    <p className={styles.tagline}>Элитная бижутерия</p>
+                </div>
             </div>
-            <div className={styles.iconLine} >
-                <>
-                    <img src='/favIcon.svg' className={styles.icon} onClick={() => favPage()} />
-                    {favourite.length > 0 && <div className={styles.favCount}>
-                        <p className={styles.favCountText}>{favourite.length}</p>
-                    </div>}
-                </>
-                <AuthModal onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
-                <Authorization />
-                <Link href='/bag' style={{ width: 'max-content' }} >
-                    <img src='/shopIcon.svg' className={styles.icon} />
-                    {cart.length > 0 && <div className={styles.bagCount}>
-                        <p className={styles.bagCountText}>{cart.length}</p>
-                    </div>}
-                </Link>
+
+            <div className={styles.searchCenter} ref={searchBlockRef}>
+                <div className={styles.searchBlock} ref={searchBlockRef}>
+                    <img src='/searchIcon.svg' className={styles.searchBlockIcon} />
+                    <input 
+                        className={styles.searchBlockInput} 
+                        placeholder="Поиск по каталогу" 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onFocus={() => {
+                            if (searchQuery.length > 0) {
+                                setIsSearchPanelOpen(true);
+                            }
+                        }}
+                    />
+                    {isSearchPanelOpen && (
+                        <div className={`${styles.inputPanel} ${isSearchPanelOpen ? styles.inputPanelOpen : ''}`}>
+                            {isSearchLoading && searchQuery.length > 0 && (
+                                <div className={styles.searchLoading}>
+                                    <p className={styles.searchLoadingText}>Поиск...</p>
+                                </div>
+                            )}
+                            {!isSearchLoading && searchQuery.length > 0 && (
+                                <>
+                                    <Link 
+                                        href={`/catalog?text=${searchQuery}`} 
+                                        onClick={() => {
+                                            setSearchQuery('');
+                                            setIsSearchPanelOpen(false);
+                                        }}
+                                    >
+                                        <div className={styles.inputPanelHeader}>
+                                            <img src='/searchIcon.svg' className={styles.searchBlockIcon} />
+                                            <p className={styles.inputPanelText}>Искать "{searchQuery}"</p>
+                                        </div>
+                                    </Link>
+                                    {searchResults.length > 0 ? (
+                                        searchResults.map((x, i) => (
+                                            <Link 
+                                                key={x._id || i} 
+                                                href={`/product/${buildProductSlug(x)}`}
+                                                onClick={() => {
+                                                    setSearchQuery('');
+                                                    setIsSearchPanelOpen(false);
+                                                }}
+                                            >
+                                                <div className={styles.inputPanelLine}>
+                                                    <img
+                                                        src={x.cover}
+                                                        className={styles.inputPanelCover}
+                                                        alt={x.name}
+                                                    />
+                                                    <p className={styles.inputPanelName}>{x.name}</p>
+                                                    <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
+                                                </div>
+                                            </Link>
+                                        ))
+                                    ) : searchQuery.length > 0 && !isSearchLoading && (
+                                        <div className={styles.searchNoResults}>
+                                            <p className={styles.searchNoResultsText}>Ничего не найдено</p>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <div className={styles.rightGroup}>
+                <div className={styles.callInfoColumn}>
+                    <a className={styles.phoneLink} href="tel:+79168530885">+7 (916) 853-08-85</a>
+                    <button className={styles.callButton} onClick={() => setIsCallModalOpen(true)}>Заказать звонок</button>
+                </div>
+
+                <div className={styles.iconLine} >
+                    <>
+                        <img src='/favIcon.svg' className={styles.icon} onClick={() => favPage()} />
+                        {favourite.length > 0 && <div className={styles.favCount}>
+                            <p className={styles.favCountText}>{favourite.length}</p>
+                        </div>}
+                    </>
+                    <AuthModal onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
+                    <Authorization />
+                    <Link href='/bag' style={{ width: 'max-content' }} >
+                        <img src='/shopIcon.svg' className={styles.icon} />
+                        {cart.length > 0 && <div className={styles.bagCount}>
+                            <p className={styles.bagCountText}>{cart.length}</p>
+                        </div>}
+                    </Link>
+                </div>
             </div>
         </div>
         <div className={styles.secondLine}>
@@ -223,6 +278,45 @@ export default function Header() {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
         />
+
+        <Modal isOpen={isCallModalOpen} onClose={() => setIsCallModalOpen(false)} autoFocus={false} isCentered size="xl">
+            <ModalOverlay />
+            <ModalContent bg="none" boxShadow="none">
+                <ModalBody p={0}>
+                    <div className={styles.callModal}>
+                        <div className={styles.callModalHeader}>
+                            <p className={styles.callModalTitle}>ЗАКАЗАТЬ ЗВОНОК</p>
+                            <img src='/cross.svg' className={styles.cross} onClick={() => setIsCallModalOpen(false)} />
+                        </div>
+                        <hr className={styles.modalHr} />
+                        <div className={styles.callModalBody}>
+                            <div className={styles.callInputColumn}>
+                                <p className={styles.callLabel}>Ваше имя</p>
+                                <input
+                                    className={styles.callInput}
+                                    placeholder="Введите имя"
+                                    value={callName}
+                                    onChange={(e) => setCallName(e.target.value)}
+                                />
+                            </div>
+                            <div className={styles.callInputColumn}>
+                                <p className={styles.callLabel}>Номер телефона</p>
+                                <InputMask
+                                    mask="+7 (999) 999-99-99"
+                                    className={styles.callInput}
+                                    placeholder="+7 (___) ___-__-__"
+                                    value={callPhone}
+                                    onChange={(e) => setCallPhone(e.target.value)}
+                                />
+                            </div>
+                            <button className={`${styles.mainButtonBlack} ${isCallSubmitting ? styles.loading : ''}`} disabled={isCallSubmitting} onClick={submitCallRequest}>
+                                {isCallSubmitting ? "Отправка..." : "ОТПРАВИТЬ"}
+                            </button>
+                        </div>
+                    </div>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
     </div>
 }
 

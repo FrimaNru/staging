@@ -121,3 +121,4 @@ async function addSaleCostToAllProducts() {
 // Запуск скрипта
 addSaleCostToAllProducts();
 
+

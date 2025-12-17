@@ -1,6 +1,7 @@
 import styles from "./styles.module.css";
 import Breadcrumb from "../Common/Breadcrumb";
 import Banner from "../Common/Banner/Banner";
+import { brandMaterialText } from "@/constants/constants.text";
 
 export function Brand() {
     return <div className={styles.main}>
@@ -30,6 +31,10 @@ export function Brand() {
                     <p className={styles.text2}>Мы не гонимся за проходящими сезонными тенденциями в моде, наш дизайн актуален для любого возраста, стиля и случая. В офисе, в театре, в ресторане и на прогулке вы будете выглядеть великолепно. </p>
                     <img src='/assets/images/aboutBrandBig.webp' />
                     <p className={styles.subtitle} >Пробуйте, экспериментируйте, сочетайте - создавайте сами свой неповторимый стиль - дорогой, выразительный и дерзкий.</p>
+                    <div className={styles.materialMovedBlock}>
+                        <p className={styles.materialMovedTitle}>Материал</p>
+                        <p className={styles.materialMovedText} dangerouslySetInnerHTML={{ __html: brandMaterialText }} data-noindex="true" />
+                    </div>
                 </div>
             </div>
         </div>

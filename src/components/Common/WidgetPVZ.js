@@ -11,10 +11,14 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
                 widgetInstance.current = new CdekWidget.default({
                     element: widgetRef.current,
                     root: 'cdek-map',
-                    servicePath: 'https://api.mi-alegria.shop/map_service/service.php',
+                    // Важно: используем относительный путь, чтобы избежать CORS в браузере.
+                    // Проксирование на API настроено через rewrites в next.config.mjs
+                    servicePath: '/map_service/service.php',
                     apiKey: 'a2ab5825-bf63-4a48-b7dc-c03fd2fe6ebf',
                     goods: [{ weight: 0.5, height: 10, width: 10, length: 10 }],
-                    defaultLocation: 'Москва',
+                    // Важно: передаем координаты, а не строку, чтобы виджет не делал geocodeString("Москва")
+                    // (это часто падает из-за ограничений/ключей Яндекса и вызывает Unhandled Runtime Error)
+                    defaultLocation: [55.7558, 37.6173],
                     map: {
                         provider: 'yandex',
                         yandex: {

@@ -5,7 +5,20 @@ export function Footer() {
     return <div className={styles.main}>
         <hr className={styles.hr} />
         <div className={styles.content}>
-            <Link href='/' style={{ width: 'max-content' }}><img src='/logoBlack.svg' className={styles.logo} /></Link>
+            <div className={styles.brandColumn}>
+                <Link href='/' style={{ width: 'max-content' }}>
+                    <img src='/logoBlack.svg' className={styles.logo} />
+                </Link>
+
+                <div className={styles.contacts}>
+                    <p className={`${styles.contactItem} ${styles.contactAddress}`}>
+                        БЦ "Омега Плаза", улица Ленинская Слобода, 19, Москва, 115280
+                    </p>
+                    <a className={styles.contactLink} href="tel:+79168530885">+7 (916) 853-08-85</a>
+                    <a className={styles.contactLink} href="mailto:clientcare@mi-alegria.shop">clientcare@mi-alegria.shop</a>
+                    <p className={styles.contactItem}>Пн-Пт 10:00 - 19:00</p>
+                </div>
+            </div>
             {links.map((x, i) => <div key={i} className={styles.column}>
                 <p className={styles.title} >{x.title}</p>
                 {x.links.map((y, n) => x.title === 'Соц сети' || x.title === 'МОБИЛЬНАЯ ВЕРСИЯ'

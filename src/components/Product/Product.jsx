@@ -99,7 +99,7 @@ export default function Product({ product }) {
                     </div>
                 </div>
             </div>
-            <CharasteristicBlock />
+            <CharasteristicBlock product={product} sizeOfProduct={sizeOfProduct} colorOfProduct={colorOfProduct} />
             <ProductModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} product={product} router={router} />
         </div>
     );

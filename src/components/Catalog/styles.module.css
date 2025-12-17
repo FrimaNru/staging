@@ -123,6 +123,58 @@
     user-select: none;
 }
 
+.filterSubBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filterSubTitle {
+    color: #140702;
+    font-family: "Tenor Sans";
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.priceInputs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.priceInput {
+    width: 90px;
+    height: 32px;
+    border: 1px solid #140702;
+    border-radius: 10px;
+    padding: 0 10px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.priceInput:focus {
+    outline: none;
+}
+
+.priceDash {
+    color: #140702;
+    user-select: none;
+}
+
+.colorsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.filterHint {
+    font-size: 12px;
+    opacity: 0.6;
+    text-align: left;
+}
+
 .catalogColumn {
     display: flex;
     flex-direction: column;

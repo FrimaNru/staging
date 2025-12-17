@@ -4,11 +4,12 @@ import PopularBlock from "@/components/PopularBlock/PopularBlock";
 import Header from "@/components/Header/Header";
 import { PRODUCT_TYPES } from "@/constants/items";
 import Product from "@/components/Product/Product";
+import OtherProductsBlock from "@/components/Product/OtherProductsBlock";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { buildProductSlug } from "@/lib/seo";
 
-export default function ProductPageBySlug({ product }) {
+export default function ProductPageBySlug({ product, otherProducts }) {
     if (!product) {
         return (
             <div style={{ textAlign: 'center', marginTop: '50px' }}>
@@ -52,6 +53,10 @@ export default function ProductPageBySlug({ product }) {
                 <main>
                     <Header />
                     <Product product={product} />
+                    <OtherProductsBlock
+                        title={`Другие ${(PRODUCT_TYPES[product.type] || 'Украшения').toLowerCase()} Mi Alegria`}
+                        products={otherProducts}
+                    />
                     <PopularBlock />
                     <Footer />
                 </main>
@@ -68,7 +73,7 @@ export async function getServerSideProps({ params, res }) {
     }
 
     try {
-        // Загружаем все продукты для поиска по slug
+        // Загружаем все продукты для поиска по slug (и для блока "Другие")
         const response = await axios.get(`${API_BASE_URL}getProducts`);
         const products = response.data;
 
@@ -87,9 +92,15 @@ export async function getServerSideProps({ params, res }) {
         const fullProductResponse = await axios.post(`${API_BASE_URL}getOneProduct`, { id: productFromList._id });
         const product = fullProductResponse.data;
 
+        // "Другие <вид>" — товары того же типа, кроме текущего
+        const otherProducts = products
+            .filter((p) => p && p._id && p._id !== productFromList._id && p.type === productFromList.type)
+            .slice(0, 12);
+
         return {
             props: {
                 product,
+                otherProducts,
             },
         };
     } catch (error) {

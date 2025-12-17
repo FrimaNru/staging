@@ -2,6 +2,7 @@ import styles from "./styles.module.css";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/router";
 import { useProducts } from "@/contexts/ProductsContext";
+import Head from "next/head";
 import Banner from "../Common/Banner/Banner";
 import Breadcrumb from "../Common/Breadcrumb";
 import PopularBlock from "../PopularBlock/PopularBlock";
@@ -26,13 +27,16 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
     const [stateSales, setStateSales] = useState([]);
     const [stateType, setStateType] = useState('');
     const [stateColor, setStateColor] = useState('');
+    const [selectedColors, setSelectedColors] = useState([]);
+    const [priceMin, setPriceMin] = useState('');
+    const [priceMax, setPriceMax] = useState('');
     const [search, setSearch] = useState(false);
     const [currentPage, setCurrentPage] = useState(initialPage);
     const itemsPerPage = 15;
     const [isNewPage, setIsNewPage] = useState(false);
     const [isUserInteraction, setIsUserInteraction] = useState(false);
     
-    const prevFilters = useRef({ stateSortItems: '', stateType: '', stateSales: [], text: '', stateColor: '' });
+    const prevFilters = useRef({ stateSortItems: '', stateType: '', stateSales: [], text: '', stateColor: '', selectedColors: [], priceMin: '', priceMax: '' });
 
     // Обертка для setStateType, которая устанавливает флаг пользовательского взаимодействия
     const handleStateTypeChange = (newType) => {
@@ -71,6 +75,31 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
     const types = ['Кольца', 'Серьги', 'Браслеты', 'Колье'];
     const sortItems = ['По популярности', 'По возрастанию цены', 'По убыванию цены'];
     const [stateSortItems, setStateSortItems] = useState('По популярности');
+
+    const getEffectivePrice = (p) => {
+        const sale = Number(p?.saleCost || 0);
+        const base = Number(p?.cost || 0);
+        return sale && sale > 0 ? sale : base;
+    };
+
+    const availableColors = useMemo(() => {
+        const set = new Set();
+        (products || []).forEach((p) => {
+            const c = (p?.color || '').trim();
+            if (c) set.add(c);
+        });
+        return Array.from(set).sort((a, b) => a.localeCompare(b, 'ru'));
+    }, [products]);
+
+    const [absoluteMinPrice, absoluteMaxPrice] = useMemo(() => {
+        const prices = (products || []).map(getEffectivePrice).filter((n) => Number.isFinite(n) && n > 0);
+        if (prices.length === 0) return [null, null];
+        return [Math.min(...prices), Math.max(...prices)];
+    }, [products]);
+
+    const hasFilterParamsForIndex = useMemo(() => {
+        return router.query?.priceMin != null || router.query?.priceMax != null || router.query?.colors != null;
+    }, [router.query]);
 
     // Маппинг URL-путей к названиям подкатегорий
     const subcategoryMapping = {
@@ -157,14 +186,17 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
     }, [PAGEN_1, router.query.page, router.asPath]);
 
     useEffect(() => {
-        const currentFilters = { stateSortItems, stateType, stateSales, text };
+        const currentFilters = { stateSortItems, stateType, stateSales, text, selectedColors, priceMin, priceMax };
         const prevFiltersValue = prevFilters.current;
         
         const filtersChanged = 
             prevFiltersValue.stateSortItems !== stateSortItems ||
             prevFiltersValue.stateType !== stateType ||
             JSON.stringify(prevFiltersValue.stateSales) !== JSON.stringify(stateSales) ||
-            prevFiltersValue.text !== text;
+            prevFiltersValue.text !== text ||
+            JSON.stringify(prevFiltersValue.selectedColors) !== JSON.stringify(selectedColors) ||
+            prevFiltersValue.priceMin !== priceMin ||
+            prevFiltersValue.priceMax !== priceMax;
         
         if (filtersChanged) {
             setCurrentPage(1);
@@ -173,12 +205,46 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
             delete newQuery.page;
             delete newQuery.slug;
             delete newQuery.product;
+
+            // синхронизация новых фильтров в URL (query)
+            const min = String(priceMin || '').replace(/[^\d]/g, '');
+            const max = String(priceMax || '').replace(/[^\d]/g, '');
+            if (min) newQuery.priceMin = min; else delete newQuery.priceMin;
+            if (max) newQuery.priceMax = max; else delete newQuery.priceMax;
+            if (Array.isArray(selectedColors) && selectedColors.length > 0) {
+                newQuery.colors = selectedColors.join(',');
+            } else {
+                delete newQuery.colors;
+            }
+
             const currentPathOnly = (router.asPath || '').split('?')[0] || '/catalog';
             router.replace({ pathname: currentPathOnly, query: newQuery }, undefined, { shallow: true });
             
             prevFilters.current = currentFilters;
         }
-    }, [stateSortItems, stateType, stateSales, text, router]);
+    }, [stateSortItems, stateType, stateSales, selectedColors, priceMin, priceMax, text, router]);
+
+    // читаем фильтры из query при прямом входе/обновлении
+    useEffect(() => {
+        const qMin = router.query?.priceMin;
+        const qMax = router.query?.priceMax;
+        const qColors = router.query?.colors;
+
+        if (qMin != null) setPriceMin(String(qMin)); else setPriceMin('');
+        if (qMax != null) setPriceMax(String(qMax)); else setPriceMax('');
+
+        if (qColors != null) {
+            const arr = String(qColors)
+                .split(',')
+                .map((s) => s.trim())
+                .filter(Boolean);
+            // оставляем только цвета, которые реально есть в карточках
+            setSelectedColors(arr.filter((c) => availableColors.includes(c)));
+        } else {
+            setSelectedColors([]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [router.query.priceMin, router.query.priceMax, router.query.colors, availableColors.join('|')]);
 
     // Отказ от query-параметров для типа: используем только путь /catalog/<slug>
 
@@ -310,17 +376,19 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
 
         if (stateType in typeMap) { d = d.filter(x => x.type === typeMap[stateType]); };
 
-        // Фильтр по цвету
-        if (stateColor === 'Под золото') {
-            d = d.filter(product => {
-                const slug = buildProductSlug(product);
-                return slug.includes('-zolotaya') || slug.includes('-zoloto');
-            });
-        } else if (stateColor === 'Под серебро') {
-            d = d.filter(product => {
-                const slug = buildProductSlug(product);
-                return slug.includes('-serebryanaya') || slug.includes('-serebro');
-            });
+        // Новый фильтр по цветам (из карточек)
+        if (Array.isArray(selectedColors) && selectedColors.length > 0) {
+            d = d.filter((p) => selectedColors.includes(String(p?.color || '').trim()));
+        }
+
+        // Фильтр по цене (по фактической цене: saleCost если есть, иначе cost)
+        const min = Number(String(priceMin || '').replace(/[^\d]/g, ''));
+        const max = Number(String(priceMax || '').replace(/[^\d]/g, ''));
+        if (Number.isFinite(min) && min > 0) {
+            d = d.filter((p) => getEffectivePrice(p) >= min);
+        }
+        if (Number.isFinite(max) && max > 0) {
+            d = d.filter((p) => getEffectivePrice(p) <= max);
         }
 
         // Фильтр для подкатегорий на основе поля subcategories
@@ -335,7 +403,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
         }
 
         return d;
-    }, [products, stateSortItems, stateType, stateSales, stateColor, text, router.asPath]);
+    }, [products, stateSortItems, stateType, stateSales, selectedColors, priceMin, priceMax, text, router.asPath]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -343,7 +411,14 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
     return (
-        <div className={`${styles.main} ${isSubcategoryPage ? styles.subcategoryPage : ''}`}>
+        <>
+            {hasFilterParamsForIndex && (
+                <Head>
+                    <meta name="robots" content="noindex, nofollow" />
+                    <meta name="googlebot" content="noindex, nofollow" />
+                </Head>
+            )}
+            <div className={`${styles.main} ${isSubcategoryPage ? styles.subcategoryPage : ''}`}>
             <Banner />
             <div className={styles.mainColumn} data-catalog-content>
                 <Breadcrumb />
@@ -372,7 +447,25 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
                              router.asPath.includes('/braslety/pod-serebro') ? 'БРАСЛЕТЫ ПОД СЕРЕБРО' :
                              stateType ? stateType.toUpperCase() : 'КАТАЛОГ'}
                         </h1>
-                        <FilterSection sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} stateColor={stateColor} setStateColor={setStateColor} />
+                        <FilterSection
+                            sales={sales}
+                            types={types}
+                            stateSales={stateSales}
+                            stateType={stateType}
+                            setStateSales={setStateSales}
+                            setStateType={handleStateTypeChange}
+                            stateColor={stateColor}
+                            setStateColor={setStateColor}
+                            availableColors={availableColors}
+                            selectedColors={selectedColors}
+                            setSelectedColors={setSelectedColors}
+                            priceMin={priceMin}
+                            priceMax={priceMax}
+                            setPriceMin={setPriceMin}
+                            setPriceMax={setPriceMax}
+                            absoluteMinPrice={absoluteMinPrice}
+                            absoluteMaxPrice={absoluteMaxPrice}
+                        />
                     </div>
                     <div className={styles.rightColumn}>
                         {isMainCatalogPage && <CategoryCards initialData={categoryCardsData} />}
@@ -388,7 +481,28 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
                                 </div>
                             )}
                             
-                            <AccordionFilters sales={sales} types={types} stateSales={stateSales} stateType={stateType} setStateSales={setStateSales} setStateType={handleStateTypeChange} stateColor={stateColor} setStateColor={setStateColor} sortItems={sortItems} stateSortItems={stateSortItems} setStateSortItems={setStateSortItems} />
+                            <AccordionFilters
+                                sales={sales}
+                                types={types}
+                                stateSales={stateSales}
+                                stateType={stateType}
+                                setStateSales={setStateSales}
+                                setStateType={handleStateTypeChange}
+                                stateColor={stateColor}
+                                setStateColor={setStateColor}
+                                availableColors={availableColors}
+                                selectedColors={selectedColors}
+                                setSelectedColors={setSelectedColors}
+                                priceMin={priceMin}
+                                priceMax={priceMax}
+                                setPriceMin={setPriceMin}
+                                setPriceMax={setPriceMax}
+                                absoluteMinPrice={absoluteMinPrice}
+                                absoluteMaxPrice={absoluteMaxPrice}
+                                sortItems={sortItems}
+                                stateSortItems={stateSortItems}
+                                setStateSortItems={setStateSortItems}
+                            />
                             <ProductGrid filteredData={currentItems} />
 
                             {filteredData.length > itemsPerPage && (
@@ -404,6 +518,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
                 </div>
             </div>
             <PopularBlock />
-        </div>
+            </div>
+        </>
     );
 }

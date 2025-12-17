@@ -92,6 +92,27 @@
     text-align: center;
 }
 
+.materialMovedBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid rgba(20, 7, 2, 0.2);
+    border-radius: 12px;
+    padding: 18px 20px;
+}
+
+.materialMovedTitle {
+    font-size: 18px;
+    font-family: 'Dela Gothic One', system-ui;
+    text-align: left;
+}
+
+.materialMovedText {
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: left;
+}
+
 .columnMobile {
     display: none;
 }
@@ -182,5 +203,18 @@
 
     .subtitle {
         font-size: 16px;
+    }
+
+    .materialMovedBlock {
+        margin: 0 15px;
+        padding: 14px 14px;
+    }
+
+    .materialMovedTitle {
+        font-size: 14px;
+    }
+
+    .materialMovedText {
+        font-size: 14px;
     }
 }

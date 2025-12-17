@@ -2,10 +2,21 @@ import { dataCharacteristic } from "@/constants/constants.text";
 import styles from "@/styles/Product/Product.module.css";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from "@chakra-ui/react";
 
-export default function CharasteristicBlock() {
+export default function CharasteristicBlock({ product, sizeOfProduct, colorOfProduct }) {
+    const characteristicsHtml =
+        `<strong>Артикул</strong><br />${product?.article || '—'}` +
+        `<br /><br /><strong>Размер</strong><br />${(sizeOfProduct ?? product?.sizes?.[0]) ? (sizeOfProduct ?? product?.sizes?.[0]) : '—'}` +
+        `<br /><br /><strong>Цвет</strong><br />${colorOfProduct || product?.color || '—'}` +
+        `<br /><br /><strong>Материал</strong><br />Сплав Zamak: цинк, магний, алюминий, медь.`;
+
+    const items = [
+        { title: 'ХАРАКТЕРИСТИКИ', text: characteristicsHtml },
+        ...dataCharacteristic,
+    ];
+
     return <div className={styles.charasteristicColumn}>
         <Accordion allowToggle>
-            {dataCharacteristic.map((x, i) => <AccordionItem key={i} border='none' style={{ borderBottom: dataCharacteristic.length === i + 1 ? 'solid 1px #140702' : null }}>
+            {items.map((x, i) => <AccordionItem key={i} border='none' style={{ borderBottom: items.length === i + 1 ? 'solid 1px #140702' : null }}>
                 {({ isExpanded }) => (
                     <>
                         <h2>
