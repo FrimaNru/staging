@@ -4,8 +4,10 @@ import Header from "@/components/Header/Header";
 import Head from "next/head";
 import { mapSlugToProductType } from "@/lib/seo";
 import { getFilteredProducts } from "@/lib/catalogServerUtils";
+import axios from "axios";
+import { API_BASE_URL } from "../../../apiConfig";
 
-export default function CatalogBySlug({ products, slug, h1Title }) {
+export default function CatalogBySlug({ products, slug, h1Title, initialType, popularProducts }) {
 
     const pageFromSlug = Number.isFinite(Number(slug)) ? parseInt(slug) : undefined;
 
@@ -73,7 +75,13 @@ export default function CatalogBySlug({ products, slug, h1Title }) {
             <center>
                 <main>
                     <Header />
-                    <Catalog initialPage={pageFromSlug || 1} initialProducts={products} h1Title={h1Title} />
+                    <Catalog
+                        initialPage={pageFromSlug || 1}
+                        initialProducts={products}
+                        h1Title={h1Title}
+                        initialType={initialType}
+                        popularProducts={popularProducts}
+                    />
                     <Footer />
                 </main>
             </center>
@@ -87,6 +95,8 @@ export async function getServerSideProps({ params, query }) {
 
     // Определяем тип продукта из slug
     const productType = mapSlugToProductType(slug);
+    const initialTypeMap = { ring: 'Кольца', earrings: 'Серьги', bracelets: 'Браслеты', necklace: 'Колье' };
+    const initialType = productType && initialTypeMap[productType] ? initialTypeMap[productType] : '';
     
     // Определяем путь подкатегории
     const path = `/catalog/${slug}`;
@@ -111,11 +121,21 @@ export async function getServerSideProps({ params, query }) {
         filter
     });
 
+    let popularProducts = [];
+    try {
+        const popularRes = await axios.get(`${API_BASE_URL}getPopularProducts`);
+        popularProducts = popularRes.data || [];
+    } catch (e) {
+        console.error('Ошибка при загрузке популярных товаров:', e.message);
+    }
+
     return {
         props: {
             products,
             slug: slug || null,
             h1Title: h1Title || null,
+            initialType,
+            popularProducts,
         },
     };
 }

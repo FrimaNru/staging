@@ -7,7 +7,7 @@ import { getFilteredProducts } from "@/lib/catalogServerUtils";
 import axios from "axios";
 import { API_BASE_URL } from "../../apiConfig";
 
-export default function CatalogPage({ products, categoryCardsData }) {
+export default function CatalogPage({ products, categoryCardsData, popularProducts }) {
     const canonicalUrl = getCanonicalUrl('/catalog');
 
     return (
@@ -43,7 +43,7 @@ export default function CatalogPage({ products, categoryCardsData }) {
             <center>
                 <main>
                     <Header />
-                    <Catalog initialProducts={products} categoryCardsData={categoryCardsData} />
+                    <Catalog initialProducts={products} categoryCardsData={categoryCardsData} popularProducts={popularProducts} />
                     <Footer />
                 </main>
             </center>
@@ -79,11 +79,16 @@ export async function getServerSideProps({ query }) {
         filter
     });
 
-    // Загружаем данные для CategoryCards на сервере
+    // Загружаем данные для CategoryCards + популярные товары на сервере (для view-source ссылок)
     let categoryCardsData = {};
+    let popularProducts = [];
     try {
-        const response = await axios.get(`${API_BASE_URL}mainPage/start`);
-        categoryCardsData = response.data || {};
+        const [startRes, popularRes] = await Promise.allSettled([
+            axios.get(`${API_BASE_URL}mainPage/start`),
+            axios.get(`${API_BASE_URL}getPopularProducts`),
+        ]);
+        categoryCardsData = startRes.status === 'fulfilled' ? (startRes.value.data || {}) : {};
+        popularProducts = popularRes.status === 'fulfilled' ? (popularRes.value.data || []) : [];
     } catch (error) {
         console.error('Ошибка при загрузке данных категорий:', error.message);
     }
@@ -92,6 +97,7 @@ export async function getServerSideProps({ query }) {
         props: {
             products,
             categoryCardsData,
+            popularProducts,
         },
     };
 }

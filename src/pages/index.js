@@ -10,7 +10,7 @@ import Head from "next/head";
 import axios from "axios";
 import { API_BASE_URL } from "../../apiConfig";
 
-export default function Home({ startBlockData }) {
+export default function Home({ startBlockData, popularProducts }) {
   return (
     <>
       <Head>
@@ -44,7 +44,7 @@ export default function Home({ startBlockData }) {
           <Banner />
           <StartBlock initialData={startBlockData} />
           <HomeIntro />
-          <PopularBlock />
+          <PopularBlock initialData={popularProducts} />
           <HomeDetails />
           <Footer />
         </main>
@@ -55,10 +55,14 @@ export default function Home({ startBlockData }) {
 
 export async function getServerSideProps() {
   try {
-    const response = await axios.get(`${API_BASE_URL}mainPage/start`);
+    const [startRes, popularRes] = await Promise.allSettled([
+      axios.get(`${API_BASE_URL}mainPage/start`),
+      axios.get(`${API_BASE_URL}getPopularProducts`),
+    ]);
     return {
       props: {
-        startBlockData: response.data || {},
+        startBlockData: startRes.status === 'fulfilled' ? (startRes.value.data || {}) : {},
+        popularProducts: popularRes.status === 'fulfilled' ? (popularRes.value.data || []) : [],
       },
     };
   } catch (error) {
@@ -66,6 +70,7 @@ export async function getServerSideProps() {
     return {
       props: {
         startBlockData: {},
+        popularProducts: [],
       },
     };
   }

@@ -3,8 +3,10 @@ import Catalog from "@/components/Catalog/Catalog";
 import Header from "@/components/Header/Header";
 import Head from "next/head";
 import { getFilteredProducts } from "@/lib/catalogServerUtils";
+import axios from "axios";
+import { API_BASE_URL } from "../../../apiConfig";
 
-export default function GoldJewelryPage({ products }) {
+export default function GoldJewelryPage({ products, popularProducts }) {
     return (
         <>
             <Head>
@@ -32,7 +34,7 @@ export default function GoldJewelryPage({ products }) {
             <center>
                 <main>
                     <Header />
-                    <Catalog initialPage={1} initialProducts={products} h1Title="БИЖУТЕРИЯ ПОД ЗОЛОТО" />
+                    <Catalog initialPage={1} initialProducts={products} h1Title="БИЖУТЕРИЯ ПОД ЗОЛОТО" popularProducts={popularProducts} />
                     <Footer />
                 </main>
             </center>
@@ -50,9 +52,18 @@ export async function getServerSideProps({ query }) {
         filter
     });
 
+    let popularProducts = [];
+    try {
+        const popularRes = await axios.get(`${API_BASE_URL}getPopularProducts`);
+        popularProducts = popularRes.data || [];
+    } catch (e) {
+        console.error('Ошибка при загрузке популярных товаров:', e.message);
+    }
+
     return {
         props: {
-            products
+            products,
+            popularProducts,
         }
     };
 }

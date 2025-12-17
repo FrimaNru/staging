@@ -18,14 +18,14 @@ import CategoryCards from "./items/CategoryCards";
 import { mapSlugToProductType, mapProductTypeToSlug, buildProductSlug } from "@/lib/seo";
 import { PRODUCT_TYPES } from "@/constants/items";
 
-export default function Catalog({ initialPage = 1, initialProducts, h1Title, categoryCardsData }) {
+export default function Catalog({ initialPage = 1, initialProducts, h1Title, categoryCardsData, initialType = '', popularProducts = null }) {
     const { products: contextProducts, loading } = useProducts();
     // Используем начальные продукты с сервера, если они есть, иначе используем из контекста
     const products = initialProducts || contextProducts;
     const router = useRouter();
     const { product, text, filter, PAGEN_1 } = router.query;
     const [stateSales, setStateSales] = useState([]);
-    const [stateType, setStateType] = useState('');
+    const [stateType, setStateType] = useState(initialType || '');
     const [stateColor, setStateColor] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
     const [priceMin, setPriceMin] = useState('');
@@ -517,7 +517,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
                     </div>
                 </div>
             </div>
-            <PopularBlock />
+            <PopularBlock initialData={popularProducts} />
             </div>
         </>
     );

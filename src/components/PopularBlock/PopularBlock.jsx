@@ -1,6 +1,6 @@
 import styles from "@/styles/PopularBlock.module.css";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Slider from "react-slick";
 import { API_BASE_URL } from "../../../apiConfig";
 import Link from "next/link";
@@ -54,12 +54,13 @@ function SamplePrevArrowMobile(props) {
     );
 };
 
-export default function PopularBlock() {
+export default function PopularBlock({ initialData = null }) {
     const router = useRouter();
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(Array.isArray(initialData) ? initialData : []);
     const { addToCart } = useCart();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [product, setProduct] = useState(null);
+    const [isClient, setIsClient] = useState(false);
 
     var settings = {
         dots: false,
@@ -82,8 +83,19 @@ export default function PopularBlock() {
     };
 
     useEffect(() => {
-        load();
+        setIsClient(true);
+        if (!Array.isArray(initialData) || initialData.length === 0) {
+            load();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const seoLinks = useMemo(() => {
+        return (data || []).slice(0, 24).map((x) => {
+            const slug = buildProductSlug(x);
+            return { href: `/product/${slug}`, text: `${PRODUCT_TYPES[x.type] || 'Украшение'} ${x.name || ''}`.trim() };
+        });
+    }, [data]);
 
     const load = async () => {
         await axios.get(`${API_BASE_URL}getPopularProducts`)
@@ -107,8 +119,15 @@ export default function PopularBlock() {
     return <div className={styles.main}>
         <p className={styles.title}>Популярное</p>
 
+        {/* SEO: ссылки должны быть видны в view-source (рендерится на сервере), но без JS-слайдера */}
+        <div style={{ position: 'absolute', left: '-9999px', top: '0', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+            {seoLinks.map((l) => (
+                <Link key={l.href} href={l.href}>{l.text}</Link>
+            ))}
+        </div>
+
         <div className={styles.sliderBlock}>
-            {data.length > 1 && <Slider {...settings}>
+            {isClient && data.length > 1 && <Slider {...settings}>
                 {data.map((x, i) => {
                     const slug = buildProductSlug(x);
                     return <div className={styles.sliderItem} key={i}>
@@ -133,7 +152,7 @@ export default function PopularBlock() {
         </div >
 
         <div className={styles.sliderBlockMobile}>
-            {data.length > 1 && <Slider {...settingsMobile}>
+            {isClient && data.length > 1 && <Slider {...settingsMobile}>
                 {data.map((x, i) => {
                     const slug = buildProductSlug(x);
                     return <div className={styles.sliderItem} key={i}>
