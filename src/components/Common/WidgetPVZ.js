@@ -18,11 +18,13 @@ const WidgetPVZ = ({ onSelectPVZ }) => {
                     goods: [{ weight: 0.5, height: 10, width: 10, length: 10 }],
                     // Важно: передаем координаты, а не строку, чтобы виджет не делал geocodeString("Москва")
                     // (это часто падает из-за ограничений/ключей Яндекса и вызывает Unhandled Runtime Error)
-                    defaultLocation: [55.7558, 37.6173],
+                    // Формат координат в виджете: [долгота, широта]
+                    defaultLocation: [37.6173, 55.7558],
                     map: {
                         provider: 'yandex',
                         yandex: {
-                            center: [55.7558, 37.6173],
+                            // Формат координат в виджете: [долгота, широта]
+                            center: [37.6173, 55.7558],
                             zoom: 10,
                         },
                     },
