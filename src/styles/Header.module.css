@@ -51,12 +51,13 @@
 }
 
 .tagline {
-    color: #140702;
-    font-family: "Tenor Sans";
+    font-family: "Dela Gothic One";
     font-size: 14px;
     font-weight: 400;
     line-height: normal;
     white-space: nowrap;
+    width: 100%;
+    color: var(--gold);
 }
 
 .callInfoColumn {
@@ -210,6 +211,10 @@
 
 .callInput:focus {
     outline: none;
+}
+
+.callInput::placeholder {
+    color: #140702;
 }
 
 .secondLine {
@@ -850,6 +855,8 @@
     .firstLine {
         width: 100%;
         padding: 0 20px;
+        justify-content: center;
+        position: relative;
     }
 
     .iconLine {
@@ -882,6 +889,22 @@
         flex-direction: row;
         align-items: center;
         gap: 15px;
+        position: absolute;
+        left: 20px;
+        z-index: 1;
+    }
+
+    .leftGroup {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logoColumn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .icon {
@@ -1061,6 +1084,10 @@
         height: 40px;
         font-size: 14px;
         padding: 0 15px;
+    }
+
+    .callInput::placeholder {
+        color: #140702;
     }
 
     .mainButtonBlack {

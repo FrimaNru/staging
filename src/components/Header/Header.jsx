@@ -137,9 +137,7 @@ export default function Header() {
 
         try {
             setIsCallSubmitting(true);
-
-            // TODO: подключить API эндпоинт для заявок на звонок на бэке (например: POST /callRequest)
-            // await axios.post(`${API_BASE_URL}callRequest`, { name: trimmedName, phone: callPhone });
+            await axios.post(`${API_BASE_URL}callRequest`, { name: trimmedName, phone: callPhone });
 
             toast({ position: "bottom-right", render: () => (<div className="toast">Заявка отправлена</div>), duration: 3000 });
             setIsCallModalOpen(false);
@@ -165,7 +163,7 @@ export default function Header() {
                     <Link href='/' style={{ width: 'max-content' }} >
                         <img src='/logo.svg' className={styles.logo} />
                     </Link>
-                    <p className={styles.tagline}>Элитная бижутерия</p>
+                    <p className={styles.tagline}>элитная бижутерия</p>
                 </div>
             </div>
 
