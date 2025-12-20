@@ -14,7 +14,7 @@ export function Footer() {
                     <p className={`${styles.contactItem} ${styles.contactAddress}`}>
                         БЦ "Омега Плаза", улица Ленинская Слобода, 19, Москва, 115280
                     </p>
-                    <a className={styles.contactLink} href="tel:+79168530885">+7 (916) 853-08-85</a>
+                    <a className={styles.contactLink} href="tel:+79165850585">+7 (916) 585-0-585</a>
                     <a className={styles.contactLink} href="mailto:clientcare@mi-alegria.shop">clientcare@mi-alegria.shop</a>
                     <p className={styles.contactItem}>Пн-Пт 10:00 - 19:00</p>
                 </div>

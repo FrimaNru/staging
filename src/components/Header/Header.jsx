@@ -237,7 +237,7 @@ export default function Header() {
 
             <div className={styles.rightGroup}>
                 <div className={styles.callInfoColumn}>
-                    <a className={styles.phoneLink} href="tel:+79168530885">+7 (916) 853-08-85</a>
+                    <a className={styles.phoneLink} href="tel:+79165850585">+7 (916) 585 - 0 - 585</a>
                     <button className={styles.callButton} onClick={() => setIsCallModalOpen(true)}>Заказать звонок</button>
                 </div>
 

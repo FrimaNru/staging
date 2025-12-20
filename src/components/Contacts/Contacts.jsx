@@ -16,7 +16,7 @@ export default function Contacts() {
                     </div>
                     <div className={styles.contactsContentColumnText}>
                         <h2>Телефон</h2>
-                        <a href="tel:+79165850585" target="_blank"><p>+7 (916) 585-05-85</p></a>
+                        <a href="tel:+79165850585" target="_blank"><p>+7 (916) 585 - 0 - 585</p></a>
                     </div>
                     <div className={styles.contactsContentColumnText}>
                         <h2>Email</h2>
