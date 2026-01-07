@@ -219,7 +219,7 @@ export default function Header() {
                                                         alt={x.name}
                                                     />
                                                     <p className={styles.inputPanelName}>{x.name}</p>
-                                                    <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
+                                                    <p className={styles.inputPanelCost}>{formatNumber(Number(x.saleCost && x.saleCost > 0 ? x.saleCost : x.cost))} руб.</p>
                                                 </div>
                                             </Link>
                                         ))
@@ -415,7 +415,7 @@ function SearchDrawerBlock({ isSearchOpen, setIsSearchOpen, products, searchQuer
                                             <div className={styles.inputPanelLine}>
                                                 <img src={x.cover} className={styles.inputPanelCover} alt={x.name} />
                                                 <p className={styles.inputPanelName}>{x.name}</p>
-                                                <p className={styles.inputPanelCost}>{formatNumber(x.cost)} руб.</p>
+                                                <p className={styles.inputPanelCost}>{formatNumber(Number(x.saleCost && x.saleCost > 0 ? x.saleCost : x.cost))} руб.</p>
                                             </div>
                                         </Link>
                                     ))

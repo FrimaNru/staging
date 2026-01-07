@@ -145,7 +145,7 @@ function ProductItem({ item, count, load }) {
                     </button>
                 </div>
 
-                <p className={styles.itemCost} >{formatNumber(Number(data?.saleCost || data?.cost))} руб.</p>
+                <p className={styles.itemCost} >{formatNumber(Number(data?.saleCost && data?.saleCost > 0 ? data?.saleCost : data?.cost))} руб.</p>
             </div>
         </div>
         <div className={styles.itemRowLil}>

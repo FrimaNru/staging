@@ -103,7 +103,7 @@ export default function FavouriteBlock() {
                                         <p className={styles.itemTexLil}>Цвет: {x.color}</p>
                                         {x.type !== "earrings" && <p className={styles.itemTexLil}>Размер: {x.size}</p>}
                                     </div>
-                                    <p className={styles.itemCost}>{formatNumber(x?.cost)} руб.</p>
+                                    <p className={styles.itemCost}>{formatNumber(Number(x?.saleCost && x?.saleCost > 0 ? x?.saleCost : x?.cost))} руб.</p>
                                 </div>
                                 <div className={styles.lilButton} onClick={() => buy(x?._id, x.size, x.color, x.article)}>В КОРЗИНУ</div>
                             </div>

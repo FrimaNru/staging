@@ -2,8 +2,25 @@ export function capitalizeFirstLetter(text) {
     return text?.toString()?.charAt(0).toUpperCase() + text?.slice(1);
 };
 
+// Округление до сотен: до 5 (0-4) - вниз, 5 и выше (5-9) - вверх
+export function roundToHundreds(number) {
+    number = Number(number);
+    if (!Number.isFinite(number) || number <= 0) return number;
+    
+    const lastTwoDigits = number % 100;
+    const hundreds = Math.floor(number / 100) * 100;
+    
+    if (lastTwoDigits < 50) {
+        return hundreds; // Округляем вниз
+    } else {
+        return hundreds + 100; // Округляем вверх
+    }
+}
+
 export function formatNumber(number) {
     number = Number(number);
+    // Сначала округляем до сотен
+    number = roundToHundreds(number);
     let numStr = number?.toString();
     let parts = numStr?.split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');

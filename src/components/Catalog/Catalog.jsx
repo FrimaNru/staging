@@ -79,7 +79,14 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
     const getEffectivePrice = (p) => {
         const sale = Number(p?.saleCost || 0);
         const base = Number(p?.cost || 0);
-        return sale && sale > 0 ? sale : base;
+        const price = sale && sale > 0 ? sale : base;
+        // Округляем до сотен для фильтрации
+        if (price > 0) {
+            const lastTwoDigits = price % 100;
+            const hundreds = Math.floor(price / 100) * 100;
+            return lastTwoDigits < 50 ? hundreds : hundreds + 100;
+        }
+        return price;
     };
 
     const availableColors = useMemo(() => {
