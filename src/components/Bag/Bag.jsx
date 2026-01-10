@@ -30,6 +30,9 @@ export default function Bag() {
     const [errorModal, setErrorModal] = useState(false);
     const [successData, setSuccessData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [promocode, setPromocode] = useState(null);
+    const [discount, setDiscount] = useState(0);
+    const [originalTotalBeforeDiscount, setOriginalTotalBeforeDiscount] = useState(0);
     const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
 
     const [isWidgetVisible, setIsWidgetVisible] = useState(false);
@@ -78,6 +81,10 @@ export default function Bag() {
             const costs = await Promise.all(productRequests);
             const summ = costs.reduce((acc, cost) => acc + cost, 0);
             setTotal(summ);
+            // Сохраняем оригинальную сумму для проверки бесплатной доставки
+            if (summ >= 3000) {
+                setOriginalTotalBeforeDiscount(summ);
+            }
         } catch (error) {
             console.error('Ошибка при загрузке данных:', error);
         }
@@ -123,10 +130,17 @@ export default function Bag() {
         });
 
         setIsLoading(true);
+        // Если оригинальная сумма была >= 3000, доставка остается бесплатной даже после скидки
+        const currentTotal = Number(total) || 0;
+        const currentDiscount = Number(discount) || 0;
+        const currentDeliveryCost = Number(deliveryCost) || 0;
+        const isFreeDelivery = originalTotalBeforeDiscount >= 3000 || currentTotal >= 3000;
+        const finalTotal = (currentTotal - currentDiscount) + (isFreeDelivery ? 0 : currentDeliveryCost);
         axios.post(`${API_BASE_URL}createOrder`, {
             dataUser,
             data: cart,
-            total: total + (total >= 3000 ? 0 : deliveryCost),
+            total: finalTotal,
+            promocode: promocode ? promocode._id : null,
             delivery: {
                 street: `${selectedPVZ.region}, ${selectedPVZ.city}, ${selectedPVZ.address}`,
                 date: deliveryDate,
@@ -177,6 +191,11 @@ export default function Bag() {
                 setOrder={setOrder}
                 setIsWidgetVisible={setIsWidgetVisible}
                 prevPath={prevPath}
+                promocode={promocode}
+                setPromocode={setPromocode}
+                discount={discount}
+                setDiscount={setDiscount}
+                originalTotalBeforeDiscount={originalTotalBeforeDiscount}
             />
         </div>
         <div id="personalData" />
@@ -196,6 +215,9 @@ export default function Bag() {
                 setOrder={setOrder}
                 setIsWidgetVisible={setIsWidgetVisible}
                 prevPath={prevPath}
+                promocode={promocode}
+                discount={discount}
+                originalTotalBeforeDiscount={originalTotalBeforeDiscount}
             />
             {order && <>
                 <hr className={styles.hr} />

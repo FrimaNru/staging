@@ -12,7 +12,8 @@ export function SideMenu() {
         { text: 'Товары', link: 'products', icon: '/assets/icons/basket.svg' },
         { text: 'Склад', link: 'warehouse', icon: '/assets/icons/warehouse.svg' },
         { text: 'Баннеры', link: 'banners', icon: '/assets/icons/banners.svg' },
-        { text: 'Рассылка', link: 'messages', icon: '/assets/icons/messages.svg' }
+        { text: 'Рассылка', link: 'messages', icon: '/assets/icons/messages.svg' },
+        { text: 'Промокоды', link: 'promocodes', icon: '/assets/icons/messages.svg' }
     ];
 
     return <div className={styles.sideMenu}>
