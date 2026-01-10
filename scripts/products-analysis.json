@@ -1,0 +1,876 @@
+{
+  "totalProducts": 145,
+  "uniqueNames": 141,
+  "products": [
+    {
+      "article": "EN24128506GSLP",
+      "name": "Патрисия",
+      "color": "Золотой цвет патина с серебренным цветом патина",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24129098GPBLW",
+      "name": "Изабелла",
+      "color": "Золотой цвет патина с деревянными чёрными элементами",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130290GSLP",
+      "name": "Вера",
+      "color": "Золотой цвет патина с серебренным цветом патина",
+      "type": "necklace"
+    },
+    {
+      "article": "CE2419109GLP",
+      "name": "Роза золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419109SLP",
+      "name": "Роза серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419101GLP",
+      "name": "Жанна золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419101SLP",
+      "name": "Жанна серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419094GLP",
+      "name": "Кармен золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419094SLP",
+      "name": "Кармен серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419005GL",
+      "name": "Изабель золотая",
+      "color": "Золотой цвет",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419005SL",
+      "name": "Изабель серебряная",
+      "color": "Серебряный цвет",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2418810GLP",
+      "name": "Эстер золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2418810SLP",
+      "name": "Эстер серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2418547GLP",
+      "name": "Марта золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2418547SLP",
+      "name": "Марта серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2418494GLP",
+      "name": "Анна золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2418494SLP",
+      "name": "Анна серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2418090GLP",
+      "name": "София золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2418090SLP",
+      "name": "София серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2415624GLP",
+      "name": "Беатрис золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2415624SLP",
+      "name": "Беатрис серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2414906GLP",
+      "name": "Бланка золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2414906SLP",
+      "name": "Бланка серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2416569GLP",
+      "name": "Франческа золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2416569SLP",
+      "name": "Франческа серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2414745GLP",
+      "name": "Алегра золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2414745SLP",
+      "name": "Алегра серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419164GLP",
+      "name": "Лидиана золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419164SLP",
+      "name": "Лидиана серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2416519GLP",
+      "name": "Рамона золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2416519SLP",
+      "name": "Рамона серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419826GLP",
+      "name": "Вероника золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419826SLP",
+      "name": "Вероника серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419707GLP",
+      "name": "Кармита золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419707SLP",
+      "name": "Кармита серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419245GLP",
+      "name": "Мариса золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419245SLP",
+      "name": "Мариса серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419386GLP",
+      "name": "Элиана золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419386SLP",
+      "name": "Элиана серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE24110302GLP",
+      "name": "Глория золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE24110302SLP",
+      "name": "Глория серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419129GLP",
+      "name": "Лаура золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2419129SLP",
+      "name": "Лаура серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2417216GLP",
+      "name": "Виктори золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CE2417216SLP",
+      "name": "Виктори серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "earrings"
+    },
+    {
+      "article": "CR2414088GLP",
+      "name": "Жулиа золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414088SLP",
+      "name": "Жулиа серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414005GLP",
+      "name": "Палома золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414005SLP",
+      "name": "Палома серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414967GLP",
+      "name": "Мария золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414967SLP",
+      "name": "Мария серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414988GLP",
+      "name": "Алехандра золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414988SLP",
+      "name": "Алехандра серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414566GLP",
+      "name": "Клара золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414566SLP",
+      "name": "Клара серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414039GLP",
+      "name": "Адель золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414039SLP",
+      "name": "Адель серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414512GLP",
+      "name": "Альба золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414512SLP",
+      "name": "Альба серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414981GLP",
+      "name": "Консуэла золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414981SLP",
+      "name": "Консуэла серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2415045GLP",
+      "name": "Альфреда золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2415045SLP",
+      "name": "Альфреда серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2415301GLP",
+      "name": "Люсия золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2415301SLP",
+      "name": "Люсия серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2415518GLP",
+      "name": "Айлин золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2415518SLP",
+      "name": "Айлин серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2415296GLP",
+      "name": "Инесс золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2415296SLP",
+      "name": "Инесс серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414409GLP",
+      "name": "Элена золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414409SLP",
+      "name": "Элена серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414971GLP",
+      "name": "Лилиана золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414971SLP",
+      "name": "Лилиана серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414867GLP",
+      "name": "Вирджиния золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CR2414867SLP",
+      "name": "Вирджиния серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "ring"
+    },
+    {
+      "article": "CBL2418190GLP",
+      "name": "Ноэлия золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2418190SLP",
+      "name": "Ноэлия серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417979GLP",
+      "name": "Марсела золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417979SLP",
+      "name": "Марсела серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417421GLP",
+      "name": "Белла золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417421SLP",
+      "name": "Белла серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2415949-1GLP",
+      "name": "Рита золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2415949-1SLP",
+      "name": "Рита серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417798GLP",
+      "name": "Рамона золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417798SL",
+      "name": "Рамона серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417793GLP",
+      "name": "Мелисса золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417793SLP",
+      "name": "Мелисса серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417088GLP",
+      "name": "Филомена золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417088SLP",
+      "name": "Филомена серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417689GLP",
+      "name": "Норма золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417689SLP",
+      "name": "Норма серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417476GLP",
+      "name": "Майра золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417476SLP",
+      "name": "Майра серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417263GLP",
+      "name": "Ракель золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417263SLP",
+      "name": "Ракель серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417103GLP",
+      "name": "Паола золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417103SLP",
+      "name": "Паола серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417045GLP",
+      "name": "Мерседес золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2417045SLP",
+      "name": "Мерседес серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2418220GLP",
+      "name": "Сара золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2418220SLP",
+      "name": "Сара серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2419395GLP",
+      "name": "Мириам золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2419395SLP",
+      "name": "Мириам серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2416557GLP",
+      "name": "Росариа золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2416557SLP",
+      "name": "Росариа серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2413719GLP",
+      "name": "Тереса золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "CBL2413719SLP",
+      "name": "Тереса серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "bracelets"
+    },
+    {
+      "article": "EN24118086GLP",
+      "name": "Каталина золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24118086SLP",
+      "name": "Каталина серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24125827GLP",
+      "name": "Птитим золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24125827SLP",
+      "name": "Птитим серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24125827GLP",
+      "name": "Клеопатра золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24125827SLP",
+      "name": "Клеопатра серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24127544GLP",
+      "name": "Виниция золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24127544SLP",
+      "name": "Виниция серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24128153GLP",
+      "name": "Франциска золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24128153SLP",
+      "name": "Франциска серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24128702GLP",
+      "name": "Адалинда золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24128702SLP",
+      "name": "Адалинда серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24128812GLP",
+      "name": "Хильда золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24128812SLP",
+      "name": "Хильда серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130246GLP",
+      "name": "Элен золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130246SLP",
+      "name": "Элен серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130292GLP",
+      "name": "Мариана золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130292SLP",
+      "name": "Мариана серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130294GLP",
+      "name": "Клара золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130294SLP",
+      "name": "Клара серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130335GLP",
+      "name": "Жозефина золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24130335SLP",
+      "name": "Жозефина серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24131371GL",
+      "name": "Даниэла золотая",
+      "color": "Золотой цвет",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24131371SL",
+      "name": "Даниэла серебряная",
+      "color": "Серебряный цвет",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24131589GLP",
+      "name": "Оливия золотая",
+      "color": "Золотой цвет",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24131589SLP",
+      "name": "Оливия серебряная",
+      "color": "Серебряный цвет",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24131451GLP",
+      "name": "Далия золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24131451SLP",
+      "name": "Далия серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24131313GLP",
+      "name": "Теодора золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24131313SLP",
+      "name": "Теодора серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24126932GLP",
+      "name": "Валери золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24126932BRP",
+      "name": "Валери бронзовая",
+      "color": "Бронзовый цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24126004GLP",
+      "name": "Мартина золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24126004SLP",
+      "name": "Мартина серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24126933GLP",
+      "name": "Орбита золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24126933SLP",
+      "name": "Орбита серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24127862GLP",
+      "name": "Хосефа золотая",
+      "color": "Золотой цвет с патиной",
+      "type": "necklace"
+    },
+    {
+      "article": "EN24127862SLP",
+      "name": "Хосефа серебряная",
+      "color": "Серебряный цвет с патиной",
+      "type": "necklace"
+    }
+  ]
+}

@@ -131,7 +131,6 @@
     cursor: pointer;
     transition: all 0.5s;
     border: none;
-    margin-top: auto;
     margin-bottom: 15px;
 }
 
@@ -199,6 +198,8 @@
 
     .title {
         font-size: 20px;
+        width: 95%;
+        text-align: center;
     }
 
     .sliderBlock {
@@ -213,7 +214,7 @@
     }
 
     .sliderItem {
-        height: 400px;
+        height: 350px;
         display: flex;
         flex-direction: column;
     }
@@ -246,7 +247,7 @@
 
     .nextArrow {
         position: absolute;
-        top: 50%;
+        top: 25%;
         right: 20px;
         z-index: 10;
         transform: translateY(-50%);
@@ -259,7 +260,7 @@
 
     .prevArrow {
         position: absolute;
-        top: 50%;
+        top: 25%;
         left: 20px;
         z-index: 10;
         transform: translateY(-50%);

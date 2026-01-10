@@ -50,7 +50,8 @@ export default function AdminEditProduct() {
         type: '',
         subcategories: [],
         family: [],
-        description: ''
+        description: '',
+        yandexMarketUrl: ''
     });
 
     const toast = useToast();
@@ -93,8 +94,12 @@ export default function AdminEditProduct() {
                 if (!productData.description) {
                     productData.description = '';
                 }
+                // Убеждаемся, что yandexMarketUrl всегда строка
+                if (!productData.yandexMarketUrl) {
+                    productData.yandexMarketUrl = '';
+                }
                     setData(productData);
-                    setFamily(productData.family[0]._id);
+                    setFamily(productData.family && productData.family[0] ? productData.family[0]._id : '');
             })
             .catch((e) => console.log(e));
     };
@@ -264,6 +269,14 @@ export default function AdminEditProduct() {
                     onChange={(e) => setData({ ...data, description: e.target.value })}
                     value={data?.description || ""}
                     rows={5}
+                />
+            </div>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Ссылка на Яндекс Маркет</p>
+                <Input
+                    placeholder="Введите ссылку на Яндекс Маркет (необязательно)"
+                    onChange={(e) => setData({ ...data, yandexMarketUrl: e.target.value })}
+                    value={data?.yandexMarketUrl || ""}
                 />
             </div>
             <div className={styles.createLilColumn}>

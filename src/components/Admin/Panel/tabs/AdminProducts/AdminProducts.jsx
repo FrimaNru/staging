@@ -9,6 +9,7 @@ import { useDisclosure, Modal, ModalOverlay, ModalCloseButton, ModalContent } fr
 import FilterBlock from "./items/FilterBlock";
 import Button from "@/ui/Button/Button";
 import Link from "next/link";
+import BulkYandexMarketUpdate from "./items/BulkYandexMarketUpdate";
 
 const stataTitle = {
     'earrings': 'СЕРЬГИ',
@@ -36,6 +37,7 @@ export default function AdminProducts() {
     const [onlyActive, setOnlyActive] = useState(false);
     const [onlyNotActive, setOnlyNotActive] = useState(false);
     const [productsView, setProductsView] = useState('blocks');
+    const { isOpen: isBulkUpdateOpen, onOpen: onBulkUpdateOpen, onClose: onBulkUpdateClose } = useDisclosure();
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 16;
@@ -263,6 +265,11 @@ export default function AdminProducts() {
                 </div>
             </ModalContent>
         </Modal>
+        <BulkYandexMarketUpdate 
+            isOpen={isBulkUpdateOpen} 
+            onClose={onBulkUpdateClose} 
+            onSuccess={load}
+        />
     </div>
 };
 

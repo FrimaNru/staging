@@ -179,6 +179,42 @@
     transition: all 0.5s;
 }
 
+.infoButtonYandex {
+    display: flex;
+    width: 100%;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 104px;
+    background: var(--beige);
+    color: var(--dark);
+    text-align: center;
+    font-family: 'Dela Gothic One', system-ui;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+    transition: all 0.5s;
+    text-decoration: none;
+    border: none;
+}
+
+.infoButtonYandex:hover {
+    background: var(--beige);
+    color: var(--dark);
+    transition: all 0.5s;
+    opacity: 0.9;
+}
+
+.yandexMarketLogo {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .imgSliderBox {
     width: 530px;
 }
@@ -779,6 +815,17 @@
     .infoButton {
         padding: 8.5px 20px;
         font-size: 14px;
+    }
+
+    .infoButtonYandex {
+        padding: 8.5px 20px;
+        font-size: 14px;
+        gap: 8px;
+    }
+
+    .yandexMarketLogo {
+        width: 18px;
+        height: 18px;
     }
 
     .menuButton {

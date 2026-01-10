@@ -46,7 +46,8 @@ export default function AdminCreateProduct() {
         sizes: [],
         type: '',
         subcategories: [],
-        description: ''
+        description: '',
+        yandexMarketUrl: ''
     });
 
     const toast = useToast();
@@ -212,6 +213,14 @@ export default function AdminCreateProduct() {
                     onChange={(e) => setData({ ...data, description: e.target.value })}
                     value={data?.description || ""}
                     rows={5}
+                />
+            </div>
+            <div className={styles.createLilColumn}>
+                <p className={styles.subtitle}>Ссылка на Яндекс Маркет</p>
+                <Input
+                    placeholder="Введите ссылку на Яндекс Маркет (необязательно)"
+                    onChange={(e) => setData({ ...data, yandexMarketUrl: e.target.value })}
+                    value={data?.yandexMarketUrl || ""}
                 />
             </div>
             <div className={styles.createLilColumn}>
