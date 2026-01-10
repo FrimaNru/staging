@@ -7,6 +7,9 @@ export function roundToHundreds(number) {
     number = Number(number);
     if (!Number.isFinite(number) || number <= 0) return number;
     
+    // Если число уже кратно 100, не округляем
+    if (number % 100 === 0) return number;
+    
     const lastTwoDigits = number % 100;
     const hundreds = Math.floor(number / 100) * 100;
     
