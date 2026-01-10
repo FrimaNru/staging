@@ -2,7 +2,7 @@ import { Footer } from "@/components";
 import Head from "next/head";
 import PopularBlock from "@/components/PopularBlock/PopularBlock";
 import Header from "@/components/Header/Header";
-import { PRODUCT_TYPES } from "@/constants/items";
+import { PRODUCT_TYPES, PRODUCT_TYPES_GENITIVE_PLURAL } from "@/constants/items";
 import Product from "@/components/Product/Product";
 import OtherProductsBlock from "@/components/Product/OtherProductsBlock";
 import axios from "axios";
@@ -54,7 +54,7 @@ export default function ProductPageBySlug({ product, otherProducts }) {
                     <Header />
                     <Product product={product} />
                     <OtherProductsBlock
-                        title={`Другие ${(PRODUCT_TYPES[product.type] || 'Украшения').toLowerCase()} Mi Alegria`}
+                        title={`Другие ${PRODUCT_TYPES_GENITIVE_PLURAL[product.type] || 'украшения'} Mi Alegria`}
                         products={otherProducts}
                     />
                     <PopularBlock />

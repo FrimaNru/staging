@@ -123,11 +123,6 @@ export default function AdminProducts() {
             <div className={styles.buttonGroup}>
                 <Button
                     size="small"
-                    variant="secondary"
-                    onClick={onBulkUpdateOpen}
-                >Массовое обновление Яндекс Маркет</Button>
-                <Button
-                    size="small"
                     variant="success"
                     onClick={() => router.push('/adminpanel?page=createProduct')}
                 >Создать товар</Button>
