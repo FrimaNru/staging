@@ -196,6 +196,7 @@ export default function Bag() {
                 discount={discount}
                 setDiscount={setDiscount}
                 originalTotalBeforeDiscount={originalTotalBeforeDiscount}
+                hidePromocode={true}
             />
         </div>
         <div id="personalData" />
@@ -216,7 +217,9 @@ export default function Bag() {
                 setIsWidgetVisible={setIsWidgetVisible}
                 prevPath={prevPath}
                 promocode={promocode}
+                setPromocode={setPromocode}
                 discount={discount}
+                setDiscount={setDiscount}
                 originalTotalBeforeDiscount={originalTotalBeforeDiscount}
             />
             {order && <>

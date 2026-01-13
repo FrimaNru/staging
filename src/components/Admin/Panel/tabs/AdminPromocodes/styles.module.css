@@ -136,3 +136,49 @@
     transition: all 0.5s;
 }
 
+.dateInputWrapper {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+}
+
+.dateInput {
+    border: none;
+    background: var(--lightgray);
+    outline: none;
+    font-family: 'Tenor Sans', sans-serif;
+    height: 40px;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 17px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.dateInputWrapper {
+    position: relative;
+}
+
+.dateInputPlaceholder {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--gray);
+    font-size: 17px;
+    font-family: 'Tenor Sans', sans-serif;
+    z-index: 1;
+}
+
+.dateInput::-webkit-datetime-edit {
+    color: transparent;
+}
+
+.dateInput:focus::-webkit-datetime-edit {
+    color: inherit;
+}
+
+.dateInput[data-has-value="true"]::-webkit-datetime-edit {
+    color: inherit;
+}

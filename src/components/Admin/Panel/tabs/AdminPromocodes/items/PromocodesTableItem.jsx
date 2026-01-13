@@ -21,7 +21,7 @@ export default function PromocodesTableItem({ item, onEdit, onDelete }) {
         <div className={styles.tableItemValue}>
             <div style={{ display: 'flex', gap: '10px' }}>
                 <Button
-                    variant="secondary"
+                    variant="download"
                     size="small"
                     onClick={() => onEdit(item)}
                 >

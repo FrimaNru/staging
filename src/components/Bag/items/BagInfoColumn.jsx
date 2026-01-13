@@ -10,7 +10,7 @@ import { useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 
-export default function BagInfoColumn({ total, deliveryCost, order, setOrder, setIsWidgetVisible, prevPath, fullWidth, promocode, setPromocode, discount, setDiscount, originalTotalBeforeDiscount, readOnly = false }) {
+export default function BagInfoColumn({ total, deliveryCost, order, setOrder, setIsWidgetVisible, prevPath, fullWidth, promocode, setPromocode, discount, setDiscount, originalTotalBeforeDiscount, readOnly = false, hidePromocode = false }) {
 
     const { cart } = useCart();
     const { user } = useUser();
@@ -170,7 +170,7 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
                     </div>
                     <p className={styles.totalText}>При заказе от 3000 рублей, доставка бесплатная</p>
                 </div>
-                <div className={styles.totalColumnLil}>
+                {!hidePromocode && <div className={styles.totalColumnLil}>
                     <div className={styles.totalRow}>
                         <p className={styles.totalSubtitle}>Промокод</p>
                     </div>
@@ -205,7 +205,7 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
                             </button>
                         </div>
                     )}
-                </div>
+                </div>}
             </div>
             <hr className={styles.hr} />
             <div className={styles.totalRow}>

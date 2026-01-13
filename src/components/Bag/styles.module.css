@@ -322,6 +322,7 @@
     flex-direction: row;
     gap: 10px;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     margin-top: 4px;
 }
@@ -1462,5 +1463,33 @@
         height: 31px;
         font-size: 13px;
         line-height: 18px;
+    }
+
+    .promocodeRow {
+        flex-direction: column;
+        gap: 5px;
+        margin-top: 4px;
+    }
+
+    .promocodeInput {
+        width: 100%;
+        min-width: auto;
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
+    .promocodeButton {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    .promocodeApplied {
+        gap: 5px;
+        margin-top: 4px;
+    }
+
+    .promocodeDiscount {
+        font-size: 16px;
     }
 }

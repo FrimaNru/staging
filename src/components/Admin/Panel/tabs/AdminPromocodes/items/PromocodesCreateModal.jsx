@@ -1,7 +1,7 @@
 import { Modal, ModalContent, ModalOverlay, useToast } from "@chakra-ui/react";
 import styles from "../styles.module.css";
 import Input from "@/ui/Inputs/Input/Input";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Button from "@/ui/Button/Button";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../../../../apiConfig";
@@ -18,6 +18,8 @@ export default function PromocodesCreateModal({ isOpen, setIsOpen, load, editing
     });
     const toast = useToast();
     const [disabled, setDisabled] = useState(false);
+    const dateInputRef = useRef(null);
+    const [isDateInputFocused, setIsDateInputFocused] = useState(false);
 
     useEffect(() => {
         if (editingItem) {
@@ -41,11 +43,42 @@ export default function PromocodesCreateModal({ isOpen, setIsOpen, load, editing
         }
     }, [editingItem, isOpen]);
 
+
     const savePromocode = async () => {
         if (!data.title || !data.value || !data.date_off) {
             return toast({ 
                 position: 'bottom-right', 
                 render: () => (<div className="toast">Заполните все обязательные поля</div>), 
+                duration: 3000 
+            });
+        }
+
+        // Проверка корректности значения в зависимости от типа
+        const numValue = Number(data.value);
+        if (data.type === 'procent' && (numValue < 0 || numValue > 100)) {
+            return toast({ 
+                position: 'bottom-right', 
+                render: () => (<div className="toast">Процент скидки должен быть от 0 до 100</div>), 
+                duration: 3000 
+            });
+        }
+        if (data.type === 'fix' && (numValue < 0 || numValue > 100000)) {
+            return toast({ 
+                position: 'bottom-right', 
+                render: () => (<div className="toast">Сумма скидки должна быть от 0 до 100000 руб.</div>), 
+                duration: 3000 
+            });
+        }
+
+        // Проверка даты - не может быть раньше текущего дня
+        const selectedDate = new Date(data.date_off);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Сбрасываем время для корректного сравнения дат
+        
+        if (selectedDate < today) {
+            return toast({ 
+                position: 'bottom-right', 
+                render: () => (<div className="toast">Дата окончания не может быть раньше текущего дня</div>), 
                 duration: 3000 
             });
         }
@@ -125,11 +158,21 @@ export default function PromocodesCreateModal({ isOpen, setIsOpen, load, editing
                 <div className={styles.modalButtonLine}>
                     <button
                         className={`${styles.modalButton} ${data.type === 'fix' ? styles.modalButtonSelect : ''}`}
-                        onClick={() => setData({ ...data, type: 'fix' })}
+                        onClick={() => {
+                            const currentValue = Number(data.value);
+                            // Если переключаемся на фиксированную сумму и значение больше 100000, сбрасываем
+                            const newValue = currentValue > 100000 ? '' : data.value;
+                            setData({ ...data, type: 'fix', value: newValue });
+                        }}
                     >Фиксированная сумма</button>
                     <button
                         className={`${styles.modalButton} ${data.type === 'procent' ? styles.modalButtonSelect : ''}`}
-                        onClick={() => setData({ ...data, type: 'procent' })}
+                        onClick={() => {
+                            const currentValue = Number(data.value);
+                            // Если переключаемся на процент и значение больше 100, сбрасываем
+                            const newValue = currentValue > 100 ? '' : data.value;
+                            setData({ ...data, type: 'procent', value: newValue });
+                        }}
                     >Процент</button>
                 </div>
                 
@@ -137,7 +180,27 @@ export default function PromocodesCreateModal({ isOpen, setIsOpen, load, editing
                     type="number"
                     placeholder={data.type === 'fix' ? 'Сумма скидки (руб.)' : 'Процент скидки'}
                     value={data.value}
-                    onChange={(e) => setData({ ...data, value: e.target.value })}
+                    onChange={(e) => {
+                        const inputValue = e.target.value;
+                        if (inputValue === '') {
+                            setData({ ...data, value: '' });
+                            return;
+                        }
+                        
+                        const numValue = Number(inputValue);
+                        
+                        if (data.type === 'procent') {
+                            // Для процента: от 0 до 100
+                            if (numValue >= 0 && numValue <= 100) {
+                                setData({ ...data, value: inputValue });
+                            }
+                        } else {
+                            // Для фиксированной суммы: от 0 до 100000
+                            if (numValue >= 0 && numValue <= 100000) {
+                                setData({ ...data, value: inputValue });
+                            }
+                        }
+                    }}
                 />
                 
                 <Input
@@ -147,12 +210,43 @@ export default function PromocodesCreateModal({ isOpen, setIsOpen, load, editing
                     onChange={(e) => setData({ ...data, available: e.target.value })}
                 />
                 
-                <Input
-                    type="date"
-                    placeholder="Дата окончания действия"
-                    value={data.date_off}
-                    onChange={(e) => setData({ ...data, date_off: e.target.value })}
-                />
+                <div 
+                    className={styles.dateInputWrapper} 
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setIsDateInputFocused(true);
+                        if (dateInputRef.current) {
+                            dateInputRef.current.showPicker?.();
+                            dateInputRef.current.focus();
+                            dateInputRef.current.click();
+                        }
+                    }}
+                >
+                    <input
+                        ref={dateInputRef}
+                        type="date"
+                        lang="ru"
+                        className={styles.dateInput}
+                        value={data.date_off}
+                        min={new Date().toISOString().split('T')[0]}
+                        data-has-value={data.date_off ? "true" : "false"}
+                        onChange={(e) => setData({ ...data, date_off: e.target.value })}
+                        onFocus={() => setIsDateInputFocused(true)}
+                        onBlur={() => setIsDateInputFocused(false)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsDateInputFocused(true);
+                            if (dateInputRef.current) {
+                                dateInputRef.current.showPicker?.();
+                            }
+                        }}
+                    />
+                    {!data.date_off && !isDateInputFocused && (
+                        <span className={styles.dateInputPlaceholder}>
+                            Действует до
+                        </span>
+                    )}
+                </div>
                 
                 <Button
                     disabled={!data.title || !data.value || !data.date_off || disabled}

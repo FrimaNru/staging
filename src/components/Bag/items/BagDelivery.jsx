@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 import BagInfoColumn from "./BagInfoColumn";
 
-export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, deliveryDate, setSelectedPVZ, isWidgetVisible, selectedPVZ, total, deliveryCost, setOrder, setIsWidgetVisible, prevPath, promocode, discount, originalTotalBeforeDiscount }) {
+export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, deliveryDate, setSelectedPVZ, isWidgetVisible, selectedPVZ, total, deliveryCost, setOrder, setIsWidgetVisible, prevPath, promocode, setPromocode, discount, setDiscount, originalTotalBeforeDiscount }) {
 
     const normalizePvz = (pvz) => {
         // Виджет СДЭК возвращает разные наборы полей в зависимости от версии/типа
@@ -81,9 +81,11 @@ export default function BagDelivery({ order, setDeliveryDate, setDeliveryCost, d
                 prevPath={prevPath}
                 fullWidth={true}
                 promocode={promocode}
+                setPromocode={setPromocode}
                 discount={discount}
+                setDiscount={setDiscount}
                 originalTotalBeforeDiscount={originalTotalBeforeDiscount}
-                readOnly={true}
+                readOnly={false}
             />
         </div>}
     </div>
