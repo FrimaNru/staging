@@ -3,46 +3,79 @@ import styles from "../styles.module.css";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useEffect, useState } from "react";
-import { useDisclosure, useToast } from "@chakra-ui/react";
+import { useDisclosure, useToast, Modal, ModalBody, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { formatNumber } from "@/lib/Formatting";
 import { useProducts } from "@/contexts/ProductsContext";
 import { PRODUCT_TYPES } from "@/constants/items";
 import { AuthModal } from "@/components/Header/items/AuthModal";
 
-export default function BagProducts({ load, total, setTotal }) {
+export default function BagProducts({ load, total, setTotal, promocode, setPromocode, setDiscount }) {
 
     const { cart } = useCart();
 
+    // Отладка
     const itemCounts = cart.reduce((acc, item) => {
         const key = JSON.stringify({ id: item.id, size: item.size, color: item.color, article: item.article });
         acc[key] = (acc[key] || 0) + 1;
         return acc;
     }, {});
 
-    return cart.length > 0 && Object.entries(itemCounts)
-        .filter(([key, count], index, self) => ([x]) => x === key)
+    if (cart.length === 0) {
+        return null;
+    }
+
+    const entries = Object.entries(itemCounts);
+    
+    if (entries.length === 0) {
+        return null;
+    }
+
+    return entries
         .map(([key, count], i) => {
             const item = JSON.parse(key);
             return (
                 <div key={i} className={styles.itemColumn}>
-                    <ProductItem item={item} count={count} setTotal={setTotal} total={total} load={load} />
+                    <ProductItem 
+                        item={item} 
+                        count={count} 
+                        setTotal={setTotal} 
+                        total={total}
+                        load={load}
+                        promocode={promocode}
+                        setPromocode={setPromocode}
+                        setDiscount={setDiscount}
+                    />
                     <hr className={styles.hr} />
                 </div>
             );
         })
 };
 
-function ProductItem({ item, count, load }) {
+function ProductItem({ item, count, load, promocode, setPromocode, setDiscount, total }) {
 
     const [data, setDataProduct] = useState({});
     const { products } = useProducts();
     const toast = useToast();
-    const { removeFromCart, addToCart } = useCart();
+    const { removeFromCart, addToCart, cart } = useCart();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isWarningOpen, onOpen: onWarningOpen, onClose: onWarningClose } = useDisclosure();
+    const [pendingAction, setPendingAction] = useState(null); // 'delete' или 'minus'
 
     useEffect(() => {
-        setDataProduct(products.filter(product => product._id === item.id)[0]);
-    }, []);
+        const productData = products.filter(product => product._id === item.id)[0];
+        if (productData) {
+            setDataProduct(productData);
+        } else {
+            // Если товар не найден в products, загружаем его через API
+            axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
+                .then(res => {
+                    setDataProduct(res.data);
+                })
+                .catch(error => {
+                    console.error(`Ошибка при получении товара с ID ${item.id}:`, error);
+                });
+        }
+    }, [products, item.id]);
 
     const makePostRequest = async (url, data, headers = {}) => {
         try {
@@ -57,12 +90,61 @@ function ProductItem({ item, count, load }) {
         }
     };
 
-    const deleteProduct = async () => {
+    // Проверка, будет ли сумма достаточной для промокода после удаления/уменьшения
+    const checkPromocodeAfterAction = async (action) => {
+        if (!promocode) return true; // Если промокод не применен, действие разрешено
+
+        // Получаем цену товара, если данные еще не загружены - делаем запрос
+        let itemPrice = Number(data?.saleCost || data?.cost || 0);
+        if (!itemPrice) {
+            try {
+                const response = await axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id });
+                itemPrice = Number(response.data.saleCost || response.data.cost || 0);
+            } catch (error) {
+                console.error("Ошибка при получении цены товара:", error);
+                return true; // Если не удалось получить цену, разрешаем действие
+            }
+        }
+
+        let newTotal = Number(total) || 0;
+
+        if (action === 'delete') {
+            // Удаляем все экземпляры товара
+            const itemCount = cart.filter(p => 
+                p.id === item.id && 
+                p.size === item.size && 
+                p.color === item.color && 
+                p.article === item.article
+            ).length;
+            newTotal = newTotal - (itemPrice * itemCount);
+        } else if (action === 'minus') {
+            // Удаляем один экземпляр товара
+            newTotal = newTotal - itemPrice;
+        }
+
+        const availableMin = Number(promocode.available) || 0;
+        return newTotal >= availableMin;
+    };
+
+    const handleDeleteClick = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
             onOpen();
             return;
         }
+
+        const willBeValid = await checkPromocodeAfterAction('delete');
+        if (!willBeValid) {
+            setPendingAction('delete');
+            onWarningOpen();
+            return;
+        }
+
+        await executeDelete();
+    };
+
+    const executeDelete = async () => {
+        const token = localStorage.getItem('token');
         try {
             removeFromCart(item.id, 'all');
 
@@ -71,15 +153,26 @@ function ProductItem({ item, count, load }) {
                 Authorization: `Bearer ${token}`
             });
 
+            // Очищаем промокод, если он был применен
+            if (promocode) {
+                setPromocode(null);
+                setDiscount(0);
+            }
+
             toast({
                 position: 'bottom-right',
                 render: () => (<div className="toast">Товар успешно удален</div>),
                 duration: 3000
             });
-            load();
+            
+            // load() будет вызван автоматически через useEffect при изменении cart.length или promocode
         } catch (error) {
             console.error("Ошибка при удалении продукта:", error.message || error);
         }
+    };
+
+    const deleteProduct = async () => {
+        await handleDeleteClick();
     };
 
     const plusProduct = async () => {
@@ -102,12 +195,25 @@ function ProductItem({ item, count, load }) {
         }
     };
 
-    const minusProduct = async () => {
+    const handleMinusClick = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
             onOpen();
             return;
         }
+
+        const willBeValid = await checkPromocodeAfterAction('minus');
+        if (!willBeValid) {
+            setPendingAction('minus');
+            onWarningOpen();
+            return;
+        }
+
+        await executeMinus();
+    };
+
+    const executeMinus = async () => {
+        const token = localStorage.getItem('token');
         try {
             removeFromCart(item.id, 'one');
 
@@ -116,15 +222,35 @@ function ProductItem({ item, count, load }) {
                 Authorization: `Bearer ${token}`
             });
 
-            load();
+            // Очищаем промокод, если он был применен
+            if (promocode) {
+                setPromocode(null);
+                setDiscount(0);
+            }
+
+            // load() будет вызван автоматически через useEffect при изменении cart.length или promocode
         } catch (error) {
             console.error("Ошибка при уменьшении количества продукта:", error.message || error);
         }
     };
 
+    const minusProduct = async () => {
+        await handleMinusClick();
+    };
+
+    const handleConfirmAction = async () => {
+        onWarningClose();
+        if (pendingAction === 'delete') {
+            await executeDelete();
+        } else if (pendingAction === 'minus') {
+            await executeMinus();
+        }
+        setPendingAction(null);
+    };
+
     return <div className={styles.item}>
         <div className={styles.itemRow}>
-            <img src={data?.cover?.length > 0 && data?.cover} className={styles.itemCover} />
+            <img src={data?.cover?.length > 0 ? data?.cover : ''} className={styles.itemCover} />
             <div className={styles.itemTextColumn}>
                 <div className={styles.itemNameLine}>
                     <div className={styles.itemNameColumn}>
@@ -161,5 +287,32 @@ function ProductItem({ item, count, load }) {
             <img src='/cross.svg' className={styles.itemCross} onClick={deleteProduct} />
         </div>
         <AuthModal isOpen={isOpen} onClose={onClose} />
+        <Modal isOpen={isWarningOpen} onClose={onWarningClose} autoFocus={false} isCentered size='xl'>
+            <ModalOverlay />
+            <ModalContent background='none'>
+                <div className={styles.modalClear}>
+                    <div className={styles.modalHeaderClear}>
+                        <p className={styles.modalHeaderTitle}>ПРЕДУПРЕЖДЕНИЕ</p>
+                        <img src='/cross.svg' onClick={onWarningClose} className={styles.modalCross} />
+                    </div>
+                    <div className={styles.modalColumn}>
+                        <p className={styles.modalWarningText}>
+                            {pendingAction === 'delete' 
+                                ? <>При удалении данного товара промокод <span className={styles.modalPromocodeHighlight}>{promocode?.title || ''}</span> перестанет действовать, так как общей суммы заказа будет не хватать.</>
+                                : <>Если вы уменьшите количество товаров, промокод <span className={styles.modalPromocodeHighlight}>{promocode?.title || ''}</span> перестанет действовать, так как общей суммы заказа будет не хватать.</>
+                            }
+                        </p>
+                        <div className={styles.modalWarningButtons}>
+                            <button onClick={onWarningClose} className={styles.modalClose}>
+                                Отменить
+                            </button>
+                            <button onClick={handleConfirmAction} className={styles.modalDeleteAll}>
+                                {pendingAction === 'delete' ? 'Удалить' : 'Уменьшить'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ModalContent>
+        </Modal>
     </div>
 };

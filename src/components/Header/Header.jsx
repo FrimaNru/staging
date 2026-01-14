@@ -99,7 +99,24 @@ export default function Header() {
         await axios.get(`${API_BASE_URL}getUser`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 setUser(res.data);
-                startSetCart(res.data.bag);
+                // Объединяем локальную корзину с серверной, чтобы не потерять локальные изменения
+                const localCart = JSON.parse(localStorage.getItem('cart') || '[]');
+                const serverBag = res.data.bag || [];
+                // Если локальная корзина не пуста, используем её, иначе используем серверную
+                if (localCart.length > 0) {
+                    // Объединяем: сначала серверные данные, потом локальные
+                    const mergedCart = [...serverBag, ...localCart.filter(localItem => 
+                        !serverBag.some(serverItem => 
+                            serverItem.id === localItem.id && 
+                            serverItem.size === localItem.size && 
+                            serverItem.color === localItem.color &&
+                            serverItem.article === localItem.article
+                        )
+                    )];
+                    startSetCart(mergedCart);
+                } else {
+                    startSetCart(serverBag);
+                }
                 startSetFavourite(res.data.favourite);
             })
             .catch((e) => {
