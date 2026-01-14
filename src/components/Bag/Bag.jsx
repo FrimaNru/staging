@@ -43,7 +43,28 @@ export default function Bag() {
         if (orderId) {
             checkOrderStatus();
         }
-    }, [orderId, cart, user]);
+    }, [orderId]);
+
+    useEffect(() => {
+        // Пересчитываем сумму только при изменении количества товаров в корзине
+        if (cart.length > 0) {
+            load();
+        } else {
+            setTotal(0);
+            // Очищаем промокод, если корзина пуста
+            if (promocode) {
+                setPromocode(null);
+                setDiscount(0);
+            }
+        }
+    }, [cart.length]);
+
+    // Пересчитываем сумму при изменении промокода или скидки
+    useEffect(() => {
+        if (cart.length > 0) {
+            load();
+        }
+    }, [promocode, discount]);
 
     useEffect(() => {
         const path = sessionStorage.getItem('prevPath');
@@ -97,6 +118,11 @@ export default function Bag() {
                 load();
                 startSetCart([]);
                 setIsWidgetVisible(false);
+                // Очищаем промокод, если он был применен
+                if (promocode) {
+                    setPromocode(null);
+                    setDiscount(0);
+                }
                 toast({ position: 'bottom-right', render: () => (<div className="toast">Корзина успешно очищена</div>), duration: 3000 });
                 setOrder(false);
             })
@@ -178,6 +204,9 @@ export default function Bag() {
                     load={load}
                     total={total}
                     setTotal={setTotal}
+                    promocode={promocode}
+                    setPromocode={setPromocode}
+                    setDiscount={setDiscount}
                 />
                 {cart.length === 0 && <div className={styles.emptyBag}>
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
