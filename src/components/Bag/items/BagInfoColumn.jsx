@@ -1,4 +1,4 @@
-import { formatNumber, roundToHundreds } from "@/lib/Formatting";
+import { formatNumber } from "@/lib/Formatting";
 import styles from "../styles.module.css";
 import { useCart } from "@/contexts/CartContext";
 import { Link } from "react-scroll";
@@ -40,6 +40,13 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
             // Обрабатываем структуру ответа: может быть response.data.promocode или response.data напрямую
             const promocodeData = response.data.promocode || response.data;
             const currentTotal = Number(total) || 0;
+            
+            // Отладочная информация
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Promocode response:', response.data);
+                console.log('Promocode data:', promocodeData);
+                console.log('Current total:', currentTotal);
+            }
             
             if (!promocodeData) {
                 toast({
@@ -84,17 +91,14 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
             // Если бэкенд вернул уже рассчитанную скидку, используем её, иначе рассчитываем сами
             let calculatedDiscount = 0;
             
-            // Округляем сумму товаров для согласованности с отображением
-            const roundedTotal = roundToHundreds(currentTotal);
-            
             if (promocodeData.discount !== null && promocodeData.discount !== undefined) {
                 // Бэкенд уже рассчитал скидку
                 calculatedDiscount = Number(promocodeData.discount) || 0;
             } else {
-                // Рассчитываем скидку на фронтенде от округленной суммы
+                // Рассчитываем скидку на фронтенде от точной суммы (без округления)
                 const promocodeValue = Number(promocodeData.value);
                 
-                if (isNaN(promocodeValue) || isNaN(roundedTotal)) {
+                if (isNaN(promocodeValue) || isNaN(currentTotal)) {
                     toast({
                         position: 'bottom-right',
                         render: () => <div className="toast">Ошибка: некорректные данные промокода</div>,
@@ -109,13 +113,13 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
                     // Фиксированная скидка
                     calculatedDiscount = promocodeValue;
                 } else if (promocodeData.type === 'procent') {
-                    // Процентная скидка от округленной суммы
-                    calculatedDiscount = Math.round(roundedTotal * (promocodeValue / 100));
+                    // Процентная скидка от точной суммы
+                    calculatedDiscount = Math.round(currentTotal * (promocodeValue / 100));
                 }
             }
 
             // Убеждаемся, что скидка не больше суммы заказа
-            calculatedDiscount = Math.min(calculatedDiscount, roundedTotal);
+            calculatedDiscount = Math.min(calculatedDiscount, currentTotal);
 
             setPromocode(promocodeData);
             setDiscount(calculatedDiscount);
@@ -127,6 +131,11 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
                 status: 'success'
             });
         } catch (error) {
+            // Логируем ошибку для отладки
+            console.error('Ошибка при применении промокода:', error);
+            console.error('Response:', error.response?.data);
+            console.error('Status:', error.response?.status);
+            
             if (error.response?.status === 404) {
                 toast({
                     position: 'bottom-right',
@@ -212,21 +221,17 @@ export default function BagInfoColumn({ total, deliveryCost, order, setOrder, se
                 <p className={styles.totalSubtitle}>Итого</p>
                 <p className={styles.totalGold}>
                     {(() => {
-                        // Используем округленные значения для расчетов, чтобы они соответствовали отображаемым
+                        // Используем точные значения для расчетов (без округления)
                         const currentTotal = Number(total) || 0;
                         const currentDiscount = Number(discount) || 0;
                         const currentDeliveryCost = Number(deliveryCost) || 0;
                         
-                        // Округляем значения до сотен для согласованности с отображением
-                        const roundedTotal = roundToHundreds(currentTotal);
-                        const roundedDiscount = roundToHundreds(currentDiscount);
-                        const roundedDeliveryCost = roundToHundreds(currentDeliveryCost);
-                        
-                        const isFreeDelivery = originalTotalBeforeDiscount >= 3000 || roundedTotal >= 3000;
+                        const isFreeDelivery = originalTotalBeforeDiscount >= 3000 || currentTotal >= 3000;
                         // Сначала вычитаем скидку из суммы товаров, потом добавляем доставку
-                        const subtotalAfterDiscount = roundedTotal - roundedDiscount;
-                        const finalSum = subtotalAfterDiscount + (isFreeDelivery ? 0 : roundedDeliveryCost);
+                        const subtotalAfterDiscount = currentTotal - currentDiscount;
+                        const finalSum = subtotalAfterDiscount + (isFreeDelivery ? 0 : currentDeliveryCost);
                         
+                        // Округление применяется только при отображении через formatNumber
                         return formatNumber(finalSum);
                     })()} руб. 
                     {(() => {

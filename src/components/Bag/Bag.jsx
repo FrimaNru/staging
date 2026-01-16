@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { formatNumber } from "@/lib/Formatting";
+import { formatNumber, roundToHundreds } from "@/lib/Formatting";
 import { useCart } from "@/contexts/CartContext";
 import { formatDate } from "@/lib/Formatting";
 import { useUser } from "@/contexts/UserContext";
@@ -92,7 +92,11 @@ export default function Bag() {
 
             const productRequests = cart.map(product =>
                 axios.post(`${API_BASE_URL}getOneProduct`, { id: product.id })
-                    .then(res => Number(res.data.saleCost || res.data.cost))
+                    .then(res => {
+                        // Используем ту же логику округления, что и в каталоге
+                        const price = Number(res.data.saleCost || res.data.cost);
+                        return roundToHundreds(price);
+                    })
                     .catch(error => {
                         console.error(`Ошибка при получении товара с ID ${product.id}:`, error);
                         return 0;
@@ -112,21 +116,41 @@ export default function Bag() {
     };
 
     const clearBag = async () => {
-        axios.post(`${API_BASE_URL}clearBag`, {}, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-            .then(() => {
-                onClose();
-                load();
-                startSetCart([]);
-                setIsWidgetVisible(false);
-                // Очищаем промокод, если он был применен
-                if (promocode) {
-                    setPromocode(null);
-                    setDiscount(0);
-                }
-                toast({ position: 'bottom-right', render: () => (<div className="toast">Корзина успешно очищена</div>), duration: 3000 });
-                setOrder(false);
-            })
-            .catch((e) => console.log(e));
+        const token = localStorage.getItem('token');
+        
+        // Очищаем локальную корзину всегда
+        startSetCart([]);
+        setIsWidgetVisible(false);
+        
+        // Сразу обнуляем сумму, чтобы блок "ИТОГО" исчез
+        setTotal(0);
+        
+        // Очищаем промокод, если он был применен
+        if (promocode) {
+            setPromocode(null);
+            setDiscount(0);
+        }
+        
+        // Отправляем на сервер только если пользователь авторизован
+        if (token) {
+            try {
+                await axios.post(`${API_BASE_URL}clearBag`, {}, { 
+                    headers: { Authorization: `Bearer ${token}` } 
+                });
+            } catch (error) {
+                // Если ошибка на сервере, но корзина уже очищена локально,
+                // просто логируем ошибку, но не прерываем выполнение
+                console.error("Ошибка при синхронизации с сервером:", error.message || error);
+            }
+        }
+        
+        onClose();
+        toast({ 
+            position: 'bottom-right', 
+            render: () => (<div className="toast">Корзина успешно очищена</div>), 
+            duration: 3000 
+        });
+        setOrder(false);
     }
 
     function buy() {

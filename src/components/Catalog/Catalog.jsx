@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useProducts } from "@/contexts/ProductsContext";
 import Head from "next/head";
@@ -76,7 +76,8 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
     const sortItems = ['По популярности', 'По возрастанию цены', 'По убыванию цены'];
     const [stateSortItems, setStateSortItems] = useState('По популярности');
 
-    const getEffectivePrice = (p) => {
+    // Мемоизируем функцию получения цены для оптимизации
+    const getEffectivePrice = useCallback((p) => {
         const sale = Number(p?.saleCost || 0);
         const base = Number(p?.cost || 0);
         const price = sale && sale > 0 ? sale : base;
@@ -87,7 +88,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
             return lastTwoDigits < 50 ? hundreds : hundreds + 100;
         }
         return price;
-    };
+    }, []);
 
     const availableColors = useMemo(() => {
         const set = new Set();
@@ -128,8 +129,8 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
         '/kole/pod-serebro': 'Под серебро'
     };
 
-    // Функция для получения текущей подкатегории на основе URL
-    const getCurrentSubcategory = () => {
+    // Функция для получения текущей подкатегории на основе URL (мемоизирована)
+    const currentSubcategory = useMemo(() => {
         const currentPath = router.asPath.split('?')[0]; // Убираем query параметры
         for (const [path, subcategory] of Object.entries(subcategoryMapping)) {
             if (currentPath.includes(path)) {
@@ -137,7 +138,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
             }
         }
         return null;
-    };
+    }, [router.asPath]);
 
     // Функция для получения типа изделия из текущего пути
     const getCurrentTypeFromPath = (path) => {
@@ -399,7 +400,6 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
         }
 
         // Фильтр для подкатегорий на основе поля subcategories
-        const currentSubcategory = getCurrentSubcategory();
         if (currentSubcategory) {
             d = d.filter(product => {
                 // Проверяем, что у товара есть подкатегории и текущая подкатегория входит в них
@@ -410,12 +410,18 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
         }
 
         return d;
-    }, [products, stateSortItems, stateType, stateSales, selectedColors, priceMin, priceMax, text, router.asPath]);
+    }, [products, stateSortItems, stateType, stateSales, selectedColors, priceMin, priceMax, text, currentSubcategory, getEffectivePrice]);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    // Мемоизируем текущие товары для пагинации
+    const currentItems = useMemo(() => {
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        return filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    }, [filteredData, currentPage, itemsPerPage]);
+    
+    const totalPages = useMemo(() => {
+        return Math.ceil(filteredData.length / itemsPerPage);
+    }, [filteredData.length, itemsPerPage]);
 
     return (
         <>
