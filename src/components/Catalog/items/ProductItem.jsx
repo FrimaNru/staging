@@ -5,7 +5,7 @@ import { formatNumber } from "@/lib/Formatting";
 import { PRODUCT_TYPES } from "@/constants/items";
 import { buildProductSlug } from "@/lib/seo";
 import { useCart } from "@/contexts/CartContext";
-import { useState, memo, useCallback } from "react";
+import { useState, memo, useCallback, useMemo } from "react";
 import { ProductModal } from "@/components/Product/Product";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -13,14 +13,25 @@ import { API_BASE_URL } from "../../../../apiConfig";
 
 function ProductItem({ product }) {
     const router = useRouter();
-    const slug = buildProductSlug(product);
+    // Мемоизируем slug для оптимизации
+    const slug = useMemo(() => buildProductSlug(product), [product._id, product.type, product.name]);
     const { addToCart } = useCart();
     const [isOpenModal, setIsOpenModal] = useState(false);
+    
+    // Мемоизируем вычисление цены
+    const displayPrice = useMemo(() => {
+        return formatNumber(Number(product.saleCost && product.saleCost > 0 ? product.saleCost : product.cost));
+    }, [product.saleCost, product.cost]);
+    
+    // Мемоизируем размер для кнопки
+    const productSize = useMemo(() => {
+        return product.type === 'ring' || product.type === 'bracelets' ? product.sizes?.[0] : product.sizes?.[0];
+    }, [product.type, product.sizes]);
 
     const buy = useCallback(async () => {
         const cartItem = {
             id: product._id,
-            size: product.type === 'ring' || product.type === 'bracelets' ? product.sizes[0] : product.sizes[0],
+            size: productSize,
             color: product.color,
             article: product?.article,
         };
@@ -38,7 +49,7 @@ function ProductItem({ product }) {
                 console.error("Ошибка при добавлении товара в корзину на сервере:", error);
             }
         }
-    }, [product._id, product.type, product.sizes, product.color, product.article, addToCart]);
+    }, [product._id, productSize, product.color, product.article, addToCart]);
 
     return (
         <div className={styles.sliderItem}>
@@ -50,8 +61,8 @@ function ProductItem({ product }) {
                 <p className={styles.productItemArticle} data-noindex="true">Артикул: {product.article}</p>
                 <div className={styles.productItemCostLine}>
                     <div className={styles.productItemCostEmpty} />
-                    <p className={styles.sliderItemCost}>{formatNumber(Number(product.saleCost && product.saleCost > 0 ? product.saleCost : product.cost))} руб.</p>
-                    <FavouriteButton idProduct={product._id} size={(product.type === 'ring' || product.type === 'bracelets') ? product.sizes[0] : product.sizes[0]} color={product.color} article={product.article} type='small' />
+                    <p className={styles.sliderItemCost}>{displayPrice} руб.</p>
+                    <FavouriteButton idProduct={product._id} size={productSize} color={product.color} article={product.article} type='small' />
                 </div>
                 <button className={styles.buyButton} onClick={buy}>КУПИТЬ</button>
             </div>

@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../apiConfig";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useToast, useDisclosure } from "@chakra-ui/react";
@@ -12,6 +12,9 @@ import BagPersonalData from "./items/BagPersonalData";
 import BagProducts from "./items/BagProducts";
 import BagInfoColumn from "./items/BagInfoColumn";
 import BagDelivery from "./items/BagDelivery";
+
+// Выносим regex за пределы компонента для оптимизации
+const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
 
 export default function Bag() {
     const router = useRouter();
@@ -33,16 +36,63 @@ export default function Bag() {
     const [promocode, setPromocode] = useState(null);
     const [discount, setDiscount] = useState(0);
     const [originalTotalBeforeDiscount, setOriginalTotalBeforeDiscount] = useState(0);
-    const regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
-
     const [isWidgetVisible, setIsWidgetVisible] = useState(false);
+    
+    // Используем ref для предотвращения дублирующих запросов
+    const isLoadingRef = useRef(false);
+
+    // Мемоизируем функцию load для предотвращения лишних перерисовок
+    const load = useCallback(async () => {
+        // Предотвращаем параллельные запросы
+        if (isLoadingRef.current) return;
+        isLoadingRef.current = true;
+
+        try {
+            if (user) setDataUser(user);
+
+            // Оптимизация: делаем запросы только для уникальных товаров
+            const uniqueProductIds = [...new Set(cart.map(p => p.id))];
+            
+            const productRequests = uniqueProductIds.map(productId =>
+                axios.post(`${API_BASE_URL}getOneProduct`, { id: productId })
+                    .then(res => {
+                        const price = Number(res.data.saleCost || res.data.cost);
+                        return { id: productId, price: roundToHundreds(price) };
+                    })
+                    .catch(error => {
+                        console.error(`Ошибка при получении товара с ID ${productId}:`, error);
+                        return { id: productId, price: 0 };
+                    })
+            );
+
+            const productPrices = await Promise.all(productRequests);
+            const priceMap = new Map(productPrices.map(p => [p.id, p.price]));
+            
+            // Считаем сумму с учетом количества каждого товара
+            const summ = cart.reduce((acc, product) => {
+                const price = priceMap.get(product.id) || 0;
+                return acc + price;
+            }, 0);
+
+            setTotal(summ);
+            // Сохраняем оригинальную сумму для проверки бесплатной доставки
+            if (summ >= 3000) {
+                setOriginalTotalBeforeDiscount(summ);
+            }
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+        } finally {
+            isLoadingRef.current = false;
+        }
+    }, [cart, user]);
 
     useEffect(() => {
-        load();
-
         if (orderId) {
             checkOrderStatus();
+        } else {
+            load();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [orderId]);
 
     useEffect(() => {
@@ -57,14 +107,8 @@ export default function Bag() {
                 setDiscount(0);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cart.length]);
-
-    // Пересчитываем сумму при изменении промокода или скидки
-    useEffect(() => {
-        if (cart.length > 0) {
-            load();
-        }
-    }, [promocode, discount]);
 
     useEffect(() => {
         const path = sessionStorage.getItem('prevPath');
@@ -73,7 +117,7 @@ export default function Bag() {
         }
     }, []);
 
-    const checkOrderStatus = async () => {
+    const checkOrderStatus = useCallback(async () => {
         await axios.post(`${API_BASE_URL}orders/status`, { orderId }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then((res) => {
                 if (res.status === 201) return;
@@ -84,38 +128,9 @@ export default function Bag() {
                 load();
             })
             .catch((e) => { console.log(e); });
-    };
+    }, [orderId, load, setUser]);
 
-    const load = async () => {
-        try {
-            if (user) setDataUser(user);
-
-            const productRequests = cart.map(product =>
-                axios.post(`${API_BASE_URL}getOneProduct`, { id: product.id })
-                    .then(res => {
-                        // Используем ту же логику округления, что и в каталоге
-                        const price = Number(res.data.saleCost || res.data.cost);
-                        return roundToHundreds(price);
-                    })
-                    .catch(error => {
-                        console.error(`Ошибка при получении товара с ID ${product.id}:`, error);
-                        return 0;
-                    })
-            );
-
-            const costs = await Promise.all(productRequests);
-            const summ = costs.reduce((acc, cost) => acc + cost, 0);
-            setTotal(summ);
-            // Сохраняем оригинальную сумму для проверки бесплатной доставки
-            if (summ >= 3000) {
-                setOriginalTotalBeforeDiscount(summ);
-            }
-        } catch (error) {
-            console.error('Ошибка при загрузке данных:', error);
-        }
-    };
-
-    const clearBag = async () => {
+    const clearBag = useCallback(async () => {
         const token = localStorage.getItem('token');
         
         // Очищаем локальную корзину всегда
@@ -151,9 +166,9 @@ export default function Bag() {
             duration: 3000 
         });
         setOrder(false);
-    }
+    }, [promocode, startSetCart, onClose, toast]);
 
-    function buy() {
+    const buy = useCallback(() => {
         if (!user) {
             return toast({
                 position: 'bottom-right',
@@ -209,7 +224,7 @@ export default function Bag() {
                 console.error(e);
                 setIsLoading(false);
             });
-    }
+    }, [user, total, discount, deliveryCost, originalTotalBeforeDiscount, selectedPVZ, deliveryDate, promocode, cart, dataUser, router, toast]);
 
     const [selectedPVZ, setSelectedPVZ] = useState(null);
 
@@ -222,7 +237,7 @@ export default function Bag() {
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <p className={styles.rowHeaderTitle}>КОРЗИНА</p>
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
-                    {cart.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
+                    {cartLength > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
                 </div>
                 <BagProducts
                     load={load}
@@ -232,7 +247,7 @@ export default function Bag() {
                     setPromocode={setPromocode}
                     setDiscount={setDiscount}
                 />
-                {cart.length === 0 && <div className={styles.emptyBag}>
+                {cartLength === 0 && <div className={styles.emptyBag}>
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
                 </div>}
@@ -280,7 +295,7 @@ export default function Bag() {
                 <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
             </>}
         </div>
-        <Modal onClose={async () => { setSuccessModal(false); }} isOpen={successModal} autoFocus={false} isCentered size='xl' >
+        <Modal onClose={handleSuccessModalClose} isOpen={successModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent p={0} bg='none' boxShadow='none' >
                 <ModalBody p={0}>
@@ -325,7 +340,7 @@ export default function Bag() {
                 </ModalBody>
             </ModalContent>
         </Modal>
-        <Modal onClose={() => setErrorModal(false)} isOpen={errorModal} autoFocus={false} isCentered size='xl' >
+        <Modal onClose={handleErrorModalClose} isOpen={errorModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent bg='none' boxShadow='none' >
                 <ModalBody p={0}>

@@ -193,16 +193,20 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
         }
     }, [PAGEN_1, router.query.page, router.asPath]);
 
+    // Мемоизируем массивы для сравнения без JSON.stringify
+    const stateSalesString = useMemo(() => stateSales.join(','), [stateSales]);
+    const selectedColorsString = useMemo(() => selectedColors.join(','), [selectedColors]);
+
     useEffect(() => {
-        const currentFilters = { stateSortItems, stateType, stateSales, text, selectedColors, priceMin, priceMax };
+        const currentFilters = { stateSortItems, stateType, stateSales: stateSalesString, text, selectedColors: selectedColorsString, priceMin, priceMax };
         const prevFiltersValue = prevFilters.current;
         
         const filtersChanged = 
             prevFiltersValue.stateSortItems !== stateSortItems ||
             prevFiltersValue.stateType !== stateType ||
-            JSON.stringify(prevFiltersValue.stateSales) !== JSON.stringify(stateSales) ||
+            prevFiltersValue.stateSales !== stateSalesString ||
             prevFiltersValue.text !== text ||
-            JSON.stringify(prevFiltersValue.selectedColors) !== JSON.stringify(selectedColors) ||
+            prevFiltersValue.selectedColors !== selectedColorsString ||
             prevFiltersValue.priceMin !== priceMin ||
             prevFiltersValue.priceMax !== priceMax;
         
@@ -230,7 +234,7 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
             
             prevFilters.current = currentFilters;
         }
-    }, [stateSortItems, stateType, stateSales, selectedColors, priceMin, priceMax, text, router]);
+    }, [stateSortItems, stateType, stateSalesString, selectedColorsString, priceMin, priceMax, text, router]);
 
     // читаем фильтры из query при прямом входе/обновлении
     useEffect(() => {
@@ -353,64 +357,101 @@ export default function Catalog({ initialPage = 1, initialProducts, h1Title, cat
         };
     }, [router, text, product]);
 
+    // Мемоизируем вычисления для поиска - подготавливаем данные заранее
+    const productsWithSearchData = useMemo(() => {
+        if (!text || text.length === 0) return null;
+        return String(text).toLowerCase().trim();
+    }, [text]);
+
+    // Мемоизируем фильтры для оптимизации
+    const filterMinPrice = useMemo(() => {
+        const min = Number(String(priceMin || '').replace(/[^\d]/g, ''));
+        return Number.isFinite(min) && min > 0 ? min : null;
+    }, [priceMin]);
+
+    const filterMaxPrice = useMemo(() => {
+        const max = Number(String(priceMax || '').replace(/[^\d]/g, ''));
+        return Number.isFinite(max) && max > 0 ? max : null;
+    }, [priceMax]);
+
+    const typeMap = useMemo(() => ({
+        'Кольца': 'ring',
+        'Серьги': 'earrings',
+        'Браслеты': 'bracelets',
+        'Колье': 'necklace'
+    }), []);
+
+    const filterType = useMemo(() => {
+        return stateType in typeMap ? typeMap[stateType] : null;
+    }, [stateType, typeMap]);
+
+    const hasNewSales = useMemo(() => stateSales.includes('Новинки'), [stateSales]);
+    const hasPopularSales = useMemo(() => stateSales.includes('Популярное'), [stateSales]);
+
     const filteredData = useMemo(() => {
+        if (!products || products.length === 0) return [];
+        
         let d = [...products];
 
-        if (stateSortItems === 'По возрастанию цены') {
-            d.sort((a, b) => a.cost - b.cost);
-        } else if (stateSortItems === 'По убыванию цены') {
-            d.sort((a, b) => b.cost - a.cost);
+        // Применяем фильтры в оптимальном порядке (сначала самые селективные)
+        
+        // Фильтр по типу (самый селективный)
+        if (filterType) {
+            d = d.filter(x => x.type === filterType);
         }
 
-        // Фильтр для новинок (работает на всех страницах каталога)
-        if (stateSales.includes('Новинки')) {
-            d = d.filter(x => x.additionally.includes('new'));
-        }
-
-        if (stateSales.includes('Популярное')) {
-            d = d.filter(x => x.additionally.includes('popular'));
-        };
-
-        if (text && text.length > 0) {
-            const normalizedQuery = String(text).toLowerCase().trim();
-            d = d.filter(x => {
-                const combined = `${(PRODUCT_TYPES[x?.type] || '').toLowerCase()} ${(x?.name || '').toLowerCase()}`.trim();
-                const article = (x?.article || '').toLowerCase();
-                return combined.includes(normalizedQuery) || article.includes(normalizedQuery);
-            });
-        };
-
-        const typeMap = { 'Кольца': 'ring', 'Серьги': 'earrings', 'Браслеты': 'bracelets', 'Колье': 'necklace' };
-
-        if (stateType in typeMap) { d = d.filter(x => x.type === typeMap[stateType]); };
-
-        // Новый фильтр по цветам (из карточек)
-        if (Array.isArray(selectedColors) && selectedColors.length > 0) {
-            d = d.filter((p) => selectedColors.includes(String(p?.color || '').trim()));
-        }
-
-        // Фильтр по цене (по фактической цене: saleCost если есть, иначе cost)
-        const min = Number(String(priceMin || '').replace(/[^\d]/g, ''));
-        const max = Number(String(priceMax || '').replace(/[^\d]/g, ''));
-        if (Number.isFinite(min) && min > 0) {
-            d = d.filter((p) => getEffectivePrice(p) >= min);
-        }
-        if (Number.isFinite(max) && max > 0) {
-            d = d.filter((p) => getEffectivePrice(p) <= max);
-        }
-
-        // Фильтр для подкатегорий на основе поля subcategories
+        // Фильтр для подкатегорий
         if (currentSubcategory) {
             d = d.filter(product => {
-                // Проверяем, что у товара есть подкатегории и текущая подкатегория входит в них
                 return product.subcategories && 
                        Array.isArray(product.subcategories) && 
                        product.subcategories.includes(currentSubcategory);
             });
         }
 
+        // Фильтр для новинок
+        if (hasNewSales) {
+            d = d.filter(x => x.additionally?.includes('new'));
+        }
+
+        // Фильтр для популярного
+        if (hasPopularSales) {
+            d = d.filter(x => x.additionally?.includes('popular'));
+        }
+
+        // Фильтр по цветам
+        if (Array.isArray(selectedColors) && selectedColors.length > 0) {
+            d = d.filter((p) => selectedColors.includes(String(p?.color || '').trim()));
+        }
+
+        // Фильтр по цене (мемоизированные значения)
+        if (filterMinPrice !== null || filterMaxPrice !== null) {
+            d = d.filter((p) => {
+                const price = getEffectivePrice(p);
+                if (filterMinPrice !== null && price < filterMinPrice) return false;
+                if (filterMaxPrice !== null && price > filterMaxPrice) return false;
+                return true;
+            });
+        }
+
+        // Поиск по тексту (в конце, чтобы меньше данных обрабатывать)
+        if (productsWithSearchData) {
+            d = d.filter(x => {
+                const combined = `${(PRODUCT_TYPES[x?.type] || '').toLowerCase()} ${(x?.name || '').toLowerCase()}`.trim();
+                const article = (x?.article || '').toLowerCase();
+                return combined.includes(productsWithSearchData) || article.includes(productsWithSearchData);
+            });
+        }
+
+        // Сортировка в конце (после всех фильтров)
+        if (stateSortItems === 'По возрастанию цены') {
+            d.sort((a, b) => a.cost - b.cost);
+        } else if (stateSortItems === 'По убыванию цены') {
+            d.sort((a, b) => b.cost - a.cost);
+        }
+
         return d;
-    }, [products, stateSortItems, stateType, stateSales, selectedColors, priceMin, priceMax, text, currentSubcategory, getEffectivePrice]);
+    }, [products, stateSortItems, filterType, currentSubcategory, hasNewSales, hasPopularSales, selectedColors, filterMinPrice, filterMaxPrice, productsWithSearchData, getEffectivePrice]);
 
     // Мемоизируем текущие товары для пагинации
     const currentItems = useMemo(() => {

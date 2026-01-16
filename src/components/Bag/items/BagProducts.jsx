@@ -2,7 +2,7 @@ import { useCart } from "@/contexts/CartContext";
 import styles from "../styles.module.css";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDisclosure, useToast, Modal, ModalBody, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { formatNumber, roundToHundreds } from "@/lib/Formatting";
 import { useProducts } from "@/contexts/ProductsContext";
@@ -13,20 +13,20 @@ export default function BagProducts({ load, total, setTotal, promocode, setPromo
 
     const { cart } = useCart();
 
-    // Отладка
-    const itemCounts = cart.reduce((acc, item) => {
-        const key = JSON.stringify({ id: item.id, size: item.size, color: item.color, article: item.article });
-        acc[key] = (acc[key] || 0) + 1;
-        return acc;
-    }, {});
+    // Мемоизируем подсчет товаров для оптимизации
+    const itemCounts = useMemo(() => {
+        return cart.reduce((acc, item) => {
+            const key = JSON.stringify({ id: item.id, size: item.size, color: item.color, article: item.article });
+            acc[key] = (acc[key] || 0) + 1;
+            return acc;
+        }, {});
+    }, [cart]);
 
-    if (cart.length === 0) {
-        return null;
-    }
+    const entries = useMemo(() => {
+        return Object.entries(itemCounts);
+    }, [itemCounts]);
 
-    const entries = Object.entries(itemCounts);
-    
-    if (entries.length === 0) {
+    if (cart.length === 0 || entries.length === 0) {
         return null;
     }
 
