@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../../apiConfig";
 import { useEffect, useState } from "react";
 import { useDisclosure, useToast, Modal, ModalBody, ModalContent, ModalOverlay } from "@chakra-ui/react";
-import { formatNumber } from "@/lib/Formatting";
+import { formatNumber, roundToHundreds } from "@/lib/Formatting";
 import { useProducts } from "@/contexts/ProductsContext";
 import { PRODUCT_TYPES } from "@/constants/items";
 import { AuthModal } from "@/components/Header/items/AuthModal";
@@ -95,11 +95,13 @@ function ProductItem({ item, count, load, promocode, setPromocode, setDiscount, 
         if (!promocode) return true; // Если промокод не применен, действие разрешено
 
         // Получаем цену товара, если данные еще не загружены - делаем запрос
-        let itemPrice = Number(data?.saleCost || data?.cost || 0);
+        // Используем округленную цену, как в каталоге
+        let itemPrice = roundToHundreds(Number(data?.saleCost || data?.cost || 0));
         if (!itemPrice) {
             try {
                 const response = await axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id });
-                itemPrice = Number(response.data.saleCost || response.data.cost || 0);
+                const price = Number(response.data.saleCost || response.data.cost || 0);
+                itemPrice = roundToHundreds(price);
             } catch (error) {
                 console.error("Ошибка при получении цены товара:", error);
                 return true; // Если не удалось получить цену, разрешаем действие
@@ -127,17 +129,14 @@ function ProductItem({ item, count, load, promocode, setPromocode, setDiscount, 
     };
 
     const handleDeleteClick = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            onOpen();
-            return;
-        }
-
-        const willBeValid = await checkPromocodeAfterAction('delete');
-        if (!willBeValid) {
-            setPendingAction('delete');
-            onWarningOpen();
-            return;
+        // Проверяем промокод перед удалением (работает и без авторизации)
+        if (promocode) {
+            const willBeValid = await checkPromocodeAfterAction('delete');
+            if (!willBeValid) {
+                setPendingAction('delete');
+                onWarningOpen();
+                return;
+            }
         }
 
         await executeDelete();
@@ -146,17 +145,42 @@ function ProductItem({ item, count, load, promocode, setPromocode, setDiscount, 
     const executeDelete = async () => {
         const token = localStorage.getItem('token');
         try {
-            removeFromCart(item.id, 'all');
+            // Удаляем из локальной корзины с учетом всех параметров
+            removeFromCart(item.id, 'all', item.size, item.color, item.article);
 
-            const url = `${API_BASE_URL}deleteProductFromBag`;
-            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                Authorization: `Bearer ${token}`
-            });
+            // Отправляем на сервер только если пользователь авторизован
+            if (token) {
+                try {
+                    const url = `${API_BASE_URL}deleteProductFromBag`;
+                    await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                        Authorization: `Bearer ${token}`
+                    });
+                } catch (serverError) {
+                    // Если ошибка на сервере, но товар уже удален из локальной корзины,
+                    // просто логируем ошибку, но не прерываем выполнение
+                    console.error("Ошибка при синхронизации с сервером:", serverError.message || serverError);
+                }
+            }
 
-            // Очищаем промокод, если он был применен
+            // Проверяем, остался ли промокод валидным после удаления товара
             if (promocode) {
-                setPromocode(null);
-                setDiscount(0);
+                // Пересчитываем сумму после удаления товара
+                const itemCount = cart.filter(p => 
+                    p.id === item.id && 
+                    p.size === item.size && 
+                    p.color === item.color && 
+                    p.article === item.article
+                ).length;
+                const itemPrice = roundToHundreds(Number(data?.saleCost || data?.cost || 0));
+                const newTotal = (Number(total) || 0) - (itemPrice * itemCount);
+                const availableMin = Number(promocode.available) || 0;
+                
+                // Если сумма стала меньше минимальной для промокода - очищаем его
+                if (availableMin > 0 && newTotal < availableMin) {
+                    setPromocode(null);
+                    setDiscount(0);
+                }
+                // Если промокод остался валидным, оставляем его как есть
             }
 
             toast({
@@ -167,6 +191,7 @@ function ProductItem({ item, count, load, promocode, setPromocode, setDiscount, 
             
             // load() будет вызван автоматически через useEffect при изменении cart.length или promocode
         } catch (error) {
+            // Эта ошибка может возникнуть только при проблемах с локальной корзиной
             console.error("Ошибка при удалении продукта:", error.message || error);
         }
     };
@@ -177,36 +202,40 @@ function ProductItem({ item, count, load, promocode, setPromocode, setDiscount, 
 
     const plusProduct = async () => {
         const token = localStorage.getItem('token');
-        if (!token) {
-            onOpen();
-            return;
-        }
         try {
+            // Добавляем в локальную корзину
             addToCart({ id: item.id, size: item.size, color: item.color, article: item.article });
 
-            const url = `${API_BASE_URL}plusProductToBag`;
-            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                Authorization: `Bearer ${token}`
-            });
+            // Отправляем на сервер только если пользователь авторизован
+            if (token) {
+                try {
+                    const url = `${API_BASE_URL}plusProductToBag`;
+                    await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                        Authorization: `Bearer ${token}`
+                    });
+                } catch (serverError) {
+                    // Если ошибка на сервере, но товар уже добавлен в локальную корзину,
+                    // просто логируем ошибку, но не прерываем выполнение
+                    console.error("Ошибка при синхронизации с сервером:", serverError.message || serverError);
+                }
+            }
 
-            load();
+            // load() будет вызван автоматически через useEffect при изменении cart.length
         } catch (error) {
+            // Эта ошибка может возникнуть только при проблемах с локальной корзиной
             console.error("Ошибка при увеличении количества продукта:", error.message || error);
         }
     };
 
     const handleMinusClick = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            onOpen();
-            return;
-        }
-
-        const willBeValid = await checkPromocodeAfterAction('minus');
-        if (!willBeValid) {
-            setPendingAction('minus');
-            onWarningOpen();
-            return;
+        // Проверяем промокод перед уменьшением (работает и без авторизации)
+        if (promocode) {
+            const willBeValid = await checkPromocodeAfterAction('minus');
+            if (!willBeValid) {
+                setPendingAction('minus');
+                onWarningOpen();
+                return;
+            }
         }
 
         await executeMinus();
@@ -215,21 +244,41 @@ function ProductItem({ item, count, load, promocode, setPromocode, setDiscount, 
     const executeMinus = async () => {
         const token = localStorage.getItem('token');
         try {
-            removeFromCart(item.id, 'one');
+            // Удаляем из локальной корзины с учетом всех параметров
+            removeFromCart(item.id, 'one', item.size, item.color, item.article);
 
-            const url = `${API_BASE_URL}minusProductFromBag`;
-            await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
-                Authorization: `Bearer ${token}`
-            });
+            // Отправляем на сервер только если пользователь авторизован
+            if (token) {
+                try {
+                    const url = `${API_BASE_URL}minusProductFromBag`;
+                    await makePostRequest(url, { id: item.id, size: item.size, color: item.color, article: item.article }, {
+                        Authorization: `Bearer ${token}`
+                    });
+                } catch (serverError) {
+                    // Если ошибка на сервере, но товар уже удален из локальной корзины,
+                    // просто логируем ошибку, но не прерываем выполнение
+                    console.error("Ошибка при синхронизации с сервером:", serverError.message || serverError);
+                }
+            }
 
-            // Очищаем промокод, если он был применен
+            // Проверяем, остался ли промокод валидным после уменьшения количества
             if (promocode) {
-                setPromocode(null);
-                setDiscount(0);
+                // Пересчитываем сумму после уменьшения количества
+                const itemPrice = roundToHundreds(Number(data?.saleCost || data?.cost || 0));
+                const newTotal = (Number(total) || 0) - itemPrice;
+                const availableMin = Number(promocode.available) || 0;
+                
+                // Если сумма стала меньше минимальной для промокода - очищаем его
+                if (availableMin > 0 && newTotal < availableMin) {
+                    setPromocode(null);
+                    setDiscount(0);
+                }
+                // Если промокод остался валидным, оставляем его как есть
             }
 
             // load() будет вызван автоматически через useEffect при изменении cart.length или promocode
         } catch (error) {
+            // Эта ошибка может возникнуть только при проблемах с локальной корзиной
             console.error("Ошибка при уменьшении количества продукта:", error.message || error);
         }
     };

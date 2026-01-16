@@ -5,25 +5,40 @@ import { formatNumber } from "@/lib/Formatting";
 import { PRODUCT_TYPES } from "@/constants/items";
 import { buildProductSlug } from "@/lib/seo";
 import { useCart } from "@/contexts/CartContext";
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { ProductModal } from "@/components/Product/Product";
 import { useRouter } from "next/router";
+import axios from "axios";
+import { API_BASE_URL } from "../../../../apiConfig";
 
-export default function ProductItem({ product }) {
+function ProductItem({ product }) {
     const router = useRouter();
     const slug = buildProductSlug(product);
     const { addToCart } = useCart();
     const [isOpenModal, setIsOpenModal] = useState(false);
 
-    const buy = async () => {
-        addToCart({
+    const buy = useCallback(async () => {
+        const cartItem = {
             id: product._id,
             size: product.type === 'ring' || product.type === 'bracelets' ? product.sizes[0] : product.sizes[0],
             color: product.color,
             article: product?.article,
-        });
+        };
+        
+        addToCart(cartItem);
         setIsOpenModal(true);
-    };
+
+        // Отправляем на сервер, если пользователь авторизован
+        if (localStorage.getItem('token')) {
+            try {
+                await axios.post(`${API_BASE_URL}addProductToBag`, cartItem, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
+            } catch (error) {
+                console.error("Ошибка при добавлении товара в корзину на сервере:", error);
+            }
+        }
+    }, [product._id, product.type, product.sizes, product.color, product.article, addToCart]);
 
     return (
         <div className={styles.sliderItem}>
@@ -44,3 +59,12 @@ export default function ProductItem({ product }) {
         </div>
     );
 }
+
+// Мемоизируем компонент для предотвращения лишних перерисовок
+export default memo(ProductItem, (prevProps, nextProps) => {
+    // Перерисовываем только если изменился ID товара или его ключевые свойства
+    return prevProps.product._id === nextProps.product._id &&
+           prevProps.product.saleCost === nextProps.product.saleCost &&
+           prevProps.product.cost === nextProps.product.cost &&
+           prevProps.product.name === nextProps.product.name;
+});

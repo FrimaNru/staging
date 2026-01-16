@@ -3,6 +3,7 @@ export function capitalizeFirstLetter(text) {
 };
 
 // Округление до сотен: до 5 (0-4) - вниз, 5 и выше (5-9) - вверх
+// Используется для расчетов, чтобы цены в корзине совпадали с ценами в каталоге
 export function roundToHundreds(number) {
     number = Number(number);
     if (!Number.isFinite(number) || number <= 0) return number;
@@ -18,6 +19,12 @@ export function roundToHundreds(number) {
     } else {
         return hundreds + 100; // Округляем вверх
     }
+}
+
+// Получить округленную цену товара (как в каталоге)
+export function getRoundedPrice(product) {
+    const price = Number(product?.saleCost || product?.cost || 0);
+    return roundToHundreds(price);
 }
 
 export function formatNumber(number) {
