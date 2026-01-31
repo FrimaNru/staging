@@ -1032,6 +1032,9 @@
         margin-top: 10px;
         top: 0;
         border: none;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
     }
 
     .inputPanelHeader {
