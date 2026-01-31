@@ -8,6 +8,7 @@ import { formatNumber, roundToHundreds } from "@/lib/Formatting";
 import { useProducts } from "@/contexts/ProductsContext";
 import { PRODUCT_TYPES } from "@/constants/items";
 import { AuthModal } from "@/components/Header/items/AuthModal";
+import ReviewsSummary from "@/components/Reviews/ReviewsSummary";
 
 export default function BagProducts({ load, total, setTotal, promocode, setPromocode, setDiscount }) {
 
@@ -304,6 +305,7 @@ function ProductItem({ item, count, load, promocode, setPromocode, setDiscount, 
                 <div className={styles.itemNameLine}>
                     <div className={styles.itemNameColumn}>
                         <p className={styles.itemName}>{data.type && PRODUCT_TYPES[data.type]} {data?.name?.length > 0 && data?.name}</p>
+                        {item.id && <ReviewsSummary productId={item.id} />}
                         <p className={styles.itemNameStat}>Артикул: {item.article}</p>
                         <p className={styles.itemNameStat}>Цвет: {item.color}</p>
                         {data.type !== "earrings" && <p className={styles.itemNameStat}>Размер: {item.size}</p>}

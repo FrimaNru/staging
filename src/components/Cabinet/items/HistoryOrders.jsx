@@ -7,6 +7,8 @@ import Link from "next/link";
 import { formatNumber } from "@/lib/Formatting";
 import { formatDate } from "@/lib/Formatting";
 import { buildProductSlug } from "@/lib/seo";
+import { Modal, ModalOverlay, ModalContent, ModalBody } from "@chakra-ui/react";
+import LeaveReviewForm from "@/components/Reviews/LeaveReviewForm";
 
 export default function HistoryOrders() {
 
@@ -52,8 +54,6 @@ export default function HistoryOrders() {
 
 
 
-                        console.log(itemCounts)
-
                         return (<div key={i} className={styles.columnOrder}>
                             <div className={styles.titleColumn}>
                                 <p className={styles.itemTitle}>ЗАКАЗ № {x.id}</p>
@@ -66,7 +66,7 @@ export default function HistoryOrders() {
                             <div className={styles.lilColumnOrder}>
                                 {Object.entries(itemCounts).map(([item, count], i) => (
                                     <div key={i} className={styles.itemColumn}>
-                                        <ProductItemOrderHistory item={JSON.parse(item)} count={count} />
+                                        <ProductItemOrderHistory item={JSON.parse(item)} count={count} orderId={x.id} onReviewSuccess={load} />
                                         <hr className={styles.hr} />
                                     </div>
                                 ))}
@@ -144,37 +144,88 @@ function ProductItemHistory({ item }) {
     return <Link href={`/product/${buildProductSlug(data)}`}><img src={data?.cover?.length > 0 && data?.cover[activeCount]} className={styles.itemCover} /></Link>
 };
 
-function ProductItemOrderHistory({ item, count }) {
+function ProductItemOrderHistory({ item, count, orderId, onReviewSuccess }) {
 
     const [data, setData] = useState({});
     const [activeCount, setActiveCount] = useState(0);
+    const [hasReviewed, setHasReviewed] = useState(null);
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
         loadNow();
     }, []);
 
+    useEffect(() => {
+        if (item?.id && localStorage.getItem('token')) {
+            fetch(`/api/reviews/check?productId=${item.id}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            })
+                .then((r) => r.json())
+                .then((d) => setHasReviewed(d.hasReviewed))
+                .catch(() => setHasReviewed(false));
+        } else {
+            setHasReviewed(false);
+        }
+    }, [item?.id]);
+
     function loadNow() {
         axios.post(`${API_BASE_URL}getOneProduct`, { id: item.id })
             .then((res) => {
-                const index = res.data.articles.findIndex(x => x === item.article);
-                setActiveCount(index);
+                const index = res.data.articles?.findIndex(x => x === item.article) ?? 0;
+                setActiveCount(index >= 0 ? index : 0);
                 setData(res.data);
             })
             .catch((e) => console.log(e));
     };
 
-    if (!data) return;
+    if (!data) return null;
 
-    return <div className={styles.itemHistory} onClick={() => router.push(`/product/${buildProductSlug(data)}`)} >
-        <div className={styles.itemRowHistory}>
-            <img src={data?.cover?.length > 0 && data.cover[activeCount]} className={styles.itemCoverHistory} />
-            <div className={styles.itemTextColumnHistory}>
-                <p className={styles.itemNameHistory}>{data?.name?.length > 0 && data.name[activeCount]?.toUpperCase()}</p>
-                <div className={styles.itemCountNumberHistory}>{count} шт</div>
-                {data.cost && <p className={styles.itemCostHistoryMobile} >{formatNumber(data?.cost?.length > 0 && data?.cost[activeCount])} руб.</p>}
+    const handleReviewClick = (e) => {
+        e.stopPropagation();
+        setReviewModalOpen(true);
+    };
+
+    return <>
+        <div className={styles.itemHistory} onClick={() => router.push(`/product/${buildProductSlug(data)}`)} >
+            <div className={styles.itemRowHistory}>
+                <img src={data?.cover?.length > 0 ? data.cover[activeCount] : data?.cover} className={styles.itemCoverHistory} alt="" />
+                <div className={styles.itemTextColumnHistory}>
+                    <p className={styles.itemNameHistory}>{data?.name?.length > 0 ? data.name[activeCount]?.toUpperCase() : data?.name}</p>
+                    <div className={styles.itemCountNumberHistory}>{count} шт</div>
+                    {hasReviewed === false && (
+                        <button
+                            type="button"
+                            className={styles.reviewButton}
+                            onClick={handleReviewClick}
+                        >
+                            Оставить отзыв
+                        </button>
+                    )}
+                    {hasReviewed === true && <span className={styles.reviewDone}>Отзыв оставлен</span>}
+                    {data.cost && <p className={styles.itemCostHistoryMobile} >{formatNumber(data?.cost?.length > 0 ? data?.cost[activeCount] : data?.cost)} руб.</p>}
+                </div>
             </div>
+            {data.cost && <p className={styles.itemCostHistory} >{formatNumber(data?.cost?.length > 0 ? data?.cost[activeCount] : data?.cost)} руб.</p>}
         </div>
-        {data.cost && <p className={styles.itemCostHistory} >{formatNumber(data?.cost?.length > 0 && data?.cost[activeCount])} руб.</p>}
-    </div>
+        <Modal isOpen={reviewModalOpen} onClose={() => setReviewModalOpen(false)} size="md" isCentered>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalBody pt={6} pb={6}>
+                    <p className={styles.reviewModalTitle}>Оставить отзыв</p>
+                    <p className={styles.reviewModalProduct}>{data?.name || 'Товар'}</p>
+                    <LeaveReviewForm
+                        productId={item.id}
+                        productName={data?.name}
+                        orderId={orderId}
+                        onSuccess={() => {
+                            setHasReviewed(true);
+                            setReviewModalOpen(false);
+                            onReviewSuccess?.();
+                        }}
+                    />
+                </ModalBody>
+            </ModalContent>
+        </Modal>
+    </>
 };
