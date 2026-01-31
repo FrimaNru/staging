@@ -85,17 +85,6 @@ export default function Product({ product }) {
                         <div className={styles.infoButtonColumn}>
                             <p className={styles.infoCost}>{formatNumber(Number(product.saleCost && product.saleCost > 0 ? product.saleCost : product.cost))} руб.</p>
                             <button className={styles.infoButton} onClick={buy}>КУПИТЬ</button>
-                            {product.yandexMarketUrl && product.yandexMarketUrl.trim() && (
-                                <a 
-                                    href={product.yandexMarketUrl} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className={styles.infoButtonYandex}
-                                >
-                                    <img src="/yandexlogo.svg" alt="Яндекс Маркет" className={styles.yandexMarketLogo} />
-                                    Купить через Яндекс Маркет
-                                </a>
-                            )}
                         </div>
                     </div>
                 </div>
