@@ -13,7 +13,8 @@ export function SideMenu() {
         { text: 'Склад', link: 'warehouse', icon: '/assets/icons/warehouse.svg' },
         { text: 'Баннеры', link: 'banners', icon: '/assets/icons/banners.svg' },
         { text: 'Рассылка', link: 'messages', icon: '/assets/icons/messages.svg' },
-        { text: 'Промокоды', link: 'promocodes', icon: '/assets/icons/promo1.svg' }
+        { text: 'Промокоды', link: 'promocodes', icon: '/assets/icons/promo1.svg' },
+        { text: 'Отзывы', link: 'reviews', icon: '/star.svg' }
     ];
 
     return <div className={styles.sideMenu}>

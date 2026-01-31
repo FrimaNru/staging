@@ -1,6 +1,7 @@
 import { dataCharacteristic } from "@/constants/constants.text";
 import styles from "@/styles/Product/Product.module.css";
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from "@chakra-ui/react";
+import ProductReviews from "@/components/Reviews/ProductReviews";
 
 export default function CharasteristicBlock({ product, sizeOfProduct, colorOfProduct }) {
     const characteristicsHtml =
@@ -39,6 +40,28 @@ export default function CharasteristicBlock({ product, sizeOfProduct, colorOfPro
                     </>
                 )}
             </AccordionItem>)}
+            <AccordionItem border='none' style={{ borderBottom: 'solid 1px #140702' }}>
+                {({ isExpanded }) => (
+                    <>
+                        <h2>
+                            <AccordionButton _hover={{}} p={0}>
+                                <div className={styles.accordionButton}>
+                                    <div className={styles.accordionButtonTitle} data-noindex="true">ОТЗЫВЫ</div>
+                                    {isExpanded ? <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 11.5L11 1.5L1 11.5" stroke="#140702" strokeLinecap="round" />
+                                    </svg>
+                                        : <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 0.5L11 10.5L21 0.5" stroke="#140702" strokeLinecap="round" />
+                                        </svg>}
+                                </div>
+                            </AccordionButton>
+                        </h2>
+                        <AccordionPanel p={0}>
+                            {product?._id && <ProductReviews productId={product._id} />}
+                        </AccordionPanel>
+                    </>
+                )}
+            </AccordionItem>
         </Accordion>
     </div>
 };

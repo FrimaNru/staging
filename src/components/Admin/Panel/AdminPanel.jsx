@@ -15,6 +15,7 @@ import AdminUser from "./tabs/AdminUsers/AdminUser/AdminUser";
 import AdminMessages from "./tabs/AdminMessages/AdminMessages";
 import AdminWarehouse from "./tabs/AdminWarehouse/AdminWarehouse";
 import AdminPromocodes from "./tabs/AdminPromocodes/AdminPromocodes";
+import AdminReviews from "./tabs/AdminReviews/AdminReviews";
 
 export default function AdminPanel() {
 
@@ -54,6 +55,8 @@ export default function AdminPanel() {
                 return <AdminWarehouse />
             case 'promocodes':
                 return <AdminPromocodes />
+            case 'reviews':
+                return <AdminReviews />
             default:
                 return <AdminDashboard />;
         }

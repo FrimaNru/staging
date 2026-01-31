@@ -87,6 +87,9 @@ web_modules/
 .next
 out
 
+# Local reviews data
+data/
+
 # Nuxt.js build / generate output
 .nuxt
 dist
