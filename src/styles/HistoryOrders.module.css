@@ -281,6 +281,45 @@
     width: 22px;
 }
 
+.reviewButton {
+    margin-top: 8px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    background: #FDEDBF;
+    color: #140702;
+    font-family: 'Dela Gothic One', sans-serif;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: max-content;
+}
+
+.reviewButton:hover {
+    background: #C39748;
+}
+
+.reviewDone {
+    margin-top: 8px;
+    color: #646464;
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 13px;
+}
+
+.reviewModalTitle {
+    color: #140702;
+    font-family: 'Dela Gothic One', sans-serif;
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.reviewModalProduct {
+    color: #646464;
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
 @media (max-width: 475px) {
     .main {
         padding-top: 0px;

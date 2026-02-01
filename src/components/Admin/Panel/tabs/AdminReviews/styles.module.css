@@ -1,0 +1,201 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    background: var(--light);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: var(--box-sh-main);
+}
+
+.title {
+    color: #140702;
+    font-family: "Dela Gothic One";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+}
+
+.subtitleLine {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.filterLine {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filterLabel {
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 14px;
+    color: #140702;
+}
+
+.filterSelect {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 14px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tableHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 40px;
+    background: var(--lightgray);
+    padding: 0 16px;
+}
+
+.thProduct { width: 12%; font-size: 13px; }
+.thAuthor { width: 12%; font-size: 13px; }
+.thRating { width: 10%; font-size: 13px; }
+.thText { width: 28%; font-size: 13px; }
+.thStatus { width: 12%; font-size: 13px; }
+.thDate { width: 12%; font-size: 13px; }
+.thActions { width: 14%; font-size: 13px; }
+
+.tableContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tableRow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: solid 1px var(--bottomBorder);
+}
+
+.tdProduct, .tdAuthor, .tdRating, .tdText, .tdStatus, .tdDate, .tdActions {
+    font-size: 13px;
+    font-family: 'Tenor Sans', sans-serif;
+}
+
+.tdProduct { width: 12%; }
+.tdAuthor { width: 12%; }
+.tdRating { width: 10%; }
+.tdText { width: 28%; white-space: pre-wrap; word-break: break-word; max-height: 60px; overflow-y: auto; }
+.tdStatus { width: 12%; }
+.tdDate { width: 12%; }
+.tdActions { width: 14%; display: flex; gap: 6px; }
+
+.status_pending { color: #b8860b; }
+.status_approved { color: #228b22; }
+.status_rejected { color: #8b0000; }
+
+.actionBtn {
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #228b22;
+    background: #228b22;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.actionBtn:hover {
+    opacity: 0.9;
+}
+
+.actionBtnReject {
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #8b0000;
+    background: #8b0000;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.actionBtnReject:hover {
+    opacity: 0.9;
+}
+
+.actionBtnDelete {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #999;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.actionBtnDelete:hover {
+    background: #fee;
+}
+
+.noItems {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 50px;
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--light);
+}
+
+.modalRow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.modalLabel {
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 14px;
+    color: #140702;
+}
+
+.modalInput {
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 15px;
+}
+
+.modalInput:focus {
+    outline: none;
+    border-color: #C39748;
+}
+
+.modalTextarea {
+    min-height: 80px;
+    resize: vertical;
+}

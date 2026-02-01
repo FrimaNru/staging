@@ -37,6 +37,7 @@ export default function Bag() {
     const [discount, setDiscount] = useState(0);
     const [originalTotalBeforeDiscount, setOriginalTotalBeforeDiscount] = useState(0);
     const [isWidgetVisible, setIsWidgetVisible] = useState(false);
+    const [selectedPVZ, setSelectedPVZ] = useState(null);
     
     // Используем ref для предотвращения дублирующих запросов
     const isLoadingRef = useRef(false);
@@ -226,8 +227,6 @@ export default function Bag() {
             });
     }, [user, total, discount, deliveryCost, originalTotalBeforeDiscount, selectedPVZ, deliveryDate, promocode, cart, dataUser, router, toast]);
 
-    const [selectedPVZ, setSelectedPVZ] = useState(null);
-
     if (!cart) return;
 
     return <div className={styles.main}>
@@ -237,7 +236,7 @@ export default function Bag() {
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
                     <p className={styles.rowHeaderTitle}>КОРЗИНА</p>
                     <hr className={`${styles.hr} ${styles.hrMobile}`} />
-                    {cartLength > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
+                    {cart.length > 0 && <button className={styles.rowHeaderClear} onClick={onOpen}>Очистить корзину</button>}
                 </div>
                 <BagProducts
                     load={load}
@@ -247,7 +246,7 @@ export default function Bag() {
                     setPromocode={setPromocode}
                     setDiscount={setDiscount}
                 />
-                {cartLength === 0 && <div className={styles.emptyBag}>
+                {cart.length === 0 && <div className={styles.emptyBag}>
                     <p className={styles.emptyBagTitle}>К сожалению, ваша корзина пуста</p>
                     <button className={styles.emptyBagButton} onClick={() => router.push('/catalog')}>В КАТАЛОГ</button>
                 </div>}
@@ -295,7 +294,7 @@ export default function Bag() {
                 <button className={`${styles.orderButtonPay} ${isLoading && styles.loading}`} onClick={buy}>ОПЛАТИТЬ</button>
             </>}
         </div>
-        <Modal onClose={handleSuccessModalClose} isOpen={successModal} autoFocus={false} isCentered size='xl' >
+        <Modal onClose={() => setSuccessModal(false)} isOpen={successModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent p={0} bg='none' boxShadow='none' >
                 <ModalBody p={0}>
@@ -340,7 +339,7 @@ export default function Bag() {
                 </ModalBody>
             </ModalContent>
         </Modal>
-        <Modal onClose={handleErrorModalClose} isOpen={errorModal} autoFocus={false} isCentered size='xl' >
+        <Modal onClose={() => setErrorModal(false)} isOpen={errorModal} autoFocus={false} isCentered size='xl' >
             <ModalOverlay />
             <ModalContent bg='none' boxShadow='none' >
                 <ModalBody p={0}>
