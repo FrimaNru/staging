@@ -37,6 +37,7 @@ export default function Bag() {
     const [discount, setDiscount] = useState(0);
     const [originalTotalBeforeDiscount, setOriginalTotalBeforeDiscount] = useState(0);
     const [isWidgetVisible, setIsWidgetVisible] = useState(false);
+    const [selectedPVZ, setSelectedPVZ] = useState(null);
     
     // Используем ref для предотвращения дублирующих запросов
     const isLoadingRef = useRef(false);
@@ -226,9 +227,11 @@ export default function Bag() {
             });
     }, [user, total, discount, deliveryCost, originalTotalBeforeDiscount, selectedPVZ, deliveryDate, promocode, cart, dataUser, router, toast]);
 
-    const [selectedPVZ, setSelectedPVZ] = useState(null);
+    const handleSuccessModalClose = useCallback(() => setSuccessModal(false), []);
+    const handleErrorModalClose = useCallback(() => setErrorModal(false), []);
 
     if (!cart) return;
+    const cartLength = cart.length;
 
     return <div className={styles.main}>
         <div className={styles.mainRow}>
