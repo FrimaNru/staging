@@ -43,12 +43,12 @@ export default function StartBlock({ initialData }) {
         </div>
         <div className={styles.line}>
             <Link href="/catalog/bizhuteriya-pod-zoloto" className={styles.block}>
-                <img className={styles.blockImage} src="https://mialegria.storage.yandexcloud.net/1742404970040-eaa970a6-e157-498c-aa50-37cc07138a4b-IMG_1543.webp" alt="Бижутерия под золото" />
-                <p className={`${styles.blockText} ${styles.blockTextDark}`}>Бижутерия под золото</p>
+                <img className={styles.blockImage} src={data?.gold?.cover} alt={data?.gold?.title || 'Бижутерия под золото'} />
+                <p className={`${styles.blockText} ${data?.gold?.textColor === 'white' ? styles.blockTextLight : styles.blockTextDark}`}>{data?.gold?.title || 'Бижутерия под золото'}</p>
             </Link>
             <Link href="/catalog/bizhuteriya-pod-serebro" className={styles.block2}>
-                <img className={styles.blockImage2} src="https://mialegria.storage.yandexcloud.net/1742403430451-e60c61a1-1169-4e10-8d9c-ded52cf84696-IMG_1859.webp" alt="Бижутерия под серебро" />
-                <p className={`${styles.blockText} ${styles.blockTextDark}`}>Бижутерия под серебро</p>
+                <img className={styles.blockImage2} src={data?.silver?.cover} alt={data?.silver?.title || 'Бижутерия под серебро'} />
+                <p className={`${styles.blockText} ${data?.silver?.textColor === 'white' ? styles.blockTextLight : styles.blockTextDark}`}>{data?.silver?.title || 'Бижутерия под серебро'}</p>
             </Link>
         </div>
     </div >

@@ -89,6 +89,15 @@ p {
   box-sizing: border-box;
 }
 
+/* Минимум 16px для полей ввода на мобильных — иначе iOS Safari приближает экран при фокусе */
+@media (max-width: 768px) {
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em) !important;
+  }
+}
+
 @media (max-width: 475px) {
   .toast {
     padding: 9.5px 20px;

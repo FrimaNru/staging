@@ -379,15 +379,43 @@ function DrawerBlock({ isOpenDrawer, setIsOpenDrawer, pathname }) {
 };
 
 function SearchDrawerBlock({ isSearchOpen, setIsSearchOpen, products, searchQuery, setSearchQuery }) {
+    const router = useRouter();
+    const touchedRef = useRef(false);
     // Используем useSearch с внешним searchQuery для синхронизации
     const { searchResults, isLoading: isSearchLoading } = useSearch(products, 300, 10, searchQuery, setSearchQuery);
 
-    return <Drawer isOpen={isSearchOpen} placement='top' autoFocus={false} onClose={() => {
+    const handleNavigate = (href) => {
         setIsSearchOpen(false);
         setSearchQuery('');
-    }} >
+        router.push(href);
+    };
+
+    const makeResultHandler = (href) => ({
+        onClick(e) {
+            if (touchedRef.current) {
+                touchedRef.current = false;
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            handleNavigate(href);
+        },
+        onTouchEnd(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            touchedRef.current = true;
+            handleNavigate(href);
+        }
+    });
+
+    const closeSearch = () => {
+        setIsSearchOpen(false);
+        setSearchQuery('');
+    };
+
+    return <Drawer isOpen={isSearchOpen} placement='top' autoFocus={false} closeOnOverlayClick={false} onClose={closeSearch} >
         <DrawerOverlay />
-        <DrawerContent bg='white'>
+        <DrawerContent bg='white' onClick={(e) => e.stopPropagation()} style={{ touchAction: 'manipulation' }}>
             <div className={styles.searchBlockDrawer}>
                 <div className={styles.searchBlockDrawerHeader} >
                     <input 
@@ -396,7 +424,9 @@ function SearchDrawerBlock({ isSearchOpen, setIsSearchOpen, products, searchQuer
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)} 
                     />
-                    <img src='/searchIcon.svg' className={styles.searchBlockIcon} />
+                    <button type="button" className={styles.searchDrawerClose} onClick={closeSearch} onTouchEnd={(e) => { e.preventDefault(); closeSearch(); }} aria-label="Закрыть поиск">
+                        <img src='/cross.svg' alt="" />
+                    </button>
                 </div>
                 {searchQuery.length > 0 && (
                     <div className={styles.inputPanel}>
@@ -407,35 +437,38 @@ function SearchDrawerBlock({ isSearchOpen, setIsSearchOpen, products, searchQuer
                         )}
                         {!isSearchLoading && (
                             <>
-                                <Link 
-                                    href={`/catalog?text=${searchQuery}`} 
-                                    onClick={() => {
-                                        setIsSearchOpen(false);
-                                        setSearchQuery('');
-                                    }} 
+                                <div
+                                    role="button"
+                                    tabIndex={0}
+                                    className={styles.inputPanelHeaderLink}
+                                    {...makeResultHandler(`/catalog?text=${encodeURIComponent(searchQuery)}`)}
+                                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNavigate(`/catalog?text=${encodeURIComponent(searchQuery)}`); } }}
                                 >
                                     <div className={styles.inputPanelHeader}>
-                                        <img src='/searchIcon.svg' className={styles.searchBlockIcon} />
+                                        <img src='/searchIcon.svg' className={styles.searchBlockIcon} alt="" />
                                         <p className={styles.inputPanelText}>Искать "{searchQuery}"</p>
                                     </div>
-                                </Link>
+                                </div>
                                 {searchResults.length > 0 ? (
-                                    searchResults.map((x, i) => (
-                                        <Link 
-                                            key={x._id || i} 
-                                            href={`/product/${buildProductSlug(x)}`} 
-                                            onClick={() => {
-                                                setIsSearchOpen(false);
-                                                setSearchQuery('');
-                                            }} 
-                                        >
-                                            <div className={styles.inputPanelLine}>
-                                                <img src={x.cover} className={styles.inputPanelCover} alt={x.name} />
-                                                <p className={styles.inputPanelName}>{x.name}</p>
-                                                <p className={styles.inputPanelCost}>{formatNumber(Number(x.saleCost && x.saleCost > 0 ? x.saleCost : x.cost))} руб.</p>
+                                    searchResults.map((x, i) => {
+                                        const productHref = `/product/${buildProductSlug(x)}`;
+                                        return (
+                                            <div
+                                                key={x._id || i}
+                                                role="button"
+                                                tabIndex={0}
+                                                className={styles.inputPanelLineLink}
+                                                {...makeResultHandler(productHref)}
+                                                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNavigate(productHref); } }}
+                                            >
+                                                <div className={styles.inputPanelLine}>
+                                                    <img src={x.cover} className={styles.inputPanelCover} alt={x.name} />
+                                                    <p className={styles.inputPanelName}>{x.name}</p>
+                                                    <p className={styles.inputPanelCost}>{formatNumber(Number(x.saleCost && x.saleCost > 0 ? x.saleCost : x.cost))} руб.</p>
+                                                </div>
                                             </div>
-                                        </Link>
-                                    ))
+                                        );
+                                    })
                                 ) : (
                                     <div className={styles.searchNoResults}>
                                         <p className={styles.searchNoResultsText}>Ничего не найдено</p>
