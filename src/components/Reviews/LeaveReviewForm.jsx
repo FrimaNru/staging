@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StarRating } from './StarRating';
 import { useToast } from '@chakra-ui/react';
+import { API_BASE_URL } from '../../../apiConfig';
 import styles from './Reviews.module.css';
 
 export default function LeaveReviewForm({ productId, productName, orderId, onSuccess }) {
@@ -22,7 +23,7 @@ export default function LeaveReviewForm({ productId, productName, orderId, onSuc
 
         setLoading(true);
         try {
-            const res = await fetch('/api/reviews', {
+            const res = await fetch(`${API_BASE_URL}reviews`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

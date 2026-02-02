@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StarRating } from './StarRating';
 import { formatDate } from '@/lib/Formatting';
+import { API_BASE_URL } from '../../../apiConfig';
 import styles from './Reviews.module.css';
 
 export default function ProductReviews({ productId }) {
@@ -9,7 +10,7 @@ export default function ProductReviews({ productId }) {
 
     useEffect(() => {
         if (!productId) return;
-        fetch(`/api/reviews?productId=${productId}`)
+        fetch(`${API_BASE_URL}reviews?productId=${productId}`)
             .then((res) => res.json())
             .then(setData)
             .catch(() => setData({ reviews: [], avgRating: 0 }))
