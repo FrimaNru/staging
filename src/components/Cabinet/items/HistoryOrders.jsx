@@ -158,7 +158,7 @@ function ProductItemOrderHistory({ item, count, orderId, onReviewSuccess }) {
 
     useEffect(() => {
         if (item?.id && localStorage.getItem('token')) {
-            fetch(`/api/reviews/check?productId=${item.id}`, {
+            fetch(`${API_BASE_URL}reviews/check?productId=${item.id}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             })
                 .then((r) => r.json())
