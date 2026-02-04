@@ -38,12 +38,11 @@ export default function AdminReviewsCreateModal({ isOpen, setIsOpen, load }) {
 
         try {
             setDisabled(true);
-            const res = await fetch("/api/reviews", {
+            const res = await fetch(`${API_BASE_URL}reviews`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${localStorage.getItem("tokenAdmin")}`,
-                    "X-Admin-Token": localStorage.getItem("tokenAdmin"),
                 },
                 body: JSON.stringify({
                     productId,

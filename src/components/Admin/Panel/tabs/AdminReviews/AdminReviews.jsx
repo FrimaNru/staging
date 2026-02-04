@@ -23,8 +23,8 @@ export default function AdminReviews() {
         setLoading(true);
         try {
             const url = statusFilter
-                ? `/api/reviews/admin?status=${statusFilter}`
-                : '/api/reviews/admin';
+                ? `${API_BASE_URL}reviews/admin?status=${statusFilter}`
+                : `${API_BASE_URL}reviews/admin`;
             const res = await axios.get(url, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` },
             });
@@ -43,7 +43,7 @@ export default function AdminReviews() {
 
     const handleModerate = async (id, status) => {
         try {
-            await axios.patch(`/api/reviews/${id}`, { status }, {
+            await axios.patch(`${API_BASE_URL}reviews/${id}`, { status }, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` },
             });
             load();
@@ -55,7 +55,7 @@ export default function AdminReviews() {
     const handleDelete = async (id) => {
         if (!confirm('Удалить отзыв?')) return;
         try {
-            await axios.delete(`/api/reviews/${id}`, {
+            await axios.delete(`${API_BASE_URL}reviews/${id}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('tokenAdmin')}` },
             });
             load();
